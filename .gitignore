@@ -1,0 +1,12 @@
+*.egg-info
+*.pot
+*.py[co]
+.tox/
+__pycache__
+MANIFEST
+.env*
+.idea
+/static/
+.DS_Store
+keel/.DS_Store
+
