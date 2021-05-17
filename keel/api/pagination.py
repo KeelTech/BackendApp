@@ -1,7 +1,4 @@
-def paginate_queryset_refactored_consumer_app(queryset, request, page_size=20):
-    if request.query_params.get('from_app', False) and not request.query_params.get('page'):
-        return queryset
-    return paginate_queryset(queryset, request, page_size)
+
 
 
 def paginate_queryset(queryset, request, page_size=20):

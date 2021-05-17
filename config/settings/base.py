@@ -33,7 +33,7 @@ if READ_DOT_ENV_FILE:
 
 # Custom User model
 AUTH_USER_MODEL = 'authentication.User'
-AUTHENTICATION_BACKENDS = ('keel.authentication.backends.AuthBackend',)
+# AUTHENTICATION_BACKENDS = ('keel.authentication.backends.AuthBackend',)
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
@@ -59,7 +59,7 @@ FILE_UPLOAD_PERMISSIONS = 0o664
 DATABASES = {
     'default': env.db('DATABASE_URL'),
 }
-# DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+DATABASES['default']['ENGINE'] ='django.db.backends.postgresql_psycopg2'
 
 
 
@@ -69,9 +69,9 @@ DJANGO_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'storages',
     'django.contrib.sites',
     'django.contrib.sitemaps',
     
@@ -100,6 +100,7 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -133,14 +134,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
+# APP_DIRS = True
 
 STATIC_ROOT = str(ROOT_DIR('static'))
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    str(APPS_DIR.path('static')),
-)
+# STATICFILES_DIRS = (
+#     str(APPS_DIR.path('static')),
+# )
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -185,7 +187,6 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-                'keel.web.context_processors.google_analytics',
             ],
         },
     },
@@ -210,6 +211,5 @@ BASE_URL = env('BASE_URL')
 ADMIN_BASE_URL = env('ADMIN_BASE_URL')
 
 API_BASE_URL = env('API_BASE_URL')
-DATA_UPLOAD_MAX_NUMBER_FIELDS=10000
 CONN_MAX_AGE=600
 

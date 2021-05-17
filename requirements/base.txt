@@ -1,4 +1,5 @@
-Django
+Django==3.2.3
+psycopg2
 django-environ
 djangorestframework
 requests

@@ -64,12 +64,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'COERCE_DECIMAL_TO_STRING': True,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
         
     ),
-    'EXCEPTION_HANDLER': 'keel.api.v1.utils.custom_exception_handler',
-
 }
 
 PRODUCTION = False
