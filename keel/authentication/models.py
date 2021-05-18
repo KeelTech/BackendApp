@@ -18,7 +18,7 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number']
 
-    # EMAIL_FIELD = 'email'
+    EMAIL_FIELD = 'email'
     # objects = CustomUserManager()
     username = None
     first_name = None

@@ -25,13 +25,14 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('api/', include('keel.api.urls')),
-    # path('', include('keel.random.urls', namespace='random')),
-    
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+# path('api/', include('keel.api.urls')),
+# path('', include('keel.random.urls', namespace='random')),
+# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns = [
-        path('admin/__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] 
