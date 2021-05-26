@@ -11,4 +11,4 @@ admin.site.site_title = 'keel CRM'
 admin.site.index_title = 'CRM Administration'
 
 
-admin.site.register(User)
+# admin.site.register(User)
