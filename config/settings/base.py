@@ -96,6 +96,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -209,7 +210,7 @@ REST_FRAMEWORK = {
 
 BASE_URL = env('BASE_URL')
 ADMIN_BASE_URL = env('ADMIN_BASE_URL')
-
+APPEND_SLASH=True
 API_BASE_URL = env('API_BASE_URL')
 CONN_MAX_AGE=600
 
