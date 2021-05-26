@@ -9,4 +9,5 @@ MANIFEST
 /static/
 .DS_Store
 keel/.DS_Store
-
+env/
+*db.sqlite3
