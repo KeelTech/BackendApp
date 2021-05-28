@@ -23,7 +23,7 @@ class CustomerLead(TimeStampedModel):
 
 
     def __str__(self):
-        return self.phone_number
+        return str(self.email)
     
     class Meta:
-        db_table = "customer_leads"
+        db_table = "customer_lead"
