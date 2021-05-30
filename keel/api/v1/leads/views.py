@@ -11,12 +11,12 @@ class CustomerLeadView(APIView):
     def post(self, request, format="json"):
         serializer = CustomerLeadSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
-        valid_data = serializer.validated_data
+
+        serializer.save()
 
         data = {
             "status" : 1,
-            "message" : valid_data
+            "message" : serializer.data
         }
         
         return Response(data, status=status.HTTP_201_CREATED)
