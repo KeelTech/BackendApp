@@ -6,7 +6,7 @@ class CustomLeadPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
 
-        header = request.headers['X-CLIENT_ID']
+        header = request.headers.get('X-CLIENT_ID')
 
         if header == settings.LEADAPITOKEN:
             return True

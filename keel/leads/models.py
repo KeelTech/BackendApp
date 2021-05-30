@@ -17,7 +17,7 @@ class CustomerLead(TimeStampedModel):
 
     lead_source = models.PositiveSmallIntegerField(verbose_name="Lead Source", choices=LEAD_SOURCE)
     resolution = models.PositiveSmallIntegerField(verbose_name="Resolution", choices=RESOLUTION)
-    email = models.EmailField(verbose_name="Email", unique=True, blank=False, null=True, default=None)
+    email = models.EmailField(verbose_name="Email", blank=False, null=True, default=None)
     phone_number = models.BigIntegerField(verbose_name='Phone Number', default=None, blank=False, null=True)
     is_active = models.BooleanField(verbose_name="Is Active", default=True)
 
