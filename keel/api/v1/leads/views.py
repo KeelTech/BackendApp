@@ -6,7 +6,7 @@ from .serializers import CustomerLeadSerializer
 
 class CustomerLeadView(APIView):
 
-    permission_classes = (CustomLeadPermission, )
+    # permission_classes = (CustomLeadPermission, )
 
     def post(self, request, format="json"):
         serializer = CustomerLeadSerializer(data=request.data)
