@@ -15,11 +15,13 @@ class EligibilityResultsView(APIView):
         valid_data = serializer.validated_data
 
         # get name and email from validated data
-        name = valid_data['data']['name']
-        email = valid_data['data']['email']
+        get_data = valid_data.get('data', None)
+        name = get_data.get('name', None)
+        email = get_data.get('email', None)
+        lead_source = CustomerLead.LEAD_SOURCE
 
-        # create instance of leads with name, email and temporarily lead_source = 1 which has a value of "WEB"
-        lead = CustomerLead(name=name, email=email, lead_source=1)
+        # create instance of leads with name, email and temporarily lead_source which has a value of "WEB"
+        lead = CustomerLead(name=name, email=email, lead_source=lead_source[0][0])
         lead.save()
 
         # add lead id to validated data
@@ -31,4 +33,4 @@ class EligibilityResultsView(APIView):
             "status" : 1,
             "message" : serializer.data 
         }
-        return Response(response, status=status.HTTP_201_CREATED)
+        return Response(response, status=status.HTTP_200_OK)

@@ -12,11 +12,12 @@ class CustomerLead(TimeStampedModel):
 
     RESOLUTION = (
         (1, 'CONVERTED'),
-        (2, 'DROPPED')
+        (2, 'DROPPED'),
+        (3, 'IN PROGRESS')
     )
 
     lead_source = models.PositiveSmallIntegerField(verbose_name="Lead Source", choices=LEAD_SOURCE)
-    resolution = models.PositiveSmallIntegerField(verbose_name="Resolution", null=True, choices=RESOLUTION)
+    resolution = models.PositiveSmallIntegerField(verbose_name="Resolution", null=True, choices=RESOLUTION, default=3)
     name = models.CharField(verbose_name="Name", null=True, max_length=255)
     email = models.EmailField(verbose_name="Email", blank=False, null=True, default=None)
     phone_number = models.BigIntegerField(verbose_name='Phone Number', default=None, blank=False, null=True)
