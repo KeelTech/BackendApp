@@ -7,7 +7,7 @@ class CustomerLeadSerializer(serializers.ModelSerializer):
 
     email = serializers.EmailField(required=True)
     phone_number = serializers.IntegerField()
-    lead_source = serializers.ChoiceField(choices=CustomerLead.LEAD_SOURCE)
+    lead_source = serializers.ChoiceField(choices=CustomerLead.LEAD_SOURCE_CHOICES)
 
     
     class Meta:

@@ -19,4 +19,4 @@ class CustomerLeadView(APIView):
             "message" : serializer.data
         }
         
-        return Response(data, status=status.HTTP_201_CREATED)
+        return Response(data)
