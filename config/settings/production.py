@@ -41,10 +41,13 @@ X_FRAME_OPTIONS = 'DENY'
 
 #INSTALLED_APPS += ('gunicorn',)
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOG_DIR = os.path.abspath(os.path.join(BASE_DIR, env('LOG_FILE_PATH')))
+
 # create directory for log file
 filepath = env('LOG_FILE_PATH')
-if not os.path.exists(filepath):
-    os.makedirs(filepath)
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
 
 LOGGING = {
     'version': 1,

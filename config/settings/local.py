@@ -21,10 +21,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 INTERNAL_IPS = ['127.0.0.1']
 
-# create directory for log file
-filepath = env('LOG_FILE_PATH')
-if not os.path.exists(filepath):
-    os.makedirs(filepath)
+import os
 
 LOGGING = {
     'version': 1,
@@ -46,11 +43,7 @@ LOGGING = {
         'file' : {
             'level' : 'INFO',
             'class' : 'logging.handlers.RotatingFileHandler',
-            'filename' : os.path.join(filepath, env('LOG_FILE')),
-            
-            # when I uncomment the backupCount and maxBytes, there is "ValueError: Unable to configure handler 'file'"
-            # work this way
-            
+            'filename' : 'info.log', 
             'backupCount': 10,
             'maxBytes': 15 * 1024 * 1024,  # 15 MB
             'formatter' : 'simple'

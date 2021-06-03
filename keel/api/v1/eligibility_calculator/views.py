@@ -29,16 +29,15 @@ class EligibilityResultsView(APIView):
             lead.save()
             # add lead id to validated data
             valid_data['lead_id'] = lead
+            serializer.save()
 
         except Exception as e:
             logger.warning('ERROR: ELIGIBILITY_CALCULATOR:EligibilityResultsView ' + str(e))
             data = {
                 'status' : 0,
-                "message" : "Something went wrong"
+                "message" : str(e)
             }
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer.save()
         
         response = {
             "status" : 1,
