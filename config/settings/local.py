@@ -21,6 +21,10 @@ DEBUG_TOOLBAR_CONFIG = {
 
 INTERNAL_IPS = ['127.0.0.1']
 
+# create directory for log file
+filepath = env('LOG_FILE_PATH')
+if not os.path.exists(filepath):
+    os.makedirs(filepath)
 
 LOGGING = {
     'version': 1,
@@ -34,9 +38,23 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s '
                       '%(process)d %(thread)d %(message)s'
         },
+        'simple': {
+            'format':  '%(levelname)s %(asctime)s %(process)d %(thread)d %(name)s.%(module)s:%(lineno)d %(message)s',
+        },
     },
     'handlers': {
-        
+        'file' : {
+            'level' : 'INFO',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : os.path.join(filepath, env('LOG_FILE')),
+            
+            # when I uncomment the backupCount and maxBytes, there is "ValueError: Unable to configure handler 'file'"
+            # work this way
+            
+            'backupCount': 10,
+            'maxBytes': 15 * 1024 * 1024,  # 15 MB
+            'formatter' : 'simple'
+        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -46,15 +64,19 @@ LOGGING = {
     'loggers': {
         'django.db.backends': {
             'level': 'WARNING',
-            'handlers': ['console', ],
+            'handlers': ['console', 'file'],
             'propagate': False,
         },
-        
         'django.security.DisallowedHost': {
             'level': 'ERROR',
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'propagate': False,
         },
+        'app-logger': { 
+            'handlers': ['file', 'console'],                                                              
+            'level': 'INFO',                                                                          
+            'propagate': True,                                                                            
+        },   
     },
 }
 

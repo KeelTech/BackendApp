@@ -6,6 +6,9 @@ from .serializers import EligibilityResultsSeriaizer
 from keel.eligibility_calculator.models import EligibilityResults
 from keel.leads.models import CustomerLead
 
+import logging
+
+logger = logging.getLogger('app-logger')
 class EligibilityResultsView(APIView):
 
     def post(self, request, format='json'):
@@ -21,11 +24,19 @@ class EligibilityResultsView(APIView):
         lead_source = CustomerLead.WEB
 
         # create instance of leads with name, email and temporarily lead_source which has a value of "WEB"
-        lead = CustomerLead(name=name, email=email, lead_source=lead_source)
-        lead.save()
+        try:
+            lead = CustomerLead(name=name, email=email)
+            lead.save()
+            # add lead id to validated data
+            valid_data['lead_id'] = lead
 
-        # add lead id to validated data
-        valid_data['lead_id'] = lead
+        except Exception as e:
+            logger.warning('ERROR: ELIGIBILITY_CALCULATOR:EligibilityResultsView ' + str(e))
+            data = {
+                'status' : 0,
+                "message" : "Something went wrong"
+            }
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         serializer.save()
         
