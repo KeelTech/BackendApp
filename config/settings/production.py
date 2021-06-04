@@ -42,10 +42,10 @@ X_FRAME_OPTIONS = 'DENY'
 #INSTALLED_APPS += ('gunicorn',)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOG_DIR = os.path.abspath(os.path.join(BASE_DIR, env('LOG_FILE_PATH')))
+LOG_DIR = os.path.abspath(os.path.join(BASE_DIR, env('LOG_DIR')))
+LOG_FILE = env(LOG_FILE)
 
 # create directory for log file
-filepath = env('LOG_FILE_PATH')
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
@@ -68,14 +68,10 @@ LOGGING = {
     'handlers': {
         'file' : {
             'level' : 'INFO',
-            'class' : 'logging.FileHandler',
-            'filename' : os.path.join(filepath, env('LOG_FILE')),
-            
-            # when I uncomment the backupCount and maxBytes, there is "ValueError: Unable to configure handler 'file'"
-            # work this way
-            
-            # 'backupCount': 10,
-            # 'maxBytes': 15 * 1024 * 1024,  # 15 MB
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : os.path.join(LOG_DIR, LOG_FILE),
+            'backupCount': 10,
+            'maxBytes': 15 * 1024 * 1024,  # 15 MB
             'formatter' : 'simple'
         },
         'console': {
