@@ -41,6 +41,14 @@ X_FRAME_OPTIONS = 'DENY'
 
 #INSTALLED_APPS += ('gunicorn',)
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOG_DIR = os.path.abspath(os.path.join(BASE_DIR, env('LOG_DIR')))
+LOG_FILE = env(LOG_FILE)
+
+# create directory for log file
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -53,9 +61,19 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s '
                       '%(process)d %(thread)d %(message)s'
         },
+        'simple': {
+            'format':  '%(levelname)s %(asctime)s %(process)d %(thread)d %(name)s.%(module)s:%(lineno)d %(message)s',
+        },
     },
     'handlers': {
-        
+        'file' : {
+            'level' : 'INFO',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'filename' : os.path.join(LOG_DIR, LOG_FILE),
+            'backupCount': 10,
+            'maxBytes': 15 * 1024 * 1024,  # 15 MB
+            'formatter' : 'simple'
+        },
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
@@ -70,14 +88,19 @@ LOGGING = {
         },
         'django.db.backends': {
             'level': 'ERROR',
-            'handlers': ['console', ],
+            'handlers': ['console', 'file'],
             'propagate': False,
         },
         'django.security.DisallowedHost': {
             'level': 'ERROR',
-            'handlers': ['console', ],
+            'handlers': ['console', 'file'],
             'propagate': False,
         },
+        'app-logger': { 
+            'handlers': ['file', 'console'],                                                              
+            'level': 'INFO',                                                                          
+            'propagate': True,                                                                            
+        },   
     },
 }
 
