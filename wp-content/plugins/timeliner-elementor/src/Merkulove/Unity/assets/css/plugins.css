@@ -1,0 +1,46 @@
+/**
+ * Timeliner for Elementor
+ * Beautiful graphical representation of a period of time for Elementor
+ * Exclusively on https://1.envato.market/timeliner-elementor
+ *
+ * @encoding        UTF-8
+ * @version         1.0.0
+ * @copyright       (C) 2018 - 2021 Merkulove ( https://merkulov.design/ ). All rights reserved.
+ * @license         Envato License https://1.envato.market/KYbje
+ * @contributors    Nemirovskiy Vitaliy (nemirovskiyvitaliy@gmail.com), Dmitry Merkulov (dmitry@merkulov.design)
+ * @support         help@merkulov.design
+ **/
+.plugins .plugin-title .cc-merkulove img {
+  height: 13px;
+  width: 15px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  float: none;
+  padding: 0;
+  margin-right: 2px; }
+
+.plugins .second {
+  padding-bottom: 0; }
+
+.mdp-rating-stars {
+  white-space: nowrap;
+  line-height: 1.1;
+  display: inline-flex; }
+  .mdp-rating-stars a {
+    outline: none;
+    display: inline-block;
+    width: 14px; }
+    .mdp-rating-stars a:hover {
+      text-decoration: none !important; }
+    .mdp-rating-stars a:focus {
+      box-shadow: none; }
+  .mdp-rating-stars .dashicons {
+    color: #ffb900;
+    font-size: 14px; }
+
+.update-message .mdp-line {
+  display: block;
+  line-height: 5px;
+  border-bottom: 1px solid rgba(255, 185, 0, 0.4);
+  margin: 5px 0; }

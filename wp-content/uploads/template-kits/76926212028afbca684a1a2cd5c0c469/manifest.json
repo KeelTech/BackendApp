@@ -1,0 +1,1099 @@
+{
+    "manifest_version": "1.0.19",
+    "title": "Agendo",
+    "page_builder": "elementor",
+    "kit_version": "1.0.1",
+    "templates": [
+        {
+            "name": "Global Kit Styles",
+            "screenshot": "screenshots\/global-kit-styles.png",
+            "source": "templates\/global.json",
+            "preview_url": "https:\/\/kit.pixel-show.com",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "global-styles",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "additional_template_information": [
+                    "These are the global theme styles configured through the Elementor Theme Styles area."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Portfolio Single",
+            "screenshot": "screenshots\/portfolio-single.jpg",
+            "source": "templates\/portfolio-single.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/blog\/template-kit\/portfolio-single\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Portfolio",
+            "screenshot": "screenshots\/portfolio.jpg",
+            "source": "templates\/portfolio.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/blog\/template-kit\/portfolio\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-portfolio",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Pricing",
+            "screenshot": "screenshots\/pricing.jpg",
+            "source": "templates\/pricing.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/blog\/template-kit\/pricing\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Contact Us",
+            "screenshot": "screenshots\/contact-us.jpg",
+            "source": "templates\/contact-us.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/blog\/template-kit\/contact-us\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Services",
+            "screenshot": "screenshots\/services.jpg",
+            "source": "templates\/services.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/blog\/template-kit\/services\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "About Us",
+            "screenshot": "screenshots\/about-us.jpg",
+            "source": "templates\/about-us.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/blog\/template-kit\/about-us\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home",
+            "screenshot": "screenshots\/home.jpg",
+            "source": "templates\/home.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/blog\/template-kit\/home\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Single Post",
+            "screenshot": "screenshots\/single-post.jpg",
+            "source": "templates\/single-post.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/?elementor_library=single-post",
+            "type": "single-post",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-post",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "single-post",
+                "elementor_pro_conditions": [
+                    "include\/singular\/post"
+                ],
+                "additional_template_information": [
+                    "This is a \"Single Post\" template for Elementor Pro.",
+                    "This template will display on: Posts."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Blog",
+            "screenshot": "screenshots\/blog.jpg",
+            "source": "templates\/blog.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/?elementor_library=blog",
+            "type": "archive",
+            "category": "page",
+            "metadata": {
+                "template_type": "archive-blog",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "archive",
+                "elementor_pro_conditions": [
+                    "include\/archive"
+                ],
+                "additional_template_information": [
+                    "This is a \"Archive\" template for Elementor Pro.",
+                    "This template will display on: All Archives."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Footer",
+            "screenshot": "screenshots\/footer.png",
+            "source": "templates\/footer.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/?elementor_library=footer",
+            "type": "footer",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "footer",
+                "elementor_pro_conditions": [
+                    "include\/general"
+                ],
+                "additional_template_information": [
+                    "This is a \"Footer\" template for Elementor Pro.",
+                    "This template will display on: Entire Site."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Header",
+            "screenshot": "screenshots\/header.png",
+            "source": "templates\/header.json",
+            "preview_url": "https:\/\/kit.pixel-show.com\/?elementor_library=header",
+            "type": "header",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "header",
+                "elementor_pro_conditions": [
+                    "include\/general"
+                ],
+                "additional_template_information": [
+                    "This is a \"Header\" template for Elementor Pro.",
+                    "This template will display on: Entire Site."
+                ]
+            },
+            "elementor_pro_required": true
+        }
+    ],
+    "required_plugins": [
+        {
+            "name": "Elementor Pro",
+            "version": "3.0.10",
+            "file": "elementor-pro\/elementor-pro.php",
+            "author": "Elementor.com"
+        },
+        {
+            "name": "ElementsKit Lite",
+            "version": "2.1.6",
+            "file": "elementskit-lite\/elementskit-lite.php",
+            "author": "Wpmet"
+        },
+        {
+            "name": "Essential Addons for Elementor",
+            "version": "4.5.0",
+            "file": "essential-addons-for-elementor-lite\/essential_adons_elementor.php",
+            "author": "WPDeveloper"
+        },
+        {
+            "name": "Fluent Forms",
+            "version": "3.6.62",
+            "file": "fluentform\/fluentform.php",
+            "author": "Contact Form - WPManageNinja LLC"
+        },
+        {
+            "name": "Elementor",
+            "version": "3.1.1",
+            "file": "elementor\/elementor.php",
+            "author": "Elementor.com"
+        }
+    ],
+    "images": [
+        {
+            "filename": "f144c678-38b7-46c3-8b9a-bf7edc4e002e.jpeg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/f144c678-38b7-46c3-8b9a-bf7edc4e002e-800x533.jpeg",
+            "templates": [
+                {
+                    "source": "templates\/portfolio-single.json",
+                    "name": "Portfolio Single"
+                },
+                {
+                    "source": "templates\/portfolio.json",
+                    "name": "Portfolio"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 56678,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/tablet-mockup-UVXKEW7"
+        },
+        {
+            "filename": "88c6f643-39b6-497d-b6f3-9ecbb433ce2e.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/88c6f643-39b6-497d-b6f3-9ecbb433ce2e-800x533.png",
+            "templates": [
+                {
+                    "source": "templates\/portfolio-single.json",
+                    "name": "Portfolio Single"
+                },
+                {
+                    "source": "templates\/portfolio.json",
+                    "name": "Portfolio"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 128866,
+            "dimensions": [
+                1170,
+                780
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/reminder-app-screen-mobile-app-template-F2TA44B"
+        },
+        {
+            "filename": "f4107326-8972-4aec-90f9-2e4694317c66.jpeg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/f4107326-8972-4aec-90f9-2e4694317c66-800x533.jpeg",
+            "templates": [
+                {
+                    "source": "templates\/portfolio-single.json",
+                    "name": "Portfolio Single"
+                },
+                {
+                    "source": "templates\/portfolio.json",
+                    "name": "Portfolio"
+                }
+            ],
+            "filesize": 45966,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/teamwork-illustration-UZVVB32"
+        },
+        {
+            "filename": "47fde150-1f53-476b-b25e-aa778d3d9532.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/47fde150-1f53-476b-b25e-aa778d3d9532-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/portfolio-single.json",
+                    "name": "Portfolio Single"
+                },
+                {
+                    "source": "templates\/portfolio.json",
+                    "name": "Portfolio"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 52313,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/dashboard-page-ui-kits-PL64R98"
+        },
+        {
+            "filename": "portrait-of-young-architects-discussing-in-office-4DM6KFV.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/portrait-of-young-architects-discussing-in-office-4DM6KFV-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/portfolio.json",
+                    "name": "Portfolio"
+                }
+            ],
+            "filesize": 85709,
+            "dimensions": [
+                1400,
+                933
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-4DM6KFV"
+        },
+        {
+            "filename": "53c6d6e7-b03a-4d55-bfb1-91fd59b64b52.jpeg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/53c6d6e7-b03a-4d55-bfb1-91fd59b64b52-800x533.jpeg",
+            "templates": [
+                {
+                    "source": "templates\/portfolio.json",
+                    "name": "Portfolio"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 59809,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/website-login-B8NXXZG"
+        },
+        {
+            "filename": "d21ac5c6-a712-4974-b0e5-66a42677683f.jpeg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/d21ac5c6-a712-4974-b0e5-66a42677683f-800x533.jpeg",
+            "templates": [
+                {
+                    "source": "templates\/portfolio.json",
+                    "name": "Portfolio"
+                }
+            ],
+            "filesize": 47573,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/travel-app-FHE9WKJ"
+        },
+        {
+            "filename": "picture-of-business-people-discussing-in-their-com-Y3C4TGE.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/picture-of-business-people-discussing-in-their-com-Y3C4TGE-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                }
+            ],
+            "filesize": 64492,
+            "dimensions": [
+                1400,
+                933
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-Y3C4TGE"
+        },
+        {
+            "filename": "successful-business-team-standing-around-computer-Z47XJL5.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/successful-business-team-standing-around-computer-Z47XJL5-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/contact-us.json",
+                    "name": "Contact Us"
+                }
+            ],
+            "filesize": 161014,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-Z47XJL5"
+        },
+        {
+            "filename": "picture-of-business-people-discussing-in-their-com-APZ9YGC.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/picture-of-business-people-discussing-in-their-com-APZ9YGC-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/contact-us.json",
+                    "name": "Contact Us"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                }
+            ],
+            "filesize": 60274,
+            "dimensions": [
+                1400,
+                933
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-APZ9YGC"
+        },
+        {
+            "filename": "dots-4.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/dots-4.png",
+            "templates": [
+                {
+                    "source": "templates\/contact-us.json",
+                    "name": "Contact Us"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 220,
+            "dimensions": [
+                345,
+                321
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "figure-2.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/figure-2.png",
+            "templates": [
+                {
+                    "source": "templates\/contact-us.json",
+                    "name": "Contact Us"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 15331,
+            "dimensions": [
+                600,
+                600
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "figure-14.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/figure-14-800x768.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 51103,
+            "dimensions": [
+                1600,
+                1536
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "ui-11.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/ui-11.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                }
+            ],
+            "filesize": 4568,
+            "dimensions": [
+                291,
+                266
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-shop-dashboard-ui-kit-FR22ZGN"
+        },
+        {
+            "filename": "ui-10.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/ui-10.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                }
+            ],
+            "filesize": 3924,
+            "dimensions": [
+                290,
+                369
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-shop-dashboard-ui-kit-FR22ZGN"
+        },
+        {
+            "filename": "ui-4.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/ui-4.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 3527,
+            "dimensions": [
+                290,
+                273
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-shop-dashboard-ui-kit-FR22ZGN"
+        },
+        {
+            "filename": "ui-5.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/ui-5.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 4173,
+            "dimensions": [
+                291,
+                303
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-shop-dashboard-ui-kit-FR22ZGN"
+        },
+        {
+            "filename": "focused-business-team-working-with-documents-P67NT9G.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/focused-business-team-working-with-documents-P67NT9G-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 76210,
+            "dimensions": [
+                1400,
+                933
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-P67NT9G"
+        },
+        {
+            "filename": "logo-5.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/logo-5.png",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2300,
+            "dimensions": [
+                178,
+                100
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "logo-7.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/logo-7.png",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2206,
+            "dimensions": [
+                178,
+                100
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "logo-6.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/logo-6.png",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1948,
+            "dimensions": [
+                178,
+                100
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "logo-9.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/logo-9.png",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2098,
+            "dimensions": [
+                178,
+                100
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "logo-11.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/logo-11.png",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1900,
+            "dimensions": [
+                178,
+                100
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "logo-10.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/logo-10.png",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2246,
+            "dimensions": [
+                178,
+                100
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "empty-office-interior-U5VZT3U.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/empty-office-interior-U5VZT3U-800x1200.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 68237,
+            "dimensions": [
+                1100,
+                1650
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/image-U5VZT3U"
+        },
+        {
+            "filename": "quality-office-break-4MBTBB6.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/quality-office-break-4MBTBB6-800x1200.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 93775,
+            "dimensions": [
+                1100,
+                1650
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-4MBTBB6"
+        },
+        {
+            "filename": "close-up-of-smiling-confident-beautiful-brunette-g-2AQ2CKN.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/close-up-of-smiling-confident-beautiful-brunette-g-2AQ2CKN-800x867.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 42952,
+            "dimensions": [
+                1000,
+                1084
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-2AQ2CKN"
+        },
+        {
+            "filename": "size-inclusive-mens-fashion-white-jumper-studio-sh-MXTDMMZ.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/size-inclusive-mens-fashion-white-jumper-studio-sh-MXTDMMZ-800x866.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 46483,
+            "dimensions": [
+                1000,
+                1083
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-MXTDMMZ"
+        },
+        {
+            "filename": "close-up-handsome-male-fashion-model-face-with-bea-DCZ9NLF.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/close-up-handsome-male-fashion-model-face-with-bea-DCZ9NLF-800x861.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 57216,
+            "dimensions": [
+                1000,
+                1076
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-DCZ9NLF"
+        },
+        {
+            "filename": "happy-cheerful-young-caucasian-red-haired-female-w-AWUM9R3.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/happy-cheerful-young-caucasian-red-haired-female-w-AWUM9R3-800x861.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 42992,
+            "dimensions": [
+                1000,
+                1076
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-AWUM9R3"
+        },
+        {
+            "filename": "confident-man-portrait-W6UUZD4.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/confident-man-portrait-W6UUZD4-800x860.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 47964,
+            "dimensions": [
+                1000,
+                1075
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-W6UUZD4"
+        },
+        {
+            "filename": "portrait-of-cute-joyful-teenage-girl-with-charming-4FRNVMT.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/portrait-of-cute-joyful-teenage-girl-with-charming-4FRNVMT-800x861.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 31717,
+            "dimensions": [
+                1000,
+                1076
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-4FRNVMT"
+        },
+        {
+            "filename": "team-of-executives-working-together-in-the-office-WB53F3M.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/team-of-executives-working-together-in-the-office-WB53F3M-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 159738,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-WB53F3M"
+        },
+        {
+            "filename": "play-icon.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/play-icon.png",
+            "templates": [
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 3108,
+            "dimensions": [
+                100,
+                100
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "fig-2.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/fig-2-800x596.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 11760,
+            "dimensions": [
+                1617,
+                1204
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "meeting-in-architects-office-PNCH3KM.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/meeting-in-architects-office-PNCH3KM-800x728.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 154210,
+            "dimensions": [
+                1406,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-PNCH3KM"
+        },
+        {
+            "filename": "fig-9-1.png",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/01\/fig-9-1-800x596.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2071,
+            "dimensions": [
+                1617,
+                1204
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "beautiful-blonde-seriosly-young-woman-WQ6YWNM.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/beautiful-blonde-seriosly-young-woman-WQ6YWNM.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 42208,
+            "dimensions": [
+                500,
+                500
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-WQ6YWNM"
+        },
+        {
+            "filename": "thoughtful-young-guy-student-in-eyeglasses-4FG5USN.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/thoughtful-young-guy-student-in-eyeglasses-4FG5USN.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 36764,
+            "dimensions": [
+                500,
+                500
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-4FG5USN"
+        },
+        {
+            "filename": "smiling-creative-professional-having-coffee-in-P7XTU6K.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/smiling-creative-professional-having-coffee-in-P7XTU6K.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 39847,
+            "dimensions": [
+                500,
+                500
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-P7XTU6K"
+        },
+        {
+            "filename": "beautiful-woman-posing-in-doctors-office-LWVPG3D.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/beautiful-woman-posing-in-doctors-office-LWVPG3D.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 42081,
+            "dimensions": [
+                500,
+                500
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-LWVPG3D"
+        },
+        {
+            "filename": "attractive-business-woman-YHLCTUZ.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/attractive-business-woman-YHLCTUZ.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 58447,
+            "dimensions": [
+                600,
+                600
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-YHLCTUZ"
+        },
+        {
+            "filename": "samantha-gades-BlIhVfXbi9s-unsplash.jpg",
+            "thumbnail_url": "https:\/\/kit.pixel-show.com\/wp-content\/uploads\/2021\/02\/samantha-gades-BlIhVfXbi9s-unsplash-800x534.jpg",
+            "templates": [
+                {
+                    "source": "templates\/blog.json",
+                    "name": "Blog"
+                }
+            ],
+            "filesize": 72385,
+            "dimensions": [
+                1920,
+                1282
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/unsplash.com\/photos\/BlIhVfXbi9s"
+        }
+    ]
+}

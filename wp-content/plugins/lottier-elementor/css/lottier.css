@@ -1,0 +1,33 @@
+/**
+ * Lottier for Elementor
+ * Lottie animations in just a few clicks without writing a single line of code.
+ * Exclusively on https://1.envato.market/lottier-elementor
+ *
+ * @encoding        UTF-8
+ * @version         1.0.2
+ * @copyright       (C) 2018 - 2020 Merkulove ( https://merkulov.design/ ). All rights reserved.
+ * @license         Envato License https://1.envato.market/KYbje
+ * @contributors    Vitaliy Nemirovskiy (nemirovskiyvitaliy@gmail.com), Dmitry Merkulov (dmitry@merkulov.design)
+ * @support         help@merkulov.design
+ * @license         Envato License https://1.envato.market/KYbje
+ **/
+.mdp-lottier-header,
+.mdp-lottier-subheader {
+  display: block; }
+
+.mdp-lottier-svg,
+.mdp-lottier-animation {
+  display: flex; }
+
+.mdp-link-max {
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }
+
+.mdp-lottier-animation {
+  position: inherit;
+  z-index: 9999;
+  width: 100%; }

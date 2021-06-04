@@ -1,0 +1,51 @@
+# Copyright (C) 2021 template-kit-import
+# This file is distributed under the same license as the template-kit-import package.
+msgid ""
+msgstr ""
+"Project-Id-Version: template-kit-import\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: Envato <extensions@envato.com>\n"
+"Last-Translator: Extensions <extensions@envato.com>\n"
+"Report-Msgid-Bugs-To: https://envato.com//\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. translators: %s: PHP version
+#: template-kit-import.php:77
+msgid "Template Kit Import plugin requires PHP version %1$s+, plugin is currently NOT ACTIVE. Please contact the hosting provider. WordPress recommends version %2$s."
+msgstr ""
+
+#: template-kit-import.php:82
+msgid "7.2 or above"
+msgstr ""
+
+#. translators: %s: WordPress version
+#: template-kit-import.php:101
+msgid "Envato Elements requires WordPress version %s+. Because you are using an earlier version, the plugin is currently NOT ACTIVE."
+msgstr ""
+
+#: inc/backend/class-welcome.php:33
+msgid "Template Kit Import"
+msgstr ""
+
+#: inc/backend/class-welcome.php:43, inc/backend/class-welcome.php:44
+msgid "TK Review"
+msgstr ""
+
+#: inc/utils/class-base.php:51, inc/utils/class-base.php:62, vendor/template-kit-import/inc/class-base.php:51, vendor/template-kit-import/inc/class-base.php:62
+msgid "Something went wrong."
+msgstr ""
+
+#: vendor/template-kit-import/inc/class-builder-elementor.php:167
+msgid "Import into Elementor Library"
+msgstr ""
+
+#: vendor/template-kit-import/inc/class-builder.php:257
+msgid "Import Template"
+msgstr ""

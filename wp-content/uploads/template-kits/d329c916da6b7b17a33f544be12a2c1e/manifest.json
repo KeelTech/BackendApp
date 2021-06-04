@@ -1,0 +1,907 @@
+{
+    "manifest_version": "1.0.19",
+    "title": "Gotech - Online Course Elementor Template Kit",
+    "page_builder": "elementor",
+    "kit_version": "1.0.0",
+    "templates": [
+        {
+            "name": "Global Kit Styles",
+            "screenshot": "screenshots\/global-kit-styles.png",
+            "source": "templates\/global.json",
+            "preview_url": "http:\/\/astylers.com\/gotech",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "global-styles",
+                "include_in_zip": "1",
+                "elementor_pro_required": null,
+                "additional_template_information": [
+                    "These are the global theme styles configured through the Elementor Theme Styles area."
+                ]
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Footer",
+            "screenshot": "screenshots\/footer.png",
+            "source": "templates\/footer.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/footer\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Header",
+            "screenshot": "screenshots\/header.png",
+            "source": "templates\/header.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/header\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Contact",
+            "screenshot": "screenshots\/contact.png",
+            "source": "templates\/contact.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/contact\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Faq",
+            "screenshot": "screenshots\/faq.png",
+            "source": "templates\/faq.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/faq\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "404",
+            "screenshot": "screenshots\/404.png",
+            "source": "templates\/404.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/404\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-404",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Pricing",
+            "screenshot": "screenshots\/pricing.png",
+            "source": "templates\/pricing.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/pricing\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Course Details",
+            "screenshot": "screenshots\/course-details.png",
+            "source": "templates\/course-details.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/course-details\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Course",
+            "screenshot": "screenshots\/course.png",
+            "source": "templates\/course.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/course\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "About",
+            "screenshot": "screenshots\/about.png",
+            "source": "templates\/about.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/about\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Home",
+            "screenshot": "screenshots\/home.png",
+            "source": "templates\/home.json",
+            "preview_url": "http:\/\/astylers.com\/gotech\/template-kit\/home\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        }
+    ],
+    "required_plugins": [
+        {
+            "name": "Contact Form 7",
+            "version": "5.4.1",
+            "file": "contact-form-7\/wp-contact-form-7.php",
+            "author": "Takayuki Miyoshi"
+        },
+        {
+            "name": "Elementor",
+            "version": "3.2.3",
+            "file": "elementor\/elementor.php",
+            "author": "Elementor.com"
+        },
+        {
+            "name": "Essential Addons for Elementor",
+            "version": "4.6.5",
+            "file": "essential-addons-for-elementor-lite\/essential_adons_elementor.php",
+            "author": "WPDeveloper"
+        },
+        {
+            "name": "Elementor - Header, Footer & Blocks",
+            "version": "1.5.9",
+            "file": "header-footer-elementor\/header-footer-elementor.php",
+            "author": "Brainstorm Force, Nikhil Chavan"
+        },
+        {
+            "name": "HT Newsletter for Elementor",
+            "version": "1.0.6",
+            "file": "ht-newsletter-for-elementor\/mailchimp-for-wp-widget-elementor.php",
+            "author": "HT Plugins"
+        },
+        {
+            "name": "MC4WP: Mailchimp for WordPress",
+            "version": "4.8.4",
+            "file": "mailchimp-for-wp\/mailchimp-for-wp.php",
+            "author": "ibericode"
+        }
+    ],
+    "images": [
+        {
+            "filename": "logo.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/logo.png",
+            "templates": [
+                {
+                    "source": "templates\/footer.json",
+                    "name": "Footer"
+                },
+                {
+                    "source": "templates\/header.json",
+                    "name": "Header"
+                }
+            ],
+            "filesize": 11540,
+            "dimensions": [
+                500,
+                140
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "bg-test3.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2021\/05\/bg-test3-800x204.png",
+            "templates": [
+                {
+                    "source": "templates\/contact.json",
+                    "name": "Contact"
+                },
+                {
+                    "source": "templates\/faq.json",
+                    "name": "Faq"
+                },
+                {
+                    "source": "templates\/404.json",
+                    "name": "404"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/course-details.json",
+                    "name": "Course Details"
+                },
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 39190,
+            "dimensions": [
+                2746,
+                699
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "bg.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2021\/05\/bg-800x204.png",
+            "templates": [
+                {
+                    "source": "templates\/faq.json",
+                    "name": "Faq"
+                },
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 8007,
+            "dimensions": [
+                879,
+                224
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "circle2.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/circle2.png",
+            "templates": [
+                {
+                    "source": "templates\/404.json",
+                    "name": "404"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 7646,
+            "dimensions": [
+                294,
+                300
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "demo-image5.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/demo-image5-600x360.png",
+            "templates": [
+                {
+                    "source": "templates\/course-details.json",
+                    "name": "Course Details"
+                },
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 341430,
+            "dimensions": [
+                1280,
+                768
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/work-from-home-computer-laptop-mobile-phone-headph-XA7D3HV"
+        },
+        {
+            "filename": "Instructor-avatar.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2021\/05\/Instructor-avatar.png",
+            "templates": [
+                {
+                    "source": "templates\/course-details.json",
+                    "name": "Course Details"
+                }
+            ],
+            "filesize": 7008,
+            "dimensions": [
+                120,
+                120
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "image2.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image2.png",
+            "templates": [
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 52608,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/digital-computer-with-financial-graph-AG272VU"
+        },
+        {
+            "filename": "image11.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image11.png",
+            "templates": [
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 62373,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/data-on-the-paper-on-the-desk-KZDR7CH"
+        },
+        {
+            "filename": "image6.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image6.png",
+            "templates": [
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 60811,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/designer-hand-working-with-graphic-tablet-74UE96R"
+        },
+        {
+            "filename": "image7.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image7.png",
+            "templates": [
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                }
+            ],
+            "filesize": 86440,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/graphic-escalator-background-Z7ZUBXY"
+        },
+        {
+            "filename": "image8.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image8.png",
+            "templates": [
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                }
+            ],
+            "filesize": 56569,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/graphical-chart-and-pen-JJSHZW6"
+        },
+        {
+            "filename": "image10.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image10.png",
+            "templates": [
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                }
+            ],
+            "filesize": 53650,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/types-of-graphical-data-6T8XVA4"
+        },
+        {
+            "filename": "image1.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image1.png",
+            "templates": [
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                }
+            ],
+            "filesize": 79387,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/cropped-view-of-designer-using-graphics-tablet-whi-4WHSQNZ"
+        },
+        {
+            "filename": "image9.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image9.png",
+            "templates": [
+                {
+                    "source": "templates\/course.json",
+                    "name": "Course"
+                }
+            ],
+            "filesize": 87259,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/high-angle-view-of-graphic-tablet-desktop-computer-QVETT34"
+        },
+        {
+            "filename": "image4.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/image4.png",
+            "templates": [
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 83251,
+            "dimensions": [
+                600,
+                360
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/student-watching-programming-online-course-5WANU64"
+        },
+        {
+            "filename": "header-image.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/header-image-600x458.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 105767,
+            "dimensions": [
+                1080,
+                825
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-education-or-business-training-PT3JE5C"
+        },
+        {
+            "filename": "path6793-3.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/path6793-3.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2573,
+            "dimensions": [
+                118,
+                120
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "k.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/k.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 3377,
+            "dimensions": [
+                68,
+                67
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-education-thin-line-icons-pack-CHME26F"
+        },
+        {
+            "filename": "path7839.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/path7839.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2776,
+            "dimensions": [
+                118,
+                120
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "g7940.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/g7940.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2511,
+            "dimensions": [
+                68,
+                68
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-education-thin-line-icons-pack-CHME26F"
+        },
+        {
+            "filename": "path8223.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/path8223.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2772,
+            "dimensions": [
+                118,
+                120
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "g7690.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/g7690.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1928,
+            "dimensions": [
+                68,
+                68
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-education-thin-line-icons-pack-CHME26F"
+        },
+        {
+            "filename": "path8140.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/path8140.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2729,
+            "dimensions": [
+                118,
+                120
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "g8205.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/g8205.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 3065,
+            "dimensions": [
+                68,
+                65
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-education-thin-line-icons-pack-CHME26F"
+        },
+        {
+            "filename": "hiw2.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/hiw2.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2373,
+            "dimensions": [
+                68,
+                68
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-education-thin-line-icons-pack-CHME26F"
+        },
+        {
+            "filename": "take-class.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/take-class.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 3632,
+            "dimensions": [
+                68,
+                68
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/online-education-thin-line-icons-pack-CHME26F"
+        },
+        {
+            "filename": "demo-image3.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/demo-image3-600x360.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 350329,
+            "dimensions": [
+                1280,
+                768
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/software-programmer-at-workplace-above-view-SCKGZ6L"
+        },
+        {
+            "filename": "aa4.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/aa4.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1973,
+            "dimensions": [
+                68,
+                60
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-icons-N7VA248"
+        },
+        {
+            "filename": "aa2.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/aa2.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2974,
+            "dimensions": [
+                69,
+                67
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-icons-N7VA248"
+        },
+        {
+            "filename": "aa3.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/aa3.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2939,
+            "dimensions": [
+                69,
+                65
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-icons-N7VA248"
+        },
+        {
+            "filename": "aa1.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/aa1.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2433,
+            "dimensions": [
+                68,
+                63
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-icons-N7VA248"
+        },
+        {
+            "filename": "icon-image4.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/icon-image4.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2619,
+            "dimensions": [
+                69,
+                66
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-icons-N7VA248"
+        },
+        {
+            "filename": "icon-image3.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/icon-image3.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1978,
+            "dimensions": [
+                70,
+                42
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-icons-N7VA248"
+        },
+        {
+            "filename": "icon-image2.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/icon-image2.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1843,
+            "dimensions": [
+                69,
+                64
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-icons-N7VA248"
+        },
+        {
+            "filename": "icon-image1.png",
+            "thumbnail_url": "http:\/\/astylers.com\/gotech\/wp-content\/uploads\/2020\/11\/icon-image1.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1595,
+            "dimensions": [
+                70,
+                45
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-icons-N7VA248"
+        }
+    ]
+}
