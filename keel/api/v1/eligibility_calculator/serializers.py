@@ -19,3 +19,9 @@ class EligibilityResultsSeriaizer(serializers.ModelSerializer):
         model = EligibilityResults
         fields = ('id', 'lead_id', 'data')
 
+
+class CrsCalculatorSerializer(serializers.Serializer):
+    age = serializers.CharField(max_length=30)
+    education = serializers.CharField(max_length=30)
+    work_experience = serializers.CharField(max_length=30)
+    language = serializers.CharField(max_length=30)
