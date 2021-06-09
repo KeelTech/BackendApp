@@ -6,7 +6,7 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = ['keel.com','admin.keel.com']
 
 DATABASES['default']['ATOMIC_REQUESTS'] = True  # noqa F405
-DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=60)  # noqa F405
+# DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=60)
 DEBUG = False
 
 
@@ -39,11 +39,11 @@ SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = 'DENY'
 
-#INSTALLED_APPS += ('gunicorn',)
+INSTALLED_APPS += ('gunicorn',)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG_DIR = os.path.abspath(os.path.join(BASE_DIR, env('LOG_DIR')))
-LOG_FILE = env(LOG_FILE)
+LOG_FILE = env('LOG_FILE')
 
 # create directory for log file
 if not os.path.exists(LOG_DIR):
@@ -105,4 +105,4 @@ LOGGING = {
 }
 
 
-LEADAPITOKEN = ""
+LEADAPITOKEN = "HVGVGJYG00"

@@ -8,11 +8,15 @@ from keel.leads.models import CustomerLead
 from .helpers import score_dict
 
 import logging
-
 logger = logging.getLogger('app-logger')
+
 class EligibilityResultsView(APIView):
 
     def post(self, request, format='json'):
+        response = {
+            'status' : 1,
+            "message" : ''
+        }
         serializer = EligibilityResultsSeriaizer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -32,23 +36,24 @@ class EligibilityResultsView(APIView):
             valid_data['lead_id'] = lead
             serializer.save()
         except Exception as e:
-            logger.warning('ERROR: ELIGIBILITY_CALCULATOR:EligibilityResultsView ' + str(e))
-            data = {
-                'status' : 0,
-                "message" : str(e)
-            }
-            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+            logger.error('ERROR: ELIGIBILITY_CALCULATOR:EligibilityResultsView ' + str(e))
+            response['messge'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        response = {
-            "status" : 1,
-            "message" : serializer.data 
-        }
-        return Response(response, status=status.HTTP_200_OK)
+        
+        response["message"] =  serializer.data 
+        
+        return Response(response)
 
 
 class CrsCalculatorView(APIView):
 
     def post(self, request, format='json'):
+        response = {
+            'status' : 1,
+            "message" : ''
+        }
         serializer = CrsCalculatorSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -75,17 +80,12 @@ class CrsCalculatorView(APIView):
                 crs_score = (get_education + get_language_test + get_age + get_work_experince)
             except ValueError as e:
                 logger.warning('ERROR: ELIGIBILITY_CALCULATOR:CrsCalculatorView ' + str(e))
-                data = {
-                    'status' : 0,
-                    "message" : str(e)
-                }
-                return Response(data, status=status.HTTP_400_BAD_REQUEST)
+                response['status'] = 0
+                response['messagae'] = str(e)
+                return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            response = {
-                "status" : 1,
-                "message" : crs_score
-            }
-            return Response(response, status=status.HTTP_200_OK)
+            response['message'] = crs_score
+            return Response(response)
         
         else:
             # each of this variables should return an integer
@@ -100,14 +100,9 @@ class CrsCalculatorView(APIView):
             
             except ValueError as e:
                 logger.warning('ERROR: ELIGIBILITY_CALCULATOR:CrsCalculatorView ' + str(e))
-                data = {
-                    'status' : 0,
-                    "message" : str(e)
-                }
-                return Response(data, status=status.HTTP_400_BAD_REQUEST)
+                response['status'] = 0
+                response['messagae'] = str(e)
+                return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            response = {
-                "status" : 1,
-                "message" : crs_score
-            }
-            return Response(response, status=status.HTTP_200_OK)
+            response['message'] = crs_score
+            return Response(response)
