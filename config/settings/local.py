@@ -21,13 +21,13 @@ DEBUG_TOOLBAR_CONFIG = {
 
 INTERNAL_IPS = ['127.0.0.1']
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOG_DIR = os.path.abspath(os.path.join(BASE_DIR, env('LOG_DIR')))
-LOG_FILE = env('LOG_FILE')
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# LOG_DIR = os.path.abspath(os.path.join(BASE_DIR, env('LOG_DIR')))
+# LOG_FILE = env('LOG_FILE')
 
-# create directory for log file
-if not os.path.exists(LOG_DIR):
-    os.makedirs(LOG_DIR)
+# # create directory for log file
+# if not os.path.exists(LOG_DIR):
+#     os.makedirs(LOG_DIR)
 
 LOGGING = {
     'version': 1,
@@ -49,7 +49,7 @@ LOGGING = {
         'file' : {
             'level' : 'INFO',
             'class' : 'logging.handlers.RotatingFileHandler',
-            'filename' : os.path.join(LOG_DIR, LOG_FILE),
+            'filename' : 'info.log',
             'backupCount': 10,
             'maxBytes': 15 * 1024 * 1024,  # 15 MB
             'formatter' : 'simple'
