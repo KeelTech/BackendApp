@@ -43,7 +43,8 @@ X_FRAME_OPTIONS = 'DENY'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG_DIR = os.path.abspath(os.path.join(BASE_DIR, env('LOG_DIR')))
-LOG_FILE = env(LOG_FILE)
+print(LOG_DIR)
+LOG_FILE = env('LOG_FILE')
 
 # create directory for log file
 if not os.path.exists(LOG_DIR):

@@ -7,11 +7,15 @@ from keel.eligibility_calculator.models import EligibilityResults
 from keel.leads.models import CustomerLead
 
 import logging
-
 logger = logging.getLogger('app-logger')
+
 class EligibilityResultsView(APIView):
 
     def post(self, request, format='json'):
+        data = {
+                'status' : 1,
+                "message" : ''
+            }
         serializer = EligibilityResultsSeriaizer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -32,15 +36,12 @@ class EligibilityResultsView(APIView):
             serializer.save()
 
         except Exception as e:
-            logger.warning('ERROR: ELIGIBILITY_CALCULATOR:EligibilityResultsView ' + str(e))
-            data = {
-                'status' : 0,
-                "message" : str(e)
-            }
-            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+            logger.error('ERROR: ELIGIBILITY_CALCULATOR:EligibilityResultsView ' + str(e))
+            response['messge'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        response = {
-            "status" : 1,
-            "message" : serializer.data 
-        }
-        return Response(response, status=status.HTTP_200_OK)
+        
+        response["message"] =  serializer.data 
+        
+        return Response(response)
