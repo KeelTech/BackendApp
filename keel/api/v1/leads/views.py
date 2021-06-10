@@ -13,7 +13,7 @@ class CustomerLeadView(APIView):
 
     # permission_classes = (CustomLeadPermission, )
 
-    def create(self, request, format="json"):
+    def create(self, request):
         response = {
             "status" : 1,
             "message" : ""
