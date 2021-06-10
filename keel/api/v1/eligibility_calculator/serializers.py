@@ -24,4 +24,4 @@ class CrsCalculatorSerializer(serializers.Serializer):
     age = serializers.CharField(max_length=30)
     education = serializers.CharField(max_length=30)
     work_experience = serializers.CharField(max_length=30)
-    language = serializers.CharField(max_length=30)
+    language_test = serializers.CharField(max_length=30)
