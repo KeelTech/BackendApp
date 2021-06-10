@@ -3,17 +3,18 @@ from rest_framework.response import Response
 from keel.api.permissions import CustomLeadPermission
 from rest_framework import status
 from .serializers import CustomerLeadSerializer
+from rest_framework import viewsets, mixins, status
 
 import logging
 logger = logging.getLogger('app-logger')
 
 
 
-class CustomerLeadView(APIView):
+class CustomerLeadView(viewsets.GenericViewSet):
 
     # permission_classes = (CustomLeadPermission, )
 
-    def create(self, request, format="json"):
+    def create(self, request):
         response = {
             "status" : 1,
             "message" : ""
