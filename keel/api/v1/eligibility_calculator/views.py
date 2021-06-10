@@ -102,10 +102,10 @@ class CrsCalculatorView(APIView):
             except Exception as e:
                 logger.warning('ERROR: ELIGIBILITY_CALCULATOR:CrsCalculatorView ' + str(e))
                 response['status'] = 0
-                response['messagae'] = str(e)
+                response['message'] = str(e)
                 return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            response['message'] = crs_score
+            response['message'] = "CRS Score is {}".format(crs_score)
             return Response(response)
         
         else:
@@ -122,7 +122,7 @@ class CrsCalculatorView(APIView):
             except Exception as e:
                 logger.warning('ERROR: ELIGIBILITY_CALCULATOR:CrsCalculatorView ' + str(e))
                 response['status'] = 0
-                response['messagae'] = str(e)
+                response['message'] = str(e)
                 return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
             response['message'] = "CRS Score is {}".format(crs_score)
