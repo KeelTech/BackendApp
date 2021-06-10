@@ -11,7 +11,7 @@ logger = logging.getLogger('app-logger')
 
 class EligibilityResultsView(APIView):
 
-    def post(self, request, format='json'):
+    def submit(self, request, format='json'):
         data = {
                 'status' : 1,
                 "message" : ''
