@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import viewsets, mixins, status
 
 from .serializers import EligibilityResultsSeriaizer
 from keel.eligibility_calculator.models import EligibilityResults
@@ -9,7 +10,7 @@ from keel.leads.models import CustomerLead
 import logging
 logger = logging.getLogger('app-logger')
 
-class EligibilityResultsView(APIView):
+class EligibilityResultsView(viewsets.GenericViewSet):
 
     def submit(self, request):
         data = {
