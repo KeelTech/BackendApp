@@ -3,5 +3,5 @@ from django.urls import path
 from .views import CustomerLeadView
 
 urlpatterns = [
-    path('', CustomerLeadView.as_view(), name='leads'),
+    path('create', CustomerLeadView.as_view({'post': 'create'}), name='leads-create'),
 ]

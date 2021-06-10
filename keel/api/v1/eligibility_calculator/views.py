@@ -12,11 +12,11 @@ logger = logging.getLogger('app-logger')
 
 class EligibilityResultsView(APIView):
 
-    def post(self, request, format='json'):
+    def submit(self, request, format='json'):
         response = {
-            'status' : 1,
-            "message" : ''
-        }
+                'status' : 1,
+                "message" : ''
+            }
         serializer = EligibilityResultsSeriaizer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
