@@ -21,8 +21,6 @@ DEBUG_TOOLBAR_CONFIG = {
 
 INTERNAL_IPS = ['127.0.0.1']
 
-import os
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -43,7 +41,7 @@ LOGGING = {
         'file' : {
             'level' : 'INFO',
             'class' : 'logging.handlers.RotatingFileHandler',
-            'filename' : 'info.log', 
+            'filename' : 'info.log',
             'backupCount': 10,
             'maxBytes': 15 * 1024 * 1024,  # 15 MB
             'formatter' : 'simple'
