@@ -43,11 +43,6 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    USERNAME_FIELD = 'email'
-    # REQUIRED_FIELDS = ['']
-
-    EMAIL_FIELD = 'email'
-    objects = CustomUserManager()
     username = None
     first_name = None
     phone_number = models.CharField(max_length=10, blank=False, null=True, default=None)
@@ -55,8 +50,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     # user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
     is_active = models.BooleanField(verbose_name= 'Active', default=True, help_text= 'Designates whether this user should be treated as active.')
     is_staff = models.BooleanField(default=True)
-
     date_joined = models.DateTimeField(auto_now_add=True)
+    
+    USERNAME_FIELD = 'email'
+    # REQUIRED_FIELDS = ['']
+
+    EMAIL_FIELD = 'email'
+    objects = CustomUserManager()
 
     def __hash__(self):
         return self.id
@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return False
 
     def __str__(self):
-        return str(self.phone_number)
+        return str(self.email)
 
 
     class Meta:

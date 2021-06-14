@@ -4,22 +4,47 @@ from dateutil.relativedelta import relativedelta
 from django.http import HttpResponseRedirect
 
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework import mixins, viewsets, status
 from keel.api.v1.auth import serializers
 from rest_framework.response import Response
+from django.contrib.auth import get_user_model
 from django.db import transaction, IntegrityError
 from django.utils import timezone
 from rest_framework.authtoken.models import Token
 from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
-from keel.authentication.models import (OtpVerifications, )
+# from keel.authentication.models import (OtpVerifications, )
 
-logger = logging.getLogger(__name__)
+import logging
+logger = logging.getLogger('app-logger')
+
 User = get_user_model()
 
 
+class UserViewset(GenericViewSet):
 
+    permission_classes = (AllowAny, )
+    serializer_class = serializers.UserRegistrationSerializer
+
+    def signup(self, request, format="json"):
+        response = {
+            'status' : 1,
+            "message" : ''
+        } 
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            response['messge'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        response["message"] =  serializer.data 
+        return Response(response)
 
 class LoginOTP(GenericViewSet):
 
