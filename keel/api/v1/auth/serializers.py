@@ -2,15 +2,27 @@ from rest_framework import serializers
 from keel.authentication.models import  (User)
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from keel.api.v1 import utils as v1_utils]
+from keel.api.v1 import utils as v1_utils
 from django.contrib.auth import get_user_model
-=from django.conf import settings
+from django.conf import settings
 from django.db.models import Q
-=from keel.common import models as common_models
+# from keel.common import models as common_models
+import logging
+logger = logging.getLogger('app-logger')
+
 
 User = get_user_model()
-logger = logging.getLogger(__name__)
 
+class UserRegistrationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
 
 class OTPSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField(min_value=5000000000,max_value=9999999999)
