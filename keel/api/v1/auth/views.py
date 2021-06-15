@@ -46,6 +46,15 @@ class UserViewset(GenericViewSet):
         response["message"] =  serializer.data 
         return Response(response)
 
+
+class LoginViewset(GenericViewSet):
+    serializer_class = serializers.LoginSerializer
+
+    def login(self, request, format="json"):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class LoginOTP(GenericViewSet):
 
     authentication_classes = []

@@ -1,9 +1,10 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
 from keel.authentication.models import  (User)
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from keel.api.v1 import utils as v1_utils
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
 from django.db.models import Q
 # from keel.common import models as common_models
@@ -24,6 +25,42 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+
+class LoginSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    tokens = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('email', 'password', 'tokens')
+
+    def validate(self, attrs):
+        email = attrs.get('email', None)
+        password = attrs.get('password', None)
+
+        user = authenticate(email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Invalid Credentials, Try Again")
+
+        if not user.is_active:
+            raise serializers.ValidationError("User is not active. Contact Administrator")
+
+        # get jwt tokens
+        token = RefreshToken.for_user(user)
+
+        data = {
+            "email" : user,
+            "tokens" : {
+                "refresh" : str(token),
+                "access" : str(token.access_token)
+            }
+        }
+
+        return data
+
+        
 class OTPSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField(min_value=5000000000,max_value=9999999999)
     via_sms = serializers.BooleanField(default=True, required=False)
