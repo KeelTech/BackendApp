@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from rest_framework_simplejwt.tokens import RefreshToken
-from keel.authentication.models import  (User)
+from keel.authentication.models import CustomToken
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from keel.api.v1 import utils as v1_utils
 from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
 from django.db.models import Q
+from .jwt import create_jwt, decode
 # from keel.common import models as common_models
 import logging
 logger = logging.getLogger('app-logger')
@@ -26,15 +26,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
-    access_token = serializers.CharField(read_only=True)
-    refresh_token = serializers.CharField(read_only=True)
-
-    class Meta:
-        model = User
-        fields = ('email', 'password', 'access_token', 'refresh_token')
+    token = serializers.CharField(read_only=True)
 
     def validate(self, attrs):
         email = attrs.get('email', None)
@@ -48,15 +43,14 @@ class LoginSerializer(serializers.ModelSerializer):
         if not user.is_active:
             raise serializers.ValidationError("User is not active. Contact Administrator")
 
-        # get jwt tokens
-        token = RefreshToken.for_user(user)
+        token = create_jwt(user)
+        obj, created = CustomToken.objects.get_or_create(token=token)
 
         data = {
             "email" : user,
-            "access_token" : str(token.access_token),
-            "refresh_token" : str(token)
+            "token" : obj.token
         }
-
+        
         return data
 
         
