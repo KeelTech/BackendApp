@@ -43,7 +43,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = None
+    username = models.CharField(max_length=255, null=True)
     first_name = None
     phone_number = models.CharField(max_length=10, blank=False, null=True, default=None)
     email = models.EmailField(max_length=100, blank=False, null=True, default=None, unique=True)
@@ -82,6 +82,9 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True
+
+class CustomToken(TimeStampedModel):
+    token = models.CharField(max_length=255, blank=False, null=True, default=None)
 
 
 class SoftDeleteModel(models.Model):
