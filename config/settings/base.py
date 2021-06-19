@@ -16,7 +16,7 @@ import json
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = environ.Path(__file__) - 3
 APPS_DIR = ROOT_DIR.path('keel')
 
@@ -62,7 +62,6 @@ DATABASES = {
 DATABASES['default']['ENGINE'] ='django.db.backends.postgresql_psycopg2'
 
 
-
 # Application definition
 
 DJANGO_APPS = (
@@ -91,6 +90,8 @@ LOCAL_APPS = (
     'keel.authentication',
     'keel.leads',
     'keel.eligibility_calculator',
+    'keel.document',
+    'keel.Core',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -139,13 +140,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 # APP_DIRS = True
 
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = str(ROOT_DIR('static'))
 
 STATIC_URL = '/static/'
 
 # STATICFILES_DIRS = (
-#     str(APPS_DIR.path('static')),
-# )
+#      str(APPS_DIR.path('static')),
+#  )
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -215,4 +217,9 @@ ADMIN_BASE_URL = env('ADMIN_BASE_URL')
 APPEND_SLASH=True
 API_BASE_URL = env('API_BASE_URL')
 # CONN_MAX_AGE=600
+
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_ACCESS_SERVER_ID = env('AWS_ACCESS_SERVER_ID')
+AWS_S3_REGION = env('AWS_S3_REGION')
+S3_BUCKET_NAME = env('S3_BUCKET_NAME')
 

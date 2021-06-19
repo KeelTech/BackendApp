@@ -8,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework import mixins, viewsets, status
 from keel.api.v1.auth import serializers
+from keel.document.models import Documents
+from keel.document.exceptions import *
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.db import transaction, IntegrityError
@@ -81,3 +83,42 @@ class LoginOTP(GenericViewSet):
         # serializer.is_valid(raise_exception=True)
 
         return Response({"message": "OTP Generated Sucessfuly."})
+
+class UploadDocument(GenericViewSet):
+
+    def upload(self, request, format='json'):
+        
+
+        response = {
+                "status": 0,
+                "message": "File Uploaded successfully",
+                "data": ""
+        }
+        data = request.data
+
+        user_id = data.get("user_id")
+        files = request.FILES
+
+        try:
+            docs = Documents.objects.add_attachments(files, user_id)
+        except DocumentInvalid as e:
+            response["status"] = 1
+            response["message"] = str(e)
+            return Response(response)
+
+        user_docs = []
+        for doc in docs:
+            temp_data = {"doc": doc.pk, "user":user_id}
+            user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
+            user_doc_serializer.is_valid(raise_exception=True)
+            user_doc_serializer.save()
+            user_docs.append(user_doc_serializer.data)
+        response["data"] = user_docs
+        return Response(response)
+
+
+
+
+
+
+

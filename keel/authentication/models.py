@@ -11,6 +11,9 @@ import json
 from rest_framework import status
 import logging
 
+from keel.document.models import Documents
+from keel.Core.models import BaseModel
+
 logger = logging.getLogger(__name__)
 
 
@@ -93,3 +96,10 @@ class SoftDeleteModel(models.Model):
 
     class Meta:
         abstract = True
+
+class UserDocument(BaseModel):
+
+    doc = models.ForeignKey(Documents,on_delete=models.deletion.DO_NOTHING, related_name='to_document')
+    user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')
+
+

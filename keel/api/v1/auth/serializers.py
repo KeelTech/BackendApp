@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from keel.authentication.models import  (User)
+from keel.authentication.models import (User, UserDocument)
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from keel.api.v1 import utils as v1_utils
@@ -39,4 +39,20 @@ class OTPSerializer(serializers.Serializer):
         # if otp_obj:
         #     attrs['otp_obj'] = otp_obj
         return attrs
+
+
+class UserDocumentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserDocument
+        fields = ('id', 'doc','user')
+
+
+    def create(self, validated_data):
+
+        user_doc = UserDocument.objects.create(**validated_data)
+        return user_doc
+
+
+
 
