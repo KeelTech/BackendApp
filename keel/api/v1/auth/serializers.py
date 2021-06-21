@@ -6,7 +6,7 @@ from keel.api.v1 import utils as v1_utils
 from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
 from django.db.models import Q
-from .jwt import create_jwt, decode
+from .jwt_backend import create_jwt, decode
 # from keel.common import models as common_models
 import logging
 logger = logging.getLogger('app-logger')
