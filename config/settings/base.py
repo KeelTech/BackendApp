@@ -245,5 +245,3 @@ API_BASE_URL = env('API_BASE_URL')
 # CONN_MAX_AGE=600
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-USER_SECRET_KEY = ["secret"]
