@@ -233,6 +233,11 @@ REST_FRAMEWORK = {
 
 }
 
+JWT_AUTH = {
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
+}
+
 BASE_URL = env('BASE_URL')
 ADMIN_BASE_URL = env('ADMIN_BASE_URL')
 APPEND_SLASH=True

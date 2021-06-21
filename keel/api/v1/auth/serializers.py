@@ -6,7 +6,7 @@ from keel.api.v1 import utils as v1_utils
 from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
 from django.db.models import Q
-from .jwt_backend import create_jwt, decode
+from keel.authentication.backends import JWTAuthentication
 # from keel.common import models as common_models
 import logging
 logger = logging.getLogger('app-logger')
@@ -29,7 +29,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
-    token = serializers.CharField(read_only=True)
+    token_details = serializers.CharField(read_only=True)
 
     def validate(self, attrs):
         email = attrs.get('email', None)
@@ -43,14 +43,18 @@ class LoginSerializer(serializers.Serializer):
         if not user.is_active:
             raise serializers.ValidationError("User is not active. Contact Administrator")
 
-        token = create_jwt(user)
-        obj, created = CustomToken.objects.get_or_create(token=token)
+        token = JWTAuthentication.generate_token(user)
+        obj, created = CustomToken.objects.get_or_create(user=user, token=token)
 
         data = {
-            "email" : user,
-            "token" : obj.token
+            "email" : obj.user,
+            "token_details" : {
+                "token_id" : obj.id, # Token id gotten from line 49
+                "token" : obj.token['token'],
+                "payload" : obj.token['payload']
+            }
         }
-        
+
         return data
 
         
