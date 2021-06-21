@@ -56,11 +56,17 @@ FILE_UPLOAD_PERMISSIONS = 0o664
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 
-DATABASES = {
-    'default': env.db('DATABASE_URL'),
-}
-DATABASES['default']['ENGINE'] ='django.db.backends.postgresql_psycopg2'
+# DATABASES = {
+#     'default': env.db('DATABASE_URL'),
+# }
+# DATABASES['default']['ENGINE'] ='django.db.backends.postgresql_psycopg2'
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # Application definition
 
@@ -82,6 +88,7 @@ THIRD_PARTY_APPS = (
     'rest_framework.authtoken',
     'corsheaders',
     'import_export',
+    'storages',
 )
 
 
@@ -142,6 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = str(ROOT_DIR('static'))
+print(STATIC_ROOT)
 
 STATIC_URL = '/static/'
 
@@ -218,8 +226,26 @@ APPEND_SLASH=True
 API_BASE_URL = env('API_BASE_URL')
 # CONN_MAX_AGE=600
 
+
+
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_ACCESS_SERVER_ID = env('AWS_ACCESS_SERVER_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME') ## TODO Change this
 AWS_S3_REGION = env('AWS_S3_REGION')
-S3_BUCKET_NAME = env('S3_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+# AWS_S3_OBJECT_PARAMETERS = {
+#     'CacheControl': 'max-age=86400',
+# }
+
+AWS_STATIC_LOCATION = 'static'
+STATICFILES_STORAGE = 'keel.Core.storage_backends.StaticStorage'
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+
+## TODO check them
+AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
+DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
+
+AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
+PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
 

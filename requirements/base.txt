@@ -1,5 +1,5 @@
 Django==3.2.3
-psycopg2
+psycopg2-binary==2.8.4
 django-environ
 djangorestframework
 requests
@@ -11,3 +11,6 @@ django-safedelete
 django-extensions
 django-admin
 gunicorn
+django-storages==1.11.1
+django-debug-toolbar
+boto3

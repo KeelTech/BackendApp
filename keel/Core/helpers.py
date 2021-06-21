@@ -4,14 +4,14 @@ import boto3
 
 from urllib.parse import urlparse
 
-from config.settings.base import (AWS_ACCESS_KEY_ID, AWS_ACCESS_SERVER_ID, 
-                                    AWS_S3_REGION, S3_BUCKET_NAME)
+from config.settings.base import (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, 
+                                    AWS_S3_REGION, AWS_STORAGE_BUCKET_NAME)
 
 def get_s3_confing():
     s3_config =  boto3.resource('s3',
                              region_name=AWS_S3_REGION,
                              aws_access_key_id=AWS_ACCESS_KEY_ID,
-                             aws_secret_access_key=AWS_ACCESS_SERVER_ID
+                             aws_secret_access_key=AWS_SECRET_ACCESS_KEY
                             )                           
     return s3_config
 
@@ -20,7 +20,6 @@ def generate_unique_id(prefix):
 
 
 def upload_file_to_s3(file):
-    return "a"
     project_path = os.path.abspath(os.path.join(os.path.dirname( __name__ ), '.'))
     file_path = project_path + "/UserDocuments/"
 

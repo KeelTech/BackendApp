@@ -88,7 +88,6 @@ class UploadDocument(GenericViewSet):
 
     def upload(self, request, format='json'):
         
-
         response = {
                 "status": 0,
                 "message": "File Uploaded successfully",
