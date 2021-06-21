@@ -33,6 +33,7 @@ if READ_DOT_ENV_FILE:
 
 # Custom User model
 AUTH_USER_MODEL = 'authentication.User'
+
 # AUTHENTICATION_BACKENDS = ('keel.authentication.backends.AuthBackend',)
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
@@ -83,6 +84,13 @@ THIRD_PARTY_APPS = (
     'rest_framework.authtoken',
     'corsheaders',
     'import_export',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'rest_auth',
+    'rest_auth.registration',
 )
 
 
@@ -95,6 +103,21 @@ LOCAL_APPS = (
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -106,7 +129,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'config.urls'
 
@@ -203,11 +225,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )
 
+}
+
+JWT_AUTH = {
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
 }
 
 BASE_URL = env('BASE_URL')
@@ -216,3 +244,4 @@ APPEND_SLASH=True
 API_BASE_URL = env('API_BASE_URL')
 # CONN_MAX_AGE=600
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

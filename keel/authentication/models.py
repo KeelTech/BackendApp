@@ -83,6 +83,13 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
 
+class CustomToken(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_id", null=True)
+    token = models.CharField(max_length=255, blank=False, null=True, default=None)
+
+    class Meta:
+        db_table = "custom_token"
+
 
 class SoftDeleteModel(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)

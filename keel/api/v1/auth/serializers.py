@@ -1,11 +1,12 @@
 from rest_framework import serializers
-from keel.authentication.models import  (User)
+from keel.authentication.models import CustomToken
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from keel.api.v1 import utils as v1_utils
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
 from django.db.models import Q
+from keel.authentication.backends import JWTAuthentication
 # from keel.common import models as common_models
 import logging
 logger = logging.getLogger('app-logger')
@@ -24,6 +25,39 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    token_details = serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email', None)
+        password = attrs.get('password', None)
+
+        user = authenticate(email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Invalid Credentials, Try Again")
+
+        if not user.is_active:
+            raise serializers.ValidationError("User is not active. Contact Administrator")
+
+        token = JWTAuthentication.generate_token(user)
+        obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+
+        data = {
+            "email" : obj.user,
+            "token_details" : {
+                "token_id" : obj.id, # Token id gotten from line 49
+                "token" : obj.token['token'],
+                "payload" : obj.token['payload']
+            }
+        }
+
+        return data
+
+        
 class OTPSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField(min_value=5000000000,max_value=9999999999)
     via_sms = serializers.BooleanField(default=True, required=False)

@@ -1,19 +1,21 @@
 import datetime
+
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
+
 from django.http import HttpResponseRedirect
+from django.contrib.auth import get_user_model
+from django.db import transaction, IntegrityError
+from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
+from django.utils import timezone
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
 from rest_framework import mixins, viewsets, status
-from keel.api.v1.auth import serializers
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
-from django.db import transaction, IntegrityError
-from django.utils import timezone
 from rest_framework.authtoken.models import Token
-from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
+
+from keel.api.v1.auth import serializers
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -46,6 +48,16 @@ class UserViewset(GenericViewSet):
         response["message"] =  serializer.data 
         return Response(response)
 
+
+class LoginViewset(GenericViewSet):
+    serializer_class = serializers.LoginSerializer
+
+    def login(self, request, format="json"):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    
 class LoginOTP(GenericViewSet):
 
     authentication_classes = []
