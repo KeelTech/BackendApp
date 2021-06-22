@@ -1,9 +1,15 @@
 from django.urls import path
 
-from .views import (LoginOTP, UserViewset, LoginViewset)
+from .views import (LoginOTP, 
+                    UserViewset, 
+                    LoginViewset, 
+                    FacebookLogin,
+                    GoogleLogin)
 
 urlpatterns = [
     path('signup/', UserViewset.as_view({'post' : 'signup'}), name='signup'),
     path('login/', LoginViewset.as_view({'post' : 'login'}), name='login'),
+    path('google-login/', GoogleLogin.as_view(), name='google_login'),
+    path('facebook-login/', FacebookLogin.as_view(), name='fb_login'),
     path('otp/generate', LoginOTP.as_view({'post': 'generate'}), name='otp-generate'),
 ]

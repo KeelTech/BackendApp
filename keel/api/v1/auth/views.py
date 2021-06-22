@@ -14,6 +14,13 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.parsers import JSONParser
+
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+# from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from .adapter import GoogleOAuth2AdapterIdToken
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from dj_rest_auth.registration.views import SocialLoginView
 
 from keel.api.v1.auth import serializers
 # from keel.authentication.models import (OtpVerifications, )
@@ -61,6 +68,27 @@ class LoginViewset(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         response["message"] = serializer.data
         return Response(response, status=status.HTTP_200_OK)
+
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+
+    
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2AdapterIdToken
+    client_class = OAuth2Client
+    serializer_class = serializers.UserSocialLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        self.request = request
+        self.serializer = self.get_serializer(data=self.request.data)
+        self.serializer.is_valid(raise_exception=True)
+        response["message"] =  self.serializer.data
+        return Response(response)
 
     
 class LoginOTP(GenericViewSet):

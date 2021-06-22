@@ -177,7 +177,7 @@ STATICFILES_FINDERS = (
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(APPS_DIR('media'))
 
-SITE_ID = 1
+SITE_ID = 2
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
@@ -223,9 +223,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'COERCE_DECIMAL_TO_STRING': True,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework.authentication.SessionAuthentication',
+        'keel.authentication.backends.JWTAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -234,7 +235,7 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
-    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_AUTH_HEADER_PREFIX': 'bearer',
     'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
 }
 

@@ -1,13 +1,16 @@
 from rest_framework import serializers
-from keel.authentication.models import CustomToken
+from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from keel.api.v1 import utils as v1_utils
 from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
 from django.db.models import Q
+
+from keel.api.v1 import utils as v1_utils
+from keel.authentication.models import CustomToken
 from keel.authentication.backends import JWTAuthentication
 # from keel.common import models as common_models
+
 import logging
 logger = logging.getLogger('app-logger')
 
@@ -51,6 +54,22 @@ class LoginSerializer(serializers.Serializer):
             "token" : obj.token['token'],
         }
 
+        return data
+
+class UserSocialLoginSerializer(SocialLoginSerializer):
+    user = serializers.CharField(read_only=True)
+    token = serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        user = attrs['user']
+        token = JWTAuthentication.generate_token(user)
+        obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+
+        data = {
+            "user" : obj.user,
+            "token" : obj.token['token'],
+        }
         return data
  
         
