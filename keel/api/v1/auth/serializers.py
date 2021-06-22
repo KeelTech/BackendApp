@@ -29,7 +29,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
-    token_details = serializers.CharField(read_only=True)
+    token = serializers.CharField(read_only=True)
 
     def validate(self, attrs):
         email = attrs.get('email', None)
@@ -48,15 +48,11 @@ class LoginSerializer(serializers.Serializer):
 
         data = {
             "email" : obj.user,
-            "token_details" : {
-                "token_id" : obj.id, # Token id gotten from line 49
-                "token" : obj.token['token'],
-                "payload" : obj.token['payload']
-            }
+            "token" : obj.token['token'],
         }
 
         return data
-
+ 
         
 class OTPSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField(min_value=5000000000,max_value=9999999999)

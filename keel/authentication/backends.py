@@ -57,7 +57,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
 
     def _authenticate_credentials(self, request, token):
-        user_key = settings.USER_SECRET_KEY
+        user_key = "settings.USER_SECRET_KEY" # No USER_SECRET_KEY in settings
         try:
             payload = jwt.decode(token, user_key)
         except Exception as e:
@@ -93,7 +93,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
     @staticmethod
     def generate_token(user, request=None):
-        user_key = settings.USER_SECRET_KEY    
+        # user_key = settings.USER_SECRET_KEY    
         exp = datetime.datetime.utcnow() + datetime.timedelta(days=365)
         payload = JWTAuthentication.jwt_payload_handler(user, exp)
         # token = jwt.encode(payload, user_key[0].key)
