@@ -12,7 +12,7 @@ from rest_framework import status
 import logging
 
 from keel.document.models import Documents
-from keel.Core.models import BaseModel
+from keel.Core.models import TimeStampedModel,SoftDeleteModel
 
 logger = logging.getLogger(__name__)
 
@@ -77,27 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique_together = (("email", "phone_number"))
         db_table = "auth_user"
 
-
-class TimeStampedModel(models.Model):
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-
-
-class SoftDeleteModel(models.Model):
-    deleted_at = models.DateTimeField(blank=True, null=True)
-
-    def mark_delete(self):
-        self.deleted_at = datetime.now()
-        self.save()
-
-    class Meta:
-        abstract = True
-
-class UserDocument(BaseModel):
+class UserDocument(TimeStampedModel, SoftDeleteModel):
 
     doc = models.ForeignKey(Documents,on_delete=models.deletion.DO_NOTHING, related_name='to_document')
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')

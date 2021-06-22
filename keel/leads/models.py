@@ -1,5 +1,5 @@
 from django.db import models
-from keel.authentication.models import TimeStampedModel
+from keel.Core.models import TimeStampedModel
 
 
 class CustomerLead(TimeStampedModel):

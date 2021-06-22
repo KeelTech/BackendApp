@@ -56,17 +56,10 @@ FILE_UPLOAD_PERMISSIONS = 0o664
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': env.db('DATABASE_URL'),
-# }
-# DATABASES['default']['ENGINE'] ='django.db.backends.postgresql_psycopg2'
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': env.db('DATABASE_URL'),
 }
+DATABASES['default']['ENGINE'] ='django.db.backends.postgresql_psycopg2'
 
 # Application definition
 
@@ -149,7 +142,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = str(ROOT_DIR('static'))
-print(STATIC_ROOT)
 
 STATIC_URL = '/static/'
 

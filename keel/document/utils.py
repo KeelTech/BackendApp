@@ -30,6 +30,6 @@ def validate_files(files):
 
 def upload_files_to(instance, filename):
     filename_base, filename_ext = os.path.splitext(filename)
-    return instance.doc_pk + filename_ext 
+    return str(instance.owner_id) + "/" + str(instance.doc_type) + "/" +str(instance.doc_pk) +filename_ext 
 
 

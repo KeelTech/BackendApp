@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import models, transaction
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-from keel.Core.models import BaseModel
+from keel.Core.models import TimeStampedModel, SoftDeleteModel
 from keel.Core.helpers import generate_unique_id
 from keel.Core.storage_backends import PrivateMediaStorage
 from .exceptions import DocumentInvalid
@@ -34,7 +34,7 @@ class DocumentsManager(models.Manager):
         self.bulk_create(docs, batch_size=1000)
         return docs
 
-class Documents(BaseModel):
+class Documents(TimeStampedModel,SoftDeleteModel):
 
     GENERIC = 0
     PASSPORT = 1
