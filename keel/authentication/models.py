@@ -82,4 +82,11 @@ class UserDocument(TimeStampedModel, SoftDeleteModel):
     doc = models.ForeignKey(Documents,on_delete=models.deletion.DO_NOTHING, related_name='to_document')
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')
 
+class CustomToken(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_id", null=True)
+    token = models.CharField(max_length=255, blank=False, null=True, default=None)
+
+    class Meta:
+        db_table = "custom_token"
+
 

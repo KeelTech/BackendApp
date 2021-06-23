@@ -7,6 +7,7 @@ from .v1.eligibility_calculator.router import urlpatterns as eligibility_url
 
 
 urlpatterns = [
+
     path('v1/user/', include(auth_url)),
     path('v1/leads/', include(leads_url)),
     path('v1/eligibility/', include(eligibility_url)),

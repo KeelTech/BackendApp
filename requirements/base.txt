@@ -14,3 +14,7 @@ gunicorn
 django-storages==1.11.1
 django-debug-toolbar
 boto3
+djangorestframework_simplejwt
+django-allauth
+django-rest-auth
+PyJWT
