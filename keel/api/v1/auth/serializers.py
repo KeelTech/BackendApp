@@ -17,16 +17,20 @@ logger = logging.getLogger('app-logger')
 
 User = get_user_model()
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ('id', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+class UserRegistrationSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    token = serializers.CharField(read_only=True)
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
-        return user
+        token = JWTAuthentication.generate_token(user)
+        obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+        data = {
+            "email" : user,
+            "token" : obj.token['token'],
+        }
+        return data
 
 
 class LoginSerializer(serializers.Serializer):

@@ -57,9 +57,9 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
 
     def _authenticate_credentials(self, request, token):
-        # user_key = "settings.USER_SECRET_KEY" # No USER_SECRET_KEY in settings
+        user_key = settings.USER_SECRET_KEY
         try:
-            payload = jwt.decode(token, "secret") # "secret" will be changed back to "user_key" on line 60
+            payload = jwt.decode(token, user_key)
         except Exception as e:
             msg = 'Invalid authentication.'
             raise exceptions.AuthenticationFailed(msg)
@@ -93,10 +93,10 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
     @staticmethod
     def generate_token(user, request=None):
-        # user_key = settings.USER_SECRET_KEY    
+        user_key = settings.USER_SECRET_KEY    
         exp = datetime.datetime.utcnow() + datetime.timedelta(days=365)
         payload = JWTAuthentication.jwt_payload_handler(user, exp)
         # token = jwt.encode(payload, user_key[0].key)
-        token = jwt.encode(payload, "secret", algorithm="HS256") # this will be changed back to line 99
+        token = jwt.encode(payload, user_key, algorithm="HS256") # this will be changed back to line 99
         return {'token': token,
                 'payload': payload}

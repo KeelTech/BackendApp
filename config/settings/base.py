@@ -177,7 +177,7 @@ STATICFILES_FINDERS = (
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(APPS_DIR('media'))
 
-SITE_ID = 2
+SITE_ID = 1
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
@@ -238,6 +238,8 @@ JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'bearer',
     'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
 }
+
+USER_SECRET_KEY = "secret"
 
 BASE_URL = env('BASE_URL')
 ADMIN_BASE_URL = env('ADMIN_BASE_URL')
