@@ -97,6 +97,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
         exp = datetime.datetime.utcnow() + datetime.timedelta(days=365)
         payload = JWTAuthentication.jwt_payload_handler(user, exp)
         # token = jwt.encode(payload, user_key[0].key)
-        token = jwt.encode(payload, "secret", algorithm="HS256") # this will be changed back to line 99
+        token = jwt.encode(payload, user_key, algorithm="HS256") # this will be changed back to line 99
         return {'token': token,
                 'payload': payload}

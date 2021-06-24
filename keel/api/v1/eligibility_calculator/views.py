@@ -32,7 +32,7 @@ class EligibilityResultsView(viewsets.GenericViewSet):
 
         # create instance of leads with name, email and temporarily lead_source which has a value of "WEB"
         try:
-            lead = CustomerLead(name=name, email=email)
+            lead = CustomerLead(name=name, email=email, lead_source=lead_source)
             lead.save()
             # add lead id to validated data
             valid_data['lead_id'] = lead
