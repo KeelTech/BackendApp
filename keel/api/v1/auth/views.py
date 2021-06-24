@@ -184,8 +184,8 @@ class LoginOTP(GenericViewSet):
 
 class UploadDocument(GenericViewSet):
 
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
     
     def upload(self, request, format='json'):
         

@@ -83,17 +83,18 @@ class UserDocumentSerializer(serializers.ModelSerializer):
 
 class ListUserDocumentSerializer(serializers.ModelSerializer):
     doc_type = serializers.SerializerMethodField()
-    doc_link = serializers.SerializerMethodField()
+    # doc_link = serializers.SerializerMethodField()
 
     def get_doc_type(self, obj):
         return obj.doc.get_doc_type_display()
 
-    def get_doc_link(self, obj):
-        return settings.BASE_URL + "/api/v1/doc/get-single-doc" + "/" +str(obj.doc.doc_pk)
+    # def get_doc_link(self, obj):
+    #     return settings.BASE_URL + "/api/v1/doc/get-single-doc" + "/" +str(obj.doc.doc_pk)
 
     class Meta:
         model = UserDocument
-        fields = ('id', 'doc_id', 'user_id', 'doc_link', 'doc_type')
+        # fields = ('id', 'doc_id', 'user_id', 'doc_link', 'doc_type')
+        fields = ('id', 'doc_id', 'user_id', 'doc_type')
 
 
 
