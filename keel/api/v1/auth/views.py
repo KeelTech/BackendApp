@@ -23,6 +23,8 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 
 from keel.api.v1.auth import serializers
+from keel.authentication.models import CustomToken
+from keel.authentication.backends import JWTAuthentication
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -36,6 +38,10 @@ class UserViewset(GenericViewSet):
     permission_classes = (AllowAny, )
     serializer_class = serializers.UserRegistrationSerializer
 
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
     def signup(self, request, format="json"):
         response = {
             'status' : 1,
@@ -43,16 +49,31 @@ class UserViewset(GenericViewSet):
         } 
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-
+        validated_data = serializer.validated_data
         try:
-            serializer.save()
+            user = self.create(validated_data)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
-            response['messge'] = str(e)
+            response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        response["message"] =  serializer.data 
+        token = JWTAuthentication.generate_token(user)
+
+        try:
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        data = {
+            "email" : obj.user.email,
+            "token" : obj.token['token'],
+        }
+        
+        response["message"] =  data
         return Response(response)
 
 
@@ -66,7 +87,21 @@ class LoginViewset(GenericViewSet):
         }
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response["message"] = serializer.data
+        user = serializer.validated_data
+        token = JWTAuthentication.generate_token(user)
+        try:
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        data = {
+            "email" : obj.user.email,
+            "token" : obj.token['token'],
+        }
+        response["message"] = data
         return Response(response, status=status.HTTP_200_OK)
 
 
@@ -87,7 +122,20 @@ class GoogleLogin(SocialLoginView):
         self.request = request
         self.serializer = self.get_serializer(data=self.request.data)
         self.serializer.is_valid(raise_exception=True)
-        response["message"] =  self.serializer.data
+        user = self.serializer.validated_data
+        token = JWTAuthentication.generate_token(user)
+        try:
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        data = {
+            "email" : obj.user.email,
+            "token" : obj.token['token'],
+        }
+        response["message"] =  data
         return Response(response)
 
     

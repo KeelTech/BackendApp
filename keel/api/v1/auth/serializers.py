@@ -7,8 +7,6 @@ from django.conf import settings
 from django.db.models import Q
 
 from keel.api.v1 import utils as v1_utils
-from keel.authentication.models import CustomToken
-from keel.authentication.backends import JWTAuthentication
 # from keel.common import models as common_models
 
 import logging
@@ -21,16 +19,6 @@ class UserRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     token = serializers.CharField(read_only=True)
-
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        token = JWTAuthentication.generate_token(user)
-        obj, created = CustomToken.objects.get_or_create(user=user, token=token)
-        data = {
-            "email" : user,
-            "token" : obj.token['token'],
-        }
-        return data
 
 
 class LoginSerializer(serializers.Serializer):
@@ -50,15 +38,7 @@ class LoginSerializer(serializers.Serializer):
         if not user.is_active:
             raise serializers.ValidationError("User is not active. Contact Administrator")
 
-        token = JWTAuthentication.generate_token(user)
-        obj, created = CustomToken.objects.get_or_create(user=user, token=token)
-
-        data = {
-            "email" : obj.user,
-            "token" : obj.token['token'],
-        }
-
-        return data
+        return user
 
 class UserSocialLoginSerializer(SocialLoginSerializer):
     user = serializers.CharField(read_only=True)
@@ -67,14 +47,7 @@ class UserSocialLoginSerializer(SocialLoginSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
         user = attrs['user']
-        token = JWTAuthentication.generate_token(user)
-        obj, created = CustomToken.objects.get_or_create(user=user, token=token)
-
-        data = {
-            "user" : obj.user,
-            "token" : obj.token['token'],
-        }
-        return data
+        return user
  
         
 class OTPSerializer(serializers.Serializer):
