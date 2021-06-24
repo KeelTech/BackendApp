@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from keel.authentication.models import (User, UserDocument, CustomToken)
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
@@ -65,4 +66,35 @@ class OTPSerializer(serializers.Serializer):
         # if otp_obj:
         #     attrs['otp_obj'] = otp_obj
         return attrs
+
+
+class UserDocumentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserDocument
+        fields = ('id', 'doc','user')
+
+
+    def create(self, validated_data):
+
+        user_doc = UserDocument.objects.create(**validated_data)
+        return user_doc
+
+
+class ListUserDocumentSerializer(serializers.ModelSerializer):
+    doc_type = serializers.SerializerMethodField()
+    # doc_link = serializers.SerializerMethodField()
+
+    def get_doc_type(self, obj):
+        return obj.doc.get_doc_type_display()
+
+    # def get_doc_link(self, obj):
+    #     return settings.BASE_URL + "/api/v1/doc/get-single-doc" + "/" +str(obj.doc.doc_pk)
+
+    class Meta:
+        model = UserDocument
+        # fields = ('id', 'doc_id', 'user_id', 'doc_link', 'doc_type')
+        fields = ('id', 'doc_id', 'user_id', 'doc_type')
+
+
 

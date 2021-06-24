@@ -12,6 +12,13 @@ from django.utils import timezone
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import mixins, viewsets, status
+
+from keel.api.v1.auth import serializers
+from keel.document.models import Documents
+from keel.document.exceptions import *
+from keel.authentication.models import UserDocument
+from keel.authentication.backends import JWTAuthentication
+
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
@@ -174,3 +181,66 @@ class LoginOTP(GenericViewSet):
         # serializer.is_valid(raise_exception=True)
 
         return Response({"message": "OTP Generated Sucessfuly."})
+
+class UploadDocument(GenericViewSet):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
+    
+    def upload(self, request, format='json'):
+        
+        response = {
+                "status": 0,
+                "message": "File Uploaded successfully",
+                "data": ""
+        }
+        resp_status = status.HTTP_200_OK
+
+        data = request.data
+
+        user = request.user
+        user_id = user.id
+        files = request.FILES
+
+        try:
+            docs = Documents.objects.add_attachments(files, user_id)
+        except DocumentInvalid as e:
+            response["status"] = 1
+            response["message"] = str(e)
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status = resp_status)
+
+        user_docs = []
+        for doc in docs:
+            temp_data = {"doc": doc.pk, "user":user_id}
+            user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
+            user_doc_serializer.is_valid(raise_exception=True)
+            user_doc_serializer.save()
+            user_docs.append(user_doc_serializer.data)
+        response["data"] = user_docs
+        return Response(response, status = resp_status)
+
+    def fetch(self, request, format = 'json'):
+
+        response = {
+                "status": 0,
+                "message":"User Document Fetched successfully",
+                "data": ""
+        }
+        resp_status = status.HTTP_200_OK
+        # Fetch User Id
+        user = request.user
+
+        try:
+            user_docs = UserDocument.objects.select_related('doc').filter(user_id = user.id)
+            user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
+            response_data = user_doc_serializer.data
+            response["data"] = response_data
+        except:
+            response["status"] = 1
+            response["message"] = "Server Failed to Complete request"
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+        return Response(response, status = resp_status)
+
+

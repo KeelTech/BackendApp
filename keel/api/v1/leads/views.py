@@ -32,3 +32,4 @@ class CustomerLeadView(viewsets.GenericViewSet):
 
         response["message"] =  serializer.data 
         return Response(response)
+

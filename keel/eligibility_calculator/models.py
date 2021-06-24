@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from keel.leads.models import CustomerLead
-from keel.authentication.models import TimeStampedModel
+from keel.Core.models import TimeStampedModel
 # Create your models here.
 
 

@@ -11,6 +11,9 @@ import json
 from rest_framework import status
 import logging
 
+from keel.document.models import Documents
+from keel.Core.models import TimeStampedModel,SoftDeleteModel
+
 logger = logging.getLogger(__name__)
 
 
@@ -74,14 +77,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique_together = (("email", "phone_number"))
         db_table = "auth_user"
 
+class UserDocument(TimeStampedModel, SoftDeleteModel):
 
-class TimeStampedModel(models.Model):
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
+    doc = models.ForeignKey(Documents,on_delete=models.deletion.DO_NOTHING, related_name='to_document')
+    user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')
 
 class CustomToken(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_id", null=True)
@@ -91,12 +90,3 @@ class CustomToken(TimeStampedModel):
         db_table = "custom_token"
 
 
-class SoftDeleteModel(models.Model):
-    deleted_at = models.DateTimeField(blank=True, null=True)
-
-    def mark_delete(self):
-        self.deleted_at = datetime.now()
-        self.save()
-
-    class Meta:
-        abstract = True
