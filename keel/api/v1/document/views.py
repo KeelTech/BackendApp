@@ -35,7 +35,7 @@ class GetDocument(GenericViewSet):
             response['status'] = 1
             response['message'] = "Document Id is invalid"
             resp_status = status.HTTP_400_BAD_REQUEST
-
+            return Response(response, status = resp_status)
         # doc_serializer = DocumentsSerializer(doc)
         # response_data = doc_serializer.data
         # response["data"] = response_data
