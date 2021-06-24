@@ -1,29 +1,56 @@
 from rest_framework import serializers
-from keel.authentication.models import (User, UserDocument)
+from keel.authentication.models import (User, UserDocument, CustomToken)
+from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from keel.api.v1 import utils as v1_utils
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.conf import settings
 from django.db.models import Q
+
+from keel.api.v1 import utils as v1_utils
 # from keel.common import models as common_models
+
 import logging
 logger = logging.getLogger('app-logger')
 
 
 User = get_user_model()
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
+class UserRegistrationSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    token = serializers.CharField(read_only=True)
 
-    class Meta:
-        model = User
-        fields = ('id', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    token = serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email', None)
+        password = attrs.get('password', None)
+
+        user = authenticate(email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Invalid Credentials, Try Again")
+
+        if not user.is_active:
+            raise serializers.ValidationError("User is not active. Contact Administrator")
+
         return user
 
+class UserSocialLoginSerializer(SocialLoginSerializer):
+    user = serializers.CharField(read_only=True)
+    token = serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        user = attrs['user']
+        return user
+ 
+        
 class OTPSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField(min_value=5000000000,max_value=9999999999)
     via_sms = serializers.BooleanField(default=True, required=False)
@@ -53,6 +80,21 @@ class UserDocumentSerializer(serializers.ModelSerializer):
         user_doc = UserDocument.objects.create(**validated_data)
         return user_doc
 
+
+class ListUserDocumentSerializer(serializers.ModelSerializer):
+    doc_type = serializers.SerializerMethodField()
+    # doc_link = serializers.SerializerMethodField()
+
+    def get_doc_type(self, obj):
+        return obj.doc.get_doc_type_display()
+
+    # def get_doc_link(self, obj):
+    #     return settings.BASE_URL + "/api/v1/doc/get-single-doc" + "/" +str(obj.doc.doc_pk)
+
+    class Meta:
+        model = UserDocument
+        # fields = ('id', 'doc_id', 'user_id', 'doc_link', 'doc_type')
+        fields = ('id', 'doc_id', 'user_id', 'doc_type')
 
 
 

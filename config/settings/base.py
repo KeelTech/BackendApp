@@ -33,6 +33,7 @@ if READ_DOT_ENV_FILE:
 
 # Custom User model
 AUTH_USER_MODEL = 'authentication.User'
+
 # AUTHENTICATION_BACKENDS = ('keel.authentication.backends.AuthBackend',)
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
@@ -61,6 +62,7 @@ DATABASES = {
 }
 DATABASES['default']['ENGINE'] ='django.db.backends.postgresql_psycopg2'
 
+
 # Application definition
 
 DJANGO_APPS = (
@@ -82,6 +84,12 @@ THIRD_PARTY_APPS = (
     'corsheaders',
     'import_export',
     'storages',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'rest_auth',
+    'rest_auth.registration',
 )
 
 
@@ -96,6 +104,26 @@ LOCAL_APPS = (
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -107,7 +135,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'config.urls'
 
@@ -203,14 +230,23 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'COERCE_DECIMAL_TO_STRING': True,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework.authentication.SessionAuthentication',
+        'keel.authentication.backends.JWTAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )
 
 }
+
+JWT_AUTH = {
+    'JWT_AUTH_HEADER_PREFIX': 'bearer',
+    'JWT_EXPIRATION_DELTA' : datetime.timedelta(seconds=300),
+}
+
+USER_SECRET_KEY = "secret"
 
 BASE_URL = env('BASE_URL')
 ADMIN_BASE_URL = env('ADMIN_BASE_URL')
@@ -226,6 +262,7 @@ AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME') ## TODO Change this
 AWS_S3_REGION = env('AWS_S3_REGION')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
+AWS_QUERYSTRING_AUTH = False
 # AWS_S3_OBJECT_PARAMETERS = {
 #     'CacheControl': 'max-age=86400',
 # }
@@ -233,7 +270,6 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_STATIC_LOCATION = 'static'
 STATICFILES_STORAGE = 'keel.Core.storage_backends.StaticStorage'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
-
 ## TODO check them
 AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
 DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
@@ -241,3 +277,4 @@ DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

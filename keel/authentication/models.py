@@ -46,7 +46,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = None
+    username=None
     first_name = None
     phone_number = models.CharField(max_length=10, blank=False, null=True, default=None)
     email = models.EmailField(max_length=100, blank=False, null=True, default=None, unique=True)
@@ -81,5 +81,12 @@ class UserDocument(TimeStampedModel, SoftDeleteModel):
 
     doc = models.ForeignKey(Documents,on_delete=models.deletion.DO_NOTHING, related_name='to_document')
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')
+
+class CustomToken(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_id", null=True)
+    token = models.CharField(max_length=512, blank=False, null=True, default=None)
+
+    class Meta:
+        db_table = "custom_token"
 
 
