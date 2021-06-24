@@ -43,7 +43,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=255, blank=False, null=True, default=None)
+    username=None
     first_name = None
     phone_number = models.CharField(max_length=10, blank=False, null=True, default=None)
     email = models.EmailField(max_length=100, blank=False, null=True, default=None, unique=True)
