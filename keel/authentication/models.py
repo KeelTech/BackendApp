@@ -85,7 +85,7 @@ class TimeStampedModel(models.Model):
 
 class CustomToken(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_id", null=True)
-    token = models.CharField(max_length=255, blank=False, null=True, default=None)
+    token = models.CharField(max_length=512, blank=False, null=True, default=None)
 
     class Meta:
         db_table = "custom_token"
