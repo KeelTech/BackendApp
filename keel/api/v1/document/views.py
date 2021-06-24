@@ -20,16 +20,21 @@ class GetDocument(GenericViewSet):
                 "message":"Document Fetched successfully",
                 "data": ""
         }
-
+        resp_status = status.HTTP_200_OK
         doc_id = kwargs.get('doc_id')
 
         if not doc_id:
-        	response['status'] = 1
-        	response['message'] = "Document Id is invalid"
-        	return Response(response)
+            response['status'] = 1
+            response['message'] = "Invalid Request Data"
+            resp_status = status.HTTP_400_BAD_REQUEST
+            return Response(response, status = resp_status)
 
-
-        doc = Documents.objects.get(doc_pk = doc_id)
+        try:
+            doc = Documents.objects.get(doc_pk = doc_id)
+        except Documents.DoesNotExist:
+            response['status'] = 1
+            response['message'] = "Document Id is invalid"
+            resp_status = status.HTTP_400_BAD_REQUEST
 
         # doc_serializer = DocumentsSerializer(doc)
         # response_data = doc_serializer.data
@@ -41,6 +46,3 @@ class GetDocument(GenericViewSet):
 
         return response
        
-
-
-

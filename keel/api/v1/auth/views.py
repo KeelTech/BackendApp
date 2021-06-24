@@ -113,9 +113,12 @@ class UploadDocument(GenericViewSet):
                 "message": "File Uploaded successfully",
                 "data": ""
         }
+        resp_status = status.HTTP_200_OK
+
         data = request.data
 
-        user_id = data.get("user_id")
+        user = request.user
+        user_id = user.id
         files = request.FILES
 
         try:
@@ -123,7 +126,8 @@ class UploadDocument(GenericViewSet):
         except DocumentInvalid as e:
             response["status"] = 1
             response["message"] = str(e)
-            return Response(response)
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status = resp_status)
 
         user_docs = []
         for doc in docs:
@@ -133,7 +137,7 @@ class UploadDocument(GenericViewSet):
             user_doc_serializer.save()
             user_docs.append(user_doc_serializer.data)
         response["data"] = user_docs
-        return Response(response)
+        return Response(response, status = resp_status)
 
     def fetch(self, request, format = 'json'):
 
@@ -142,35 +146,20 @@ class UploadDocument(GenericViewSet):
                 "message":"User Document Fetched successfully",
                 "data": ""
         }
-
+        resp_status = status.HTTP_200_OK
         # Fetch User Id
         user = request.user
 
         try:
-            user_docs = UserDocument.objects.select_related('doc').filter(user_id = 1)
+            user_docs = UserDocument.objects.select_related('doc').filter(user_id = user.id)
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data
         except:
             response["status"] = 1
             response["message"] = "Server Failed to Complete request"
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
-        return Response(response)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return Response(response, status = resp_status)
 
 
