@@ -4,7 +4,7 @@ import boto3
 
 from urllib.parse import urlparse
 
-from config.settings.base import (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, 
+from config.settings.production import (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, 
                                     AWS_S3_REGION, AWS_STORAGE_BUCKET_NAME)
 
 def get_s3_confing():
