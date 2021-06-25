@@ -27,6 +27,8 @@ COPY ./docker-build/wsgi-entry.sh /rest/
 
 RUN chmod +x /rest/wsgi-entry.sh 
 
+RUN  apt-get install -y --no-install-recommends python-dev libpq-dev
+
 RUN mkdir -p /rest/logs && \
     pip3 install wheel==0.34.2 && \
     pip3 install -r base.txt 
