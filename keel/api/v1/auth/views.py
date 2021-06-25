@@ -131,6 +131,7 @@ class FacebookLogin(SocialLoginView):
 class LinkedinLogin(SocialLoginView):
     adapter_class = LinkedInOAuth2Adapter
     client_class = OAuth2Client
+    callback_url = "http://localhost:8000/accounts/linkedin_oauth2/login/callback/"
     serializer_class = serializers.UserSocialLoginSerializer
 
     def post(self, request, *args, **kwargs):
