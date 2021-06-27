@@ -19,7 +19,6 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = environ.Path(__file__) - 3
 APPS_DIR = ROOT_DIR.path('keel')
-
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=True)
@@ -61,7 +60,6 @@ DATABASES = {
     'default': env.db('DATABASE_URL'),
 }
 DATABASES['default']['ENGINE'] ='django.db.backends.postgresql_psycopg2'
-
 
 # Application definition
 
@@ -169,7 +167,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 #STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = str(ROOT_DIR('static'))
-
 STATIC_URL = '/static/'
 
 # STATICFILES_DIRS = (
@@ -182,7 +179,7 @@ STATICFILES_FINDERS = (
 )
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = str(APPS_DIR('media'))
+MEDIA_ROOT = str(ROOT_DIR('media'))
 
 SITE_ID = 1
 
@@ -268,13 +265,12 @@ AWS_QUERYSTRING_AUTH = False
 # }
 
 AWS_STATIC_LOCATION = 'static'
-STATICFILES_STORAGE = 'keel.Core.storage_backends.StaticStorage'
-STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+STATICFILES_STORAGE = 'django.core.files.storage.FileSystemStorage'
 ## TODO check them
 AWS_PUBLIC_MEDIA_LOCATION = 'media/public'
-DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
-PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
+PRIVATE_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
