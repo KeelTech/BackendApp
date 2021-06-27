@@ -13,6 +13,11 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
+#default value
+ARG django_settings_value=config.settings.local 
+
+ENV DJANGO_SETTINGS_MODULE=$django_settings_value
+
 COPY ./docker-build/wsgi-entry.sh /rest/
 
 RUN chmod +x /rest/wsgi-entry.sh 
