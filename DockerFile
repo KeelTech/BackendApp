@@ -1,11 +1,17 @@
 FROM python:3.8-slim-buster
 
-RUN apt-get update
-RUN apt-get -y install gcc
+RUN apt-get update && \
+	apt-get -y install gcc && \
+	python3 -m pip install --upgrade pip
 
 WORKDIR /rest/BackendApp
 
 COPY ./requirements/base.txt ./
+
+# default value
+ARG req_file=requirements/local.txt
+
+COPY $req_file ./requirements.txt
 
 # Prevents Python from writing pyc files to disc
 ENV PYTHONDONTWRITEBYTECODE 1

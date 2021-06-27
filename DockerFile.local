@@ -5,10 +5,7 @@ RUN apt-get -y install gcc
 
 WORKDIR /rest/BackendApp
 
-COPY ./requirements/base.txt ./
 COPY ./requirements/local.txt ./
-COPY ./requirements/production.txt ./ 
-COPY ./requirements/staging.txt ./
 
 # Prevents Python from writing pyc files to disc
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,20 +13,11 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
+ENV DJANGO_SETTINGS_MODULE config.settings.local
 
-RUN pwd
-
-RUN ls -l
-
-RUN ls -a
 
 RUN mkdir -p /rest/logs && \
     pip3 install wheel==0.34.2 && \
     pip3 install -r base.txt 
-#    pip3 install -r local.txt && \
-#    pip3 install -r production.txt && \
-#    pip3 install -r staging.txt 
-
-RUN ls -a
 
 COPY ./ ./
