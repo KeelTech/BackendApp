@@ -6,11 +6,11 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 from keel.Core.models import TimeStampedModel, SoftDeleteModel
 from keel.Core.helpers import generate_unique_id
-from keel.Core.storage_backends import doc_storage
+from keel.Core.storage_backends import PrivateStorage
+from keel.Core.err_log import log_error
 from .exceptions import DocumentInvalid
 from .utils import validate_files, upload_files_to
 from datetime import date, datetime, timedelta
-
 
 # Create your models here.
 
@@ -32,9 +32,10 @@ class DocumentsManager(models.Manager):
                                         original_name= file.name,
                                         doc_pk= generate_unique_id(self.model.DOCUMENT_PREFIX)))
 
-            self.bulk_create(docs, batch_size=1000)
+            self.bulk_create(docs)
         except Exception as e:
-            raise DocumentInvalid(e)
+            log_error("ERROR", "DocumentsManager: add_attachments", str(user_id), err = str(e))
+            raise Exception(e)
         return docs
 
 class Documents(TimeStampedModel,SoftDeleteModel):
@@ -49,7 +50,7 @@ class Documents(TimeStampedModel,SoftDeleteModel):
     doc_pk = models.CharField(max_length=255, primary_key=True)
     # doc_url = models.URLField(max_length=1000, null=True, blank=True)
     avatar = models.FileField(("Documents"), upload_to=upload_files_to,
-                              blank=True, storage=doc_storage)
+                              blank=True, storage=PrivateStorage)
     doc_type = models.SmallIntegerField(default=GENERIC, choices=DOC_TYPE_CHOICES)
     owner_id = models.CharField(max_length=255)
     original_name = models.CharField(max_length=255)

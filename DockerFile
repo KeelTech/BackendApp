@@ -8,11 +8,6 @@ WORKDIR /rest/BackendApp
 
 COPY ./requirements/base.txt ./
 
-# default value
-ARG req_file=requirements/local.txt
-
-COPY $req_file ./requirements.txt
-
 # Prevents Python from writing pyc files to disc
 ENV PYTHONDONTWRITEBYTECODE 1
 
@@ -20,24 +15,19 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 #default value
-ARG django_settings_value=config.settings.local 
+ARG SERVER_ENV=local 
 
-ENV DJANGO_SETTINGS_MODULE=$django_settings_value
+COPY ./requirements/$SERVER_ENV.txt ./requirements.txt
 
-COPY ./docker-build/wsgi-entry.sh /rest/
-
-RUN chmod +x /rest/wsgi-entry.sh 
+ENV DJANGO_SETTINGS_MODULE=config.settings.$SERVER_ENV
 
 RUN apt-get install -y --no-install-recommends python-dev libpq-dev
 
 RUN mkdir -p /rest/logs && \
     pip3 install wheel==0.34.2 && \
-    pip3 install -r base.txt 
+    pip3 install -r requirements.txt 
 
 COPY ./ ./
 
 CMD [ "python", "manage.py",  "migrate"]
 
-#CMD [ "python", "manage.py",  "runserver", "0.0.0.0:8000" ]
-
-#ENTRYPOINT ["/rest/wsgi-entry.sh"]
