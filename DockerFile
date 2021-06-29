@@ -1,0 +1,33 @@
+FROM python:3.8-slim-buster
+
+RUN apt-get update && \
+	apt-get -y install gcc && \
+	python3 -m pip install --upgrade pip
+
+WORKDIR /rest/BackendApp
+
+COPY ./requirements/base.txt ./
+
+# Prevents Python from writing pyc files to disc
+ENV PYTHONDONTWRITEBYTECODE 1
+
+# Prevents Python from buffering stdout and stderr
+ENV PYTHONUNBUFFERED 1
+
+#default value
+ARG SERVER_ENV=local 
+
+COPY ./requirements/$SERVER_ENV.txt ./requirements.txt
+
+ENV DJANGO_SETTINGS_MODULE=config.settings.$SERVER_ENV
+
+RUN apt-get install -y --no-install-recommends python-dev libpq-dev
+
+RUN mkdir -p /rest/logs && \
+    pip3 install wheel==0.34.2 && \
+    pip3 install -r requirements.txt 
+
+COPY ./ ./
+
+CMD [ "python", "manage.py",  "migrate"]
+

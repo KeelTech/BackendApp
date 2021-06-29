@@ -18,6 +18,8 @@ from keel.document.models import Documents
 from keel.document.exceptions import *
 from keel.authentication.models import UserDocument
 from keel.authentication.backends import JWTAuthentication
+from keel.Core.constants import GENERIC_ERROR
+from keel.Core.err_log import log_error
 
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -218,7 +220,6 @@ class UploadDocument(GenericViewSet):
     permission_classes = (IsAuthenticated,)
     
     def upload(self, request, format='json'):
-        
         response = {
                 "status": 0,
                 "message": "File Uploaded successfully",
@@ -235,8 +236,15 @@ class UploadDocument(GenericViewSet):
         try:
             docs = Documents.objects.add_attachments(files, user_id)
         except DocumentInvalid as e:
+            log_error("ERROR", "UploadDocument:upload DocumentInvalid", str(user_id), err = str(e))
             response["status"] = 1
             response["message"] = str(e)
+            resp_status = status.HTTP_400_BAD_REQUEST
+            return Response(response, status = resp_status)
+        except Exception as e:
+            log_error("ERROR", "UploadDocument:upload Exception", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
@@ -246,7 +254,7 @@ class UploadDocument(GenericViewSet):
             user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
             user_doc_serializer.is_valid(raise_exception=True)
             user_doc_serializer.save()
-            user_docs.append(user_doc_serializer.data)
+            user_docs.append(user_doc_serializer.data) 
         response["data"] = user_docs
         return Response(response, status = resp_status)
 
@@ -258,7 +266,6 @@ class UploadDocument(GenericViewSet):
                 "data": ""
         }
         resp_status = status.HTTP_200_OK
-        # Fetch User Id
         user = request.user
 
         try:
@@ -266,9 +273,10 @@ class UploadDocument(GenericViewSet):
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data
-        except:
+        except Exception as e:
+            log_error("ERROR", "UploadDocument:fetch exception", str(user.id), err = str(e))
             response["status"] = 1
-            response["message"] = "Server Failed to Complete request"
+            response["message"] = GENERIC_ERROR
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
         return Response(response, status = resp_status)

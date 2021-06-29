@@ -1,0 +1,16 @@
+version: '3.3'
+
+services:
+  wsgi:
+    build:
+      context: .
+      dockerfile: ./DockerFile.local
+    image: keel-local:latest
+    hostname: keel-local-service
+    env_file:
+      - .env
+    ports:
+      - 8001:8001
+    container_name: keel-local
+
+

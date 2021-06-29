@@ -107,6 +107,13 @@ LOGGING = {
 
 LEADAPITOKEN = "HVGVGJYG00"
 
+PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
+STATICFILES_STORAGE = 'keel.Core.storage_backends.StaticStorage'
+DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
+
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+
+
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME') ## TODO Change this
