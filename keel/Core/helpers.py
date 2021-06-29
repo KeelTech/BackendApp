@@ -4,14 +4,17 @@ import boto3
 
 from urllib.parse import urlparse
 
-from config.settings.production import (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, 
-                                    AWS_S3_REGION, AWS_STORAGE_BUCKET_NAME)
+from django.conf import settings
+# from config.settings.production import (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, 
+#                                     AWS_S3_REGION, AWS_STORAGE_BUCKET_NAME)
 
 def get_s3_confing():
+    if not settings.get('AWS_ACCESS_KEY_ID'):
+        return False
     s3_config =  boto3.resource('s3',
-                             region_name=AWS_S3_REGION,
-                             aws_access_key_id=AWS_ACCESS_KEY_ID,
-                             aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+                             region_name=settings.AWS_S3_REGION,
+                             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
                             )                           
     return s3_config
 
@@ -40,11 +43,12 @@ def upload_file_to_s3(file):
     f.write(file.read())
     f.close()
     s3_config = get_s3_confing()
-    response = s3_config.meta.client.upload_file(
-                                file_full_path, 
-                                S3_BUCKET_NAME, 
-                                "/UserDocuments/"+file_name
-                                )
+    if s3_config:
+        response = s3_config.meta.client.upload_file(
+                                    file_full_path, 
+                                    S3_BUCKET_NAME, 
+                                    "/UserDocuments/"+file_name
+                                    )
     ## return with URLs
     return
 

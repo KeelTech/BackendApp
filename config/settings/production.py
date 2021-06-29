@@ -103,7 +103,7 @@ LOGGING = {
         },   
     },
 }
-
+PRODUCTION=True
 
 LEADAPITOKEN = "HVGVGJYG00"
 
