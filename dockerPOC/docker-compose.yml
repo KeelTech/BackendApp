@@ -1,0 +1,24 @@
+version: '3.3'
+
+services:
+  wsgi:
+    build:
+      context: .
+      dockerfile: ./DockerFile
+    image: keel-service:latest
+    hostname: keel-backend-service
+    env_file:
+      - .env
+    expose:
+      - 8000
+    container_name: keel-container
+    command: gunicorn config.wsgi:application -w 1 -b 0.0.0.0:8000 
+  nginx:
+    build: 
+      context: .
+      dockerfile: ./docker-build/dockerfile.nginx
+    ports:
+      - 8080:80
+    depends_on:
+      - wsgi
+    restart: "always"

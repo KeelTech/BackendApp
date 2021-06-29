@@ -1,0 +1,23 @@
+FROM python:3.8-slim-buster
+
+RUN apt-get update
+RUN apt-get -y install gcc
+
+WORKDIR /rest/BackendApp
+
+COPY ./requirements/local.txt ./
+
+# Prevents Python from writing pyc files to disc
+ENV PYTHONDONTWRITEBYTECODE 1
+
+# Prevents Python from buffering stdout and stderr
+ENV PYTHONUNBUFFERED 1
+
+ENV DJANGO_SETTINGS_MODULE config.settings.local
+
+
+RUN mkdir -p /rest/logs && \
+    pip3 install wheel==0.34.2 && \
+    pip3 install -r base.txt 
+
+COPY ./ ./
