@@ -26,10 +26,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-# from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from .adapter import GoogleOAuth2AdapterIdToken
+from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
+from .adapter import GoogleOAuth2AdapterIdToken
 
 from keel.api.v1.auth import serializers
 from keel.authentication.models import CustomToken
@@ -116,6 +116,36 @@ class LoginViewset(GenericViewSet):
 
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
+    client_class = OAuth2Client
+    serializer_class = serializers.UserSocialLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        self.request = request
+        self.serializer = self.get_serializer(data=self.request.data)
+        self.serializer.is_valid(raise_exception=True)
+        response["message"] =  self.serializer.data
+        return Response(response)
+
+class LinkedinLogin(SocialLoginView):
+    adapter_class = LinkedInOAuth2Adapter
+    client_class = OAuth2Client
+    callback_url = "http://localhost:8000/accounts/linkedin_oauth2/login/callback/"
+    serializer_class = serializers.UserSocialLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        self.request = request
+        self.serializer = self.get_serializer(data=self.request.data)
+        self.serializer.is_valid(raise_exception=True)
+        response["message"] =  self.serializer.data
+        return Response(response)
 
     
 class GoogleLogin(SocialLoginView):
