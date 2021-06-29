@@ -12,6 +12,7 @@ from django.utils import timezone
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import mixins, viewsets, status
+from keel.api.v1 import auth
 
 from keel.api.v1.auth import serializers
 from keel.document.models import Documents
@@ -32,6 +33,7 @@ from .adapter import GoogleOAuth2AdapterIdToken
 from keel.api.v1.auth import serializers
 from keel.authentication.models import CustomToken
 from keel.authentication.backends import JWTAuthentication
+from .helpers.token_helper import save_token
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -59,30 +61,22 @@ class UserViewset(GenericViewSet):
         validated_data = serializer.validated_data
         try:
             user = self.create(validated_data)
+            token = JWTAuthentication.generate_token(user)
+            token_to_save = save_token(token)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        token = JWTAuthentication.generate_token(user)
-
-        try:
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
         
         data = {
             "email" : obj.user.email,
-            "token" : obj.token['token'],
+            "token" : obj.token,
         }
         
         response["message"] =  data
         return Response(response)
-
 
 class LoginViewset(GenericViewSet):
     serializer_class = serializers.LoginSerializer
@@ -95,18 +89,20 @@ class LoginViewset(GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        token = JWTAuthentication.generate_token(user)
+
         try:
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+            token = JWTAuthentication.generate_token(user)
+            token_to_save = save_token(token)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
         except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            logger.error('ERROR: AUTHENTICATION:LoginViewset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         data = {
             "email" : obj.user.email,
-            "token" : obj.token['token'],
+            "token" : obj.token,
         }
         response["message"] = data
         return Response(response, status=status.HTTP_200_OK)
@@ -160,20 +156,48 @@ class GoogleLogin(SocialLoginView):
         self.serializer = self.get_serializer(data=self.request.data)
         self.serializer.is_valid(raise_exception=True)
         user = self.serializer.validated_data
-        token = JWTAuthentication.generate_token(user)
         try:
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+            token = JWTAuthentication.generate_token(user)
+            token_to_save = save_token(token)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
         except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            logger.error('ERROR: AUTHENTICATION:GoogleLogin ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         data = {
             "email" : obj.user.email,
-            "token" : obj.token['token'],
+            "token" : obj.token,
         }
         response["message"] =  data
         return Response(response)
+
+class UserDeleteTokenView(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+
+    def remove(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        token = request.headers.get('Authorization', None).split(" ")[1]
+        
+        if token == None:
+            response["message"] = "No token in request"
+            response["status"] = 0
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            CustomToken.objects.get(token=token).delete()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:UserDeleteTokenView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        response["message"] = "User logged out successfully"
+        return Response(response, status=status.HTTP_200_OK)
 
     
 class LoginOTP(GenericViewSet):

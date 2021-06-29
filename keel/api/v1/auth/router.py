@@ -1,11 +1,12 @@
 from django.urls import path
 
 from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, 
-                    FacebookLogin, GoogleLogin, LinkedinLogin)
+                    FacebookLogin, GoogleLogin, LinkedinLogin, UserDeleteTokenView)
 
 urlpatterns = [
     path('signup', UserViewset.as_view({'post' : 'signup'}), name='signup'),
     path('login', LoginViewset.as_view({'post' : 'login'}), name='login'),
+    path('logout', UserDeleteTokenView.as_view({'get' : 'remove'}), name='logout'),
     path('google-login', GoogleLogin.as_view(), name='google_login'),
     path('linkedin-login', LinkedinLogin.as_view(), name='linkedin-login'),
     path('facebook-login', FacebookLogin.as_view(), name='fb_login'),

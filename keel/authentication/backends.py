@@ -1,3 +1,4 @@
+from keel.authentication.models import CustomToken
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 import datetime, calendar
@@ -58,6 +59,13 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
     def _authenticate_credentials(self, request, token):
         user_key = settings.USER_SECRET_KEY
+
+        try:
+            CustomToken.objects.get(token=token)
+        except CustomToken.DoesNotExist:
+            msg = 'Invalid Token'
+            raise exceptions.AuthenticationFailed(msg)
+
         try:
             payload = jwt.decode(token, user_key)
         except Exception as e:
