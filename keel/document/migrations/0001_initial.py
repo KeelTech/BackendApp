@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('deleted_at', models.DateTimeField(blank=True, null=True)),
                 ('doc_pk', models.CharField(max_length=255, primary_key=True, serialize=False)),
-                ('avatar', models.FileField(blank=True, upload_to=keel.document.utils.upload_files_to, verbose_name='Documents')),
+                ('avatar', models.FileField(blank=True, storage=keel.Core.storage_backends.PrivateMediaStorage(), upload_to=keel.document.utils.upload_files_to, verbose_name='Documents')),
                 ('doc_type', models.SmallIntegerField(choices=[(0, 'Generic'), (1, 'Passport')], default=0)),
                 ('owner_id', models.CharField(max_length=255)),
                 ('original_name', models.CharField(max_length=255)),
