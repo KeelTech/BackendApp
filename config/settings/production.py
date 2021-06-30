@@ -3,7 +3,7 @@ import logging
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
-ALLOWED_HOSTS = ['getkeel.com','admin.keel.com','*']
+ALLOWED_HOSTS = ['getkeel.com','admin.keel.com']
 
 DATABASES['default']['ATOMIC_REQUESTS'] = True  # noqa F405
 # DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=60)
