@@ -3,7 +3,7 @@ import logging
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
-ALLOWED_HOSTS = ['getkeel.com','admin.keel.com']
+ALLOWED_HOSTS = ['getkeel.com','admin.keel.com','*']
 
 DATABASES['default']['ATOMIC_REQUESTS'] = True  # noqa F405
 # DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=60)
@@ -135,3 +135,18 @@ DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
 
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
+
+
+## SEND GRID EMAIL SETTINGS
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY') 
+SENDER_EMAIL = os.getenv('SENDER_EMAIL')
+SENDGRID_USER_NAME = os.getenv('SENDGRID_USER_NAME')
+EMAIL_HOST_USER = SENDGRID_USER_NAME
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+
+
+
