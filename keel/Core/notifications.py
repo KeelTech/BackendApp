@@ -57,7 +57,7 @@ class EmailNotification:
             #     send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, html_message = self.content)
             # else:
             # send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list)
-            self.get_connection().send_email(self.subject, self.content, settings.SENDER_EMAIL, self.to_list)
+            self.get_connection().send_email(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, self.content_type)
 
 
         except Exception as e:
@@ -65,7 +65,7 @@ class EmailNotification:
             err = str("Failed to send email")
         return err
 
-    def get_connection():
+    def get_connection(self):
         path = settings.EMAIL_BACKEND
         try:
             mod_name, class_name = path.rsplit('.', 1)
