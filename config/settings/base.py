@@ -281,3 +281,6 @@ AWS_STATIC_LOCATION=''
 AWS_PUBLIC_MEDIA_LOCATION=''
 AWS_PRIVATE_MEDIA_LOCATION=''
 PRIVATE_FILE_STORAGE='django.core.files.storage.FileSystemStorage'
+
+# To send emails
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction, IntegrityError
 from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
 from django.utils import timezone
@@ -33,9 +34,10 @@ from dj_rest_auth.registration.views import SocialLoginView
 from .adapter import GoogleOAuth2AdapterIdToken
 
 from keel.api.v1.auth import serializers
-from keel.authentication.models import CustomToken
+from keel.authentication.models import CustomToken, PasswordResetToken
 from keel.authentication.backends import JWTAuthentication
 from .helpers.token_helper import save_token
+from .helpers.password_reset_email import send_email
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -109,6 +111,108 @@ class LoginViewset(GenericViewSet):
         response["message"] = data
         return Response(response, status=status.HTTP_200_OK)
 
+class GeneratePasswordReset(GenericViewSet):
+    serializer_class = serializers.GenerateTokenSerializer
+    
+    def token(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        current_time = str(datetime.datetime.now().timestamp()).split(".")[0]
+        print(current_time)
+        site = get_current_site(request)
+        
+        try:
+            user = User.objects.get(email=email)
+            obj, created = PasswordResetToken.objects.get_or_create(user=user, reset_token=current_time)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+        # send email
+        # sent = send_email(user, site, current_time)
+        # if sent == 0:
+        #     response["message"] = "Failed to send reset email"
+        #     response['status'] = 0
+        #     return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        response["message"] = "Password Reset Link sent successfully"
+        return Response(response)
+
+
+class ConfirmPasswordReset(GenericViewSet):
+    serializer_class = serializers.ConfirmResetTokenSerializer
+
+    def confirm_reset(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        reset_token = validated_data.get('reset_token', None)
+        password = validated_data['password']
+        try:
+            token = PasswordResetToken.objects.get(reset_token=reset_token)
+            # get user and set password
+            user = User.objects.get(email=token.user)
+            user.set_password(password)
+            user.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:ConfirmPasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        # delete token since it has beeen used
+        token.delete()
+
+        response["message"] = "User password reset successful"
+        return Response(response)
+
+
+class ChangePasswordView(GenericViewSet):
+
+    serializer_class = serializers.ChangePasswordSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+
+    def change_password_without_email(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        
+        user = request.user
+        old_password = validated_data.get('old_password', None)
+        new_password1 = validated_data.get('new_password1', None)
+        new_password2 = validated_data.get('new_password2', None)
+
+        if not user.check_password(old_password):
+            response['status'] = 0
+            response["message"] = "Incorrect Password"
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        if new_password1 and new_password2:
+            if new_password1 != new_password2:
+                response['status'] = 0
+                response["message"] = "Password Mismatch"
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            
+            user.set_password(new_password2)
+            user.save()
+        
+        response["message"] = "User password changed successfully"
+        return Response(response)
 
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
@@ -184,11 +288,6 @@ class UserDeleteTokenView(GenericViewSet):
             "message" : ""
         }
         token = request.headers.get('Authorization', None).split(" ")[1]
-        
-        if token == None:
-            response["message"] = "No token in request"
-            response["status"] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             CustomToken.objects.get(token=token).delete()
@@ -201,6 +300,8 @@ class UserDeleteTokenView(GenericViewSet):
         response["message"] = "User logged out successfully"
         return Response(response, status=status.HTTP_200_OK)
 
+
+# class
     
 class LoginOTP(GenericViewSet):
 

@@ -89,4 +89,13 @@ class CustomToken(TimeStampedModel):
     class Meta:
         db_table = "custom_token"
 
+class PasswordResetToken(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="password_reset_user_id", null=True)
+    reset_token = models.CharField(max_length=512, blank=True, null=True, default=None, unique=True)
+    expiry_date = models.DateTimeField(default=datetime.now() + timedelta(days=1))
 
+    def __str__(self) -> str:
+        return "Reset token {} belongs to {}".format(self.reset_token, self.user)
+
+    class Meta:
+        db_table = "password_reset_token"

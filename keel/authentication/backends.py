@@ -59,7 +59,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
     def _authenticate_credentials(self, request, token):
         user_key = settings.USER_SECRET_KEY
-
+        print(token)
         try:
             CustomToken.objects.get(token=token)
         except CustomToken.DoesNotExist:
