@@ -111,14 +111,15 @@ PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
 STATICFILES_STORAGE = 'keel.Core.storage_backends.StaticStorage'
 DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
 
-STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
-
-
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME') ## TODO Change this
 AWS_S3_REGION = env('AWS_S3_REGION')
+
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+
+
 
 AWS_QUERYSTRING_AUTH = False
 # AWS_S3_OBJECT_PARAMETERS = {
@@ -134,3 +135,18 @@ DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
 
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
+
+
+## SEND GRID EMAIL SETTINGS
+SENDER_EMAIL = os.getenv('SENDER_EMAIL')
+EMAIL_HOST_USER =  os.getenv('SENDGRID_USER_NAME')
+EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'keel.Core.notification_backend.SMTPEmailBackend'
+
+
+
+
+

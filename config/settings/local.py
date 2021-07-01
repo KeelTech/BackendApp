@@ -86,3 +86,4 @@ REST_FRAMEWORK = {
 PRODUCTION = False
 
 LEADAPITOKEN = ""
+EMAIL_BACKEND = 'keel.Core.notification_backend.ConsoleEmailBackend'
