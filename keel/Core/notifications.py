@@ -2,8 +2,9 @@ import re
 
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django.utils.module_loading import import_module
 from .err_log import log_error
+from django.core.exceptions import ImproperlyConfigured
 from .exceptions import InvalidDataType
 
 class EmailNotification:
@@ -52,15 +53,33 @@ class EmailNotification:
             return err 
         try:
 
-            if self.content_type == self.HTML:
-                send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, html_message = self.content)
-            else:
-                send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list)
+            # if self.content_type == self.HTML:
+            #     send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, html_message = self.content)
+            # else:
+            # send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list)
+            self.get_connection().send_email(self.subject, self.content, settings.SENDER_EMAIL, self.to_list)
+
 
         except Exception as e:
-            log_error("CRITICAL","EmailNotification:send_mail","", err = str(e))
+            log_error("CRITICAL", "EmailNotification:send_mail", "", err = str(e))
             err = str("Failed to send email")
         return err
+
+    def get_connection():
+        path = settings.EMAIL_BACKEND
+        try:
+            mod_name, class_name = path.rsplit('.', 1)
+            mod = import_module(mod_name)
+        except AttributeError as e:
+            raise ImproperlyConfigured('Error importing  backend %s: "%s"' % (mod_name, e))
+
+        try:
+            class_ref = getattr(mod, class_name)
+        except AttributeError:
+            raise ImproperlyConfigured('Module "%s" does not define a "%s" class' % (mod_name, class_name))
+
+        return class_ref()
+
 
 class SendNotification:
 
@@ -110,7 +129,7 @@ class SendNotification:
         response_dict = {}
         err = self.validate_data()
         if err:
-            log_error('ERROR',"SendNotification:validate_data", "",err = err)
+            log_error('ERROR', "SendNotification:validate_data", "", err = err)
             raise InvalidDataType(err)
 
         for notif_type in self.notif_type_list:
