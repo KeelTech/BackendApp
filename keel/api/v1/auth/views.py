@@ -1,14 +1,14 @@
+from datetime import timedelta
 import datetime
-
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
-from django.db import transaction, IntegrityError
+from django.db import transaction, IntegrityError, utils
 from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
-from django.utils import timezone
 from django.template.loader import get_template
 
 from rest_framework.viewsets import GenericViewSet
@@ -157,15 +157,29 @@ class ConfirmPasswordReset(GenericViewSet):
         password = validated_data['password']
         try:
             token = PasswordResetToken.objects.get(reset_token=reset_token)
+            
+            expiry_time = token.expiry_date
+            time_now = timezone.now() + timedelta(minutes=0)
+            if (expiry_time - time_now).total_seconds() < 0:
+                response['status'] = 0
+                response["message"] = "Reset token expired"
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+           
             # get user and set password
             user = User.objects.get(email=token.user)
             user.set_password(password)
             user.save()
+        except (PasswordResetToken.DoesNotExist, User.DoesNotExist) as e:
+            logger.error('ERROR: AUTHENTICATION:ConfirmPasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:ConfirmPasswordReset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
         # delete token since it has beeen used
         token.delete()
 
@@ -296,8 +310,6 @@ class UserDeleteTokenView(GenericViewSet):
         response["message"] = "User logged out successfully"
         return Response(response, status=status.HTTP_200_OK)
 
-
-# class
     
 class LoginOTP(GenericViewSet):
 
