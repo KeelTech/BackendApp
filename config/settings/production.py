@@ -135,3 +135,18 @@ DEFAULT_FILE_STORAGE = 'keel.Core.storage_backends.PublicMediaStorage'
 
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
+
+
+## SEND GRID EMAIL SETTINGS
+SENDER_EMAIL = os.getenv('SENDER_EMAIL')
+EMAIL_HOST_USER =  os.getenv('SENDGRID_USER_NAME')
+EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'keel.Core.notification_backend.SMTPEmailBackend'
+
+
+
+
+

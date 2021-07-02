@@ -1,29 +1,33 @@
+from datetime import timedelta
 import datetime
-
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
-from django.db import transaction, IntegrityError
+from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction, IntegrityError, utils
 from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
-from django.utils import timezone
+from django.template.loader import get_template
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import mixins, viewsets, status
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.parsers import JSONParser
 
-from keel.api.v1.auth import serializers
 from keel.document.models import Documents
 from keel.document.exceptions import *
 from keel.authentication.models import UserDocument
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
-
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework.parsers import JSONParser
+from keel.Core.notifications import EmailNotification
+from keel.api.v1.auth import serializers
+from keel.authentication.models import CustomToken, PasswordResetToken
+from .helpers.token_helper import save_token
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2Adapter
@@ -31,9 +35,6 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .adapter import GoogleOAuth2AdapterIdToken
 
-from keel.api.v1.auth import serializers
-from keel.authentication.models import CustomToken
-from keel.authentication.backends import JWTAuthentication
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -61,30 +62,22 @@ class UserViewset(GenericViewSet):
         validated_data = serializer.validated_data
         try:
             user = self.create(validated_data)
+            token = JWTAuthentication.generate_token(user)
+            token_to_save = save_token(token)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        token = JWTAuthentication.generate_token(user)
-
-        try:
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
         
         data = {
             "email" : obj.user.email,
-            "token" : obj.token['token'],
+            "token" : obj.token,
         }
         
         response["message"] =  data
         return Response(response)
-
 
 class LoginViewset(GenericViewSet):
     serializer_class = serializers.LoginSerializer
@@ -97,22 +90,139 @@ class LoginViewset(GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        token = JWTAuthentication.generate_token(user)
+
         try:
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+            token = JWTAuthentication.generate_token(user)
+            token_to_save = save_token(token)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
         except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            logger.error('ERROR: AUTHENTICATION:LoginViewset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         data = {
             "email" : obj.user.email,
-            "token" : obj.token['token'],
+            "token" : obj.token,
         }
         response["message"] = data
         return Response(response, status=status.HTTP_200_OK)
 
+class GeneratePasswordReset(GenericViewSet):
+    serializer_class = serializers.GenerateTokenSerializer
+    
+    def token(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        current_time = str(datetime.datetime.now().timestamp()).split(".")[0]
+        
+        try:
+            user = User.objects.get(email=email)
+            obj, created = PasswordResetToken.objects.get_or_create(user=user, reset_token=current_time)
+            context = {
+                'token' : current_time
+            }
+            subject = 'Password Reset'
+            html_content = get_template('password_reset_email.html').render(context)
+            # send email
+            emails = EmailNotification(subject, html_content, [email])
+            emails.send_email()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        response["message"] = "Password Reset Link sent successfully"
+        return Response(response)
+
+
+class ConfirmPasswordReset(GenericViewSet):
+    serializer_class = serializers.ConfirmResetTokenSerializer
+
+    def confirm_reset(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        reset_token = validated_data.get('reset_token', None)
+        password = validated_data['password']
+        try:
+            token = PasswordResetToken.objects.get(reset_token=reset_token)
+            
+            expiry_time = token.expiry_date
+            time_now = timezone.now() + timedelta(minutes=0)
+            if (expiry_time - time_now).total_seconds() < 0:
+                response['status'] = 0
+                response["message"] = "Reset token expired"
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+           
+            # get user and set password
+            user = User.objects.get(email=token.user)
+            user.set_password(password)
+            user.save()
+        except (PasswordResetToken.DoesNotExist, User.DoesNotExist) as e:
+            logger.error('ERROR: AUTHENTICATION:ConfirmPasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:ConfirmPasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        # delete token since it has beeen used
+        token.delete()
+
+        response["message"] = "User password reset successful"
+        return Response(response)
+
+
+class ChangePasswordView(GenericViewSet):
+
+    serializer_class = serializers.ChangePasswordSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+
+    def change_password_without_email(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        
+        user = request.user
+        old_password = validated_data.get('old_password', None)
+        new_password1 = validated_data.get('new_password1', None)
+        new_password2 = validated_data.get('new_password2', None)
+
+        if not user.check_password(old_password):
+            response['status'] = 0
+            response["message"] = "Incorrect Password"
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        if new_password1 and new_password2:
+            if new_password1 != new_password2:
+                response['status'] = 0
+                response["message"] = "Password Mismatch"
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            
+            user.set_password(new_password2)
+            user.save()
+        
+        response["message"] = "User password changed successfully"
+        return Response(response)
 
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
@@ -162,20 +272,43 @@ class GoogleLogin(SocialLoginView):
         self.serializer = self.get_serializer(data=self.request.data)
         self.serializer.is_valid(raise_exception=True)
         user = self.serializer.validated_data
-        token = JWTAuthentication.generate_token(user)
         try:
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token)
+            token = JWTAuthentication.generate_token(user)
+            token_to_save = save_token(token)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
         except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            logger.error('ERROR: AUTHENTICATION:GoogleLogin ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         data = {
             "email" : obj.user.email,
-            "token" : obj.token['token'],
+            "token" : obj.token,
         }
         response["message"] =  data
         return Response(response)
+
+class UserDeleteTokenView(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+
+    def remove(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        token = request.headers.get('Authorization', None).split(" ")[1]
+
+        try:
+            CustomToken.objects.get(token=token).delete()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:UserDeleteTokenView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        response["message"] = "User logged out successfully"
+        return Response(response, status=status.HTTP_200_OK)
 
     
 class LoginOTP(GenericViewSet):
