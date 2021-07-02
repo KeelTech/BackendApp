@@ -1,5 +1,5 @@
 """
-Helpers for dealing with HTML input.
+Helpers for dealing with token input.
 """
 def save_token(token):
     """
