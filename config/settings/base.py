@@ -100,6 +100,7 @@ LOCAL_APPS = (
     'keel.eligibility_calculator',
     'keel.document',
     'keel.Core',
+    'keel.tasks',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
