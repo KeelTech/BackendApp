@@ -49,8 +49,23 @@ class UserSocialLoginSerializer(SocialLoginSerializer):
         attrs = super().validate(attrs)
         user = attrs['user']
         return user
+
+
+class GenerateTokenSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class ConfirmResetTokenSerializer(serializers.Serializer):
+    reset_token = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password1 = serializers.CharField(write_only=True)
+    new_password2 = serializers.CharField(write_only=True)
+
  
-        
 class OTPSerializer(serializers.Serializer):
     phone_number = serializers.IntegerField(min_value=5000000000,max_value=9999999999)
     via_sms = serializers.BooleanField(default=True, required=False)

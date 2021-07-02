@@ -8,7 +8,7 @@ from .v1.document.router import urlpatterns as documents_url
 
 urlpatterns = [
 
-    path('v1/user/', include(auth_url)),
+    path('v1/user/', include(auth_url), name="authentication"),
     path('v1/leads/', include(leads_url)),
     path('v1/eligibility/', include(eligibility_url)),
     path('v1/doc/', include(documents_url)),

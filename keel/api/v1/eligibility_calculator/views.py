@@ -1,3 +1,5 @@
+from keel.authentication.backends import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -12,6 +14,8 @@ import logging
 logger = logging.getLogger('app-logger')
 
 class EligibilityResultsView(viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication, )
 
 
     def submit(self, request, format='json'):
