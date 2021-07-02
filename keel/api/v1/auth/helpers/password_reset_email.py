@@ -6,7 +6,7 @@ from django.core.mail import send_mail, BadHeaderError
 def send_email(user, site, current_time):
     status = 0
     subject = "Password Reset from GetKeel"
-    email_template_name = "authentication/password_reset_email.txt"
+    email_template_name = "password_reset_email.txt"
     c = {
         "email": user,
         'domain': site.domain,

@@ -9,23 +9,25 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction, IntegrityError
 from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
 from django.utils import timezone
+from django.template.loader import get_template
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import mixins, viewsets, status
-from keel.api.v1 import auth
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.parsers import JSONParser
 
-from keel.api.v1.auth import serializers
 from keel.document.models import Documents
 from keel.document.exceptions import *
 from keel.authentication.models import UserDocument
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
-
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework.parsers import JSONParser
+from keel.Core.notifications import EmailNotification
+from keel.api.v1.auth import serializers
+from keel.authentication.models import CustomToken, PasswordResetToken
+from .helpers.token_helper import save_token
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2Adapter
@@ -33,11 +35,6 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .adapter import GoogleOAuth2AdapterIdToken
 
-from keel.api.v1.auth import serializers
-from keel.authentication.models import CustomToken, PasswordResetToken
-from keel.authentication.backends import JWTAuthentication
-from .helpers.token_helper import save_token
-from .helpers.password_reset_email import send_email
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -123,24 +120,23 @@ class GeneratePasswordReset(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data['email']
         current_time = str(datetime.datetime.now().timestamp()).split(".")[0]
-        print(current_time)
-        site = get_current_site(request)
         
         try:
             user = User.objects.get(email=email)
             obj, created = PasswordResetToken.objects.get_or_create(user=user, reset_token=current_time)
+            context = {
+                'token' : current_time
+            }
+            subject = 'Password Reset'
+            html_content = get_template('password_reset_email.html').render(context)
+            # send email
+            emails = EmailNotification(subject, html_content, [email])
+            emails.send_email()
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-
-        # send email
-        # sent = send_email(user, site, current_time)
-        # if sent == 0:
-        #     response["message"] = "Failed to send reset email"
-        #     response['status'] = 0
-        #     return Response(response, status=status.HTTP_400_BAD_REQUEST)
         
         response["message"] = "Password Reset Link sent successfully"
         return Response(response)
