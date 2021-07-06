@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from django.db.models.deletion import DO_NOTHING
 from django.db.models.fields import PositiveIntegerRelDbTypeMixin
-from keel.authentication.models import TimeStampedModel
+from keel.Core.models import TimeStampedModel
 
 class Plans(TimeStampedModel):
     title = models.CharField(max_length=512, null=True, default=None, blank=True)
