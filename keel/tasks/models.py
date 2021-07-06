@@ -30,9 +30,8 @@ class Task(TimeStampedModel, SoftDeleteModel):
     due_date = models.DateTimeField(null=True, blank=True)
     status = models.SmallIntegerField(default=PENDING,
                                           choices=STATUS_CHOICE)
-    check_list = models.JSONField(default ={}, null=True) 
-
-
+    check_list = models.JSONField(default =dict, null=True) 
+    user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name = "user_tasks")
 
 class TaskComments(TimeStampedModel, SoftDeleteModel):
 
