@@ -26,7 +26,8 @@ from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.notifications import EmailNotification
 from keel.api.v1.auth import serializers
-from keel.authentication.models import CustomToken, PasswordResetToken
+from keel.authentication.models import (CustomToken, PasswordResetToken)
+from keel.authentication.models import User as user_model
 from .helpers.token_helper import save_token
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
@@ -60,6 +61,7 @@ class UserViewset(GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
+        validated_data['user_type'] = user_model.CUSTOMER # add user type to validated data
         try:
             user = self.create(validated_data)
             token = JWTAuthentication.generate_token(user)
@@ -161,6 +163,7 @@ class ConfirmPasswordReset(GenericViewSet):
             expiry_time = token.expiry_date
             time_now = timezone.now() + timedelta(minutes=0)
             if (expiry_time - time_now).total_seconds() < 0:
+                token.delete() # delete token if expired
                 response['status'] = 0
                 response["message"] = "Reset token expired"
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)

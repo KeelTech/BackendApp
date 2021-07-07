@@ -100,6 +100,7 @@ LOCAL_APPS = (
     'keel.eligibility_calculator',
     'keel.document',
     'keel.Core',
+    'keel.plans',
     'keel.tasks',
 )
 

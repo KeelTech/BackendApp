@@ -9,6 +9,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 import requests
 import json
+import uuid
 from rest_framework import status
 import logging
 
@@ -47,11 +48,20 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    
+    CUSTOMER=1
+    RCIC=2
+
+    USER_TYPE_CHOICES = (
+        (CUSTOMER, 'CUSTOMER'),
+        (RCIC, 'RCIC'),
+    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username=None
     first_name = None
     phone_number = models.CharField(max_length=10, blank=False, null=True, default=None)
     email = models.EmailField(max_length=100, blank=False, null=True, default=None, unique=True)
-    # user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
+    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, verbose_name="User Types", default=CUSTOMER, null=True)
     is_active = models.BooleanField(verbose_name= 'Active', default=True, help_text= 'Designates whether this user should be treated as active.')
     is_staff = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
