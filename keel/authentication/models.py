@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models, transaction
-from datetime import date, datetime, timedelta
+from django.utils import timezone
+from datetime import timedelta
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 # from safedelete import SOFT_DELETE
@@ -8,6 +9,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 import requests
 import json
+import uuid
 from rest_framework import status
 import logging
 
@@ -46,11 +48,20 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    
+    CUSTOMER=1
+    RCIC=2
+
+    USER_TYPE_CHOICES = (
+        (CUSTOMER, 'CUSTOMER'),
+        (RCIC, 'RCIC'),
+    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username=None
     first_name = None
     phone_number = models.CharField(max_length=10, blank=False, null=True, default=None)
     email = models.EmailField(max_length=100, blank=False, null=True, default=None, unique=True)
-    # user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES)
+    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, verbose_name="User Types", default=CUSTOMER, null=True)
     is_active = models.BooleanField(verbose_name= 'Active', default=True, help_text= 'Designates whether this user should be treated as active.')
     is_staff = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -89,4 +100,13 @@ class CustomToken(TimeStampedModel):
     class Meta:
         db_table = "custom_token"
 
+class PasswordResetToken(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="password_reset_user_id", null=True)
+    reset_token = models.CharField(max_length=512, blank=True, null=True, default=None, unique=True)
+    expiry_date = models.DateTimeField(default=timezone.now() + timedelta(minutes=10))
 
+    def __str__(self) -> str:
+        return "Reset token {} belongs to {}".format(self.reset_token, self.user)
+
+    class Meta:
+        db_table = "password_reset_token"

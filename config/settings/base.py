@@ -100,6 +100,8 @@ LOCAL_APPS = (
     'keel.eligibility_calculator',
     'keel.document',
     'keel.Core',
+    'keel.plans',
+    'keel.tasks',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -122,26 +124,12 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online',
         }
     },
-    'facebook': {
-        'METHOD': 'oauth2',
-        'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
-        'SCOPE': ['email', 'public_profile'],
+    'facebook':
+        {'METHOD': 'oauth2',
+        'SCOPE': ['email'],
         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-        'INIT_PARAMS': {'cookie': True},
-        'FIELDS': [
-            'id',
-            'first_name',
-            'last_name',
-            'middle_name',
-            'name',
-            'name_format',
-            'picture',
-            'short_name'
-        ],
-        'EXCHANGE_TOKEN': True,
-        'LOCALE_FUNC': 'path.to.callable',
-        'VERIFIED_EMAIL': False,
-        'VERSION': 'v7.0',
+        'LOCALE_FUNC': lambda request: 'en_US',
+        'VERSION': 'v2.4'
     },
     'linkedin': {
         'SCOPE': [
@@ -295,3 +283,8 @@ AWS_STATIC_LOCATION=''
 AWS_PUBLIC_MEDIA_LOCATION=''
 AWS_PRIVATE_MEDIA_LOCATION=''
 PRIVATE_FILE_STORAGE='django.core.files.storage.FileSystemStorage'
+
+
+
+
+
