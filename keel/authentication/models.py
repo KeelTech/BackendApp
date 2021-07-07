@@ -56,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         (CUSTOMER, 'CUSTOMER'),
         (RCIC, 'RCIC'),
     )
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username=None
     first_name = None
     phone_number = models.CharField(max_length=10, blank=False, null=True, default=None)
