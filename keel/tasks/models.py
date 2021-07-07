@@ -4,17 +4,6 @@ from keel.authentication.models import User
 
 # Create your models here.
 
-class Case(TimeStampedModel, SoftDeleteModel):
-
-    case_id = models.CharField(max_length=255, primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='users_cases')
-    agent = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='agents_cases')
-    account_manager_id = models.IntegerField(null=True, blank=True)
-    is_active = models.BooleanField(verbose_name= 'Active', default=True)
-    ref_id = models.ForeignKey('self',null=True, blank=True, on_delete=models.deletion.DO_NOTHING)
-    # plan_id = models.IntegerField(null=True, blank=True) TODO
-
-
 class Task(TimeStampedModel, SoftDeleteModel):
 
     LOW = 0
@@ -34,7 +23,7 @@ class Task(TimeStampedModel, SoftDeleteModel):
     task_id = models.CharField(max_length=255, primary_key=True)
     title = models.TextField(null=True,blank=True)
     description = models.TextField(null=True,blank=True)
-    case = models.ForeignKey(Case, on_delete=models.deletion.DO_NOTHING, null=True, blank=True, related_name='cases_tasks')
+    case_id = models.IntegerField(null=True) # TODO : to be changed to FK
     priority = models.SmallIntegerField(default=MEDIUM,
                                           choices=PRIORITY_CHOICE)
     tags = models.SmallIntegerField(null=True) # TODO: to be changed later
@@ -49,5 +38,6 @@ class TaskComments(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='users_comment')
     task = models.ForeignKey(Task, on_delete=models.deletion.DO_NOTHING, related_name='tasks_comment')
     msg = models.TextField(null=True,blank=True)
+
 
 

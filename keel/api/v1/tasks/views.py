@@ -19,6 +19,7 @@ class ListTask(GenericViewSet):
     permission_classes = (IsAuthenticated,)
 
     def list(self, request, format = 'json'):
+
         response = {
             "status" : 0,
             "message" : "Task list is successfully fetched",
@@ -29,9 +30,9 @@ class ListTask(GenericViewSet):
         user = request.user
         user_id = user.id
         req_data = request.GET
-        status = req_data.get("status","")
+        status = req_data.get("status")
 
-        if status is None or ( type(status) is str and not status.isnumeric()):
+        if status is None or not status.isnumeric():
             log_error("ERROR","ListTask: list", str(user_id), err = "invalid status data", msg = str(status))
             response["message"] = "Invalid Status Choice"
             response["status"] = 1
@@ -40,8 +41,7 @@ class ListTask(GenericViewSet):
 
         status = int(status)
         try:
-            task_validation = ListTaskSerializer(data = {"status":status})
-            task_validation.is_valid(raise_exception = True) 
+            ListTaskSerializer().validate_status(status)
         except ValidationError as e:
             log_error("ERORR","ListTask: list validate_status", str(user_id), err = str(e), data = str(status))
             response["message"] = "Invalid Status Choice value"
