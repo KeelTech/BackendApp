@@ -5,6 +5,7 @@ from django.db.models.fields import PositiveIntegerRelDbTypeMixin
 from keel.Core.models import TimeStampedModel
 
 class Plans(TimeStampedModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     title = models.CharField(max_length=512, null=True, default=None, blank=True)
     description = models.TextField(null=True, blank=True, default=None)
     price = models.FloatField(null=True, blank=True, default=True)
@@ -13,7 +14,7 @@ class Plans(TimeStampedModel):
 
 
 class Vendors(TimeStampedModel):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=512, null=True, blank=True, default=None)
 
 
