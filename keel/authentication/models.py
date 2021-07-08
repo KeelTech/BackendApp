@@ -56,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         (CUSTOMER, 'CUSTOMER'),
         (RCIC, 'RCIC'),
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username=None
     first_name = None
     phone_number = models.CharField(max_length=10, blank=False, null=True, default=None)
@@ -103,7 +103,7 @@ class CustomToken(TimeStampedModel):
 class PasswordResetToken(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="password_reset_user_id", null=True)
     reset_token = models.CharField(max_length=512, blank=True, null=True, default=None, unique=True)
-    expiry_date = models.DateTimeField(default=timezone.now() + timedelta(minutes=10))
+    expiry_date = models.DateTimeField(default=None, null=True, blank=False)
 
     def __str__(self) -> str:
         return "Reset token {} belongs to {}".format(self.reset_token, self.user)
