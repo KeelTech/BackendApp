@@ -122,10 +122,10 @@ class GeneratePasswordReset(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data['email']
         current_time = str(datetime.datetime.now().timestamp()).split(".")[0]
-        
+        expiry_date = timezone.now() + timedelta(minutes=10)
         try:
             user = User.objects.get(email=email)
-            obj, created = PasswordResetToken.objects.get_or_create(user=user, reset_token=current_time)
+            obj, created = PasswordResetToken.objects.get_or_create(user=user, reset_token=current_time, expiry_date=expiry_date)
             context = {
                 'token' : current_time
             }
