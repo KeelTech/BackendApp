@@ -15,6 +15,7 @@ import logging
 
 from keel.document.models import Documents
 from keel.Core.models import TimeStampedModel,SoftDeleteModel
+from keel.plans.models import Service
 
 logger = logging.getLogger(__name__)
 
@@ -110,3 +111,13 @@ class PasswordResetToken(TimeStampedModel):
 
     class Meta:
         db_table = "password_reset_token"
+
+class UserService(TimeStampedModel, SoftDeleteModel):
+
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_user_services")
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, related_name = "services_user_services")
+    quantity = models.IntegerField(null=True, blank=True)
+    limit_exists = models.BooleanField(verbose_name= 'Active', default=True)
+    expiry_time = models.DateTimeField(null=True, blank= True)
+
+
