@@ -13,7 +13,7 @@ class Case(TimeStampedModel, SoftDeleteModel):
     account_manager_id = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(verbose_name= 'Active', default=True)
     ref_id = models.ForeignKey('self',null=True, blank=True, on_delete=models.deletion.DO_NOTHING)
-    plan_id = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_cases')
+    plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_cases')
 
 
 
