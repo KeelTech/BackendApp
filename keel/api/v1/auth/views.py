@@ -1,5 +1,7 @@
 from datetime import timedelta
 import datetime
+import facebook
+import requests
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -227,12 +229,28 @@ class ChangePasswordView(GenericViewSet):
         response["message"] = "User password changed successfully"
         return Response(response)
 
-class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter
-    client_class = OAuth2Client
-    serializer_class = serializers.UserSocialLoginSerializer
+class FacebookLogin(GenericViewSet):
+    serializer_class = serializers.FacebookSocialLoginSerializer
 
-    def post(self, request, *args, **kwargs):
+    @staticmethod
+    def facebook(auth_token):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        """
+        validate method Queries the facebook GraphAPI to fetch the user info
+        """
+        try:
+            graph = facebook.GraphAPI(access_token=auth_token)
+            profile = graph.get_object(id='me', fields='first_name, last_name, id, email')
+            return profile
+        except requests.ConnectionError as e:
+            raise e
+        except facebook.GraphAPIError as e:
+            return e
+
+    def fblogin(self, request, *args, **kwargs):
         response = {
             "status" : 1,
             "message" : ""
@@ -240,7 +258,24 @@ class FacebookLogin(SocialLoginView):
         self.request = request
         self.serializer = self.get_serializer(data=self.request.data)
         self.serializer.is_valid(raise_exception=True)
-        response["message"] =  self.serializer.data
+        validated_data = self.serializer.validated_data
+        try:
+            fb = self.facebook(validated_data['access_token'])
+            email = fb['email']
+            user, created = User.objects.get_or_create(email=email)
+            token = JWTAuthentication.generate_token(user)
+            token_to_save = save_token(token)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:FacebookLogin ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        data = {
+            "email" : obj.user.email,
+            "token" : obj.token,
+        }
+        response["message"] =  data
         return Response(response)
 
 class LinkedinLogin(SocialLoginView):
