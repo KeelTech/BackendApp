@@ -50,6 +50,10 @@ class UserSocialLoginSerializer(SocialLoginSerializer):
         user = attrs['user']
         return user
 
+class FacebookSocialLoginSerializer(serializers.Serializer):
+    access_token = serializers.CharField()
+
+
 
 class GenerateTokenSerializer(serializers.Serializer):
     email = serializers.EmailField()
