@@ -12,14 +12,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='user',
-            old_name='uuid',
-            new_name='id',
-        ),
-        migrations.AlterField(
-            model_name='passwordresettoken',
-            name='expiry_date',
-            field=models.DateTimeField(default=datetime.datetime(2021, 7, 7, 7, 57, 53, 369365, tzinfo=utc)),
-        ),
+        # migrations.RenameField(
+        #     model_name='user',
+        #     old_name='uuid',
+        #     new_name='id',
+        # ),
+        # migrations.AlterField(
+        #     model_name='passwordresettoken',
+        #     name='expiry_date',
+        #     field=models.DateTimeField(default=datetime.datetime(2021, 7, 7, 7, 57, 53, 369365, tzinfo=utc)),
+        # ),
     ]

@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Plans, Vendors, Services
+from .models import Plan, Vendor, Service
 # Register your models here.
 
-admin.site.register(Plans)
-admin.site.register(Vendors)
-admin.site.register(Services)
+admin.site.register(Plan)
+admin.site.register(Vendor)
+admin.site.register(Service)

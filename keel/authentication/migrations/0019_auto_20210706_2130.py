@@ -13,18 +13,18 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='id',
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='uuid',
-            field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False),
-        ),
-        migrations.AlterField(
-            model_name='passwordresettoken',
-            name='expiry_date',
-            field=models.DateTimeField(default=datetime.datetime(2021, 7, 6, 16, 10, 0, 947219, tzinfo=utc)),
-        ),
+        # migrations.RemoveField(
+        #     model_name='user',
+        #     name='id',
+        # ),
+        # migrations.AddField(
+        #     model_name='user',
+        #     name='uuid',
+        #     field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False),
+        # ),
+        # migrations.AlterField(
+        #     model_name='passwordresettoken',
+        #     name='expiry_date',
+        #     field=models.DateTimeField(default=datetime.datetime(2021, 7, 6, 16, 10, 0, 947219, tzinfo=utc)),
+        # ),
     ]
