@@ -39,6 +39,7 @@ class ChatList(GenericViewSet):
         except ChatRoom.DoesNotExist as e:
             log_error("ERROR", "ChatList: listChats", str(user_id), err = str(e), msg = "invalid case_id", case_id = case_id)
             response["status"] = 1
+            response["message"] = "Invalid Request"
             return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
 
         pagination_class = LimitOffsetPagination()
@@ -71,6 +72,7 @@ class ChatList(GenericViewSet):
         except ChatRoom.DoesNotExist as e:
             log_error("ERROR", "ChatList: createChat", str(user_id), err = str(e), msg = "invalid case_id", case_id = case_id)
             response["status"] = 1
+            response["message"] = "Invalid Request"
             return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
 
         req_data["chatroom"] = chat_room.id
