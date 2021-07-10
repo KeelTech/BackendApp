@@ -44,7 +44,7 @@ class ChatList(GenericViewSet):
 
         pagination_class = LimitOffsetPagination()
 
-        queryset = Chat.objects.filter(chatroom = chat_room)
+        queryset = Chat.objects.filter(chatroom = chat_room).order_by("-created_at")
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
         serializer_class = ChatListSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
