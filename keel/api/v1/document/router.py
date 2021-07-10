@@ -1,7 +1,7 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import GetDocument
 
 urlpatterns = [
-	url(r'get-single-doc/(?P<doc_id>[^\s]+)',GetDocument.as_view({'get':'generate'}), name='get-a-doc'),
+	path(r'get-single-doc/<str:doc_id>',GetDocument.as_view({'get':'generate'}), name='get-a-doc'),
 ]
