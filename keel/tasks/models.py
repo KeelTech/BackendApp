@@ -27,7 +27,7 @@ class Task(TimeStampedModel, SoftDeleteModel):
     case = models.ForeignKey(Case, on_delete=models.deletion.DO_NOTHING, null=True, blank=True, related_name='cases_tasks')
     priority = models.SmallIntegerField(default=MEDIUM,
                                           choices=PRIORITY_CHOICE)
-    tags = models.SmallIntegerField(null=True) # TODO: to be changed later
+    tags = models.CharField(null=True, max_length = 255) 
     due_date = models.DateTimeField(null=True, blank=True)
     status = models.SmallIntegerField(default=PENDING,
                                           choices=STATUS_CHOICE)
