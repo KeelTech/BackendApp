@@ -127,7 +127,8 @@ class GeneratePasswordReset(GenericViewSet):
         
         try:
             user = User.objects.get(email=email)
-            obj, created = PasswordResetToken.objects.get_or_create(user=user, reset_token=current_time)
+            expiry_date = timezone.now() + timedelta(minutes=10)
+            obj, created = PasswordResetToken.objects.get_or_create(user=user, reset_token=current_time, expiry_date=expiry_date)
             context = {
                 'token' : current_time
             }
