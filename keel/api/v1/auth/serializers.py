@@ -128,7 +128,7 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         try:
             username = email.split("@")[0]
         except Exception as e:
-            log_error("ERROR", "UserDetailsSerializer: get_user_name","", err = e, email = email)
+            log_error("ERROR", "UserDetailsSerializer: get_user_name","", err = str(e), email = email)
         return username
 
     class Meta:
