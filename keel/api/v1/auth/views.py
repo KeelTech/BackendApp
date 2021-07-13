@@ -67,9 +67,6 @@ class UserViewset(GenericViewSet):
         
         try:
             user = self.create(validated_data)
-            if not user.is_verified:
-                user.is_verified = True
-                user.save()
             token = JWTAuthentication.generate_token(user)
             token_to_save = save_token(token)
             obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
@@ -79,23 +76,23 @@ class UserViewset(GenericViewSet):
             response['status'] = 0
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-        # # if user account is not active, send a email with token to activate user account
-        # # commenting this out for now
-        # current_time = str(datetime.datetime.now().timestamp()).split(".")[0]
-        # context = {
-        #     'token' : current_time
-        # }
-        # subject = 'Password Reset'
-        # html_content = get_template('password_reset_email.html').render(context)
-        # # send email
-        # try:
-        #     emails = EmailNotification(subject, html_content, [user.email])
-        #     emails.send_email()
-        # except Exception as e:
-        #         logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
-        #         response['message'] = str(e)
-        #         response['status'] = 0
-        #         return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        # if user account is not active, send a email with token to activate user account
+        # commenting this out for now
+        current_time = str(datetime.datetime.now().timestamp()).split(".")[0]
+        context = {
+            'token' : current_time
+        }
+        subject = 'Account Verification'
+        html_content = get_template('account_verification.html').render(context)
+        # send email
+        try:
+            emails = EmailNotification(subject, html_content, [user.email])
+            emails.send_email()
+        except Exception as e:
+                logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+                response['message'] = str(e)
+                response['status'] = 0
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         data = {
             "email" : obj.user.email,
