@@ -119,10 +119,10 @@ class LoginViewset(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
         
-        if not user.is_verified:
-            response["status"] = 0
-            response["message"] = "Acount has not been verified, Please check your email for verification code"
-            return Response(response)
+        # if not user.is_verified:
+        #     response["status"] = 0
+        #     response["message"] = "Acount has not been verified, Please check your email for verification code"
+        #     return Response(response)
         
         try:
             token = JWTAuthentication.generate_token(user)
