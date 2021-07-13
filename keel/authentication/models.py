@@ -41,6 +41,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         """Create and save a SuperUser with the given email and password."""
+        extra_fields.setdefault('is_verified', True)
+        extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -63,7 +65,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=100, blank=False, null=True, default=None, unique=True)
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, verbose_name="User Types", default=CUSTOMER, null=True)
     is_active = models.BooleanField(verbose_name= 'Active', default=True, help_text= 'Designates whether this user should be treated as active.')
-    is_staff = models.BooleanField(default=True)
+    is_verified = models.BooleanField(verbose_name="Verified", default=False)
+    is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     
     USERNAME_FIELD = 'email'
