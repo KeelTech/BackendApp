@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from keel.api.v1.auth.serializers import UserDetailsSerializer, UserDocumentSerializer
 from keel.tasks.models import Task, TaskComments
 
 class ListTaskSerializer(serializers.ModelSerializer):
@@ -21,16 +23,20 @@ class ListTaskSerializer(serializers.ModelSerializer):
 
 
 class TaskCommentSerializer(serializers.ModelSerializer):
+    user_details = UserDetailsSerializer(source = 'user',many = False)
 
     class Meta:
         model = TaskComments
-        fields = ('user','msg')
+        fields = ('user','msg','created_at','user_details')
 
 class TaskSerializer(ListTaskSerializer):
     tasks_comment = TaskCommentSerializer(many= True)
+    tasks_docs = UserDocumentSerializer(many = True)
 
     class Meta:
         model = Task
-        fields = ('task_id','status_name','priority_name','created_at','title','description','due_date','tasks_comment')
+        fields = ('task_id','status_name','priority_name','created_at',
+                    'title','description','due_date','tasks_comment', 'tasks_docs',
+                    'check_list','tags','case_id')
 
 

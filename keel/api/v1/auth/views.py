@@ -21,7 +21,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
 
 from keel.document.models import Documents
-from keel.document.exceptions import *
+from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.authentication.models import UserDocument
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
@@ -392,6 +392,7 @@ class UploadDocument(GenericViewSet):
     permission_classes = (IsAuthenticated,)
     
     def upload(self, request, format='json'):
+
         response = {
                 "status": 0,
                 "message": "File Uploaded successfully",
@@ -399,15 +400,19 @@ class UploadDocument(GenericViewSet):
         }
         resp_status = status.HTTP_200_OK
 
-        data = request.data
+        req_data = request.data
 
         user = request.user
         user_id = user.id
         files = request.FILES
 
+        # TODO: move validations to DocumentSerializer
+
+        doc_type = req_data.get("doc_type")
+
         try:
-            docs = Documents.objects.add_attachments(files, user_id)
-        except DocumentInvalid as e:
+            docs = Documents.objects.add_attachments(files, user_id, doc_type)
+        except (DocumentInvalid, DocumentTypeInvalid) as e:
             log_error("ERROR", "UploadDocument:upload DocumentInvalid", str(user_id), err = str(e))
             response["status"] = 1
             response["message"] = str(e)
@@ -420,9 +425,10 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
+        task_id = req_data.get("task_id")
         user_docs = []
         for doc in docs:
-            temp_data = {"doc": doc.pk, "user":user_id}
+            temp_data = {"doc": doc.pk, "user":user_id, "task": task_id}
             user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
             user_doc_serializer.is_valid(raise_exception=True)
             user_doc_serializer.save()
@@ -441,7 +447,7 @@ class UploadDocument(GenericViewSet):
         user = request.user
 
         try:
-            user_docs = UserDocument.objects.select_related('doc').filter(user_id = user.id)
+            user_docs = UserDocument.objects.select_related('doc','doc__doc_type').filter(user_id = user.id)
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data
