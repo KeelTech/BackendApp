@@ -32,11 +32,18 @@ class TaskCommentSerializer(serializers.ModelSerializer):
 class TaskSerializer(ListTaskSerializer):
     tasks_comment = TaskCommentSerializer(many= True)
     tasks_docs = UserDocumentSerializer(many = True)
+    tasks_member =  serializers.SerializerMethodField()
+
+    def get_tasks_member(self, obj):
+        members = []
+        if obj.case:
+            members = obj.case.get_member_details()
+        return members
 
     class Meta:
         model = Task
         fields = ('task_id','status_name','priority_name','created_at',
                     'title','description','due_date','tasks_comment', 'tasks_docs',
-                    'check_list','tags','case_id')
+                    'check_list','tags','case_id', 'tasks_member')
 
 

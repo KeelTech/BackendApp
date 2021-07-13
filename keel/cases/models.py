@@ -16,4 +16,19 @@ class Case(TimeStampedModel, SoftDeleteModel):
     plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_cases')
 
 
+    def get_member_details(self):
+
+        members_list = []
+        if self.user:
+            members_list.append(self.user.email)
+
+        if self.agent:
+            members_list.append(self.agent.email)
+
+        # TODO: Uncomment this once `account_manager_id` schema is finalized
+        # if self.account_manager_id:
+        #     members_list.append(self.user.account_manager_id)
+
+        return members_list
+
 
