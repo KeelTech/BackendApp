@@ -102,6 +102,8 @@ LOCAL_APPS = (
     'keel.Core',
     'keel.plans',
     'keel.tasks',
+    'keel.cases',
+    'keel.chats',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -264,6 +266,7 @@ REST_FRAMEWORK = {
     )
 
 }
+CORS_ALLOW_HEADERS = ['accept', 'accept-encoding', 'authorization', 'content-type', 'dnt', 'origin', 'user-agent', 'x-csrftoken', 'x-requested-with', 'app-name']
 
 JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'bearer',

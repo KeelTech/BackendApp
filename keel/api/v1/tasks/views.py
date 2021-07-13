@@ -67,7 +67,7 @@ class GetTaskDetails(GenericViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def fetch(self, request, format = 'json', **kwargs):
+    def taskDetails(self, request, format = 'json', **kwargs):
 
         response = {
             "status" : 0,
