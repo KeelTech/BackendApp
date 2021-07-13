@@ -343,9 +343,6 @@ class GoogleLogin(SocialLoginView):
         self.serializer = self.get_serializer(data=self.request.data)
         self.serializer.is_valid(raise_exception=True)
         user = self.serializer.validated_data
-        if not user.is_verified:
-            user.is_verified = True
-            user.save()
         try:
             token = JWTAuthentication.generate_token(user)
             token_to_save = save_token(token)
