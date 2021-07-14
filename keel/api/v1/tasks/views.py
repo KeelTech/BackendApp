@@ -155,10 +155,9 @@ class CommentService(GenericViewSet):
             log_error("ERROR", "CommentService: delete delete_comments",str(user_id), err = str(e))
             response["message"] = "Comment Id does not exist"
             response["status"] = 1
-            resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
 
         comment_obj.mark_delete()
-
         return Response(response, status = resp_status)
 
 
