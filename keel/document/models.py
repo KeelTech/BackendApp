@@ -8,7 +8,7 @@ from keel.Core.models import TimeStampedModel, SoftDeleteModel
 from keel.Core.helpers import generate_unique_id
 from keel.Core.storage_backends import PrivateStorage
 from keel.Core.err_log import log_error
-from .exceptions import DocumentInvalid
+from .exceptions import DocumentInvalid, DocumentTypeInvalid
 from .utils import validate_files, upload_files_to
 from datetime import date, datetime, timedelta
 
@@ -16,18 +16,26 @@ from datetime import date, datetime, timedelta
 
 class DocumentsManager(models.Manager):
 
-    def add_attachments(self, files, user_id):
+    def add_attachments(self, files, user_id, doc_type):
 
         err_msg = ''
         err_msg = validate_files(files)
         if err_msg:
             raise DocumentInvalid(err_msg)
 
+        if not doc_type:
+            doc_type = DocumentType.DEFAULT_PK_ID
+        else:
+            try:
+                doc_type_obj = DocumentType.objects.get(id = doc_type)
+            except DocumentType.DoesNotExist:
+                raise DocumentTypeInvalid("Invalid Document Type Id")
+
         try:
             docs = []
             for file in files.values():
                 docs.append(self.model(avatar =file, 
-                                        doc_type = Documents.GENERIC, 
+                                        doc_type_id = doc_type, 
                                         owner_id = user_id,
                                         original_name= file.name,
                                         doc_pk= generate_unique_id(self.model.DOCUMENT_PREFIX)))
@@ -38,12 +46,13 @@ class DocumentsManager(models.Manager):
             raise Exception(e)
         return docs
 
-class Documents(TimeStampedModel,SoftDeleteModel):
+class DocumentType(TimeStampedModel, SoftDeleteModel):
 
-    GENERIC = 0
-    PASSPORT = 1
-    DOC_TYPE_CHOICES = ((GENERIC, 'Generic'),
-                        (PASSPORT,'Passport'))
+    DEFAULT_PK_ID = 1 # OTHERS
+    doc_type_name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+
+class Documents(TimeStampedModel,SoftDeleteModel):
 
     DOCUMENT_PREFIX = "doc_"
 
@@ -51,7 +60,8 @@ class Documents(TimeStampedModel,SoftDeleteModel):
     # doc_url = models.URLField(max_length=1000, null=True, blank=True)
     avatar = models.FileField(("Documents"), upload_to=upload_files_to,
                               blank=True, storage=PrivateStorage)
-    doc_type = models.SmallIntegerField(default=GENERIC, choices=DOC_TYPE_CHOICES)
+    doc_type = models.ForeignKey(DocumentType, on_delete=models.deletion.DO_NOTHING, default = DocumentType.DEFAULT_PK_ID,
+                                 related_name='doc_type_docs')
     owner_id = models.CharField(max_length=255)
     original_name = models.CharField(max_length=255)
 

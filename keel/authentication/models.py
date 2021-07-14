@@ -94,8 +94,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class UserDocument(TimeStampedModel, SoftDeleteModel):
 
+    from keel.tasks.models import Task
+    
     doc = models.ForeignKey(Documents,on_delete=models.deletion.DO_NOTHING, related_name='to_document')
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')
+    task = models.ForeignKey(Task, on_delete=models.deletion.DO_NOTHING, related_name='tasks_docs', null=True, blank=True)
 
 class CustomToken(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_id", null=True)
