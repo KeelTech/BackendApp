@@ -55,6 +55,7 @@ class UserViewset(GenericViewSet):
         user = User.objects.create_user(**validated_data)
         return user
 
+
     def signup(self, request, format="json"):
         response = {
             'status' : 1,
@@ -92,7 +93,7 @@ class UserViewset(GenericViewSet):
                 logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
                 response['message'] = str(e)
                 response['status'] = 0
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
 
         data = {
             "email" : obj.user.email,
@@ -163,11 +164,16 @@ class GeneratePasswordReset(GenericViewSet):
             # send email
             emails = EmailNotification(subject, html_content, [email])
             emails.send_email()
+        except User.DoesNotExist as e:
+            logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
         
         response["message"] = "Password Reset Link sent successfully"
         return Response(response)
