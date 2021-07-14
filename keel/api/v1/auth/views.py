@@ -55,6 +55,7 @@ class UserViewset(GenericViewSet):
         user = User.objects.create_user(**validated_data)
         return user
 
+
     def signup(self, request, format="json"):
         response = {
             'status' : 1,
@@ -64,6 +65,7 @@ class UserViewset(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         validated_data['user_type'] = user_model.CUSTOMER # add user type to validated data
+        
         try:
             user = self.create(validated_data)
             token = JWTAuthentication.generate_token(user)
@@ -74,14 +76,34 @@ class UserViewset(GenericViewSet):
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        
+
+        # if user account is not active, send a email with token to activate user account
+        # commenting this out for now
+        current_time = str(datetime.datetime.now().timestamp()).split(".")[0]
+        context = {
+            'token' : current_time
+        }
+        subject = 'Account Verification'
+        html_content = get_template('account_verification.html').render(context)
+        # send email
+        try:
+            emails = EmailNotification(subject, html_content, [user.email])
+            emails.send_email()
+        except Exception as e:
+                logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+                response['message'] = str(e)
+                response['status'] = 0
+                return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
+
         data = {
             "email" : obj.user.email,
             "token" : obj.token,
         }
-        
-        response["message"] =  data
-        return Response(response)
+        response["message"] = data
+        return Response(response, status=status.HTTP_200_OK)
+    
+    def verify_account(self, request):
+        pass
 
 class LoginViewset(GenericViewSet):
     serializer_class = serializers.LoginSerializer
@@ -94,7 +116,12 @@ class LoginViewset(GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-
+        
+        # if not user.is_verified:
+        #     response["status"] = 0
+        #     response["message"] = "Acount has not been verified, Please check your email for verification code"
+        #     return Response(response)
+        
         try:
             token = JWTAuthentication.generate_token(user)
             token_to_save = save_token(token)
@@ -137,11 +164,16 @@ class GeneratePasswordReset(GenericViewSet):
             # send email
             emails = EmailNotification(subject, html_content, [email])
             emails.send_email()
+        except User.DoesNotExist as e:
+            logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
         
         response["message"] = "Password Reset Link sent successfully"
         return Response(response)
@@ -264,6 +296,9 @@ class FacebookLogin(GenericViewSet):
             fb = self.facebook(validated_data['access_token'])
             email = fb['email']
             user, created = User.objects.get_or_create(email=email)
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
             token = JWTAuthentication.generate_token(user)
             token_to_save = save_token(token)
             obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)

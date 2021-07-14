@@ -48,6 +48,9 @@ class UserSocialLoginSerializer(SocialLoginSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
         user = attrs['user']
+        if not user.is_active:
+            user.is_active = True
+            user.save()
         return user
 
 class FacebookSocialLoginSerializer(serializers.Serializer):
