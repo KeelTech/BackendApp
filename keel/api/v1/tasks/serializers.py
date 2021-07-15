@@ -27,16 +27,27 @@ class TaskCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskComments
-        fields = ('user','msg','created_at','user_details')
+        fields = ('id','user','msg','created_at','user_details')
 
 class TaskSerializer(ListTaskSerializer):
-    tasks_comment = TaskCommentSerializer(many= True)
+    tasks_comment = serializers.SerializerMethodField("get_task_comments")
     tasks_docs = UserDocumentSerializer(many = True)
+
+    def get_task_comments(self, task):
+        qs = task.tasks_comment.filter(deleted_at__isnull = True)
+        serializer = TaskCommentSerializer(instance=qs, many=True)
+        return serializer.data        
 
     class Meta:
         model = Task
         fields = ('task_id','status_name','priority_name','created_at',
                     'title','description','due_date','tasks_comment', 'tasks_docs',
                     'check_list','tags','case_id')
+
+class CreateTaskCommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TaskComments
+        fields = ('id','user','task','msg')
 
 
