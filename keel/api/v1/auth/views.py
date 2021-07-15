@@ -19,6 +19,7 @@ from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
+from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
@@ -460,15 +461,21 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
-        task_id = req_data.get("task_id")
-        user_docs = []
-        for doc in docs:
-            temp_data = {"doc": doc.pk, "user":user_id, "task": task_id}
-            user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
-            user_doc_serializer.is_valid(raise_exception=True)
-            user_doc_serializer.save()
-            user_docs.append(user_doc_serializer.data) 
-        response["data"] = user_docs
+        try:
+            task_id = req_data.get("task_id")
+            user_docs = []
+            for doc in docs:
+                temp_data = {"doc": doc.pk, "user":user_id, "task": task_id}
+                user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
+                user_doc_serializer.is_valid(raise_exception=True)
+                user_doc_serializer.save()
+                user_docs.append(user_doc_serializer.data) 
+            response["data"] = user_docs
+        except ValidationError as e:
+            log_error("ERROR","UploadDocument: upload", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
         return Response(response, status = resp_status)
 
     def fetch(self, request, format = 'json'):

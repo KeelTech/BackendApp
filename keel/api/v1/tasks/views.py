@@ -11,7 +11,8 @@ from keel.Core.constants import GENERIC_ERROR
 from keel.Core.helpers import generate_unique_id
 from keel.tasks.models import Task, TaskComments
 
-from .serializers import ListTaskSerializer, TaskSerializer, TaskCreateSerializer, TaskUpdateSerializer
+from .serializers import (ListTaskSerializer, TaskSerializer, TaskCreateSerializer, 
+                            TaskUpdateSerializer, CreateTaskCommentSerializer)
 
 
 class ListTask(GenericViewSet):
@@ -159,9 +160,9 @@ class GetTaskDetails(GenericViewSet):
         user = request.user
         user_id = user.id
         task_id = kwargs.get("task_id")
-
         try:
-            task = Task.objects.get(task_id = task_id, user_id = user_id)
+            task = Task.objects.prefetch_related("tasks_comment","tasks_docs").get(task_id = task_id, user_id = user_id)
+            # task = Task.objects.get(task_id = task_id, user_id = user_id)
             task_data = TaskSerializer(task)
             resp_data = task_data.data
             response['data'] = resp_data
@@ -181,9 +182,64 @@ class GetTaskDetails(GenericViewSet):
         return Response(response, resp_status)
 
 
+class CommentService(GenericViewSet):
 
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
+    
+    def postComments(self, request, format = 'json'):
 
+        response = {
+            "status" : 0,
+            "message" : "Comments posted",
+            "data" : {},        
+        }    
+        resp_status = HTTP_STATUS.HTTP_200_OK
+        req_data = request.POST.dict() 
 
+        user = request.user
+        user_id = user.id
+        req_data['user'] = user_id
+        try:
+
+            comment_serializer = CreateTaskCommentSerializer(data = req_data)
+            comment_serializer.is_valid(raise_exception = True)
+            # response['data'] = comment_serializer.validated_data
+            comment_obj = comment_serializer.save()
+            response['data'] = CreateTaskCommentSerializer(comment_obj).data
+
+        except ValidationError as e:
+            log_error("ERORR","CommentService: post postComments", str(user_id), err = str(e))
+            response["message"] = GENERIC_ERROR
+            response["status"] = 1
+            resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
+
+        return Response(response, status = resp_status)
+
+    def deleteComments(self, request, format = 'json', **kwargs):
+
+        response = {
+            "status" : 0,
+            "message" : "Comments deleted",
+            "data" : {},            
+        }
+
+        user = request.user
+        user_id = user.id
+
+        resp_status = HTTP_STATUS.HTTP_200_OK
+        comment_id = kwargs.get("comment_id")
+
+        try:
+            comment_obj = TaskComments.objects.get(id = comment_id, user = user_id)
+        except TaskComments.DoesNotExist as e:
+            log_error("ERROR", "CommentService: delete delete_comments",str(user_id), err = str(e))
+            response["message"] = "Comment Id does not exist"
+            response["status"] = 1
+            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
+
+        comment_obj.mark_delete()
+        return Response(response, status = resp_status)
 
 
 
