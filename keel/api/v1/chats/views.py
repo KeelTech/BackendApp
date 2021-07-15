@@ -31,7 +31,7 @@ class ChatList(GenericViewSet):
         user = request.user
         user_id = user.id
 
-        req_data = request.data.dict()
+        req_data = request.data
         case_id = req_data.get("case_id","")
 
         try:
@@ -64,7 +64,7 @@ class ChatList(GenericViewSet):
         user = request.user
         user_id = user.id
 
-        req_data = request.POST.dict()
+        req_data = request.data
         case_id = req_data.get("case_id", "")
 
         try:

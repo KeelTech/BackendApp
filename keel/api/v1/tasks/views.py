@@ -114,7 +114,7 @@ class CommentService(GenericViewSet):
             "data" : {},        
         }    
         resp_status = HTTP_STATUS.HTTP_200_OK
-        req_data = request.POST.dict() 
+        req_data = request.data
 
         user = request.user
         user_id = user.id
