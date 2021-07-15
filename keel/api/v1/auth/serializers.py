@@ -99,7 +99,7 @@ class UserDocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDocument
-        fields = ('id', 'doc','user','task','doc_type')
+        fields = ('id', 'doc','user','task','doc_type','created_at')
 
     def create(self, validated_data):
         user_doc = UserDocument.objects.create(**validated_data)
@@ -119,7 +119,7 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserDocument
         # fields = ('id', 'doc_id', 'user_id', 'doc_link', 'doc_type')
-        fields = ('id', 'doc_id', 'user_id', 'doc_type')
+        fields = ('id', 'doc_id', 'user_id', 'doc_type','task','created_at')
 
 class UserDetailsSerializer(serializers.ModelSerializer):
 
