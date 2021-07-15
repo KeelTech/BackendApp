@@ -21,9 +21,12 @@ class FilterUserCases(GenericViewSet):
         return Response(serializer.data)
 
 
-class FilterUserCasesDetails(generics.RetrieveUpdateDestroyAPIView):
-    
-    queryset = Case.objects.all()
+class FilterUserCasesDetails(generics.ListAPIView):
+
     serializer_class = ListCasesSerializer
     permission_classes = (permissions.IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
+
+    def get_queryset(self):
+        queryset = Case.objects.filter(pk=self.kwargs['pk'])
+        return queryset
