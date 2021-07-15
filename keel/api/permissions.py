@@ -25,7 +25,7 @@ class IsRCICUser(permissions.BasePermission):
         then we check if user.user_type = 2
         """
         
-        if user.user_type == 1: 
+        if user.user_type == 2: 
             return True
         
         return False
