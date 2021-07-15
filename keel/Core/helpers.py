@@ -19,7 +19,7 @@ def get_s3_confing():
     return s3_config
 
 def generate_unique_id(prefix):
-    return prefix + str(uuid.uuid4())
+    return prefix + str(uuid.uuid4().hex)
 
 
 def upload_file_to_s3(file):

@@ -40,3 +40,23 @@ class TaskSerializer(ListTaskSerializer):
                     'check_list','tags','case_id')
 
 
+class TaskCreateSerializer(serializers.ModelSerializer):
+
+    priority = serializers.ChoiceField(choices=Task.PRIORITY_CHOICE)
+
+    class Meta:
+        model = Task
+        fields = ('priority','case','user','title','description','due_date','task_id','check_list','tags')
+
+
+class TaskUpdateSerializer(serializers.ModelSerializer):
+
+    priority = serializers.ChoiceField(choices=Task.PRIORITY_CHOICE)
+
+    class Meta:
+        model = Task
+        fields = ('priority','title','description','due_date','task_id','check_list','tags')
+
+
+
+
