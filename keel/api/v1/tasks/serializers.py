@@ -5,7 +5,7 @@ from keel.tasks.models import Task, TaskComments
 
 class ListTaskSerializer(serializers.ModelSerializer):
 
-    status = serializers.ChoiceField(choices=Task.STATUS_CHOICE)
+    status = serializers.ChoiceField(choices=Task.STATUS_CHOICE, required = False)
     status_name = serializers.SerializerMethodField()
     priority = serializers.ChoiceField(choices=Task.PRIORITY_CHOICE, required = False)
     priority_name = serializers.SerializerMethodField()
