@@ -1,7 +1,9 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from keel.api.v1.auth.serializers import UserDetailsSerializer, UserDocumentSerializer
 from keel.tasks.models import Task, TaskComments
+
 
 class ListTaskSerializer(serializers.ModelSerializer):
 
@@ -67,6 +69,22 @@ class TaskUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('priority','title','description','due_date','task_id','check_list','tags')
+
+
+class TaskStatusChangeSerializer(serializers.ModelSerializer):
+
+    status = serializers.ChoiceField(choices=Task.STATUS_CHOICE)
+
+    # TODO : Incase any validation to be done for status change, like Task is COMPLETED
+    # def validate(self, attrs):
+    #     if self.instance:
+    #         if self.instance.status == self.instance.COMPLETED:
+    #             raise ValidationError("Task Status is COMPLETED, cannot be changed")
+    #     return attrs
+
+    class Meta:
+        model = Task
+        fields = ('task_id','status')
 
 
 
