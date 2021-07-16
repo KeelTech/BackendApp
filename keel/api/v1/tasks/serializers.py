@@ -19,7 +19,7 @@ class ListTaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ('task_id','status_name','priority_name','priority','status','created_at','title')
+        fields = ('task_id','status_name','priority_name','priority','status','created_at','title','case')
 
 
 class TaskCommentSerializer(serializers.ModelSerializer):
