@@ -1,3 +1,4 @@
+from inspect import getmembers
 from django.db.models import query
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
@@ -10,11 +11,18 @@ from keel.cases.models import Case
 from keel.api.permissions import IsRCICUser
 
 from keel.api.v1.auth.serializers import CustomerProfileSerializer, CustomerQualificationsSerializer
-from .serializers import ListCasesSerializer
+from .serializers import CasesSerializer
 
 
-class FilterUserCases(APIView):
-    serializer_class = ListCasesSerializer
+class CaseView(generics.CreateAPIView):
+    serializer_class = CasesSerializer
+    authentication_classes = (JWTAuthentication,) 
+    permission_classes = (permissions.IsAuthenticated,) 
+    queryset = Case.objects.all()
+
+
+class FilterUserCases(generics.ListAPIView):
+    serializer_class = CasesSerializer
     authentication_classes = (JWTAuthentication, )
     permission_classes = (permissions.IsAuthenticated, IsRCICUser)
 
@@ -36,7 +44,7 @@ class FilterUserCases(APIView):
 
 class FilterUserCasesDetails(generics.ListAPIView):
 
-    serializer_class = ListCasesSerializer
+    serializer_class = CasesSerializer
     permission_classes = (permissions.IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
 
