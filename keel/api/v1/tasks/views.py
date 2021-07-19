@@ -1,3 +1,4 @@
+from django.db.models import Q
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, viewsets, status as HTTP_STATUS
@@ -11,6 +12,8 @@ from keel.Core.constants import GENERIC_ERROR
 from keel.Core.helpers import generate_unique_id
 from keel.tasks.models import Task, TaskComments
 from keel.api.permissions import IsRCICUser
+from keel.cases.models import Case
+
 
 from .serializers import (ListTaskSerializer, TaskSerializer, TaskCreateSerializer, 
                             TaskUpdateSerializer, CreateTaskCommentSerializer, TaskStatusChangeSerializer)
@@ -22,6 +25,7 @@ class ListTask(GenericViewSet):
     permission_classes = (IsAuthenticated,)
 
     def list(self, request, format = 'json'):
+
         response = {
             "status" : 0,
             "message" : "Task list is successfully fetched",
@@ -31,29 +35,42 @@ class ListTask(GenericViewSet):
 
         user = request.user
         user_id = user.id
-        req_data = request.GET
-        status = req_data.get("status","")
+        req_data = request.GET.dict()
+        case_id = req_data.get("case","")
 
-        if status is None or ( type(status) is str and not status.isnumeric()):
-            log_error("ERROR","ListTask: list", str(user_id), err = "invalid status data", msg = str(status))
-            response["message"] = "Invalid Status Choice"
+        # Verify Case Id 
+        if not case_id:
+            log_error("ERROR", "ListTask: list", str(user_id), err = "invalid case_id")        
+            response["message"] = "Invalid Case Id"
             response["status"] = 1
             resp_status = HTTP_STATUS.HTTP_400_BAD_REQUEST
             return Response(response, status = resp_status)
 
-        status = int(status)
+        # Validate Request Param Data
         try:
-            task_validation = ListTaskSerializer(data = {"status":status})
+            task_validation = ListTaskSerializer(data = req_data)
             task_validation.is_valid(raise_exception = True) 
+            validated_data = task_validation.validated_data
         except ValidationError as e:
-            log_error("ERORR","ListTask: list validate_status", str(user_id), err = str(e), data = str(status))
-            response["message"] = "Invalid Status Choice value"
+            log_error("ERORR","ListTask: list validate_status", str(user_id), err = str(e))
+            response["message"] = "Invalid Request Data"
             response["status"] = 1
             resp_status = HTTP_STATUS.HTTP_400_BAD_REQUEST
             return Response(response, status = resp_status)
 
+        # validate Case ID against User/Agent
         try:
-            tasks = Task.objects.filter(status = status, user_id = user_id)
+            Case.objects.get(Q(user = user_id) | Q(agent = user_id), case_id = case_id)
+        except Case.DoesNotExist as e:
+            log_error("ERROR","ListTask: list", str(user_id), err = str(e), case_id = case_id)
+            response["message"] = "Case id does not exist"
+            response["status"] = 1
+            resp_status = HTTP_STATUS.HTTP_400_BAD_REQUEST
+            return Response(response, status = resp_status)
+
+        # Filter the data as per req filters
+        try:
+            tasks = Task.objects.filter(**validated_data)
             task_list_data = ListTaskSerializer(tasks, many = True)
             resp_data = task_list_data.data    
             response['data'] = resp_data 

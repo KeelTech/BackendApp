@@ -7,7 +7,7 @@ from keel.tasks.models import Task, TaskComments
 
 class ListTaskSerializer(serializers.ModelSerializer):
 
-    status = serializers.ChoiceField(choices=Task.STATUS_CHOICE)
+    status = serializers.ChoiceField(choices=Task.STATUS_CHOICE, required = False)
     status_name = serializers.SerializerMethodField()
     priority = serializers.ChoiceField(choices=Task.PRIORITY_CHOICE, required = False)
     priority_name = serializers.SerializerMethodField()
@@ -21,7 +21,7 @@ class ListTaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ('task_id','status_name','priority_name','priority','status','created_at','title')
+        fields = ('task_id','status_name','priority_name','priority','status','created_at','title','case')
 
 
 class TaskCommentSerializer(serializers.ModelSerializer):
