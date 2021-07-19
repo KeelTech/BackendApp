@@ -3,7 +3,6 @@ from django.db import models
 from keel.Core.models import TimeStampedModel, SoftDeleteModel
 from keel.plans.models import Plan
 from keel.authentication.models import User
-# Create your models here.
 
 class Case(TimeStampedModel, SoftDeleteModel):
 

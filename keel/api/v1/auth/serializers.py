@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from keel.authentication.models import (User, UserDocument, CustomToken)
+from keel.authentication.models import (User, UserDocument, CustomToken, CustomerProfile, CustomerQualifications)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -21,6 +21,19 @@ class UserRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     token = serializers.CharField(read_only=True)
+
+
+class CustomerProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerProfile
+        fields = "__all__"
+
+class CustomerQualificationsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerQualifications
+        fields = "__all__"
 
 
 class LoginSerializer(serializers.Serializer):
