@@ -11,10 +11,12 @@ from keel.Core.err_log import log_error
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.helpers import generate_unique_id
 from keel.tasks.models import Task, TaskComments
+from keel.api.permissions import IsRCICUser
 from keel.cases.models import Case
 
+
 from .serializers import (ListTaskSerializer, TaskSerializer, TaskCreateSerializer, 
-                            TaskUpdateSerializer, CreateTaskCommentSerializer)
+                            TaskUpdateSerializer, CreateTaskCommentSerializer, TaskStatusChangeSerializer)
 
 
 class ListTask(GenericViewSet):
@@ -258,5 +260,52 @@ class CommentService(GenericViewSet):
         return Response(response, status = resp_status)
 
 
+class TaskStatusChange(GenericViewSet):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,IsRCICUser)
+
+    def StatusEdit(self, request, format = 'json', **kwargs):
+
+        response = {
+            "status": 0,
+            "message": "Task Status Updated successfully",
+            "data" : {}
+        }
+
+        user = request.user
+        user_id = user.id
+        req_data = request.data  
+              
+        task_id = kwargs.get("task_id")
+
+        if not task_id:
+            log_error("ERROR", "TaskStatusChange: StatusEdit", str(user_id), err_msg = "Invalid Task Id")
+            response["message"] = "Task does not exist"
+            response["status"] = 1
+            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
+
+        try:
+            task = Task.objects.get(task_id = task_id)
+        except Task.DoesNotExist as e:
+            log_error("ERROR", "TaskStatusChange: StatusEdit", str(user_id), err = str(e))
+            response["message"] = "Task does not exist"
+            response["status"] = 1
+            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
+
+        req_data['task_id'] = task_id
+        try:
+            status_serilizer = TaskStatusChangeSerializer(task, data = req_data)
+            status_serilizer.is_valid(raise_exception = True)
+            task_obj = status_serilizer.save()
+            response['data'] = TaskSerializer(task_obj).data
+
+        except ValidationError as e:
+            log_error("ERROR","TaskStatusChange : StatusEdit", str(user_id), err = str(e))
+            response["message"] = GENERIC_ERROR
+            response['status'] = 1
+            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
 
