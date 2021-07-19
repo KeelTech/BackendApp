@@ -33,12 +33,17 @@ class TaskCommentSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(ListTaskSerializer):
     tasks_comment = serializers.SerializerMethodField("get_task_comments")
-    tasks_docs = UserDocumentSerializer(many = True)
+    tasks_docs = serializers.SerializerMethodField("get_task_docs")
 
     def get_task_comments(self, task):
         qs = task.tasks_comment.filter(deleted_at__isnull = True)
         serializer = TaskCommentSerializer(instance=qs, many=True)
         return serializer.data        
+
+    def get_task_docs(self, task):
+        qs = task.tasks_docs.filter(deleted_at__isnull = True)
+        serializer = UserDocumentSerializer(instance = qs, many = True)
+        return serializer.data 
 
     class Meta:
         model = Task

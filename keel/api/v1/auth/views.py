@@ -489,7 +489,8 @@ class UploadDocument(GenericViewSet):
         user = request.user
 
         try:
-            user_docs = UserDocument.objects.select_related('doc','doc__doc_type').filter(user_id = user.id)
+            user_docs = UserDocument.objects.select_related('doc','doc__doc_type'). \
+                            filter(user_id = user.id, deleted_at__isnull = True)
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data
@@ -500,5 +501,48 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
         return Response(response, status = resp_status)
+
+
+    def deleteUserDoc(self, request, format = 'json', **kwargs):
+
+        response = {
+                "status": 0,
+                "message": "User Document is deleted",
+                "data": ""
+        }
+
+        resp_status = status.HTTP_200_OK
+        user = request.user
+        user_id = user.id
+        user_doc_id = kwargs.get("id")
+
+        try:
+            user_doc = UserDocument.objects.select_related('doc').get(id = user_doc_id)
+        except UserDocument.DoesNotExist as e:
+            log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = "Invalid User Doc Id")
+            response["status"] = 1
+            response["message"] = "Invalid User Document Id"
+            resp_status = status.HTTP_400_BAD_REQUEST
+            return Response(response, status = resp_status)
+
+        if user_doc.doc.owner_id != str(user_id):
+            log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = "LoggedIn User is not a owner of document")
+            response["status"] = 1
+            response["message"] = "User is not authorised to perform this action"
+            return Response(response, status = resp_status)
+
+        user_doc.mark_delete()
+        user_doc.doc.mark_delete()
+
+        return Response(response, status = resp_status)
+
+
+
+
+
+
+
+
+
 
 

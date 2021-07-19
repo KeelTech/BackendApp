@@ -17,4 +17,5 @@ urlpatterns = [
     path('otp/generate', LoginOTP.as_view({'post': 'generate'}), name='otp-generate'),
     path('upload-doc', UploadDocument.as_view({'post':'upload'}),name='doc-upload'),
     path('get-user-doc',UploadDocument.as_view({'get':'fetch'}), name='get-docs'),
+    path('delete-doc/<int:id>',UploadDocument.as_view({'delete':'deleteUserDoc'}), name='delete-docs'),
 ]
