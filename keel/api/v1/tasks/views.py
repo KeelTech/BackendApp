@@ -70,7 +70,7 @@ class ListTask(GenericViewSet):
 
         # Filter the data as per req filters
         try:
-            tasks = Task.objects.filter(**validated_data)
+            tasks = Task.objects.filter(**validated_data).filter(deleted_at__isnull = True)
             task_list_data = ListTaskSerializer(tasks, many = True)
             resp_data = task_list_data.data    
             response['data'] = resp_data 
@@ -136,7 +136,7 @@ class ListTask(GenericViewSet):
             return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
 
         try:
-            task = Task.objects.get(task_id = task_id)
+            task = Task.objects.get(task_id = task_id, deleted_at__isnull = True)
         except Task.DoesNotExist as e:
             log_error("ERROR", "ListTask: updateTask", str(user_id), err = str(e))
             response["message"] = "Task does not exist"
@@ -158,7 +158,28 @@ class ListTask(GenericViewSet):
 
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
+    def deleteTask(self, request, format='json', **kwargs):
 
+        response = {
+            "status": 0,
+            "message": "Tasks deleted successfully",
+            "data": ""
+        }
+
+        user = request.user
+        user_id = user.id
+        task_id = kwargs.get("task_id")
+
+        try:
+            task = Task.objects.prefetch_related("tasks_comment","tasks_docs").get(task_id = task_id)
+        except Task.DoesNotExist as e:
+            log_error("ERROR", "ListTask: deleteTask", str(user_id), err = "Invalid Task Id")
+            response["message"] = "Task does not exist"
+            response["status"] = 1
+            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
+
+        task.mark_delete()
+        return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
 
 class GetTaskDetails(GenericViewSet):
@@ -179,7 +200,8 @@ class GetTaskDetails(GenericViewSet):
         user_id = user.id
         task_id = kwargs.get("task_id")
         try:
-            task = Task.objects.prefetch_related("tasks_comment","tasks_docs").get(task_id = task_id, user_id = user_id)
+            task = Task.objects.prefetch_related("tasks_comment","tasks_docs").\
+                                                get(task_id = task_id, user_id = user_id, deleted_at__isnull = True)
             # task = Task.objects.get(task_id = task_id, user_id = user_id)
             task_data = TaskSerializer(task)
             resp_data = task_data.data
@@ -219,7 +241,6 @@ class CommentService(GenericViewSet):
         user_id = user.id
         req_data['user'] = user_id
         try:
-
             comment_serializer = CreateTaskCommentSerializer(data = req_data)
             comment_serializer.is_valid(raise_exception = True)
             # response['data'] = comment_serializer.validated_data
@@ -286,7 +307,7 @@ class TaskStatusChange(GenericViewSet):
             return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
 
         try:
-            task = Task.objects.get(task_id = task_id)
+            task = Task.objects.get(task_id = task_id, deleted_at__isnull = True)
         except Task.DoesNotExist as e:
             log_error("ERROR", "TaskStatusChange: StatusEdit", str(user_id), err = str(e))
             response["message"] = "Task does not exist"
