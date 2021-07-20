@@ -41,7 +41,10 @@ class FilterUserCases(generics.ListAPIView):
                 "account_manager_id": cases.account_manager_id,
                 "agent": cases.agent.email,
                 "plan": cases.plan.title,
+                "status": cases.status,
                 "is_active": cases.is_active,
+                "start_date": cases.created_at,
+                "updated_at": cases.updated_at,
             })
         response["message"] = data
         return Response(response)
@@ -58,7 +61,7 @@ class FilterUserCasesDetails(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        pk = kwargs.get('pk')
+        pk = kwargs.get('case_id')
         try:
             queryset = Case.objects.get(case_id=pk)
             # get all user qualifications
