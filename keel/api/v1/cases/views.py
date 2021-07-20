@@ -4,6 +4,7 @@ from rest_framework import permissions, generics, status
 from rest_framework.response import Response
 
 from keel.authentication.backends import JWTAuthentication
+from keel.tasks.models import Task
 from keel.cases.models import Case
 from keel.api.permissions import IsRCICUser
 
@@ -57,34 +58,36 @@ class FilterUserCasesDetails(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        queryset = Case.objects.filter(pk=self.kwargs['pk'])
-        data = []
+        pk = kwargs.get('pk')
         try:
-            for case in queryset:
-                data.append({
-                    "case_details" : {
-                        "case_id" : case.case_id,
-                        "account_manager_id" : case.account_manager_id,
-                        "status" : case.status,
-                        "is_active" : case.is_active
-                    },
-                    "user_details" : {
-                        "fullname" : "{} {}".format(case.user.user_profile.first_name, case.user.user_profile.last_name),
-                        "mother_fullname" : case.user.user_profile.mother_fullname,
-                        "father_fullname" : case.user.user_profile.father_fullname,
-                        "age" : case.user.user_profile.age,
-                        "address" : case.user.user_profile.address,
-                        "date_of_birth" : case.user.user_profile.date_of_birth,
-                    },
-                    "user_qualifications" : {
-                        "institute_name" : case.user.user_qualification.institute_name,
-                        "grade" : case.user.user_qualification.grade,
-                        "year_of_passing" : case.user.user_qualification.year_of_passing,
-                        "start_date" : case.user.user_qualification.start_date,
-                        "city" : case.user.user_qualification.city,
-                        "country" : case.user.user_qualification.country,
-                    }
-                })
+            queryset = Case.objects.get(case_id=pk)
+            tasks = Task.objects.filter(case=queryset).count()
+            data = []
+            data.append({
+                "case_details" : {
+                    "case_id" : queryset.case_id,
+                    "account_manager_id" : queryset.account_manager_id,
+                    "status" : queryset.status,
+                    "is_active" : queryset.is_active
+                },
+                "user_details" : {
+                    "fullname" : "{} {}".format(queryset.user.user_profile.first_name, queryset.user.user_profile.last_name),
+                    "mother_fullname" : queryset.user.user_profile.mother_fullname,
+                    "father_fullname" : queryset.user.user_profile.father_fullname,
+                    "age" : queryset.user.user_profile.age,
+                    "address" : queryset.user.user_profile.address,
+                    "date_of_birth" : queryset.user.user_profile.date_of_birth,
+                },
+                "user_qualifications" : {
+                    "institute_name" : queryset.user.user_qualification.institute_name,
+                    "grade" : queryset.user.user_qualification.grade,
+                    "year_of_passing" : queryset.user.user_qualification.year_of_passing,
+                    "start_date" : queryset.user.user_qualification.start_date,
+                    "city" : queryset.user.user_qualification.city,
+                    "country" : queryset.user.user_qualification.country,
+                },
+                "task_count" : tasks
+            })
         except Exception as e:
             logger.error('ERROR: CASE:FilterUserCasesDetails ' + str(e))
             response['message'] = str(e)
