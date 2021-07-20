@@ -461,11 +461,29 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
+        doc_user_id = user_id
+
+        # Validate for Task Id, and replace the doc_user_id with task.user_id
         try:
             task_id = req_data.get("task_id")
+            if task_id:
+                task_serializer = serializers.TaskIDSerializer(data = {"task_id":task_id})
+                task_serializer.is_valid(raise_exception = True)
+                task_obj = task_serializer.validated_data
+                doc_user_id = task_obj.user_id
+
+        except ValidationError as e:
+            log_error("ERROR","UploadDocument: upload taskValidation", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status = resp_status)
+
+        # validate and create User Doc
+        try:
             user_docs = []
             for doc in docs:
-                temp_data = {"doc": doc.pk, "user":user_id, "task": task_id}
+                temp_data = {"doc": doc.pk, "user":doc_user_id, "task": task_id}
                 user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
                 user_doc_serializer.is_valid(raise_exception=True)
                 user_doc_serializer.save()
@@ -535,10 +553,6 @@ class UploadDocument(GenericViewSet):
         user_doc.doc.mark_delete()
 
         return Response(response, status = resp_status)
-
-
-
-
 
 
 
