@@ -2,7 +2,7 @@ from rest_framework import serializers
 from keel.cases.models import Case
 
 
-class ListCasesSerializer(serializers.ModelSerializer):
+class CasesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Case
