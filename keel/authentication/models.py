@@ -139,7 +139,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
 
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
     institute_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
     year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)

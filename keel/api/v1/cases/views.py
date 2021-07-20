@@ -61,6 +61,20 @@ class FilterUserCasesDetails(GenericViewSet):
         pk = kwargs.get('pk')
         try:
             queryset = Case.objects.get(case_id=pk)
+            # get all user qualifications
+            qualifications = queryset.user.user_qualification.all()
+            user_qua = []
+            for qualification in qualifications:
+                user_qua.append({
+                     "institute_name" : qualification.institute_name,
+                    "grade" : qualification.grade,
+                    "year_of_passing" : qualification.year_of_passing,
+                    "start_date" : qualification.start_date,
+                    "city" : qualification.city,
+                    "country" : qualification.country,
+                })
+            
+            # get number of tasks related to cases from Task Model
             tasks = Task.objects.filter(case=queryset).count()
             data = []
             data.append({
@@ -78,14 +92,7 @@ class FilterUserCasesDetails(GenericViewSet):
                     "address" : queryset.user.user_profile.address,
                     "date_of_birth" : queryset.user.user_profile.date_of_birth,
                 },
-                "user_qualifications" : {
-                    "institute_name" : queryset.user.user_qualification.institute_name,
-                    "grade" : queryset.user.user_qualification.grade,
-                    "year_of_passing" : queryset.user.user_qualification.year_of_passing,
-                    "start_date" : queryset.user.user_qualification.start_date,
-                    "city" : queryset.user.user_qualification.city,
-                    "country" : queryset.user.user_qualification.country,
-                },
+                "user_qualifications" : user_qua,
                 "task_count" : tasks
             })
         except Exception as e:
