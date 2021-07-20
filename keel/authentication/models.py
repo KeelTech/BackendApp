@@ -128,7 +128,7 @@ class UserService(TimeStampedModel, SoftDeleteModel):
 
 
 class CustomerProfile(TimeStampedModel, SoftDeleteModel):
-    user = models.OneToOneField(User, related_name="general_user_profile", on_delete=models.DO_NOTHING)
+    user = models.OneToOneField(User, related_name="user_profile", on_delete=models.DO_NOTHING)
     first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
     mother_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
@@ -139,7 +139,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
 
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="qualification_user_profile")
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
     institute_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
     year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)
