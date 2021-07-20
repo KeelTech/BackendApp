@@ -19,14 +19,14 @@ class Case(TimeStampedModel, SoftDeleteModel):
         (CANCELLED, 'CANCELLED'),
     )
 
-    case_id = models.CharField(max_length=255, primary_key=True, default=None, blank=True)
-    user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='users_cases', default=None, null=True, blank=True)
-    agent = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='agents_cases', default=None, null=True, blank=True)
-    account_manager_id = models.IntegerField(null=True, blank=True)
-    status = models.PositiveSmallIntegerField(choices=CASES_TYPE_CHOICES, verbose_name="case_status", default=BOOKED, null=True, blank=True)
+    case_id = models.CharField(max_length=255, primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='users_cases')
+    agent = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='agents_cases')
+    account_manager_id = models.IntegerField(null=True, blank=True, default=None)
+    status = models.PositiveSmallIntegerField(choices=CASES_TYPE_CHOICES, verbose_name="case_status", default=BOOKED)
     is_active = models.BooleanField(verbose_name= 'Active', default=True)
     ref_id = models.ForeignKey('self',null=True, blank=True, on_delete=models.deletion.DO_NOTHING)
-    plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_cases', default=None, null=True, blank=True)
+    plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_cases')
 
     def save(self, *args, **kwargs):
         self.case_id = uuid.uuid4()
