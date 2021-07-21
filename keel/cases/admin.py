@@ -7,6 +7,8 @@ User = get_user_model()
 class CaseAdmin(admin.ModelAdmin):
     list_display = ('case_id', 'user', 'agent', 'is_active')
     ordering = ('case_id',)
+    search_fields = ['user', 'agent']
+    autocomplete_fields = ['user', 'agent']
     readonly_fields=('deleted_at',)
 
     # def get_queryset(self, request):
