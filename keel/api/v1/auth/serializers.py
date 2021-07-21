@@ -103,7 +103,6 @@ class OTPSerializer(serializers.Serializer):
         #     attrs['otp_obj'] = otp_obj
         return attrs
 
-
 class UserDocumentSerializer(serializers.ModelSerializer):
     doc_type = serializers.SerializerMethodField()
 
@@ -151,5 +150,18 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id','user_name','email')
 
+class TaskIDSerializer(serializers.Serializer):
 
+    task_id = serializers.CharField(max_length=255)
 
+    def validate(self, attrs):
+        from keel.tasks.models import Task
+
+        task_id = attrs.get('task_id')
+        try:
+            task = Task.objects.get(pk = task_id, deleted_at__isnull = True)
+        except Task.DoesNotExist as e:
+            log_error("ERROR", "TaskIDSerializer: validate", "", err = str(e), task_id = task_id )
+            raise serializers.ValidationError("Task Id is invalid")
+
+        return task
