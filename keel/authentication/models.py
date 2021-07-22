@@ -127,3 +127,22 @@ class UserService(TimeStampedModel, SoftDeleteModel):
     expiry_time = models.DateTimeField(null=True, blank= True)
 
 
+class CustomerProfile(TimeStampedModel, SoftDeleteModel):
+    user = models.OneToOneField(User, related_name="user_profile", on_delete=models.DO_NOTHING)
+    first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+    last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+    mother_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
+    father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
+    age = models.CharField(max_length=512, blank=True, null=True, default=None)
+    address = models.CharField(max_length=512, blank=True, null=True, default=None)
+    date_of_birth = models.DateField(default=None, null=True,blank=False)
+
+
+class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
+    institute_name = models.CharField(max_length=512, default=None, blank=True, null=True)
+    grade = models.CharField(max_length=512, blank=True, null=True, default=None)
+    year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)
+    start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
+    city = models.CharField(max_length=512, blank=True, null=True, default=None)
+    country = models.CharField(max_length=512, blank=True, null=True, default=None)

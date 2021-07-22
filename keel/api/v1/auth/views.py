@@ -461,11 +461,29 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
+        doc_user_id = user_id
+
+        # Validate for Task Id, and replace the doc_user_id with task.user_id
         try:
             task_id = req_data.get("task_id")
+            if task_id:
+                task_serializer = serializers.TaskIDSerializer(data = {"task_id":task_id})
+                task_serializer.is_valid(raise_exception = True)
+                task_obj = task_serializer.validated_data
+                doc_user_id = task_obj.user_id
+
+        except ValidationError as e:
+            log_error("ERROR","UploadDocument: upload taskValidation", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status = resp_status)
+
+        # validate and create User Doc
+        try:
             user_docs = []
             for doc in docs:
-                temp_data = {"doc": doc.pk, "user":user_id, "task": task_id}
+                temp_data = {"doc": doc.pk, "user":doc_user_id, "task": task_id}
                 user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
                 user_doc_serializer.is_valid(raise_exception=True)
                 user_doc_serializer.save()
@@ -489,7 +507,8 @@ class UploadDocument(GenericViewSet):
         user = request.user
 
         try:
-            user_docs = UserDocument.objects.select_related('doc','doc__doc_type').filter(user_id = user.id)
+            user_docs = UserDocument.objects.select_related('doc','doc__doc_type'). \
+                            filter(user_id = user.id, deleted_at__isnull = True)
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data
@@ -500,5 +519,44 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
         return Response(response, status = resp_status)
+
+
+    def deleteUserDoc(self, request, format = 'json', **kwargs):
+
+        response = {
+                "status": 0,
+                "message": "User Document is deleted",
+                "data": ""
+        }
+
+        resp_status = status.HTTP_200_OK
+        user = request.user
+        user_id = user.id
+        user_doc_id = kwargs.get("id")
+
+        try:
+            user_doc = UserDocument.objects.select_related('doc').get(id = user_doc_id)
+        except UserDocument.DoesNotExist as e:
+            log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = "Invalid User Doc Id")
+            response["status"] = 1
+            response["message"] = "Invalid User Document Id"
+            resp_status = status.HTTP_400_BAD_REQUEST
+            return Response(response, status = resp_status)
+
+        if user_doc.doc.owner_id != str(user_id):
+            log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = "LoggedIn User is not a owner of document")
+            response["status"] = 1
+            response["message"] = "User is not authorised to perform this action"
+            return Response(response, status = resp_status)
+
+        user_doc.mark_delete()
+        user_doc.doc.mark_delete()
+
+        return Response(response, status = resp_status)
+
+
+
+
+
 
 

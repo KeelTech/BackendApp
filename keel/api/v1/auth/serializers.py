@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from keel.authentication.models import (User, UserDocument, CustomToken)
+from keel.authentication.models import (User, UserDocument, CustomToken, CustomerProfile, CustomerQualifications)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -21,6 +21,19 @@ class UserRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     token = serializers.CharField(read_only=True)
+
+
+class CustomerProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerProfile
+        fields = "__all__"
+
+class CustomerQualificationsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerQualifications
+        fields = "__all__"
 
 
 class LoginSerializer(serializers.Serializer):
@@ -90,7 +103,6 @@ class OTPSerializer(serializers.Serializer):
         #     attrs['otp_obj'] = otp_obj
         return attrs
 
-
 class UserDocumentSerializer(serializers.ModelSerializer):
     doc_type = serializers.SerializerMethodField()
 
@@ -138,5 +150,18 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id','user_name','email')
 
+class TaskIDSerializer(serializers.Serializer):
 
+    task_id = serializers.CharField(max_length=255)
 
+    def validate(self, attrs):
+        from keel.tasks.models import Task
+
+        task_id = attrs.get('task_id')
+        try:
+            task = Task.objects.get(pk = task_id, deleted_at__isnull = True)
+        except Task.DoesNotExist as e:
+            log_error("ERROR", "TaskIDSerializer: validate", "", err = str(e), task_id = task_id )
+            raise serializers.ValidationError("Task Id is invalid")
+
+        return task

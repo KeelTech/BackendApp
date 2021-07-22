@@ -11,6 +11,9 @@ class Plan(TimeStampedModel):
     currency = models.CharField(max_length=10, null=True, blank=True, default=None)
     country_iso = models.CharField(max_length=512, null=True, blank=True, default=None)
 
+    def __str__(self):
+        return str(self.title)
+
 
 class Vendor(TimeStampedModel):
     name = models.CharField(max_length=512, null=True, blank=True, default=None)
