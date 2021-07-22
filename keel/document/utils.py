@@ -14,19 +14,17 @@ def validate_file_size(file):
         return err_msg
 
 
-def validate_files(files):
+def validate_files(file):
 
     err_msg = ''
-
-    if len(files) > MAX_ATTACHMENT_COUNT:
-        err_msg = MAX_ATTACHMENT_ERR_MSG
-        return err_msg
-
-    for file in files.values():
-        err_msg = validate_file_size(file)
-        if err_msg:
-            return err_msg
+    err_msg = validate_file_size(file)
     return err_msg
+
+    # Not Required since 1 file will be coming
+    # if len(files) > MAX_ATTACHMENT_COUNT:
+    #     err_msg = MAX_ATTACHMENT_ERR_MSG
+    #     return err_msg
+
 
 def upload_files_to(instance, filename):
     filename_base, filename_ext = os.path.splitext(filename)
