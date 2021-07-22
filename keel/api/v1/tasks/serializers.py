@@ -3,7 +3,7 @@ from rest_framework.exceptions import ValidationError
 
 from keel.api.v1.auth.serializers import UserDetailsSerializer, UserDocumentSerializer
 from keel.tasks.models import Task, TaskComments
-
+from keel.Core.err_log import log_error
 
 class ListTaskSerializer(serializers.ModelSerializer):
 
@@ -92,5 +92,22 @@ class TaskStatusChangeSerializer(serializers.ModelSerializer):
         fields = ('task_id','status')
 
 
+class TaskIDCheckSerializer(serializers.Serializer):
+    task_id = serializers.CharField(max_length = 255)
 
+    def validate(self, attrs):
+        task_obj = ''
+        task_id = attrs.get("task_id")
+
+        if not task_id:
+            raise serializers.ValidationError("Invalid Task Id")
+
+        try:
+            task_obj = Task.objects.prefetch_related("tasks_comment","tasks_docs").\
+                                                get(task_id = task_id, deleted_at__isnull = True)
+        except Task.DoesNotExist as e:
+            log_error("ERROR", "TaskIDCheckSerializer: validate", "", err = str(e), task_id = task_id)
+            raise serializers.ValidationError("Task Id does not exist")
+
+        return task_obj
 
