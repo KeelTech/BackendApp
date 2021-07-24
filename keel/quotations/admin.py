@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Quotation, QuotationMilestone
+class QuotationMilestoneLine(admin.TabularInline):
+    model = QuotationMilestone
 
 class QuotationAdmin(admin.ModelAdmin):
 
@@ -7,12 +9,9 @@ class QuotationAdmin(admin.ModelAdmin):
     autocomplete_fields = ('user', 'plan')
     search_fields = ('q_id', )
     readonly_fields = ('deleted_at',)
+    inlines = [QuotationMilestoneLine]
 
-class QuotationMilestoneAdmin(admin.ModelAdmin):
 
-    list_display = ('qm_id', 'due_date', 'amount', 'quotation', 'status')
-    autocomplete_fields = ('quotation', )
-    readonly_fields = ('deleted_at',)
 
 admin.site.register(Quotation, QuotationAdmin)
-admin.site.register(QuotationMilestone, QuotationMilestoneAdmin)
+admin.site.register(QuotationMilestone)
