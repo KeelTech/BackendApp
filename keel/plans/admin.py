@@ -4,6 +4,7 @@ from .models import Plan, Vendor, Service
 
 class PlanAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'currency')
+    search_fields = ('title', )
     readonly_fields=('deleted_at',)
 
 class VendorAdmin(admin.ModelAdmin):

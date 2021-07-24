@@ -4,6 +4,7 @@ from .models import Case
 
 User = get_user_model()
 
+
 class CaseAdmin(admin.ModelAdmin):
     list_display = ('case_id', 'user', 'agent', 'is_active')
     ordering = ('case_id',)
