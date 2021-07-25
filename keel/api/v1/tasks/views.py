@@ -44,15 +44,9 @@ class ListTask(GenericViewSet):
         case_id = req_data.get("case","")
 
         # validate Case ID against User/Agent
-        try:
-            case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
-            case_serializer.is_valid(raise_exception=True)
-            case_obj = case_serializer.validated_data
-        except ValidationError as e:
-            log_error("ERROR", "ListTask: list", str(user_id), err = str(e), case_id = case_id)
-            response["message"] = GENERIC_ERROR
-            response["status"] = 1
-            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
+        case_serializer.is_valid(raise_exception=True)
+        case_obj = case_serializer.validated_data
 
         # Validate Request Param Data
         try:
@@ -96,17 +90,9 @@ class ListTask(GenericViewSet):
 
         task_id = kwargs.get("task_id")
 
-        try:
-            task_serializer = TaskIDCheckSerializer(data = {"task_id": task_id})
-            task_serializer.is_valid(raise_exception = True)
-            task_obj = task_serializer.validated_data
-
-        except ValidationError as e:
-            log_error("ERROR","ListTask: updateTask", str(user_id), err = str(e))
-            response['status'] = 1
-            response['message'] = GENERIC_ERROR
-            resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
-            return Response(response, resp_status)
+        task_serializer = TaskIDCheckSerializer(data = {"task_id": task_id})
+        task_serializer.is_valid(raise_exception = True)
+        task_obj = task_serializer.validated_data
 
         req_data['task_id'] = task_id
         try:
@@ -144,15 +130,9 @@ class TaskAdminOperations(GenericViewSet):
 
         case_id = req_data.get("case") 
 
-        try:
-            case_serializer = CaseIDSerializer(data = {"case_id": case_id,"user_id": user_id})
-            case_serializer.is_valid(raise_exception=True)
-            case_obj = case_serializer.validated_data
-        except ValidationError as e:
-            log_error("ERROR", "TaskAdminOperations: createTask", str(user_id), err = str(e), case_id = case_id)
-            response["message"] = GENERIC_ERROR
-            response["status"] = 1
-            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        case_serializer = CaseIDSerializer(data = {"case_id": case_id,"user_id": user_id})
+        case_serializer.is_valid(raise_exception=True)
+        case_obj = case_serializer.validated_data
 
         # Task.User shud be a Case.Customer 
         req_data["user"] = case_obj.user_id
@@ -193,15 +173,9 @@ class TaskAdminOperations(GenericViewSet):
             return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
 
         # Validate for Case, since only Assigned RCIC can delete the Task
-        try:
-            case_serializer = CaseIDSerializer(data = {"case_id": task.case_id, "user_id": user_id})
-            case_serializer.is_valid(raise_exception=True)
-            case_obj = case_serializer.validated_data
-        except ValidationError as e:
-            log_error("ERROR", "TaskAdminOperations: deleteTask", str(user_id), err = str(e), case_id = task.case_id)
-            response["message"] = GENERIC_ERROR
-            response["status"] = 1
-            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        case_serializer = CaseIDSerializer(data = {"case_id": task.case_id, "user_id": user_id})
+        case_serializer.is_valid(raise_exception=True)
+        case_obj = case_serializer.validated_data
 
         task.mark_delete()
         task.tasks_comment.update(deleted_at = datetime.now(pytz.timezone(settings.TIME_ZONE)))
@@ -226,31 +200,17 @@ class GetTaskDetails(GenericViewSet):
         user = request.user
         user_id = user.id
         task_id = kwargs.get("task_id")
-        try:
-            task_serializer = TaskIDCheckSerializer(data = {"task_id": task_id})
-            task_serializer.is_valid(raise_exception = True)
-            task_obj = task_serializer.validated_data
 
-        except ValidationError as e:
-            log_error("ERROR","GetTaskDetails:fetch", str(user_id), err = str(e), msg = "Unknown exception")
-            response['status'] = 1
-            response['message'] = GENERIC_ERROR
-            resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
-            return Response(response, resp_status)
-
+        task_serializer = TaskIDCheckSerializer(data = {"task_id": task_id})
+        task_serializer.is_valid(raise_exception = True)
+        task_obj = task_serializer.validated_data
 
         case_id = task_obj.case_id
 
         ## Validate User with Task.Case, so that only Case's Customer/RCIC shud be fetching task details
-        try:
-            case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
-            case_serializer.is_valid(raise_exception=True)
-            case_obj = case_serializer.validated_data
-        except ValidationError as e:
-            log_error("ERROR", "TaskAdminOperations: createTask", str(user_id), err = str(e), case_id = case_id)
-            response["message"] = GENERIC_ERROR
-            response["status"] = 1
-            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
+        case_serializer.is_valid(raise_exception=True)
+        case_obj = case_serializer.validated_data
         
         resp_data = TaskSerializer(task_obj).data
         response['data'] = resp_data
