@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from keel.document.models import Documents, DocumentType
 from keel.document.utils import validate_files
+from keel.Core.err_log import log_error
 
 class DocumentsSerializer(serializers.ModelSerializer):
 
@@ -17,6 +18,7 @@ class DocumentCreateSerializer(serializers.Serializer):
         err_msg = ''
         err_msg = validate_files(value)
         if err_msg:
+            log_error("ERROR","DocumentCreateSerializer: validate_doc_file", "", err = str(e), value = value)
             raise serializers.ValidationError(err_msg)
         return err_msg
 
@@ -34,6 +36,7 @@ class DocumentTypeSerializer(serializers.Serializer):
         try:
             doc_type_obj = DocumentType.objects.get(id = doc_type_id)
         except DocumentType.DoesNotExist as e:
+            log_error("ERROR","DocumentTypeSerializer: validate_doc_type", "", err = str(e), value = value)
             raise serializers.ValidationError("Invalid Document Type Id")
 
         return doc_type_obj

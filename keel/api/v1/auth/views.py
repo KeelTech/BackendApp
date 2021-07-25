@@ -445,25 +445,11 @@ class UploadDocument(GenericViewSet):
 
         doc_type = req_data.get("doc_type")
 
-        try:
-            doc_serializer = DocumentCreateSerializer(data = request.FILES.dict())
-            doc_serializer.is_valid(raise_exception=True)
-        except ValidationError as e:
-            log_error("ERROR","UploadDocument: upload docValidation", str(user_id), err = str(e))
-            response["status"] = 1
-            response["message"] = GENERIC_ERROR
-            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
-            return Response(response, status = resp_status)
+        doc_serializer = DocumentCreateSerializer(data = request.FILES.dict())
+        doc_serializer.is_valid(raise_exception=True)
 
-        try:
-            doc_type_serializer = DocumentTypeSerializer(data = {"doc_type": doc_type})
-            doc_type_serializer.is_valid(raise_exception = True)
-        except ValidationError as e:
-            log_error("ERROR","UploadDocument: upload docTypeValidation", str(user_id), err = str(e))
-            response["status"] = 1
-            response["message"] = GENERIC_ERROR
-            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
-            return Response(response, status = resp_status)
+        doc_type_serializer = DocumentTypeSerializer(data = {"doc_type": doc_type})
+        doc_type_serializer.is_valid(raise_exception = True)
 
         try:
             docs = Documents.objects.add_attachments(files, user_id, doc_type)
