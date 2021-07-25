@@ -95,17 +95,10 @@ class ListTask(GenericViewSet):
         task_obj = task_serializer.validated_data
 
         req_data['task_id'] = task_id
-        try:
-            task_serializer = TaskUpdateSerializer(task_obj, data = req_data)
-            task_serializer.is_valid(raise_exception = True)
-            task_obj = task_serializer.save()
-            response['data'] = TaskSerializer(task_obj).data
-
-        except ValidationError as e:
-            log_error("ERROR","ListTask : updateTask", str(user_id), err = str(e))
-            response["message"] = GENERIC_ERROR
-            response['status'] = 1
-            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        task_serializer = TaskUpdateSerializer(task_obj, data = req_data)
+        task_serializer.is_valid(raise_exception = True)
+        task_obj = task_serializer.save()
+        response['data'] = TaskSerializer(task_obj).data
 
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
@@ -138,17 +131,10 @@ class TaskAdminOperations(GenericViewSet):
         req_data["user"] = case_obj.user_id
         req_data["task_id"] = generate_unique_id("task_")
 
-        try:
-            task_serializer = TaskCreateSerializer(data = req_data)
-            task_serializer.is_valid(raise_exception = True)
-            task_obj = task_serializer.save()
-            response['data'] = TaskSerializer(task_obj).data
-
-        except ValidationError as e:
-            log_error("ERROR","ListTask : createTask", str(user_id), err = str(e))
-            response["message"] = GENERIC_ERROR
-            response['status'] = 1
-            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        task_serializer = TaskCreateSerializer(data = req_data)
+        task_serializer.is_valid(raise_exception = True)
+        task_obj = task_serializer.save()
+        response['data'] = TaskSerializer(task_obj).data
 
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
@@ -312,6 +298,7 @@ class TaskStatusChange(GenericViewSet):
 
         req_data['task_id'] = task_id
         try:
+
             status_serilizer = TaskStatusChangeSerializer(task, data = req_data)
             status_serilizer.is_valid(raise_exception = True)
             task_obj = status_serilizer.save()
