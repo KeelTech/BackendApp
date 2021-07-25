@@ -70,7 +70,7 @@ class ListTask(GenericViewSet):
 
         # Filter the data as per req filters
         try:
-            tasks = Task.objects.filter(**validated_data)
+            tasks = Task.objects.filter(**validated_data).order_by("-updated_at")
             task_list_data = ListTaskSerializer(tasks, many = True)
             resp_data = task_list_data.data    
             response['data'] = resp_data 
