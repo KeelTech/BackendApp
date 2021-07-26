@@ -8,6 +8,7 @@ from .v1.document.router import urlpatterns as documents_url
 from .v1.tasks.router import urlpatterns as tasks_url
 from .v1.chats.router import urlpatterns as chats_url
 from .v1.cases.router import urlpatterns as cases_url
+from .v1.plans.router import urlpatterns as plans_url
 
 urlpatterns = [
 
@@ -18,4 +19,5 @@ urlpatterns = [
     path('v1/tasks/', include(tasks_url)),
     path('v1/chats/', include(chats_url)),
     path('v1/cases/', include(cases_url)),
+    path('v1/plans/', include(plans_url)),
 ]

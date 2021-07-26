@@ -10,6 +10,7 @@ class Plan(TimeStampedModel, SoftDeleteModel):
     price = models.FloatField(null=True, blank=True, default=True)
     currency = models.CharField(max_length=10, null=True, blank=True, default=None)
     country_iso = models.CharField(max_length=512, null=True, blank=True, default=None)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.title)
