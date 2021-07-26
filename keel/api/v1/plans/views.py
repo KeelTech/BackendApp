@@ -9,8 +9,7 @@ from .serializers import PlanSerializers
 
 class PlanListView(generics.ListAPIView):
     serializer_class = PlanSerializers
-    authentication_classes = (JWTAuthentication, )
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.AllowAny, )
     
     def get_queryset(self):
         queryset = Plan.objects.filter(is_active=True)

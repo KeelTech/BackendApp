@@ -12,6 +12,9 @@ class Plan(TimeStampedModel, SoftDeleteModel):
     country_iso = models.CharField(max_length=512, null=True, blank=True, default=None)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self):
         return str(self.title)
 
