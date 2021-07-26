@@ -394,7 +394,6 @@ class ProfileView(GenericViewSet):
     def get_queryset_profile(self):
         try:
             profile = CustomerProfile.objects.get(user=self.request.user.id)
-            print(profile)
         except CustomerProfile.DoesNotExist as e:
             logger.error('ERROR: USER:ProfileView:get_queryset_profile ' + str(e))
             return "User profile not found"
