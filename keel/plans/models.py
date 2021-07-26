@@ -26,3 +26,10 @@ class Service(TimeStampedModel, SoftDeleteModel):
     price = models.FloatField(null=True, blank=True, default=None)
     currency = models.CharField(max_length=512, null=True, blank=True, default=None) 
     country_iso = models.CharField(max_length=512, null=True, blank=True, default=None)
+
+
+class ServicesPlans(TimeStampedModel, SoftDeleteModel):
+
+    plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_services')
+    service = models.ForeignKey(Service, on_delete=models.deletion.DO_NOTHING, related_name='services_plans')
+
