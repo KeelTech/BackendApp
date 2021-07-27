@@ -403,15 +403,9 @@ class ProfileView(GenericViewSet):
         response = {
             "status" : 1,
             "message" : ""
-        }
-        try:        
-            profile = self.serializer_class_profile(self.get_queryset_profile(), many=True)
-            qualification = self.serializer_class_qualification(self.get_queryset_qualification(), many=True)
-        except Exception as e:
-            logger.error('ERROR: USER:ProfileView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        }   
+        profile = self.serializer_class_profile(self.get_queryset_profile(), many=True)
+        qualification = self.serializer_class_qualification(self.get_queryset_qualification(), many=True)
         
         response["message"] = {"profile":profile.data, "qualification":qualification.data}
         return Response(response)
