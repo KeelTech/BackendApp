@@ -392,20 +392,11 @@ class ProfileView(GenericViewSet):
     serializer_class_qualification = serializers.CustomerQualificationsSerializer
 
     def get_queryset_profile(self):
-        try:
-            profile = CustomerProfile.objects.get(user=self.request.user.id)
-        except CustomerProfile.DoesNotExist as e:
-            logger.error('ERROR: USER:ProfileView:get_queryset_profile ' + str(e))
-            return "User profile not found"
+        profile = CustomerProfile.objects.filter(user=self.request.user.id)
         return profile
 
-
     def get_queryset_qualification(self):
-        try:
-            qualification = CustomerQualifications.objects.get(user=self.request.user.id)
-        except CustomerQualifications.DoesNotExist as e:
-            logger.error('ERROR: USER:ProfileView:get_queryset_qualification ' + str(e))
-            return "User qualifications not found"
+        qualification = CustomerQualifications.objects.filter(user=self.request.user.id)
         return qualification
 
     def profile(self, request):
@@ -414,8 +405,8 @@ class ProfileView(GenericViewSet):
             "message" : ""
         }
         try:        
-            profile = self.serializer_class_profile(self.get_queryset_profile())
-            qualification = self.serializer_class_qualification(self.get_queryset_qualification())
+            profile = self.serializer_class_profile(self.get_queryset_profile(), many=True)
+            qualification = self.serializer_class_qualification(self.get_queryset_qualification(), many=True)
         except Exception as e:
             logger.error('ERROR: USER:ProfileView ' + str(e))
             response['message'] = str(e)
@@ -423,7 +414,7 @@ class ProfileView(GenericViewSet):
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
         
         response["message"] = {"profile":profile.data, "qualification":qualification.data}
-        return Response (response)
+        return Response(response)
 
     
 class LoginOTP(GenericViewSet):
