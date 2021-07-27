@@ -31,3 +31,6 @@ class Case(TimeStampedModel, SoftDeleteModel):
     def save(self, *args, **kwargs):
         self.case_id = uuid.uuid4()
         super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return str(self.case_id)

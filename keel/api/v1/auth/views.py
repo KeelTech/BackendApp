@@ -29,6 +29,7 @@ from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.notifications import EmailNotification
 from keel.api.v1.auth import serializers
+from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer 
 from keel.authentication.models import (CustomToken, PasswordResetToken)
 from keel.authentication.models import User as user_model
 from .helpers.token_helper import save_token
@@ -442,9 +443,13 @@ class UploadDocument(GenericViewSet):
         user_id = user.id
         files = request.FILES
 
-        # TODO: move validations to DocumentSerializer
-
         doc_type = req_data.get("doc_type")
+
+        doc_serializer = DocumentCreateSerializer(data = request.FILES.dict())
+        doc_serializer.is_valid(raise_exception=True)
+
+        doc_type_serializer = DocumentTypeSerializer(data = {"doc_type": doc_type})
+        doc_type_serializer.is_valid(raise_exception = True)
 
         try:
             docs = Documents.objects.add_attachments(files, user_id, doc_type)
