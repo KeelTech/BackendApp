@@ -18,19 +18,6 @@ class DocumentsManager(models.Manager):
 
     def add_attachments(self, files, user_id, doc_type):
 
-        err_msg = ''
-        err_msg = validate_files(files)
-        if err_msg:
-            raise DocumentInvalid(err_msg)
-
-        if not doc_type:
-            doc_type = DocumentType.DEFAULT_PK_ID
-        else:
-            try:
-                doc_type_obj = DocumentType.objects.get(id = doc_type)
-            except DocumentType.DoesNotExist:
-                raise DocumentTypeInvalid("Invalid Document Type Id")
-
         try:
             docs = []
             for file in files.values():
