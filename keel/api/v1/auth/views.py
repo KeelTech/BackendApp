@@ -23,7 +23,7 @@ from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import UserDocument
+from keel.authentication.models import CustomerProfile, CustomerQualifications, UserDocument
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
@@ -39,7 +39,6 @@ from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .adapter import GoogleOAuth2AdapterIdToken
-
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -385,6 +384,32 @@ class UserDeleteTokenView(GenericViewSet):
         
         response["message"] = "User logged out successfully"
         return Response(response, status=status.HTTP_200_OK)
+
+
+class ProfileView(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+    serializer_class_profile = serializers.CustomerProfileSerializer
+    serializer_class_qualification = serializers.CustomerQualificationsSerializer
+
+    def get_queryset_profile(self):
+        profile = CustomerProfile.objects.filter(user=self.request.user.id)
+        return profile
+
+    def get_queryset_qualification(self):
+        qualification = CustomerQualifications.objects.filter(user=self.request.user.id)
+        return qualification
+
+    def profile(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }   
+        profile = self.serializer_class_profile(self.get_queryset_profile(), many=True)
+        qualification = self.serializer_class_qualification(self.get_queryset_qualification(), many=True)
+        
+        response["message"] = {"profile":profile.data, "qualification":qualification.data}
+        return Response(response)
 
     
 class LoginOTP(GenericViewSet):

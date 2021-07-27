@@ -27,13 +27,15 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerProfile
-        fields = "__all__"
+        fields = ('first_name', 'last_name', 'mother_fullname', 
+                    'father_fullname', 'age', 'address', 'date_of_birth')
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerQualifications
-        fields = "__all__"
+        fields = ('institute_name', 'grade', 'year_of_passing', 'start_date',
+                    'city', 'country')
 
 
 class LoginSerializer(serializers.Serializer):
