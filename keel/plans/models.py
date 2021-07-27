@@ -26,7 +26,7 @@ class Service(TimeStampedModel, SoftDeleteModel):
     price = models.FloatField(null=True, blank=True, default=None)
     currency = models.CharField(max_length=512, null=True, blank=True, default=None) 
     country_iso = models.CharField(max_length=512, null=True, blank=True, default=None)
-
+    plans = models.ManyToManyField(Plan, through = "ServicesPlans", blank = True)
 
 class ServicesPlans(TimeStampedModel, SoftDeleteModel):
 
