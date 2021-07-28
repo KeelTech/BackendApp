@@ -5,12 +5,30 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 
-from keel.document.models import Documents
+from .serializers import ListDocumentTypeSerializer
+
+from keel.document.models import Documents, DocumentType
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.err_log import log_error
 
 from .serializers import DocumentsSerializer
 
+class GetDocumentTypeChoices(GenericViewSet):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
+
+    def docTypeList(self, request, format = 'json'):
+
+        response = {
+                "status": 0,
+                "message":"Document Type List fetched successfully",
+                "data": ""
+        }
+
+        doc_types = DocumentType.objects.all()
+        response['data'] = ListDocumentTypeSerializer(doc_types, many = True).data
+        return Response(response, status = status.HTTP_200_OK)
 
 class GetDocument(GenericViewSet):
     authentication_classes = [JWTAuthentication]
