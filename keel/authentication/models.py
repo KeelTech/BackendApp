@@ -143,6 +143,27 @@ class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
     institute_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
     year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)
-    start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
     city = models.CharField(max_length=512, blank=True, null=True, default=None)
     country = models.CharField(max_length=512, blank=True, null=True, default=None)
+    start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
+    end_date = models.DateField(max_length=512, blank=True, null=True, default=None)
+
+
+class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
+    
+    PART_TIME = 1
+    FULL_TIME = 2
+
+    JOB_TYPE = (
+        (PART_TIME, 'PART_TIME'),
+        (FULL_TIME, 'FULL_TIME'),
+    )
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_workexp")
+    start_date = models.DateField(max_length=512, default=None, blank=True, null=True)
+    end_date = models.DateField(max_length=512, default=None, blank=True, null=True)
+    job_type = models.CharField(max_length=512, default=FULL_TIME, blank=True, null=True)
+    designation = models.DateField(max_length=512, default=None, blank=True, null=True)
+    job_description = models.DateField(max_length=512, default=None, blank=True, null=True)
+    company_name = models.DateField(max_length=512, default=None, blank=True, null=True)
+    city = models.DateField(max_length=512, default=None, blank=True, null=True)
+    weekly_working_hours = models.DateField(max_length=512, default=None, blank=True, null=True)
