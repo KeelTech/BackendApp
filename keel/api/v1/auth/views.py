@@ -415,7 +415,7 @@ class ProfileView(GenericViewSet):
             logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["message"] = serializer.data
         return Response(response)
 
@@ -457,7 +457,7 @@ class CreateQualificationView(GenericViewSet):
             logger.error('ERROR: AUTHENTICATION:CreateQualificationView ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["message"] = serializer.data
         return Response(response)
 
@@ -487,7 +487,7 @@ class CreateWorkExperienceView(GenericViewSet):
             logger.error('ERROR: AUTHENTICATION:CreateWorkExperienceView ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["message"] = serializer.data
         return Response(response)
 
