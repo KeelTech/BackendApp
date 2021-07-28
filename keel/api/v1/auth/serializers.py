@@ -25,50 +25,43 @@ class UserRegistrationSerializer(serializers.Serializer):
 
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    mother_fullname = serializers.CharField(required=True)
+    father_fullname = serializers.CharField(required=True)
+    age = serializers.CharField(required=True)
+    address = serializers.CharField(required=True)
+    date_of_birth = serializers.DateField(required=True)
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        for key, value in data.items():
-            try:
-                if not value:
-                    data[key] = ""
-            except KeyError:
-                pass
-        return data
     class Meta:
         model = CustomerProfile
         fields = ('first_name', 'last_name', 'mother_fullname', 
                     'father_fullname', 'age', 'address', 'date_of_birth')
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        for key, value in data.items():
-            try:
-                if not value:
-                    data[key] = ""
-            except KeyError:
-                pass
-        return data
+    institute_name = serializers.CharField(required=True)
+    grade = serializers.CharField(required=True)
+    year_of_passing = serializers.CharField(required=True)
+    city = serializers.CharField(required=True)
+    country = serializers.CharField(required=True)
+    start_date = serializers.DateField(required=True)
+    end_date = serializers.DateField(required=True)
 
     class Meta:
         model = CustomerQualifications
-        fields = ('id', 'institute_name', 'grade', 'year_of_passing', 'start_date',
-                    'city', 'country')
+        fields = ('id', 'institute_name', 'grade', 'year_of_passing', 'start_date', 
+                    'end_date', 'city', 'country')
 
 
 class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        for key, value in data.items():
-            try:
-                if not value:
-                    data[key] = ""
-            except KeyError:
-                pass
-        return data
+    start_date = serializers.DateField(required=True)
+    end_date = serializers.DateField(required=True)
+    job_type = serializers.CharField(required=True)
+    designation = serializers.DateField(required=True)
+    job_description = serializers.DateField(required=True)
+    company_name = serializers.DateField(required=True)
+    city = serializers.DateField(required=True)
+    weekly_working_hours = serializers.DateField(required=True)
     class Meta:
         model = CustomerWorkExperience
         fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',

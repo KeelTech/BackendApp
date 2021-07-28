@@ -406,15 +406,10 @@ class ProfileView(GenericViewSet):
             "message" : ""
         } 
         serializer = self.serializer_class_profile(data=request.data)
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         validated_data['user'] = request.user
         try:
-            user = CustomerProfile.objects.get(user=request.user)
-            if user:
-                response['message'] = 'User already has a profile'
-                response['status'] = 0
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
