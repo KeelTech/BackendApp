@@ -3,6 +3,13 @@ from keel.document.models import Documents, DocumentType
 from keel.document.utils import validate_files
 from keel.Core.err_log import log_error
 
+
+class ListDocumentTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DocumentType
+        fields = ('id','doc_type_name')
+
 class DocumentsSerializer(serializers.ModelSerializer):
 
     class Meta:
