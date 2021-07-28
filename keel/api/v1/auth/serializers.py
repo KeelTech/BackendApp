@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from keel.authentication.models import (User, UserDocument, CustomToken, CustomerProfile, CustomerQualifications)
+from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, 
+                                        CustomerProfile, CustomerQualifications)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -25,6 +26,15 @@ class UserRegistrationSerializer(serializers.Serializer):
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for key, value in data.items():
+            try:
+                if not value:
+                    data[key] = ""
+            except KeyError:
+                pass
+        return data
     class Meta:
         model = CustomerProfile
         fields = ('first_name', 'last_name', 'mother_fullname', 
@@ -32,10 +42,37 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for key, value in data.items():
+            try:
+                if not value:
+                    data[key] = ""
+            except KeyError:
+                pass
+        return data
+
     class Meta:
         model = CustomerQualifications
-        fields = ('institute_name', 'grade', 'year_of_passing', 'start_date',
+        fields = ('id', 'institute_name', 'grade', 'year_of_passing', 'start_date',
                     'city', 'country')
+
+
+class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for key, value in data.items():
+            try:
+                if not value:
+                    data[key] = ""
+            except KeyError:
+                pass
+        return data
+    class Meta:
+        model = CustomerWorkExperience
+        fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
+                    'city', 'weekly_working_hours', 'start_date', 'end_date')
 
 
 class LoginSerializer(serializers.Serializer):
@@ -71,7 +108,6 @@ class UserSocialLoginSerializer(SocialLoginSerializer):
 
 class FacebookSocialLoginSerializer(serializers.Serializer):
     access_token = serializers.CharField()
-
 
 
 class GenerateTokenSerializer(serializers.Serializer):
