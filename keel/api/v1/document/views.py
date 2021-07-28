@@ -52,7 +52,7 @@ class GetDocument(GenericViewSet):
             return Response(response, status = resp_status)
 
         try:
-            doc = Documents.objects.get(doc_pk = doc_id)
+            doc = Documents.objects.get(doc_pk = doc_id, deleted_at__isnull = True)
         except Documents.DoesNotExist:
             log_error('ERROR', 'GetDocument/generate',str(user.id), doc_id = str(doc_id), msg = "Documents.DoesNotExist")
             response['status'] = 1

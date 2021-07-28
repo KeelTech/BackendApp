@@ -19,15 +19,17 @@ from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
+from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import UserDocument
+from keel.authentication.models import CustomerProfile, CustomerQualifications, UserDocument
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.notifications import EmailNotification
 from keel.api.v1.auth import serializers
+from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer 
 from keel.authentication.models import (CustomToken, PasswordResetToken)
 from keel.authentication.models import User as user_model
 from .helpers.token_helper import save_token
@@ -37,7 +39,6 @@ from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .adapter import GoogleOAuth2AdapterIdToken
-
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -55,6 +56,7 @@ class UserViewset(GenericViewSet):
         user = User.objects.create_user(**validated_data)
         return user
 
+
     def signup(self, request, format="json"):
         response = {
             'status' : 1,
@@ -64,6 +66,7 @@ class UserViewset(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         validated_data['user_type'] = user_model.CUSTOMER # add user type to validated data
+        
         try:
             user = self.create(validated_data)
             token = JWTAuthentication.generate_token(user)
@@ -74,14 +77,34 @@ class UserViewset(GenericViewSet):
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        
+
+        # if user account is not active, send a email with token to activate user account
+        # commenting this out for now
+        current_time = str(datetime.datetime.now().timestamp()).split(".")[0]
+        context = {
+            'token' : current_time
+        }
+        subject = 'Account Verification'
+        html_content = get_template('account_verification.html').render(context)
+        # send email
+        try:
+            emails = EmailNotification(subject, html_content, [user.email])
+            emails.send_email()
+        except Exception as e:
+                logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+                response['message'] = str(e)
+                response['status'] = 0
+                return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
+
         data = {
             "email" : obj.user.email,
             "token" : obj.token,
         }
-        
-        response["message"] =  data
-        return Response(response)
+        response["message"] = data
+        return Response(response, status=status.HTTP_200_OK)
+    
+    def verify_account(self, request):
+        pass
 
 class LoginViewset(GenericViewSet):
     serializer_class = serializers.LoginSerializer
@@ -94,7 +117,12 @@ class LoginViewset(GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-
+        
+        # if not user.is_verified:
+        #     response["status"] = 0
+        #     response["message"] = "Acount has not been verified, Please check your email for verification code"
+        #     return Response(response)
+        
         try:
             token = JWTAuthentication.generate_token(user)
             token_to_save = save_token(token)
@@ -137,11 +165,16 @@ class GeneratePasswordReset(GenericViewSet):
             # send email
             emails = EmailNotification(subject, html_content, [email])
             emails.send_email()
+        except User.DoesNotExist as e:
+            logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
         
         response["message"] = "Password Reset Link sent successfully"
         return Response(response)
@@ -264,6 +297,9 @@ class FacebookLogin(GenericViewSet):
             fb = self.facebook(validated_data['access_token'])
             email = fb['email']
             user, created = User.objects.get_or_create(email=email)
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
             token = JWTAuthentication.generate_token(user)
             token_to_save = save_token(token)
             obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
@@ -349,6 +385,32 @@ class UserDeleteTokenView(GenericViewSet):
         response["message"] = "User logged out successfully"
         return Response(response, status=status.HTTP_200_OK)
 
+
+class ProfileView(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+    serializer_class_profile = serializers.CustomerProfileSerializer
+    serializer_class_qualification = serializers.CustomerQualificationsSerializer
+
+    def get_queryset_profile(self):
+        profile = CustomerProfile.objects.filter(user=self.request.user.id)
+        return profile
+
+    def get_queryset_qualification(self):
+        qualification = CustomerQualifications.objects.filter(user=self.request.user.id)
+        return qualification
+
+    def profile(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }   
+        profile = self.serializer_class_profile(self.get_queryset_profile(), many=True)
+        qualification = self.serializer_class_qualification(self.get_queryset_qualification(), many=True)
+        
+        response["message"] = {"profile":profile.data, "qualification":qualification.data}
+        return Response(response)
+
     
 class LoginOTP(GenericViewSet):
 
@@ -406,9 +468,13 @@ class UploadDocument(GenericViewSet):
         user_id = user.id
         files = request.FILES
 
-        # TODO: move validations to DocumentSerializer
-
         doc_type = req_data.get("doc_type")
+
+        doc_serializer = DocumentCreateSerializer(data = request.FILES.dict())
+        doc_serializer.is_valid(raise_exception=True)
+
+        doc_type_serializer = DocumentTypeSerializer(data = {"doc_type": doc_type})
+        doc_type_serializer.is_valid(raise_exception = True)
 
         try:
             docs = Documents.objects.add_attachments(files, user_id, doc_type)
@@ -425,15 +491,39 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
-        task_id = req_data.get("task_id")
-        user_docs = []
-        for doc in docs:
-            temp_data = {"doc": doc.pk, "user":user_id, "task": task_id}
-            user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
-            user_doc_serializer.is_valid(raise_exception=True)
-            user_doc_serializer.save()
-            user_docs.append(user_doc_serializer.data) 
-        response["data"] = user_docs
+        doc_user_id = user_id
+
+        # Validate for Task Id, and replace the doc_user_id with task.user_id
+        try:
+            task_id = req_data.get("task_id")
+            if task_id:
+                task_serializer = serializers.TaskIDSerializer(data = {"task_id":task_id})
+                task_serializer.is_valid(raise_exception = True)
+                task_obj = task_serializer.validated_data
+                doc_user_id = task_obj.user_id
+
+        except ValidationError as e:
+            log_error("ERROR","UploadDocument: upload taskValidation", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status = resp_status)
+
+        # validate and create User Doc
+        try:
+            user_docs = []
+            for doc in docs:
+                temp_data = {"doc": doc.pk, "user":doc_user_id, "task": task_id}
+                user_doc_serializer = serializers.UserDocumentSerializer(data = temp_data)
+                user_doc_serializer.is_valid(raise_exception=True)
+                user_doc_serializer.save()
+                user_docs.append(user_doc_serializer.data) 
+            response["data"] = user_docs
+        except ValidationError as e:
+            log_error("ERROR","UploadDocument: upload", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
         return Response(response, status = resp_status)
 
     def fetch(self, request, format = 'json'):
@@ -447,7 +537,8 @@ class UploadDocument(GenericViewSet):
         user = request.user
 
         try:
-            user_docs = UserDocument.objects.select_related('doc','doc__doc_type').filter(user_id = user.id)
+            user_docs = UserDocument.objects.select_related('doc','doc__doc_type'). \
+                            filter(user_id = user.id, deleted_at__isnull = True)
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data
@@ -458,5 +549,44 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
         return Response(response, status = resp_status)
+
+
+    def deleteUserDoc(self, request, format = 'json', **kwargs):
+
+        response = {
+                "status": 0,
+                "message": "User Document is deleted",
+                "data": ""
+        }
+
+        resp_status = status.HTTP_200_OK
+        user = request.user
+        user_id = user.id
+        user_doc_id = kwargs.get("id")
+
+        try:
+            user_doc = UserDocument.objects.select_related('doc').get(id = user_doc_id)
+        except UserDocument.DoesNotExist as e:
+            log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = "Invalid User Doc Id")
+            response["status"] = 1
+            response["message"] = "Invalid User Document Id"
+            resp_status = status.HTTP_400_BAD_REQUEST
+            return Response(response, status = resp_status)
+
+        if user_doc.doc.owner_id != str(user_id):
+            log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = "LoggedIn User is not a owner of document")
+            response["status"] = 1
+            response["message"] = "User is not authorised to perform this action"
+            return Response(response, status = resp_status)
+
+        user_doc.mark_delete()
+        user_doc.doc.mark_delete()
+
+        return Response(response, status = resp_status)
+
+
+
+
+
 
 

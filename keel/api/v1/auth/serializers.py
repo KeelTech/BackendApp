@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from keel.authentication.models import (User, UserDocument, CustomToken)
+from keel.authentication.models import (User, UserDocument, CustomToken, CustomerProfile, CustomerQualifications)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -21,6 +21,21 @@ class UserRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     token = serializers.CharField(read_only=True)
+
+
+class CustomerProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerProfile
+        fields = ('first_name', 'last_name', 'mother_fullname', 
+                    'father_fullname', 'age', 'address', 'date_of_birth')
+
+class CustomerQualificationsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerQualifications
+        fields = ('institute_name', 'grade', 'year_of_passing', 'start_date',
+                    'city', 'country')
 
 
 class LoginSerializer(serializers.Serializer):
@@ -49,6 +64,9 @@ class UserSocialLoginSerializer(SocialLoginSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
         user = attrs['user']
+        if not user.is_active:
+            user.is_active = True
+            user.save()
         return user
 
 class FacebookSocialLoginSerializer(serializers.Serializer):
@@ -87,7 +105,6 @@ class OTPSerializer(serializers.Serializer):
         #     attrs['otp_obj'] = otp_obj
         return attrs
 
-
 class UserDocumentSerializer(serializers.ModelSerializer):
     doc_type = serializers.SerializerMethodField()
 
@@ -96,7 +113,7 @@ class UserDocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDocument
-        fields = ('id', 'doc','user','task','doc_type')
+        fields = ('id', 'doc','user','task','doc_type','created_at')
 
     def create(self, validated_data):
         user_doc = UserDocument.objects.create(**validated_data)
@@ -105,6 +122,7 @@ class UserDocumentSerializer(serializers.ModelSerializer):
 
 class ListUserDocumentSerializer(serializers.ModelSerializer):
     doc_type = serializers.SerializerMethodField()
+    task = serializers.SerializerMethodField()
     # doc_link = serializers.SerializerMethodField()
 
     def get_doc_type(self, obj):
@@ -113,10 +131,16 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
     # def get_doc_link(self, obj):
     #     return settings.BASE_URL + "/api/v1/doc/get-single-doc" + "/" +str(obj.doc.doc_pk)
 
+    def get_task(self, obj):
+        task = ""
+        if obj.task and not obj.task.deleted_at:
+            task = obj.task_id
+        return task
+
     class Meta:
         model = UserDocument
         # fields = ('id', 'doc_id', 'user_id', 'doc_link', 'doc_type')
-        fields = ('id', 'doc_id', 'user_id', 'doc_type')
+        fields = ('id', 'doc_id', 'user_id', 'doc_type','task','created_at')
 
 class UserDetailsSerializer(serializers.ModelSerializer):
 
@@ -135,5 +159,18 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id','user_name','email')
 
+class TaskIDSerializer(serializers.Serializer):
 
+    task_id = serializers.CharField(max_length=255)
 
+    def validate(self, attrs):
+        from keel.tasks.models import Task
+
+        task_id = attrs.get('task_id')
+        try:
+            task = Task.objects.get(pk = task_id, deleted_at__isnull = True)
+        except Task.DoesNotExist as e:
+            log_error("ERROR", "TaskIDSerializer: validate", "", err = str(e), task_id = task_id )
+            raise serializers.ValidationError("Task Id is invalid")
+
+        return task

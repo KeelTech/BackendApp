@@ -12,3 +12,20 @@ class CustomLeadPermission(permissions.BasePermission):
             return True
 
         return False
+
+
+class IsRCICUser(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        
+        user = request.user
+
+        """
+        user type 2 == RCIC, 1 = CUSTOMER, since we're checking is user is RCIC, 
+        then we check if user.user_type = 2
+        """
+        
+        if user.user_type == user.RCIC: 
+            return True
+        
+        return False

@@ -42,6 +42,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password, **extra_fields):
         """Create and save a SuperUser with the given email and password."""
+        extra_fields.setdefault('is_verified', True)
+        extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -64,7 +66,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=100, blank=False, null=True, default=None, unique=True)
     user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES, verbose_name="User Types", default=CUSTOMER, null=True)
     is_active = models.BooleanField(verbose_name= 'Active', default=True, help_text= 'Designates whether this user should be treated as active.')
-    is_staff = models.BooleanField(default=True)
+    is_verified = models.BooleanField(verbose_name="Verified", default=False)
+    is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     
     USERNAME_FIELD = 'email'
@@ -124,3 +127,22 @@ class UserService(TimeStampedModel, SoftDeleteModel):
     expiry_time = models.DateTimeField(null=True, blank= True)
 
 
+class CustomerProfile(TimeStampedModel, SoftDeleteModel):
+    user = models.OneToOneField(User, related_name="user_profile", on_delete=models.DO_NOTHING)
+    first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+    last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+    mother_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
+    father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
+    age = models.CharField(max_length=512, blank=True, null=True, default=None)
+    address = models.CharField(max_length=512, blank=True, null=True, default=None)
+    date_of_birth = models.DateField(default=None, null=True,blank=False)
+
+
+class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
+    institute_name = models.CharField(max_length=512, default=None, blank=True, null=True)
+    grade = models.CharField(max_length=512, blank=True, null=True, default=None)
+    year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)
+    start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
+    city = models.CharField(max_length=512, blank=True, null=True, default=None)
+    country = models.CharField(max_length=512, blank=True, null=True, default=None)
