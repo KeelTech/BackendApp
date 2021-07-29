@@ -152,10 +152,14 @@ class UserDocumentSerializer(serializers.ModelSerializer):
 class ListUserDocumentSerializer(serializers.ModelSerializer):
     doc_type = serializers.SerializerMethodField()
     task = serializers.SerializerMethodField()
+    orignal_file_name = serializers.SerializerMethodField()
     # doc_link = serializers.SerializerMethodField()
 
     def get_doc_type(self, obj):
         return obj.doc.doc_type.doc_type_name
+
+    def get_orignal_file_name(self, obj):
+        return obj.doc.original_name
 
     # def get_doc_link(self, obj):
     #     return settings.BASE_URL + "/api/v1/doc/get-single-doc" + "/" +str(obj.doc.doc_pk)
@@ -169,7 +173,7 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserDocument
         # fields = ('id', 'doc_id', 'user_id', 'doc_link', 'doc_type')
-        fields = ('id', 'doc_id', 'user_id', 'doc_type','task','created_at')
+        fields = ('id', 'doc_id', 'user_id', 'doc_type','task', 'orignal_file_name', 'created_at')
 
 class UserDetailsSerializer(serializers.ModelSerializer):
 
