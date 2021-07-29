@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from keel.authentication.models import (User, UserDocument, CustomToken, CustomerProfile, CustomerQualifications)
+from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, 
+                                        CustomerProfile, CustomerQualifications)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -24,6 +25,13 @@ class UserRegistrationSerializer(serializers.Serializer):
 
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    mother_fullname = serializers.CharField(required=True)
+    father_fullname = serializers.CharField(required=True)
+    age = serializers.CharField(required=True)
+    address = serializers.CharField(required=True)
+    date_of_birth = serializers.DateField(required=True)
 
     class Meta:
         model = CustomerProfile
@@ -31,11 +39,33 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
                     'father_fullname', 'age', 'address', 'date_of_birth')
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
+    institute_name = serializers.CharField(required=True)
+    grade = serializers.CharField(required=True)
+    year_of_passing = serializers.CharField(required=True)
+    city = serializers.CharField(required=True)
+    country = serializers.CharField(required=True)
+    start_date = serializers.DateField(required=True)
+    end_date = serializers.DateField(required=True)
 
     class Meta:
         model = CustomerQualifications
-        fields = ('institute_name', 'grade', 'year_of_passing', 'start_date',
-                    'city', 'country')
+        fields = ('id', 'institute_name', 'grade', 'year_of_passing', 'start_date', 
+                    'end_date', 'city', 'country')
+
+
+class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
+    start_date = serializers.DateField(required=True)
+    end_date = serializers.DateField(required=True)
+    job_type = serializers.CharField(required=True)
+    designation = serializers.DateField(required=True)
+    job_description = serializers.DateField(required=True)
+    company_name = serializers.DateField(required=True)
+    city = serializers.DateField(required=True)
+    weekly_working_hours = serializers.DateField(required=True)
+    class Meta:
+        model = CustomerWorkExperience
+        fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
+                    'city', 'weekly_working_hours', 'start_date', 'end_date')
 
 
 class LoginSerializer(serializers.Serializer):
@@ -71,7 +101,6 @@ class UserSocialLoginSerializer(SocialLoginSerializer):
 
 class FacebookSocialLoginSerializer(serializers.Serializer):
     access_token = serializers.CharField()
-
 
 
 class GenerateTokenSerializer(serializers.Serializer):

@@ -23,7 +23,7 @@ from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import CustomerProfile, CustomerQualifications, UserDocument
+from keel.authentication.models import CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
@@ -399,8 +399,28 @@ class ProfileView(GenericViewSet):
     def get_queryset_qualification(self):
         qualification = CustomerQualifications.objects.filter(user=self.request.user.id)
         return qualification
+    
+    def create_profile(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        } 
+        serializer = self.serializer_class_profile(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        validated_data['user'] = request.user
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response["message"] = serializer.data
+        return Response(response)
 
-    def profile(self, request):
+
+    def get_profile(self, request):
         response = {
             "status" : 1,
             "message" : ""
@@ -411,7 +431,67 @@ class ProfileView(GenericViewSet):
         response["message"] = {"profile":profile.data, "qualification":qualification.data}
         return Response(response)
 
-    
+
+class CreateQualificationView(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+    serializer_class = serializers.CustomerQualificationsSerializer
+
+    def create(self, validated_data):
+        qualification = CustomerQualifications.objects.create(**validated_data)
+        return qualification
+
+    def qualification(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        for data in validated_data:
+            data['user'] = request.user
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:CreateQualificationView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response["message"] = serializer.data
+        return Response(response)
+
+
+class CreateWorkExperienceView(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+    serializer_class = serializers.CustomerWorkExperienceSerializer
+
+    def create(self, validated_data):
+        work_exp = CustomerWorkExperience.objects.create(**validated_data)
+        return work_exp
+
+    def work_exp(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        for data in validated_data:
+            data['user'] = request.user
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:CreateWorkExperienceView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response["message"] = serializer.data
+        return Response(response)
+
+
 class LoginOTP(GenericViewSet):
 
     authentication_classes = []
