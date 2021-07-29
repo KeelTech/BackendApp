@@ -652,21 +652,28 @@ class UploadDocument(GenericViewSet):
             response["message"] = "Invalid User Document Id"
             resp_status = status.HTTP_400_BAD_REQUEST
             return Response(response, status = resp_status)
+        except Exception as e:
+            log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status = resp_status)
 
         if user_doc.doc.owner_id != str(user_id):
             log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = "LoggedIn User is not a owner of document")
             response["status"] = 1
             response["message"] = "User is not authorised to perform this action"
             return Response(response, status = resp_status)
-
-        user_doc.mark_delete()
-        user_doc.doc.mark_delete()
+        try:        
+            user_doc.mark_delete()
+            user_doc.doc.mark_delete()
+        except Exception as e:
+            log_error("ERROR", "UploadDocument: deleteUserDoc mark_delete", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status = resp_status)
 
         return Response(response, status = resp_status)
-
-
-
-
-
 
 
