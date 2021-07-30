@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Plan, Vendor, Service
+from .models import Plan, Vendor, Service, ServicesPlans
 # Register your models here.
 
 class PlanAdmin(admin.ModelAdmin):
@@ -19,3 +19,5 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Plan, PlanAdmin)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(Service, ServiceAdmin)
+admin.site.register(ServicesPlans)
+
