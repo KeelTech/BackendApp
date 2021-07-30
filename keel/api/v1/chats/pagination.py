@@ -1,7 +1,7 @@
 
 from rest_framework.pagination import LimitOffsetPagination
 
-CHAT_PAGINATION_LIMIT = 20
+CHAT_PAGINATION_LIMIT = 200
 
 class ChatsPagination(LimitOffsetPagination):
 
