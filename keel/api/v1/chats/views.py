@@ -45,12 +45,13 @@ class ChatList(GenericViewSet):
 
         pagination_class = ChatsPagination()
 
-        queryset = Chat.objects.filter(chatroom = chat_room).order_by("-created_at")
+        queryset = Chat.objects.filter(chatroom = chat_room).order_by("-id")
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
         serializer_class = ChatCreateSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
 
         response["data"] = resp_data
+        response["requested_by"] = user_id
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
 
