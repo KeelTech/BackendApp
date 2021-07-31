@@ -21,7 +21,7 @@ class ChatList(GenericViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def listChats(self, request, format = 'json'):
+    def listChats(self, request, format = 'json', **kwargs):
 
         response = {
             "status" : 0,
@@ -32,9 +32,11 @@ class ChatList(GenericViewSet):
         user = request.user
         user_id = user.id
 
-        req_data = request.data
-        case_id = req_data.get("case_id","")
-
+        # req_data = request.data
+        case_id = kwargs.get("case_id","")
+        if not case_id:
+            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
+            
         try:
             chat_room = ChatRoom.objects.filter(Q(user = user_id) | Q(agent = user_id)).get(case = case_id)
         except ChatRoom.DoesNotExist as e:
