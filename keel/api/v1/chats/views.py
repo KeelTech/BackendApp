@@ -5,14 +5,15 @@ from rest_framework import mixins, viewsets, status as HTTP_STATUS
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import ValidationError
-from rest_framework.pagination import LimitOffsetPagination
+# from rest_framework.pagination import LimitOffsetPagination
 
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.err_log import log_error
 from keel.Core.constants import GENERIC_ERROR
 from keel.chats.models import Chat, ChatRoom
 
-from .serializers import ChatListSerializer, ChatCreateSerializer
+from .serializers import ChatCreateSerializer
+from .pagination import ChatsPagination, CHAT_PAGINATION_LIMIT
 
 
 class ChatList(GenericViewSet):
@@ -20,7 +21,7 @@ class ChatList(GenericViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def listChats(self, request, format = 'json'):
+    def listChats(self, request, format = 'json', **kwargs):
 
         response = {
             "status" : 0,
@@ -31,9 +32,11 @@ class ChatList(GenericViewSet):
         user = request.user
         user_id = user.id
 
-        req_data = request.data
-        case_id = req_data.get("case_id","")
-
+        # req_data = request.data
+        case_id = kwargs.get("case_id","")
+        if not case_id:
+            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
+            
         try:
             chat_room = ChatRoom.objects.filter(Q(user = user_id) | Q(agent = user_id)).get(case = case_id)
         except ChatRoom.DoesNotExist as e:
@@ -42,14 +45,15 @@ class ChatList(GenericViewSet):
             response["message"] = "Invalid Request"
             return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
 
-        pagination_class = LimitOffsetPagination()
+        pagination_class = ChatsPagination()
 
-        queryset = Chat.objects.filter(chatroom = chat_room).order_by("-created_at")
+        queryset = Chat.objects.filter(chatroom = chat_room).order_by("-id")
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
-        serializer_class = ChatListSerializer(paginate_queryset, many = True)
+        serializer_class = ChatCreateSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
 
         response["data"] = resp_data
+        response["requested_by"] = user_id
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
 
@@ -77,12 +81,15 @@ class ChatList(GenericViewSet):
 
         req_data["chatroom"] = chat_room.id
         req_data["sender"] = user.id
+
+        serializer_class = ChatCreateSerializer(data = req_data)
+        serializer_class.is_valid(raise_exception = True)
+
         try:
-            serializer_class = ChatCreateSerializer(data = req_data)
-            serializer_class.is_valid(raise_exception = True)
             validated_data = serializer_class.validated_data
             chat_obj = serializer_class.create(validated_data)
-            response['data'] = ChatListSerializer(chat_obj).data
+            queryset = Chat.objects.filter(chatroom = chat_room).order_by("-created_at")[:CHAT_PAGINATION_LIMIT]
+            response['data'] = ChatCreateSerializer(queryset, many = True).data
         except Exception as e:
             log_error("ERROR","ChatList: createChat", str(user_id), err = str(e), msg = "Validation/serializer error")
             response["status"] = 1
