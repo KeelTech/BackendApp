@@ -690,7 +690,7 @@ class ItemCount(GenericViewSet):
 
         resp_data, err_msg = get_rcic_item_counts(user)
         if err_msg:
-            log_error("ERROR", "ItemCount:, ", str(user_id), err = str(e))
+            log_error("ERROR", "ItemCount:, ", str(user.id), err = str(err_msg))
             response["status"] = 1
             response["message"] = GENERIC_ERROR
             return Response(response, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
