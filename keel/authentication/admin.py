@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, CustomToken, PasswordResetToken, UserService, CustomerProfile, CustomerQualifications
+from .models import User, CustomToken, PasswordResetToken, UserService, CustomerProfile, CustomerQualifications, ProfileQualificationModel
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -11,3 +11,4 @@ admin.site.register(PasswordResetToken)
 admin.site.register(UserService)
 admin.site.register(CustomerProfile)
 admin.site.register(CustomerQualifications)
+admin.site.register(ProfileQualificationModel)

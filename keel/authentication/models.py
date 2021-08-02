@@ -167,3 +167,30 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     company_name = models.DateField(max_length=512, default=None, blank=True, null=True)
     city = models.DateField(max_length=512, default=None, blank=True, null=True)
     weekly_working_hours = models.DateField(max_length=512, default=None, blank=True, null=True)
+
+
+class ProfileQualificationModel(TimeStampedModel, SoftDeleteModel):
+    user = models.CharField(max_length=512)
+    institute = models.CharField(max_length=512)
+    year_of_passing = models.CharField(max_length=512)
+    city = models.CharField(max_length=512)
+    country = models.CharField(max_length=512)
+    start_date = models.CharField(max_length=512)
+    end_date = models.CharField(max_length=512)
+
+
+class RelativeInCanadaModel(TimeStampedModel, SoftDeleteModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="relative_in_canada")
+    full_name = models.CharField(max_length=512, default=None, null=True, blank=True)
+    relationship = models.CharField(max_length=512, default=None, null=True, blank=True)
+    immigration_status = models.CharField(max_length=512, default=None, null=True, blank=True)
+    address = models.CharField(max_length=512, default=None, null=True, blank=True)
+    contact_number = models.CharField(max_length=512, default=None, null=True, blank=True)
+    email_address = models.CharField(max_length=512, default=None, null=True, blank=True)
+
+
+class EducationalCreationalAssessmentModel(TimeStampedModel, SoftDeleteModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="educational_creational")
+    eca_authority_name = models.CharField(max_length=512, default=None, blank=True, null=True)
+    eca_authority_number = models.CharField(max_length=512, default=None, blank=True, null=True)
+    canadian_equivalency_summary = models.CharField(max_length=512, default=None, blank=True, null=True)

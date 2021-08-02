@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, 
-                                        CustomerProfile, CustomerQualifications)
+                                        CustomerProfile, CustomerQualifications, ProfileQualificationModel)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -207,3 +207,47 @@ class TaskIDSerializer(serializers.Serializer):
             raise serializers.ValidationError("Task Id is invalid")
 
         return task
+
+
+class ListProfileLabelSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    institute = serializers.SerializerMethodField()
+    year_of_passing = serializers.SerializerMethodField()
+    city = serializers.SerializerMethodField()
+    country = serializers.SerializerMethodField()
+    start_date = serializers.SerializerMethodField()
+    end_date = serializers.SerializerMethodField()
+
+    
+    def get_user(self, obj):
+        var = obj.user
+        return { "col_name":var, "value": "", "type":"char", "label":var+"_label"}
+
+    def get_institute(self, obj):
+        var = obj.institute
+        return { "col_name":var, "value": "", "type":"char", "label":var+"_label"}
+    
+    def get_year_of_passing(self, obj):
+        var = obj.year_of_passing 
+        return { "col_name":var, "value": "", "type":"char", "label":var+"_label"}
+    
+    def get_city(self, obj):
+        var = obj.city
+        return { "col_name":var, "value": "", "type":"char", "label":var+"_label"}
+    
+    def get_country(self, obj):
+        var = obj.country
+        return { "col_name":var, "value": "", "type":"char", "label":var+"_label"}
+    
+    def get_start_date(self, obj):
+        var = obj.start_date
+        return { "col_name":var, "value": "", "type":"char", "label":var+"_label"}
+        
+    def get_end_date(self, obj):
+        var = obj.end_date
+        return { "col_name":var, "value": "", "type":"char", "label":var+"_label"}
+
+    class Meta:
+        model = ProfileQualificationModel
+        fields = ('id', 'user', 'institute', 'year_of_passing', 'city', 'country',
+                    'start_date', 'end_date')

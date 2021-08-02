@@ -15,7 +15,7 @@ from django.template.loader import get_template
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import mixins, viewsets, status
+from rest_framework import generics, mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.parsers import JSONParser
@@ -23,7 +23,7 @@ from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument
+from keel.authentication.models import CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument, ProfileQualificationModel
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
@@ -677,3 +677,11 @@ class UploadDocument(GenericViewSet):
         return Response(response, status = resp_status)
 
 
+
+class LabelListView(GenericViewSet):
+    serializer_class = serializers.ListProfileLabelSerializer
+
+    def lists(self, request):
+        queryset = ProfileQualificationModel.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
