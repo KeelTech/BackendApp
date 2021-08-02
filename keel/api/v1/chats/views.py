@@ -21,7 +21,7 @@ class ChatList(GenericViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def listChats(self, request, format = 'json'):
+    def listChats(self, request, format = 'json', **kwargs):
 
         response = {
             "status" : 0,
@@ -32,9 +32,11 @@ class ChatList(GenericViewSet):
         user = request.user
         user_id = user.id
 
-        req_data = request.data
-        case_id = req_data.get("case_id","")
-
+        # req_data = request.data
+        case_id = kwargs.get("case_id","")
+        if not case_id:
+            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
+            
         try:
             chat_room = ChatRoom.objects.filter(Q(user = user_id) | Q(agent = user_id)).get(case = case_id)
         except ChatRoom.DoesNotExist as e:
@@ -45,12 +47,13 @@ class ChatList(GenericViewSet):
 
         pagination_class = ChatsPagination()
 
-        queryset = Chat.objects.filter(chatroom = chat_room).order_by("-created_at")
+        queryset = Chat.objects.filter(chatroom = chat_room).order_by("-id")
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
         serializer_class = ChatCreateSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
 
         response["data"] = resp_data
+        response["requested_by"] = user_id
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
 

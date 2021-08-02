@@ -24,7 +24,6 @@ class AuthBackend(ModelBackend):
         except User.DoesNotExist:
             return None
 
-
     def get_user(self, user_id):
         try:
             return User.objects.get(pk=user_id)
@@ -55,7 +54,6 @@ class JWTAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed('UnAuthorized')
 
         return self._authenticate_credentials(request, token)
-
 
     def _authenticate_credentials(self, request, token):
         user_key = settings.USER_SECRET_KEY
@@ -103,7 +101,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         user_key = settings.USER_SECRET_KEY    
         exp = datetime.datetime.utcnow() + datetime.timedelta(days=365)
         payload = JWTAuthentication.jwt_payload_handler(user, exp)
-        # token = jwt.encode(payload, user_key[0].key)
-        token = jwt.encode(payload, user_key, algorithm="HS256") # this will be changed back to line 99
+        # token = jwt.encode(payload, user_key[0].key).decode('UTF-8')
+        token = jwt.encode(payload, user_key, algorithm="HS256").decode('UTF-8')  # this will be changed back to line 99
         return {'token': token,
                 'payload': payload}
