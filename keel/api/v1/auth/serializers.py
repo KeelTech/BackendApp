@@ -221,31 +221,31 @@ class ListProfileLabelSerializer(serializers.ModelSerializer):
 
     def get_user(self, obj):
         var = obj.user
-        return { "col_name":var, "value": var, "type":"char", "label":"user"}
+        return {"value": var, "type":"char", "label":"user"}
 
     def get_institute(self, obj):
         var = obj.institute
-        return { "col_name":var, "value": var, "type":"char", "label":"institute"}
+        return {"value": var, "type":"char", "label":"institute"}
     
     def get_year_of_passing(self, obj):
         var = obj.year_of_passing 
-        return { "col_name":var, "value": var, "type":"char", "label":"year_of_passing"}
+        return {"value": var, "type":"char", "label":"year_of_passing"}
     
     def get_city(self, obj):
         var = obj.city
-        return { "col_name":var, "value": var, "type":"char", "label":"city"}
+        return {"value": var, "type":"char", "label":"city"}
     
     def get_country(self, obj):
         var = obj.country
-        return { "col_name":var, "value": var, "type":"char", "label":"country"}
+        return {"value": var, "type":"char", "label":"country"}
     
     def get_start_date(self, obj):
         var = obj.start_date
-        return { "col_name":var, "value": var, "type":"char", "label":"start_date"}
+        return {"value": var, "type":"char", "label":"start_date"}
         
     def get_end_date(self, obj):
         var = obj.end_date
-        return { "col_name":var, "value": var, "type":"char", "label":"end_date"}
+        return {"value": var, "type":"char", "label":"end_date"}
 
     class Meta:
         model = ProfileQualificationModel
