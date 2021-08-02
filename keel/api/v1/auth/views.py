@@ -25,11 +25,13 @@ from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.authentication.models import CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument
 from keel.authentication.backends import JWTAuthentication
+from keel.authentication.interface import get_rcic_item_counts
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.notifications import EmailNotification
 from keel.api.v1.auth import serializers
-from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer 
+from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer
+from keel.api.permissions import IsRCICUser 
 from keel.authentication.models import (CustomToken, PasswordResetToken)
 from keel.authentication.models import User as user_model
 from .helpers.token_helper import save_token
@@ -630,7 +632,6 @@ class UploadDocument(GenericViewSet):
 
         return Response(response, status = resp_status)
 
-
     def deleteUserDoc(self, request, format = 'json', **kwargs):
 
         response = {
@@ -675,5 +676,37 @@ class UploadDocument(GenericViewSet):
             return Response(response, status = resp_status)
 
         return Response(response, status = resp_status)
+
+
+class ItemCount(GenericViewSet):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsRCICUser,)
+
+    def getItemCount(self, request, format = 'json'):
+
+        response = {
+            "status": 0,
+            "message": "Items counts successfully fetched",
+            "data": ""
+        }
+
+        user = request.user
+
+        resp_data, err_msg = get_rcic_item_counts(user)
+        if err_msg:
+            log_error("ERROR", "ItemCount:, ", str(user_id), err = str(e))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            return Response(response, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        response['data'] = resp_data
+        return Response(response, status = status.HTTP_200_OK)
+
+
+
+
+
+
 
 

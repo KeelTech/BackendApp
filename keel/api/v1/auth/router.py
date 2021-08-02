@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, GeneratePasswordReset,
                     FacebookLogin, GoogleLogin, LinkedinLogin, UserDeleteTokenView, 
-                    ConfirmPasswordReset, ChangePasswordView, ProfileView, CreateQualificationView, CreateWorkExperienceView)
+                    ConfirmPasswordReset, ChangePasswordView, ProfileView, CreateQualificationView, CreateWorkExperienceView,
+                    ItemCount)
 
 urlpatterns = [
     path('signup', UserViewset.as_view({'post' : 'signup'}), name='signup'),
@@ -22,4 +23,5 @@ urlpatterns = [
     path('upload-doc', UploadDocument.as_view({'post':'upload'}),name='doc-upload'),
     path('get-user-doc',UploadDocument.as_view({'get':'fetch'}), name='get-docs'),
     path('delete-doc/<int:id>',UploadDocument.as_view({'delete':'deleteUserDoc'}), name='delete-docs'),
+    path('item-count', ItemCount.as_view({'get':'getItemCount'}), name='get-item-count'),
 ]
