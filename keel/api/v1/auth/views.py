@@ -23,7 +23,7 @@ from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument, ProfileQualificationModel
+from keel.authentication.models import CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument, QualificationLabelModel
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
@@ -679,9 +679,20 @@ class UploadDocument(GenericViewSet):
 
 
 class LabelListView(GenericViewSet):
-    serializer_class = serializers.ListProfileLabelSerializer
+    serializer_class = serializers.CustomerQualificationsSerializer
+    authentication_classes = (JWTAuthentication, )
+    permission_classes = (IsAuthenticated, )
 
-    def lists(self, request):
-        queryset = ProfileQualificationModel.objects.all()
-        serializer = self.serializer_class(queryset, many=True)
+    def lists(self, request, format="json"):
+        get_labels = QualificationLabelModel.objects.filter(user_label="user")
+        labels = {}
+        for label in get_labels:
+            labels['institute_label'] = label.institute_label
+            labels['year_of_passing_label'] = label.year_of_passing_label
+            labels['city_label'] = label.city_label
+            labels['country_label'] = label.country_label
+            labels['start_date_label'] = label.start_date_label
+            labels['end_date_label'] = label.end_date_label
+        queryset = CustomerQualifications.objects.filter(user=request.user)
+        serializer = self.serializer_class(queryset, many=True, context={"labels":labels})
         return Response(serializer.data)

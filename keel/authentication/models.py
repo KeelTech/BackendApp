@@ -140,13 +140,23 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
-    institute_name = models.CharField(max_length=512, default=None, blank=True, null=True)
+    institute = models.CharField(max_length=512, default=None, blank=True, null=True)
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
     year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)
     city = models.CharField(max_length=512, blank=True, null=True, default=None)
     country = models.CharField(max_length=512, blank=True, null=True, default=None)
     start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
     end_date = models.DateField(max_length=512, blank=True, null=True, default=None)
+
+
+class QualificationLabelModel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(default="user", max_length=512)
+    institute_label = models.CharField(max_length=512)
+    year_of_passing_label = models.CharField(max_length=512)
+    city_label = models.CharField(max_length=512)
+    country_label = models.CharField(max_length=512)
+    start_date_label = models.CharField(max_length=512)
+    end_date_label = models.CharField(max_length=512)
 
 
 class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
@@ -167,16 +177,6 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     company_name = models.DateField(max_length=512, default=None, blank=True, null=True)
     city = models.DateField(max_length=512, default=None, blank=True, null=True)
     weekly_working_hours = models.DateField(max_length=512, default=None, blank=True, null=True)
-
-
-class ProfileQualificationModel(TimeStampedModel, SoftDeleteModel):
-    user = models.CharField(max_length=512)
-    institute = models.CharField(max_length=512)
-    year_of_passing = models.CharField(max_length=512)
-    city = models.CharField(max_length=512)
-    country = models.CharField(max_length=512)
-    start_date = models.CharField(max_length=512)
-    end_date = models.CharField(max_length=512)
 
 
 class RelativeInCanadaModel(TimeStampedModel, SoftDeleteModel):
