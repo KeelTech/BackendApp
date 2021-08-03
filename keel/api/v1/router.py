@@ -9,7 +9,6 @@ from .tasks.router import urlpatterns as tasks_url
 from .chats.router import urlpatterns as chats_url
 from .cases.router import urlpatterns as cases_url
 from .plans.router import urlpatterns as plans_url
-from .call_schedule_calendly.router import urlpatterns as call_schedule_calendly_url
 
 urlpatterns = [
 
@@ -21,5 +20,4 @@ urlpatterns = [
     path('chats/', include(chats_url)),
     path('cases/', include(cases_url)),
     path('plans/', include(plans_url)),
-    path('call-schedule/calendly', include(call_schedule_calendly_url)),
 ]
