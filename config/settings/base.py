@@ -105,6 +105,7 @@ LOCAL_APPS = (
     'keel.cases',
     'keel.chats',
     'keel.quotations',
+    'keel.calendly',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -291,6 +292,11 @@ AWS_PRIVATE_MEDIA_LOCATION=''
 PRIVATE_FILE_STORAGE='django.core.files.storage.FileSystemStorage'
 
 
+
+# Calendly settings
+
+CALENDLY_PERSONAL_TOKEN = env('CALENDLY_PERSONAL_TOKEN')
+CALENDLY_BASE_URL = env('CALENDLY_BASE_URL')
 
 
 
