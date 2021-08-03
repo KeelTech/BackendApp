@@ -26,14 +26,15 @@ from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.authentication.models import (CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument, 
                                         QualificationLabel, WorkExperienceLabel)
 from keel.authentication.backends import JWTAuthentication
+from keel.authentication.interface import get_rcic_item_counts
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.notifications import EmailNotification
 from keel.api.v1.auth import serializers
-from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer 
+from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer
+from keel.api.permissions import IsRCICUser 
 from keel.authentication.models import (CustomToken, PasswordResetToken)
 from keel.authentication.models import User as user_model
-from .helpers.token_helper import save_token
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2Adapter
@@ -70,9 +71,8 @@ class UserViewset(GenericViewSet):
         
         try:
             user = self.create(validated_data)
-            token = JWTAuthentication.generate_token(user)
-            token_to_save = save_token(token)
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
+            token_to_save = JWTAuthentication.generate_token(user)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
             response['message'] = str(e)
@@ -125,9 +125,8 @@ class LoginViewset(GenericViewSet):
         #     return Response(response)
         
         try:
-            token = JWTAuthentication.generate_token(user)
-            token_to_save = save_token(token)
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
+            token_to_save = JWTAuthentication.generate_token(user)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:LoginViewset ' + str(e))
             response['message'] = str(e)
@@ -301,9 +300,8 @@ class FacebookLogin(GenericViewSet):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            token = JWTAuthentication.generate_token(user)
-            token_to_save = save_token(token)
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
+            token_to_save = JWTAuthentication.generate_token(user)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:FacebookLogin ' + str(e))
             response['message'] = str(e)
@@ -349,9 +347,8 @@ class GoogleLogin(SocialLoginView):
         self.serializer.is_valid(raise_exception=True)
         user = self.serializer.validated_data
         try:
-            token = JWTAuthentication.generate_token(user)
-            token_to_save = save_token(token)
-            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save)
+            token_to_save = JWTAuthentication.generate_token(user)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GoogleLogin ' + str(e))
             response['message'] = str(e)
@@ -665,7 +662,6 @@ class UploadDocument(GenericViewSet):
 
         return Response(response, status = resp_status)
 
-
     def deleteUserDoc(self, request, format = 'json', **kwargs):
 
         response = {
@@ -736,3 +732,35 @@ class QualificationLabelView(GenericViewSet):
 
 class WorkExperinceLabelView(GenericViewSet):
     pass
+class ItemCount(GenericViewSet):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsRCICUser,)
+
+    def getItemCount(self, request, format = 'json'):
+
+        response = {
+            "status": 0,
+            "message": "Items counts successfully fetched",
+            "data": ""
+        }
+
+        user = request.user
+
+        resp_data, err_msg = get_rcic_item_counts(user)
+        if err_msg:
+            log_error("ERROR", "ItemCount:, ", str(user.id), err = str(err_msg))
+            response["status"] = 1
+            response["message"] = GENERIC_ERROR
+            return Response(response, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        response['data'] = resp_data
+        return Response(response, status = status.HTTP_200_OK)
+
+
+
+
+
+
+
+
