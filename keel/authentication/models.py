@@ -138,6 +138,17 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     date_of_birth = models.DateField(default=None, null=True,blank=False)
 
 
+class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(default="user", max_length=512)
+    first_name_label = models.CharField(max_length=512)
+    last_name_label = models.CharField(max_length=512)
+    mother_fullname_label = models.CharField(max_length=512)
+    father_fullname_label = models.CharField(max_length=512)
+    age_label = models.CharField(max_length=512)
+    address_label = models.CharField(max_length=512)
+    date_of_birth_label = models.CharField(max_length=512)
+
+
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
     institute = models.CharField(max_length=512, default=None, blank=True, null=True)

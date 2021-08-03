@@ -421,7 +421,6 @@ class ProfileView(GenericViewSet):
             labels['end_date_label'] = label.end_date_label
         queryset = CustomerWorkExperience.objects.filter(user=request.user)
         serializer = self.serializer_class_experience(queryset, many=True, context={"labels":labels})
-        print(serializer.data)
         for label in serializer.data:
             label.pop("labels")
         return serializer.data

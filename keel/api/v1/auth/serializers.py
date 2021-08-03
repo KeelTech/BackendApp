@@ -96,6 +96,16 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
         var = obj.end_date
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["end_date_label"]}
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for key, value in data.items():
+            try:
+                if not value:
+                    data[key] = ""
+            except KeyError:
+                pass
+        return data
 
     class Meta:
         model = QualificationLabel
@@ -131,7 +141,6 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
 
     def get_labels(self, obj):
         if "labels" in self.context:
-            print(self.context)
             return self.context["labels"]
         return None
 
@@ -174,6 +183,16 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
         var = obj.weekly_working_hours
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["weekly_working_hours_label"]}
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for key, value in data.items():
+            try:
+                if not value:
+                    data[key] = ""
+            except KeyError:
+                pass
+        return data
     
     class Meta:
         model = WorkExperienceLabel
