@@ -23,7 +23,7 @@ from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import (CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument, 
+from keel.authentication.models import (CustomerProfile, CustomerProfileLabel, CustomerQualifications, CustomerWorkExperience, UserDocument, 
                                         QualificationLabel, WorkExperienceLabel)
 from keel.authentication.backends import JWTAuthentication
 from keel.authentication.interface import get_rcic_item_counts
@@ -387,7 +387,7 @@ class UserDeleteTokenView(GenericViewSet):
 class ProfileView(GenericViewSet):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
-    serializer_class_profile = serializers.CustomerProfileSerializer
+    serializer_class_profile = serializers.CustomerProfileLabelSerializer
     serializer_class_qualification = serializers.CustomerQualificationsLabelSerializer
     serializer_class_experience = serializers.WorkExperienceLabelSerializer
 
@@ -402,10 +402,21 @@ class ProfileView(GenericViewSet):
             labels['start_date_label'] = label.start_date_label
             labels['end_date_label'] = label.end_date_label
         queryset = CustomerQualifications.objects.filter(user=request.user)
-        serializer = self.serializer_class_qualification(queryset, many=True, context={"labels":labels})
-        for label in serializer.data:
-            label.pop("labels")
-        return serializer.data
+        if queryset:
+            serializer = self.serializer_class_qualification(queryset, many=True, context={"labels":labels})
+            for label in serializer.data:
+                label.pop("labels")
+            return serializer.data
+        else:
+            data = {
+                "institute": {"value": "", "type": "char", "labels": "Institute"},
+                "year_of_passing": {"value": "", "type": "char", "labels": "Year Of Passing"},
+                "city": {"value": "", "type": "char", "labels": "City"},
+                "country": {"value": "", "type": "char", "labels": "Country"},
+                "start_date": {"value": "", "type": "char", "labels": "Start Date"},
+                "end_date": {"value": "", "type": "char", "labels": "End Date"}
+            }
+            return data
     
     def get_queryset_experience(self, request):
         get_labels = WorkExperienceLabel.objects.filter(user_label="user")
@@ -420,14 +431,52 @@ class ProfileView(GenericViewSet):
             labels['start_date_label'] = label.start_date_label
             labels['end_date_label'] = label.end_date_label
         queryset = CustomerWorkExperience.objects.filter(user=request.user)
-        serializer = self.serializer_class_experience(queryset, many=True, context={"labels":labels})
-        for label in serializer.data:
-            label.pop("labels")
-        return serializer.data
+        if queryset:
+            serializer = self.serializer_class_experience(queryset, many=True, context={"labels":labels})
+            for label in serializer.data:
+                label.pop("labels")
+            return serializer.data
+        else:
+            data = {
+                "company_name": {"value": "", "type": "char", "labels": "Company Name"},
+                "start_date": {"value": "", "type": "char", "labels": "Start Date"},
+                "end_date": {"value": "", "type": "char", "labels": "End Date"},
+                "city": {"value": "", "type": "char", "labels": "City"},
+                "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
+                "designation": {"value": "", "type": "char", "labels": "Desgination"},
+                "job_type": {"value": "", "type": "char", "labels": "Job Type"},
+                "job_description": {"value": "", "type": "char", "labels": "Job Description"}
+            }
+            return data
 
-    def get_queryset_profile(self):
+    def get_queryset_profile(self, request):
+        get_labels = CustomerProfileLabel.objects.filter(user_label="user")
+        labels = {}
+        for label in get_labels:
+            labels['first_name_label'] = label.first_name_label
+            labels['last_name_label'] = label.last_name_label
+            labels['mother_fullname_label'] = label.mother_fullname_label
+            labels['father_fullname_label'] = label.father_fullname_label
+            labels['age_label'] = label.age_label
+            labels['address_label'] = label.address_label
+            labels['date_of_birth_label'] = label.date_of_birth_label
         profile = CustomerProfile.objects.filter(user=self.request.user.id)
-        return profile
+        if profile:
+            serializer = self.serializer_class_profile(profile, many=True, context={"labels":labels})
+            for label in serializer.data:
+                label.pop("labels")
+            return serializer.data
+        else:
+            data = {
+                "first_name": {"value": "", "type": "char", "labels": "First Name"},
+                "last_name": {"value": "", "type": "char", "labels": "Last Name"},
+                "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
+                "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
+                "age": {"value": "", "type": "char", "labels": "Age"},
+                "address": {"value": "", "type": "char", "labels": "Address"},
+                "date_of_birth": {"value": "", "type": "char", "labels": "Date of Birth"}
+            }
+            return data
 
     
     def create_profile(self, request):
@@ -455,11 +504,11 @@ class ProfileView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }   
-        profile = self.serializer_class_profile(self.get_queryset_profile(), many=True)
+        profile = self.get_queryset_profile(request)
         qualification = self.get_queryset_qualification(request)
         work_experience = self.get_queryset_experience(request)
         
-        response["message"] = {"profile":profile.data, "qualification":qualification, "work_experience":work_experience}
+        response["message"] = {"profile":profile, "qualification":qualification, "work_experience":work_experience}
         return Response(response)
 
 

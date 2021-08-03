@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, WorkExperienceLabel,
-                                        CustomerProfile, QualificationLabel, CustomerQualifications,)
+                                        CustomerProfile,  CustomerProfileLabel, QualificationLabel, CustomerQualifications,)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -39,6 +39,60 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
                     'father_fullname', 'age', 'address', 'date_of_birth')
 
 
+class CustomerProfileLabelSerializer(serializers.ModelSerializer):
+    labels = serializers.SerializerMethodField()
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    mother_fullname = serializers.SerializerMethodField()
+    father_fullname = serializers.SerializerMethodField()
+    age = serializers.SerializerMethodField()
+    address = serializers.SerializerMethodField()
+    date_of_birth = serializers.SerializerMethodField()
+
+    def get_labels(self, obj):
+        if "labels" in self.context:
+            return self.context["labels"]
+        return None
+
+    def get_first_name(self, obj):
+        var = obj.first_name
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["first_name_label"]}
+
+    def get_last_name(self, obj):
+        var = obj.last_name
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["last_name_label"]}
+
+    def get_mother_fullname(self, obj):
+        var = obj.mother_fullname
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["mother_fullname_label"]}
+
+    def get_father_fullname(self, obj):
+        var = obj.father_fullname
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["father_fullname_label"]}
+
+    def get_age(self, obj):
+        var = obj.age
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["age_label"]}
+
+    def get_address(self, obj):
+        var = obj.address
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["address_label"]}
+
+    def get_date_of_birth(self, obj):
+        var = obj.date_of_birth
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["date_of_birth_label"]}
+
+    class Meta:
+        model = CustomerProfileLabel
+        fields = ('first_name', 'last_name', 'mother_fullname', 
+                    'father_fullname', 'age', 'address', 'date_of_birth', 'labels')
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
     institute = serializers.CharField(required=True)
     grade = serializers.CharField(required=True)
@@ -97,16 +151,6 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["end_date_label"]}
     
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        for key, value in data.items():
-            try:
-                if not value:
-                    data[key] = ""
-            except KeyError:
-                pass
-        return data
-
     class Meta:
         model = QualificationLabel
         fields = ('id', 'institute', 'year_of_passing', 'city', 'country',
@@ -183,16 +227,6 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
         var = obj.weekly_working_hours
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["weekly_working_hours_label"]}
-    
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        for key, value in data.items():
-            try:
-                if not value:
-                    data[key] = ""
-            except KeyError:
-                pass
-        return data
     
     class Meta:
         model = WorkExperienceLabel
