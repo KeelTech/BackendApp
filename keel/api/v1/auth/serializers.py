@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, 
-                                        CustomerProfile, CustomerQualifications, QualificationLabelModel)
+from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, WorkExperienceLabel,
+                                        CustomerProfile, QualificationLabel, CustomerQualifications,)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -38,7 +38,22 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'mother_fullname', 
                     'father_fullname', 'age', 'address', 'date_of_birth')
 
+
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
+    institute = serializers.CharField(required=True)
+    grade = serializers.CharField(required=True)
+    year_of_passing = serializers.CharField(required=True)
+    city = serializers.CharField(required=True)
+    country = serializers.CharField(required=True)
+    start_date = serializers.DateField(required=True)
+    end_date = serializers.DateField(required=True)
+
+    class Meta:
+        model = CustomerQualifications
+        fields = ('id', 'institute', 'grade', 'year_of_passing', 'start_date', 
+                    'end_date', 'city', 'country')
+
+class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField()
     institute = serializers.SerializerMethodField()
     year_of_passing = serializers.SerializerMethodField()
@@ -54,30 +69,36 @@ class CustomerQualificationsSerializer(serializers.ModelSerializer):
 
     def get_institute(self, obj):
         var = obj.institute
-        return {"value": var, "type":"char"}
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["institute_label"]}
     
     def get_year_of_passing(self, obj):
         var = obj.year_of_passing 
-        return {"value": var, "type":"char"}
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["year_of_passing_label"]}
     
     def get_city(self, obj):
         var = obj.city
-        return {"value": var, "type":"char"}
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["city_label"]}
     
     def get_country(self, obj):
         var = obj.country
-        return {"value": var, "type":"char"}
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["country_label"]}
     
     def get_start_date(self, obj):
         var = obj.start_date
-        return {"value": var, "type":"char"}
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["start_date_label"]}
         
     def get_end_date(self, obj):
         var = obj.end_date
-        return {"value": var, "type":"char"}
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["end_date_label"]}
 
     class Meta:
-        model = QualificationLabelModel
+        model = QualificationLabel
         fields = ('id', 'institute', 'year_of_passing', 'city', 'country',
                     'start_date', 'end_date', 'labels')
 
@@ -96,6 +117,68 @@ class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
         fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
                     'city', 'weekly_working_hours', 'start_date', 'end_date')
 
+
+class WorkExperienceLabelSerializer(serializers.ModelSerializer):
+    labels = serializers.SerializerMethodField()
+    start_date = serializers.SerializerMethodField()
+    end_date = serializers.SerializerMethodField()
+    job_type = serializers.SerializerMethodField()
+    designation = serializers.SerializerMethodField()
+    job_description = serializers.SerializerMethodField()
+    company_name = serializers.SerializerMethodField()
+    city = serializers.SerializerMethodField()
+    weekly_working_hours = serializers.SerializerMethodField()
+
+    def get_labels(self, obj):
+        if "labels" in self.context:
+            print(self.context)
+            return self.context["labels"]
+        return None
+
+    def get_job_type(self, obj):
+        var = obj.job_type
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["job_type_label"]}
+
+    def get_designation(self, obj):
+        var = obj.designation
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["designation_label"]}
+
+    def get_start_date(self, obj):
+        var = obj.start_date
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["start_date_label"]}
+
+    def get_end_date(self, obj):
+        var = obj.end_date
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["end_date_label"]}
+
+    def get_job_description(self, obj):
+        var = obj.job_description
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["job_description_label"]}
+            
+    def get_company_name(self, obj):
+        var = obj.company_name
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["company_name_label"]}
+
+    def get_city(self, obj):
+        var = obj.city
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["city_label"]}
+
+    def get_weekly_working_hours(self, obj):
+        var = obj.weekly_working_hours
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["weekly_working_hours_label"]}
+    
+    class Meta:
+        model = WorkExperienceLabel
+        fields = ('id', 'company_name', 'start_date', 'end_date', 'city', 'weekly_working_hours', 
+                    'designation', 'job_type', 'labels', 'job_description')
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -236,47 +319,3 @@ class TaskIDSerializer(serializers.Serializer):
             raise serializers.ValidationError("Task Id is invalid")
 
         return task
-
-
-class QualificationLabelSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
-    institute = serializers.SerializerMethodField()
-    year_of_passing = serializers.SerializerMethodField()
-    city = serializers.SerializerMethodField()
-    country = serializers.SerializerMethodField()
-    start_date = serializers.SerializerMethodField()
-    end_date = serializers.SerializerMethodField()
-
-
-    def get_user(self, obj):
-        var = obj.user
-        return {"value": var, "type":"char", "label":"user"}
-
-    def get_institute(self, obj):
-        var = obj.institute
-        return {"value": var, "type":"char", "label":"institute"}
-    
-    def get_year_of_passing(self, obj):
-        var = obj.year_of_passing 
-        return {"value": var, "type":"char", "label":"year_of_passing"}
-    
-    def get_city(self, obj):
-        var = obj.city
-        return {"value": var, "type":"char", "label":"city"}
-    
-    def get_country(self, obj):
-        var = obj.country
-        return {"value": var, "type":"char", "label":"country"}
-    
-    def get_start_date(self, obj):
-        var = obj.start_date
-        return {"value": var, "type":"char", "label":"start_date"}
-        
-    def get_end_date(self, obj):
-        var = obj.end_date
-        return {"value": var, "type":"char", "label":"end_date"}
-
-    class Meta:
-        model = QualificationLabelModel
-        fields = ('id', 'user', 'institute', 'year_of_passing', 'city', 'country',
-                    'start_date', 'end_date')

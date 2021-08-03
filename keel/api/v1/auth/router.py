@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, GeneratePasswordReset,
                     FacebookLogin, GoogleLogin, LinkedinLogin, UserDeleteTokenView, 
                     ConfirmPasswordReset, ChangePasswordView, ProfileView, CreateQualificationView, CreateWorkExperienceView,
-                    LabelListView)
+                    QualificationLabelView)
 
 urlpatterns = [
     path('signup', UserViewset.as_view({'post' : 'signup'}), name='signup'),
@@ -11,7 +11,7 @@ urlpatterns = [
     path('get-profile', ProfileView.as_view({'get' : 'get_profile'}), name='get-profile'),
     path('create-profile', ProfileView.as_view({'post' : 'create_profile'}), name='create_profile'),
     path('logout', UserDeleteTokenView.as_view({'get' : 'remove'}), name='logout'),
-    path('label', LabelListView.as_view({'get' : 'lists'}), name='label'),
+    path('get-qualification', QualificationLabelView.as_view({'get' : 'qualification'}), name='get-qualification'),
     path('google-login', GoogleLogin.as_view(), name='google_login'),
     path('linkedin-login', LinkedinLogin.as_view(), name='linkedin-login'),
     path('facebook-login', FacebookLogin.as_view({'post' : 'fblogin'}), name='fb_login'),

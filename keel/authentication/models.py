@@ -149,7 +149,7 @@ class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
     end_date = models.DateField(max_length=512, blank=True, null=True, default=None)
 
 
-class QualificationLabelModel(TimeStampedModel, SoftDeleteModel):
+class QualificationLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(default="user", max_length=512)
     institute_label = models.CharField(max_length=512)
     year_of_passing_label = models.CharField(max_length=512)
@@ -172,11 +172,23 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     start_date = models.DateField(max_length=512, default=None, blank=True, null=True)
     end_date = models.DateField(max_length=512, default=None, blank=True, null=True)
     job_type = models.CharField(max_length=512, default=FULL_TIME, blank=True, null=True)
-    designation = models.DateField(max_length=512, default=None, blank=True, null=True)
-    job_description = models.DateField(max_length=512, default=None, blank=True, null=True)
-    company_name = models.DateField(max_length=512, default=None, blank=True, null=True)
-    city = models.DateField(max_length=512, default=None, blank=True, null=True)
-    weekly_working_hours = models.DateField(max_length=512, default=None, blank=True, null=True)
+    designation = models.CharField(max_length=512, default=None, blank=True, null=True)
+    job_description = models.CharField(max_length=512, default=None, blank=True, null=True)
+    company_name = models.CharField(max_length=512, default=None, blank=True, null=True)
+    city = models.CharField(max_length=512, default=None, blank=True, null=True)
+    weekly_working_hours = models.CharField(max_length=512, default=None, blank=True, null=True)
+
+
+class WorkExperienceLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(max_length=255, default="user")
+    job_type_label = models.CharField(max_length=255)
+    designation_label = models.CharField(max_length=255)
+    job_description_label = models.CharField(max_length=255)
+    company_name_label = models.CharField(max_length=255)
+    city_label = models.CharField(max_length=255)
+    weekly_working_hours_label = models.CharField(max_length=255)
+    start_date_label = models.CharField(max_length=255)
+    end_date_label = models.CharField(max_length=255)
 
 
 class RelativeInCanadaModel(TimeStampedModel, SoftDeleteModel):

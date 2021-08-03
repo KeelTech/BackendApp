@@ -23,7 +23,8 @@ from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument, QualificationLabelModel
+from keel.authentication.models import (CustomerProfile, CustomerQualifications, CustomerWorkExperience, UserDocument, 
+                                        QualificationLabel, WorkExperienceLabel)
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
@@ -390,15 +391,48 @@ class ProfileView(GenericViewSet):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
     serializer_class_profile = serializers.CustomerProfileSerializer
-    serializer_class_qualification = serializers.CustomerQualificationsSerializer
+    serializer_class_qualification = serializers.CustomerQualificationsLabelSerializer
+    serializer_class_experience = serializers.WorkExperienceLabelSerializer
+
+    def get_queryset_qualification(self, request):
+        get_labels = QualificationLabel.objects.filter(user_label="user")
+        labels = {}
+        for label in get_labels:
+            labels['institute_label'] = label.institute_label
+            labels['year_of_passing_label'] = label.year_of_passing_label
+            labels['city_label'] = label.city_label
+            labels['country_label'] = label.country_label
+            labels['start_date_label'] = label.start_date_label
+            labels['end_date_label'] = label.end_date_label
+        queryset = CustomerQualifications.objects.filter(user=request.user)
+        serializer = self.serializer_class_qualification(queryset, many=True, context={"labels":labels})
+        for label in serializer.data:
+            label.pop("labels")
+        return serializer.data
+    
+    def get_queryset_experience(self, request):
+        get_labels = WorkExperienceLabel.objects.filter(user_label="user")
+        labels = {}
+        for label in get_labels:
+            labels['job_type_label'] = label.job_type_label
+            labels['designation_label'] = label.designation_label
+            labels['job_description_label'] = label.job_description_label
+            labels['company_name_label'] = label.company_name_label
+            labels['city_label'] = label.city_label
+            labels['weekly_working_hours_label'] = label.weekly_working_hours_label
+            labels['start_date_label'] = label.start_date_label
+            labels['end_date_label'] = label.end_date_label
+        queryset = CustomerWorkExperience.objects.filter(user=request.user)
+        serializer = self.serializer_class_experience(queryset, many=True, context={"labels":labels})
+        print(serializer.data)
+        for label in serializer.data:
+            label.pop("labels")
+        return serializer.data
 
     def get_queryset_profile(self):
         profile = CustomerProfile.objects.filter(user=self.request.user.id)
         return profile
 
-    def get_queryset_qualification(self):
-        qualification = CustomerQualifications.objects.filter(user=self.request.user.id)
-        return qualification
     
     def create_profile(self, request):
         response = {
@@ -426,9 +460,10 @@ class ProfileView(GenericViewSet):
             "message" : ""
         }   
         profile = self.serializer_class_profile(self.get_queryset_profile(), many=True)
-        qualification = self.serializer_class_qualification(self.get_queryset_qualification(), many=True)
+        qualification = self.get_queryset_qualification(request)
+        work_experience = self.get_queryset_experience(request)
         
-        response["message"] = {"profile":profile.data, "qualification":qualification.data}
+        response["message"] = {"profile":profile.data, "qualification":qualification, "work_experience":work_experience}
         return Response(response)
 
 
@@ -677,14 +712,13 @@ class UploadDocument(GenericViewSet):
         return Response(response, status = resp_status)
 
 
-
-class LabelListView(GenericViewSet):
-    serializer_class = serializers.CustomerQualificationsSerializer
+class QualificationLabelView(GenericViewSet):
+    serializer_class = serializers.CustomerQualificationsLabelSerializer
     authentication_classes = (JWTAuthentication, )
     permission_classes = (IsAuthenticated, )
 
-    def lists(self, request, format="json"):
-        get_labels = QualificationLabelModel.objects.filter(user_label="user")
+    def qualification(self, request, format="json"):
+        get_labels = QualificationLabel.objects.filter(user_label="user")
         labels = {}
         for label in get_labels:
             labels['institute_label'] = label.institute_label
@@ -695,4 +729,10 @@ class LabelListView(GenericViewSet):
             labels['end_date_label'] = label.end_date_label
         queryset = CustomerQualifications.objects.filter(user=request.user)
         serializer = self.serializer_class(queryset, many=True, context={"labels":labels})
+        for label in serializer.data:
+            label.pop("labels")
         return Response(serializer.data)
+
+
+class WorkExperinceLabelView(GenericViewSet):
+    pass
