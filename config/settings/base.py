@@ -106,6 +106,7 @@ LOCAL_APPS = (
     'keel.chats',
     'keel.quotations',
     'keel.calendly',
+    'keel.call_schedule'
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

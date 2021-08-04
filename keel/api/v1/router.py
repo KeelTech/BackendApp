@@ -3,7 +3,6 @@ from django.urls import path
 
 from .auth.router import urlpatterns as auth_url
 from .calendly.router import urlpatterns as calendly_url
-from .call_schedule.router import urlpatterns as call_schedule_url
 from .cases.router import urlpatterns as cases_url
 from .chats.router import urlpatterns as chats_url
 from .document.router import urlpatterns as documents_url
@@ -22,6 +21,5 @@ urlpatterns = [
     path('chats/', include(chats_url)),
     path('cases/', include(cases_url)),
     path('plans/', include(plans_url)),
-    path('calendly/', include(calendly_url)),
-    path('call-schedule/', include(call_schedule_url)),
+    path('calendly/', include(calendly_url))
 ]
