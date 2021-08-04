@@ -153,6 +153,7 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
     doc_type = serializers.SerializerMethodField()
     task = serializers.SerializerMethodField()
     orignal_file_name = serializers.SerializerMethodField()
+    user_type = serializers.SerializerMethodField()
     # doc_link = serializers.SerializerMethodField()
 
     def get_doc_type(self, obj):
@@ -160,6 +161,15 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
 
     def get_orignal_file_name(self, obj):
         return obj.doc.original_name
+
+    def get_user_type(self, obj):
+        user_id = obj.doc.owner_id
+        try:
+            user = User.objects.get(id = user_id)
+        except Exception as e:
+            log_error("ERROR", "ListUserDocumentSerializer: get_user_type",str(user_id), err = str(e))
+            return dict(User.USER_TYPE_CHOICES).get(User.CUSTOMER)
+        return user.get_user_type_display()
 
     # def get_doc_link(self, obj):
     #     return settings.BASE_URL + "/api/v1/doc/get-single-doc" + "/" +str(obj.doc.doc_pk)
@@ -172,8 +182,7 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDocument
-        # fields = ('id', 'doc_id', 'user_id', 'doc_link', 'doc_type')
-        fields = ('id', 'doc_id', 'user_id', 'doc_type','task', 'orignal_file_name', 'created_at')
+        fields = ('id', 'doc_id', 'user_id', 'doc_type','task', 'orignal_file_name', 'created_at','user_type')
 
 class UserDetailsSerializer(serializers.ModelSerializer):
 
