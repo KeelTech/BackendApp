@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, GeneratePasswordReset,
                     FacebookLogin, GoogleLogin, LinkedinLogin, UserDeleteTokenView, ConfirmPasswordReset, 
                     ChangePasswordView, ProfileView, WorkExperienceView, QualificationView, ItemCount,
-                    RelativeInCanadaView)
+                    RelativeInCanadaView, EducationalCreationalAssessmentView)
 
 urlpatterns = [
     # authentication
@@ -26,8 +26,10 @@ urlpatterns = [
     path('get-qualification', QualificationView.as_view({'get' : 'get_qualification'}), name='get-qualification'),
     path('create-work-experience', WorkExperienceView.as_view({'post':'work_exp'}), name='create-work-experience'),
     path('get-work-experience', WorkExperienceView.as_view({'get':'get_work_experience'}), name='get-work-experience'),
-    path('create-relative', RelativeInCanadaView.as_view({'post':'relative_in_canada'}, name='create-relative')),
-    path('get-relative', RelativeInCanadaView.as_view({'get':'get_relative_in_canada'}, name='get-relative')),
+    path('create-relative', RelativeInCanadaView.as_view({'post':'relative_in_canada'}), name='create-relative'),
+    path('get-relative', RelativeInCanadaView.as_view({'get':'get_relative_in_canada'}), name='get-relative'),
+    path('create-educational-assessment', EducationalCreationalAssessmentView.as_view({'post':'educational_creational_assessment'}), name='create-educational-assessment'),
+    path('get-educational-assessment', EducationalCreationalAssessmentView.as_view({'get':'get_educational_creational_assessment'}), name='get-educational-assessment'),
 
     # document
     path('upload-doc', UploadDocument.as_view({'post':'upload'}),name='doc-upload'),

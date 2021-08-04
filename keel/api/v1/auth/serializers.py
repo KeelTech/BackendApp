@@ -438,3 +438,43 @@ class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
         model = RelativeInCanadaLabel
         fields = ('id', 'full_name', 'relationship', 'immigrations_status', 'address', 
                     'contact_number', 'email_address')
+
+
+class EducationalCreationalAssessmentSerializer(serializers.ModelSerializer):
+    eca_authority_name = serializers.CharField(required=True)
+    eca_authority_number = serializers.CharField(required=True)
+    canadian_equivalency_summary = serializers.CharField(required=True)
+
+    class Meta:
+        model = EducationalCreationalAssessment
+        fields = ('id', 'eca_authority_name', 'eca_authority_number', 'canadian_equivalency_summary')
+
+
+class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer):
+    eca_authority_name = serializers.SerializerMethodField()
+    eca_authority_number = serializers.SerializerMethodField()
+    canadian_equivalency_summary = serializers.SerializerMethodField()
+
+    def get_labels(self, obj):
+        if "labels" in self.context:
+            return self.context["labels"]
+        return None
+
+    def get_eca_authority_name(self, obj):
+        var = obj.eca_authority_name
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["eca_authority_name_label"]}
+
+    def get_eca_authority_number(self, obj):
+        var = obj.eca_authority_number
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["eca_authority_number_label"]}
+
+    def get_canadian_equivalency_summary(self, obj):
+        var = obj.canadian_equivalency_summary
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["canadian_equivalency_summary_label"]}
+
+    class Meta:
+        model = EducationalCreationalAssessmentLabel
+        fields = ('id', 'eca_authority_name', 'eca_authority_number', 'canadian_equivalency_summary')

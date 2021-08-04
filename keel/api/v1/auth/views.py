@@ -393,6 +393,7 @@ class ProfileView(GenericViewSet):
     serializer_class_qualification = serializers.CustomerQualificationsLabelSerializer
     serializer_class_experience = serializers.WorkExperienceLabelSerializer
     serializer_class_relative_in_canada = serializers.RelativeInCanadaLabelSerializer
+    serializer_class_education_assessment = serializers.EducationalCreationalAssessmentLabelSerializer
 
     def get_queryset_qualification(self, request):
         get_labels = QualificationLabel.objects.filter(user_label="user")
@@ -418,6 +419,25 @@ class ProfileView(GenericViewSet):
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"}
+            }
+            return data
+    
+    def get_queryset_education_assessment(self, request):
+        get_labels = EducationalCreationalAssessmentLabel.objects.filter(user_label="user")
+        labels = {}
+        for label in get_labels:
+            labels['eca_authority_name_label'] = label.eca_authority_name_label
+            labels['eca_authority_number_label'] = label.eca_authority_number_label
+            labels['canadian_equivalency_summary_label'] = label.canadian_equivalency_summary_label
+        queryset = EducationalCreationalAssessment.objects.filter(user=request.user)
+        if queryset:
+            serializer = self.serializer_class_education_assessment(queryset, many=True, context={"labels":labels})
+            return serializer.data
+        else:
+            data = {
+                "eca_authority_name": {"value": "", "type": "char", "labels": "ECA Authority Name"},
+                "eca_authority_number": {"value": "", "type": "char", "labels": "ECA Authority Number"},
+                "canadian_equivalency_summary": {"value": "", "type": "char", "labels": "Canadian Equivalency Summary"},
             }
             return data
     
@@ -544,12 +564,14 @@ class ProfileView(GenericViewSet):
         qualification = self.get_queryset_qualification(request)
         work_experience = self.get_queryset_experience(request)
         relative_in_canada = self.get_queryset_relative_in_canada(request)
+        education_assessment = self.get_queryset_education_assessment(request)
         
         response["message"] = {
                                 "profile" : profile, 
                                 "qualification" : qualification, 
                                 "work_experience" : work_experience, 
-                                "relative_in_canada" : relative_in_canada
+                                "relative_in_canada" : relative_in_canada,
+                                "education_assessment" : education_assessment
                             }
         return Response(response)
 
@@ -652,6 +674,42 @@ class RelativeInCanadaView(GenericViewSet):
             serializer.save()
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response["message"] = serializer.data
+        return Response(response)
+
+
+class EducationalCreationalAssessmentView(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+    serializer_class = serializers.EducationalCreationalAssessmentSerializer
+
+    def get_educational_creational_assessment(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        queryset = EducationalCreationalAssessment.objects.filter(user=request.user)
+        serializer = self.serializer_class(queryset, many=True)
+        response["message"] = serializer.data
+        return Response(response)
+
+    def educational_creational_assessment(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        for data in validated_data:
+            data['user'] = request.user
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
