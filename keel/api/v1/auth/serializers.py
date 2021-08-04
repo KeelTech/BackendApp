@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, WorkExperienceLabel,
-                                        CustomerProfile,  CustomerProfileLabel, QualificationLabel, CustomerQualifications,)
+                                        CustomerProfile,  CustomerProfileLabel, QualificationLabel, CustomerQualifications,
+                                        RelativeInCanada, RelativeInCanadaLabel, EducationalCreationalAssessment, 
+                                        EducationalCreationalAssessmentLabel)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -35,7 +37,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerProfile
-        fields = ('first_name', 'last_name', 'mother_fullname', 
+        fields = ('id', 'first_name', 'last_name', 'mother_fullname', 
                     'father_fullname', 'age', 'address', 'date_of_birth')
 
 
@@ -93,6 +95,8 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
         model = CustomerProfileLabel
         fields = ('first_name', 'last_name', 'mother_fullname', 
                     'father_fullname', 'age', 'address', 'date_of_birth', 'labels')
+
+
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
     institute = serializers.CharField(required=True)
     grade = serializers.CharField(required=True)
@@ -372,3 +376,65 @@ class TaskIDSerializer(serializers.Serializer):
             raise serializers.ValidationError("Task Id is invalid")
 
         return task
+
+
+class RelativeInCanadaSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(required=True)
+    relationship = serializers.CharField(required=True)
+    immigration_status = serializers.CharField(required=True)
+    address = serializers.CharField(required=True)
+    contact_number = serializers.CharField(required=True)
+    email_address = serializers.CharField(required=True)
+    class Meta:
+        model = RelativeInCanada
+        fields = ('id', 'full_name', 'relationship', 'immigration_status', 
+                    'address', 'contact_number', 'email_address')
+
+
+class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    relationship = serializers.SerializerMethodField()
+    immigrations_status = serializers.SerializerMethodField()
+    address = serializers.SerializerMethodField()
+    contact_number = serializers.SerializerMethodField()
+    email_address = serializers.SerializerMethodField()
+
+    def get_labels(self, obj):
+        if "labels" in self.context:
+            return self.context["labels"]
+        return None
+
+    def get_full_name(self, obj):
+        var = obj.full_name
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["full_name_label"]}
+
+    def get_relationship(self, obj):
+        var = obj.relationship
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["relationship_label"]}
+
+    def get_immigrations_status(self, obj):
+        var = obj.immigration_status
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["immigrations_status_label"]}
+
+    def get_address(self, obj):
+        var = obj.address
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["address_label"]}
+
+    def get_contact_number(self, obj):
+        var = obj.contact_number
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["contact_number_label"]}
+
+    def get_email_address(self, obj):
+        var = obj.email_address
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["email_address_label"]}
+
+    class Meta:
+        model = RelativeInCanadaLabel
+        fields = ('id', 'full_name', 'relationship', 'immigrations_status', 'address', 
+                    'contact_number', 'email_address')

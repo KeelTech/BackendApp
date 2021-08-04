@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import date, timedelta
 import datetime
 import facebook
 import requests
@@ -23,8 +23,11 @@ from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import (CustomerProfile, CustomerProfileLabel, CustomerQualifications, CustomerWorkExperience, UserDocument, 
-                                        QualificationLabel, WorkExperienceLabel)
+from keel.authentication.models import (CustomerProfile, CustomerProfileLabel, CustomerQualifications, CustomerWorkExperience, 
+                                        UserDocument, QualificationLabel, WorkExperienceLabel, RelativeInCanadaLabel, RelativeInCanada,
+                                        EducationalCreationalAssessment, EducationalCreationalAssessmentLabel)
+from keel.authentication.models import (CustomToken, PasswordResetToken)
+from keel.authentication.models import User as user_model
 from keel.authentication.backends import JWTAuthentication
 from keel.authentication.interface import get_rcic_item_counts
 from keel.Core.constants import GENERIC_ERROR
@@ -33,8 +36,6 @@ from keel.Core.notifications import EmailNotification
 from keel.api.v1.auth import serializers
 from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer
 from keel.api.permissions import IsRCICUser 
-from keel.authentication.models import (CustomToken, PasswordResetToken)
-from keel.authentication.models import User as user_model
 
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2Adapter
@@ -387,9 +388,11 @@ class UserDeleteTokenView(GenericViewSet):
 class ProfileView(GenericViewSet):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
+    serializer_class_pro = serializers.CustomerProfileSerializer
     serializer_class_profile = serializers.CustomerProfileLabelSerializer
     serializer_class_qualification = serializers.CustomerQualificationsLabelSerializer
     serializer_class_experience = serializers.WorkExperienceLabelSerializer
+    serializer_class_relative_in_canada = serializers.RelativeInCanadaLabelSerializer
 
     def get_queryset_qualification(self, request):
         get_labels = QualificationLabel.objects.filter(user_label="user")
@@ -415,6 +418,31 @@ class ProfileView(GenericViewSet):
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"}
+            }
+            return data
+    
+    def get_queryset_relative_in_canada(self, request):
+        get_labels = RelativeInCanadaLabel.objects.filter(user_label="user")
+        labels = {}
+        for label in get_labels:
+            labels['full_name_label'] = label.full_name_label
+            labels['relationship_label'] = label.relationship_label
+            labels['immigrations_status_label'] = label.immigrations_status_label
+            labels['address_label'] = label.address_label
+            labels['contact_number_label'] = label.contact_number_label
+            labels['email_address_label'] = label.email_address_label
+        queryset = RelativeInCanada.objects.filter(user=request.user)
+        if queryset:
+            serializer = self.serializer_class_relative_in_canada(queryset, many=True, context={"labels":labels})
+            return serializer.data
+        else:
+            data = {
+                "full_name": {"value": "", "type": "char", "labels": "Full Name"},
+                "relationship": {"value": "", "type": "char", "labels": "Relationship"},
+                "immigration_status": {"value": "", "type": "char", "labels": "Immigration Status"},
+                "address": {"value": "", "type": "char", "labels": "Address"},
+                "contact_number": {"value": "", "type": "char", "labels": "Contact Number"},
+                "email_address": {"value": "", "type": "char", "labels": "Email Address"}
             }
             return data
     
@@ -478,13 +506,12 @@ class ProfileView(GenericViewSet):
             }
             return data
 
-    
     def create_profile(self, request):
         response = {
             "status" : 1,
             "message" : ""
         } 
-        serializer = self.serializer_class_profile(data=request.data)
+        serializer = self.serializer_class_pro(data=request.data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         validated_data['user'] = request.user
@@ -497,9 +524,18 @@ class ProfileView(GenericViewSet):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["message"] = serializer.data
         return Response(response)
-
-
+    
     def get_profile(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        } 
+        queryset = CustomerProfile.objects.filter(user=request.user)
+        serializer = self.serializer_class_pro(queryset, many=True)
+        response["message"] = serializer.data
+        return Response(response)
+
+    def get_full_profile(self, request):
         response = {
             "status" : 1,
             "message" : ""
@@ -507,15 +543,26 @@ class ProfileView(GenericViewSet):
         profile = self.get_queryset_profile(request)
         qualification = self.get_queryset_qualification(request)
         work_experience = self.get_queryset_experience(request)
+        relative_in_canada = self.get_queryset_relative_in_canada(request)
         
-        response["message"] = {"profile":profile, "qualification":qualification, "work_experience":work_experience}
+        response["message"] = {
+                                "profile" : profile, 
+                                "qualification" : qualification, 
+                                "work_experience" : work_experience, 
+                                "relative_in_canada" : relative_in_canada
+                            }
         return Response(response)
 
 
-class CreateQualificationView(GenericViewSet):
+class QualificationView(GenericViewSet):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
     serializer_class = serializers.CustomerQualificationsSerializer
+
+    def get_qualification(self, request, format="json"):
+        queryset = CustomerQualifications.objects.filter(user=request.user)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, validated_data):
         qualification = CustomerQualifications.objects.create(**validated_data)
@@ -542,10 +589,15 @@ class CreateQualificationView(GenericViewSet):
         return Response(response)
 
 
-class CreateWorkExperienceView(GenericViewSet):
+class WorkExperienceView(GenericViewSet):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
     serializer_class = serializers.CustomerWorkExperienceSerializer
+
+    def get_work_experience(self, request, format="json"):
+        queryset = CustomerWorkExperience.objects.filter(user=request.user)
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, validated_data):
         work_exp = CustomerWorkExperience.objects.create(**validated_data)
@@ -565,6 +617,41 @@ class CreateWorkExperienceView(GenericViewSet):
             serializer.save()
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:CreateWorkExperienceView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response["message"] = serializer.data
+        return Response(response)
+
+class RelativeInCanadaView(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+    serializer_class = serializers.RelativeInCanadaSerializer
+
+    def get_relative_in_canada(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        queryset = RelativeInCanada.objects.filter(user=request.user)
+        serializer = self.serializer_class(queryset, many=True)
+        response["message"] = serializer.data
+        return Response(response)
+
+    def relative_in_canada(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = self.serializer_class(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        for data in validated_data:
+            data['user'] = request.user
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -756,30 +843,6 @@ class UploadDocument(GenericViewSet):
         return Response(response, status = resp_status)
 
 
-class QualificationLabelView(GenericViewSet):
-    serializer_class = serializers.CustomerQualificationsLabelSerializer
-    authentication_classes = (JWTAuthentication, )
-    permission_classes = (IsAuthenticated, )
-
-    def qualification(self, request, format="json"):
-        get_labels = QualificationLabel.objects.filter(user_label="user")
-        labels = {}
-        for label in get_labels:
-            labels['institute_label'] = label.institute_label
-            labels['year_of_passing_label'] = label.year_of_passing_label
-            labels['city_label'] = label.city_label
-            labels['country_label'] = label.country_label
-            labels['start_date_label'] = label.start_date_label
-            labels['end_date_label'] = label.end_date_label
-        queryset = CustomerQualifications.objects.filter(user=request.user)
-        serializer = self.serializer_class(queryset, many=True, context={"labels":labels})
-        for label in serializer.data:
-            label.pop("labels")
-        return Response(serializer.data)
-
-
-class WorkExperinceLabelView(GenericViewSet):
-    pass
 class ItemCount(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
@@ -804,11 +867,3 @@ class ItemCount(GenericViewSet):
 
         response['data'] = resp_data
         return Response(response, status = status.HTTP_200_OK)
-
-
-
-
-
-
-
-

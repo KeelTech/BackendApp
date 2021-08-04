@@ -202,7 +202,7 @@ class WorkExperienceLabel(TimeStampedModel, SoftDeleteModel):
     end_date_label = models.CharField(max_length=255)
 
 
-class RelativeInCanadaModel(TimeStampedModel, SoftDeleteModel):
+class RelativeInCanada(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="relative_in_canada")
     full_name = models.CharField(max_length=512, default=None, null=True, blank=True)
     relationship = models.CharField(max_length=512, default=None, null=True, blank=True)
@@ -212,8 +212,25 @@ class RelativeInCanadaModel(TimeStampedModel, SoftDeleteModel):
     email_address = models.CharField(max_length=512, default=None, null=True, blank=True)
 
 
-class EducationalCreationalAssessmentModel(TimeStampedModel, SoftDeleteModel):
+class RelativeInCanadaLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(max_length=215, default="user")
+    full_name_label = models.CharField(max_length=215)
+    relationship_label = models.CharField(max_length=215)
+    immigrations_status_label = models.CharField(max_length=215)
+    address_label = models.CharField(max_length=215)
+    contact_number_label = models.CharField(max_length=215)
+    email_address_label = models.CharField(max_length=215)
+
+
+class EducationalCreationalAssessment(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="educational_creational")
     eca_authority_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     eca_authority_number = models.CharField(max_length=512, default=None, blank=True, null=True)
     canadian_equivalency_summary = models.CharField(max_length=512, default=None, blank=True, null=True)
+
+
+class EducationalCreationalAssessmentLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(max_length=215, default="user")
+    eca_authority_name_label = models.CharField(max_length=215)
+    eca_authority_number_label = models.CharField(max_length=215)
+    canadian_equivalency_summary_label = models.CharField(max_length=215)
