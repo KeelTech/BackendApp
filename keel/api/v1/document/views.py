@@ -13,6 +13,8 @@ from keel.Core.err_log import log_error
 
 from .serializers import DocumentsSerializer
 
+import magic
+
 class GetDocumentTypeChoices(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
@@ -59,11 +61,8 @@ class GetDocument(GenericViewSet):
             response['message'] = "Document Id is invalid"
             resp_status = status.HTTP_400_BAD_REQUEST
             return Response(response, status = resp_status)
-        # doc_serializer = DocumentsSerializer(doc)
-        # response_data = doc_serializer.data
-        # response["data"] = response_data
         try:
-            file_handle = doc.avatar.open()
+            file_object = doc.avatar.open()
         except FileNotFoundError as e:
             log_error('ERROR', 'GetDocument/generate', str(user.id), msg = 'FileNotFoundError', doc_id = str(doc_id),
                                             err = str(e))
@@ -72,9 +71,12 @@ class GetDocument(GenericViewSet):
             resp_status = status.HTTP_400_BAD_REQUEST
             return Response(response, status = resp_status)
 
-        response = FileResponse(file_handle, content_type='whatever')
+        content_type = magic.from_buffer(doc.avatar.open().read(2048), mime = True)
+        response = FileResponse(file_object, content_type=content_type)
+
         response['Content-Length'] = doc.avatar.size
         response['Content-Disposition'] = 'attachment; filename="%s"' % doc.avatar.name
+        response['Original-File-Name'] = doc.original_name
 
         return response
        
