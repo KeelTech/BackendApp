@@ -165,16 +165,16 @@ class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
     start_date = serializers.DateField(required=True)
     end_date = serializers.DateField(required=True)
     job_type = serializers.CharField(required=True)
-    designation = serializers.DateField(required=True)
-    job_description = serializers.DateField(required=True)
-    company_name = serializers.DateField(required=True)
-    city = serializers.DateField(required=True)
-    weekly_working_hours = serializers.DateField(required=True)
+    designation = serializers.CharField(required=True)
+    job_description = serializers.CharField(required=True)
+    company_name = serializers.CharField(required=True)
+    city = serializers.CharField(required=True)
+    weekly_working_hours = serializers.CharField(required=True)
     class Meta:
         model = CustomerWorkExperience
         fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
                     'city', 'weekly_working_hours', 'start_date', 'end_date')
-
+                    
 
 class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField()

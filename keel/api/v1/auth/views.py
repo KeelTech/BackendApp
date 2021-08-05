@@ -12,6 +12,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction, IntegrityError, utils
 from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
 from django.template.loader import get_template
+from rest_framework.views import APIView
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -585,21 +586,35 @@ class QualificationView(GenericViewSet):
         queryset = CustomerQualifications.objects.filter(user=request.user)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
-
-    def create(self, validated_data):
-        qualification = CustomerQualifications.objects.create(**validated_data)
-        return qualification
+    
+    @staticmethod
+    def extract(datas):
+        data = []
+        for info in datas:
+            customer_work_info = {
+                "institute" : info["institute"].get("value"),
+                "year_of_passing" : info["year_of_passing"].get("value"),
+                "city" : info["city"].get("value"),
+                "country" : info["country"].get("value"),
+                "grade" : info["grade"].get("value"),
+                "start_date" : info["start_date"].get("value"),
+                "end_date" : info["end_date"].get("value"),
+            }
+            data.append(customer_work_info)
+        return data
 
     def qualification(self, request):
+        user = request.user
         response = {
             "status" : 1,
             "message" : ""
         }
-        serializer = self.serializer_class(data=request.data, many=True)
+        request = self.extract(request.data)
+        serializer = self.serializer_class(data=request, many=True)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         for data in validated_data:
-            data['user'] = request.user
+            data['user'] = user
         try:
             serializer.save()
         except Exception as e:
@@ -620,21 +635,36 @@ class WorkExperienceView(GenericViewSet):
         queryset = CustomerWorkExperience.objects.filter(user=request.user)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
-
-    def create(self, validated_data):
-        work_exp = CustomerWorkExperience.objects.create(**validated_data)
-        return work_exp
+    
+    @staticmethod
+    def extract(datas):
+        data = []
+        for info in datas:
+            customer_work_info = {
+                "company_name" : info["company_name"].get("value"),
+                "job_type" : info["job_type"].get("value"),
+                "designation" : info["designation"].get("value"),
+                "job_description" : info["job_description"].get("value"),
+                "city" : info["city"].get("value"),
+                "weekly_working_hours" : info["weekly_working_hours"].get("value"),
+                "start_date" : info["start_date"].get("value"),
+                "end_date" : info["end_date"].get("value")
+            }
+            data.append(customer_work_info)
+        return data
 
     def work_exp(self, request):
+        user = request.user
         response = {
             "status" : 1,
             "message" : ""
         }
-        serializer = self.serializer_class(data=request.data, many=True)
+        request = self.extract(request.data)
+        serializer = self.serializer_class(data=request, many=True)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         for data in validated_data:
-            data['user'] = request.user
+            data['user'] = user
         try:
             serializer.save()
         except Exception as e:
@@ -659,17 +689,34 @@ class RelativeInCanadaView(GenericViewSet):
         serializer = self.serializer_class(queryset, many=True)
         response["message"] = serializer.data
         return Response(response)
+    
+    @staticmethod
+    def extract(datas):
+        data = []
+        for info in datas:
+            customer_work_info = {
+                "full_name" : info["full_name"].get("value"),
+                "relationship" : info["relationship"].get("value"),
+                "immigration_status" : info["immigration_status"].get("value"),
+                "address" : info["address"].get("value"),
+                "contact_number" : info["contact_number"].get("value"),
+                "email_address" : info["email_address"].get("value"),
+            }
+            data.append(customer_work_info)
+        return data
 
     def relative_in_canada(self, request):
+        user = request.user
         response = {
             "status" : 1,
             "message" : ""
         }
-        serializer = self.serializer_class(data=request.data, many=True)
+        request = self.extract(request.data)
+        serializer = self.serializer_class(data=request, many=True)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         for data in validated_data:
-            data['user'] = request.user
+            data['user'] = user
         try:
             serializer.save()
         except Exception as e:
@@ -695,17 +742,32 @@ class EducationalCreationalAssessmentView(GenericViewSet):
         serializer = self.serializer_class(queryset, many=True)
         response["message"] = serializer.data
         return Response(response)
+    
+    @staticmethod
+    def extract(datas):
+        data = []
+        for info in datas:
+            print(info)
+            customer_work_info = {
+                "eca_authority_name" : info["eca_authority_name"].get("value"),
+                "eca_authority_number" : info["eca_authority_number"].get("value"),
+                "canadian_equivalency_summary" : info["canadian_equivalency_summary"].get("value"),
+            }
+            data.append(customer_work_info)
+        return data
 
     def educational_creational_assessment(self, request):
+        user = request.user
         response = {
             "status" : 1,
             "message" : ""
         }
-        serializer = self.serializer_class(data=request.data, many=True)
+        request = self.extract(request.data)
+        serializer = self.serializer_class(data=request, many=True)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         for data in validated_data:
-            data['user'] = request.user
+            data['user'] = user
         try:
             serializer.save()
         except Exception as e:
@@ -925,3 +987,4 @@ class ItemCount(GenericViewSet):
 
         response['data'] = resp_data
         return Response(response, status = status.HTTP_200_OK)
+
