@@ -138,15 +138,36 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     date_of_birth = models.DateField(default=None, null=True,blank=False)
 
 
+class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(default="user", max_length=512)
+    first_name_label = models.CharField(max_length=512)
+    last_name_label = models.CharField(max_length=512)
+    mother_fullname_label = models.CharField(max_length=512)
+    father_fullname_label = models.CharField(max_length=512)
+    age_label = models.CharField(max_length=512)
+    address_label = models.CharField(max_length=512)
+    date_of_birth_label = models.CharField(max_length=512)
+
+
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
-    institute_name = models.CharField(max_length=512, default=None, blank=True, null=True)
+    institute = models.CharField(max_length=512, default=None, blank=True, null=True)
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
     year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)
     city = models.CharField(max_length=512, blank=True, null=True, default=None)
     country = models.CharField(max_length=512, blank=True, null=True, default=None)
     start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
     end_date = models.DateField(max_length=512, blank=True, null=True, default=None)
+
+
+class QualificationLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(default="user", max_length=512)
+    institute_label = models.CharField(max_length=512)
+    year_of_passing_label = models.CharField(max_length=512)
+    city_label = models.CharField(max_length=512)
+    country_label = models.CharField(max_length=512)
+    start_date_label = models.CharField(max_length=512)
+    end_date_label = models.CharField(max_length=512)
 
 
 class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
@@ -162,8 +183,54 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     start_date = models.DateField(max_length=512, default=None, blank=True, null=True)
     end_date = models.DateField(max_length=512, default=None, blank=True, null=True)
     job_type = models.CharField(max_length=512, default=FULL_TIME, blank=True, null=True)
-    designation = models.DateField(max_length=512, default=None, blank=True, null=True)
-    job_description = models.DateField(max_length=512, default=None, blank=True, null=True)
-    company_name = models.DateField(max_length=512, default=None, blank=True, null=True)
-    city = models.DateField(max_length=512, default=None, blank=True, null=True)
-    weekly_working_hours = models.DateField(max_length=512, default=None, blank=True, null=True)
+    designation = models.CharField(max_length=512, default=None, blank=True, null=True)
+    job_description = models.CharField(max_length=512, default=None, blank=True, null=True)
+    company_name = models.CharField(max_length=512, default=None, blank=True, null=True)
+    city = models.CharField(max_length=512, default=None, blank=True, null=True)
+    weekly_working_hours = models.CharField(max_length=512, default=None, blank=True, null=True)
+
+
+class WorkExperienceLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(max_length=255, default="user")
+    job_type_label = models.CharField(max_length=255)
+    designation_label = models.CharField(max_length=255)
+    job_description_label = models.CharField(max_length=255)
+    company_name_label = models.CharField(max_length=255)
+    city_label = models.CharField(max_length=255)
+    weekly_working_hours_label = models.CharField(max_length=255)
+    start_date_label = models.CharField(max_length=255)
+    end_date_label = models.CharField(max_length=255)
+
+
+class RelativeInCanada(TimeStampedModel, SoftDeleteModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="relative_in_canada")
+    full_name = models.CharField(max_length=512, default=None, null=True, blank=True)
+    relationship = models.CharField(max_length=512, default=None, null=True, blank=True)
+    immigration_status = models.CharField(max_length=512, default=None, null=True, blank=True)
+    address = models.CharField(max_length=512, default=None, null=True, blank=True)
+    contact_number = models.CharField(max_length=512, default=None, null=True, blank=True)
+    email_address = models.CharField(max_length=512, default=None, null=True, blank=True)
+
+
+class RelativeInCanadaLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(max_length=215, default="user")
+    full_name_label = models.CharField(max_length=215)
+    relationship_label = models.CharField(max_length=215)
+    immigrations_status_label = models.CharField(max_length=215)
+    address_label = models.CharField(max_length=215)
+    contact_number_label = models.CharField(max_length=215)
+    email_address_label = models.CharField(max_length=215)
+
+
+class EducationalCreationalAssessment(TimeStampedModel, SoftDeleteModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="educational_creational")
+    eca_authority_name = models.CharField(max_length=512, default=None, blank=True, null=True)
+    eca_authority_number = models.CharField(max_length=512, default=None, blank=True, null=True)
+    canadian_equivalency_summary = models.CharField(max_length=512, default=None, blank=True, null=True)
+
+
+class EducationalCreationalAssessmentLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(max_length=215, default="user")
+    eca_authority_name_label = models.CharField(max_length=215)
+    eca_authority_number_label = models.CharField(max_length=215)
+    canadian_equivalency_summary_label = models.CharField(max_length=215)
