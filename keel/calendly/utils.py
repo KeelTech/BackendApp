@@ -86,12 +86,6 @@ class BusinessLogic(object):
         if not rcic_user_obj:
             return scheduling_url
         try:
-            invitee_sch_url_detail = CalendlyInviteeScheduledUrl.objects.get(invitee_user=invitee_obj, host_user=rcic_user_obj)
-            return invitee_sch_url_detail.scheduled_call_url
-        except ObjectDoesNotExist as err:
-            pass
-
-        try:
             calendly_user_obj = CalendlyUsers.objects.get(user=rcic_user_obj)
         except ObjectDoesNotExist as err:
             logger.error("CALENDLY-GET_AGENT_SCHEDULE_URL: error getting "
@@ -104,13 +98,11 @@ class BusinessLogic(object):
             return scheduling_url
 
         schedule_url_details = CalendlyApis.single_use_scheduling_link(
-            calendly_user_obj.event_type_url, 100, invitee_obj.first_name, invitee_obj.email)
+            calendly_user_obj.event_type_url, 1, invitee_obj.first_name, invitee_obj.email)
 
         if not schedule_url_details["status"]:
             return scheduling_url
-        calendly_invitee_scheduled_obj = CalendlyInviteeScheduledUrl.objects.create(
-            invitee_user=invitee_obj, host_user=rcic_user_obj, scheduled_call_url=schedule_url_details["schedule_url"])
-        return calendly_invitee_scheduled_obj.scheduled_call_url
+        return schedule_url_details["schedule_url"]
 
     def create_event_schedule(self, visitor_user_obj, host_user_obj, invitee_url):
         response = {
@@ -143,7 +135,7 @@ class BusinessLogic(object):
         response["data"] = {
             "schedule_id": call_schedule_obj.pk,
             "reschedule_url": calendly_call_schedule_obj.reschedule_url,
-            "cancel_url": calendly_call_schedule_obj.cancel_call_url,
+            "cancel_url": calendly_call_schedule_obj.cancel_url,
             "status": call_schedule_obj.readable_status
         }
         return response
