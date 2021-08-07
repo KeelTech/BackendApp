@@ -12,6 +12,7 @@ from keel.authentication.backends import JWTAuthentication
 from keel.authentication.models import User
 from keel.calendly.utils import calendly_business_logic
 from keel.call_schedule.models import CallSchedule
+from keel.calendly.models import CalendlyCallSchedule
 
 import logging
 logger = logging.getLogger('app-logger')
@@ -70,7 +71,7 @@ class CallScheduleViewSet(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         try:
-            host_user = User.objects.get(pk=validated_data["host_user_id"])
+            host_user = request.user.users_cases.get(is_active=True).agent
         except Exception as err:
             response["status"] = 0
             response["message"] = "Invalid host id"
@@ -94,9 +95,6 @@ class CallScheduleViewSet(GenericViewSet):
             "message": ""
         }
         schedule_id = kwargs["schedule_id"]
-        serializer = ScheduleCallSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
 
         schedule_obj_list = CallSchedule.objects.filter(
             visitor_user=request.user, pk=schedule_id, is_active=True,
@@ -110,8 +108,7 @@ class CallScheduleViewSet(GenericViewSet):
                                       "user which is in active or rescheduled status"
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        reschedule_details = calendly_business_logic.reschedule_scheduled_event(schedule_obj_list[0],
-                                                                                validated_data.calendly_schedule_event_url)
+        reschedule_details = calendly_business_logic.reschedule_scheduled_event(schedule_obj_list[0])
         if not reschedule_details["status"]:
             response["message"] = reschedule_details["error"]
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -130,15 +127,41 @@ class CallScheduleViewSet(GenericViewSet):
         schedule_obj_list = CallSchedule.objects.filter(
             visitor_user=request.user, pk=schedule_id, is_active=True,
             status__in=(CallSchedule.ACTIVE, CallSchedule.RESCHEDULED))
-        if not schedule_obj_list or len(schedule_obj_list) > 1:
-            if not schedule_obj_list:
-                response["message"] = "Error getting schedule with this id and associated user which is in" \
+        if not schedule_obj_list:
+            response["message"] = "Error getting schedule with this id and associated user which is in" \
                                       "active or rescheduled status"
-            else:
-                response["message"] = "Getting more than one schedule with this id and associated " \
-                                      "user which is in active or rescheduled status"
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
         calendly_business_logic.cancel_scheduled_event(schedule_obj_list[0])
 
         return Response(response, status.HTTP_200_OK)
 
+    def get_scheduled_call(self, request, **kwargs):
+        response = {
+            "status": 0,
+            "message": ""
+        }
+        call_schedule_details = CallSchedule.objects.filter(
+            visitor_user=request.user, is_active=True,
+            status__in=(CallSchedule.ACTIVE, CallSchedule.RESCHEDULED)).values("id", "start_time", "end_time")
+
+        if not call_schedule_details:
+            response["message"] = "Schedule for user does not exist"
+            return Response(response, status.HTTP_400_BAD_REQUEST)
+
+        calendly_schedule_details = CalendlyCallSchedule.objects.filter(
+            call_schedule__id=call_schedule_details["id"], is_active=True).values("cancel_call_url", "reschedule_call_url")
+
+        reschedule_url = None
+        cancel_url = None
+        if calendly_schedule_details:
+            reschedule_url = calendly_schedule_details[0]["reschedule_call_url"]
+            cancel_url = calendly_schedule_details[0]["cancel_call_url"]
+
+        response["message"] = {
+            "start_time": call_schedule_details.start_time,
+            "end_time": call_schedule_details.end_time,
+            "reschedule_url": reschedule_url,
+            "cancel_url": cancel_url
+        }
+
+        return Response(response, status.HTTP_200_OK)

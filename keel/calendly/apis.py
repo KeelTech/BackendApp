@@ -15,7 +15,7 @@ logger = logging.getLogger('app-logger')
 class CalendlyApis(object):
 
     @staticmethod
-    def single_use_scheduling_link(event_type_url: str, invitee_name: str, invitee_email: str):
+    def single_use_scheduling_link(event_type_url: str, call_schedule_number: int, invitee_name: str, invitee_email: str):
         response = {
             "status": 0,
             "schedule_link": "",
@@ -28,7 +28,7 @@ class CalendlyApis(object):
             "authorization": bearer_token,
         }
         payload = {
-          "max_event_count": 1,
+          "max_event_count": call_schedule_number,
           "owner": event_type_url,
           "owner_type": "EventType"
         }
@@ -67,7 +67,7 @@ class CalendlyApis(object):
     def get_scheduled_event_invitee_details(scheduled_event_invitee_url):
         response = {
             "status": 0,
-            "data": {},
+            "data": {"rescheduled": True},
             "error": ""
         }
         bearer_token = "Bearer " + settings.CALENDLY_PERSONAL_TOKEN
@@ -75,27 +75,27 @@ class CalendlyApis(object):
             "authorization": bearer_token,
         }
         try:
-            request_resp = requests.get(url=scheduled_event_invitee_url, headers=headers)
-            req_resp_json = request_resp.json()
-            status_code = request_resp.status_code
-            response_parser = parser_factory.get_parser("schedule_event_invitee_details")(req_resp_json)
-            if status_code == status.HTTP_201_CREATED:
-                if response_parser.validate_201():
-                    response["data"] = response_parser.extract_201()
-                    response["status"] = 1
-                else:
-                    response["error"] = response_parser.error()
-            elif status_code == status.HTTP_400_BAD_REQUEST:
-                response["error"] = "Invalid Request"
-            elif status_code == status.HTTP_401_UNAUTHORIZED:
-                response["error"] = "Invalid authentication token"
-            elif status_code == status.HTTP_403_FORBIDDEN:
-                response["error"] = "User not authorize to do the request"
-            elif status_code == status.HTTP_404_NOT_FOUND:
-                response["error"] = "Requested resource not found"
-            elif status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
-                response["error"] = "Internal error from Calendly"
-            return response
+            while response["data"]["rescheduled"] and not response["error"]:
+                request_resp = requests.get(url=scheduled_event_invitee_url, headers=headers)
+                req_resp_json = request_resp.json()
+                status_code = request_resp.status_code
+                response_parser = parser_factory.get_parser("schedule_event_invitee_details")(req_resp_json)
+                if status_code == status.HTTP_200_OK:
+                    if response_parser.validate_200():
+                        response["data"] = response_parser.extract_200()
+                        response["status"] = 1
+                    else:
+                        response["error"] = response_parser.error()
+                elif status_code == status.HTTP_400_BAD_REQUEST:
+                    response["error"] = "Invalid Request"
+                elif status_code == status.HTTP_401_UNAUTHORIZED:
+                    response["error"] = "Invalid authentication token"
+                elif status_code == status.HTTP_403_FORBIDDEN:
+                    response["error"] = "User not authorize to do the request"
+                elif status_code == status.HTTP_404_NOT_FOUND:
+                    response["error"] = "Requested resource not found"
+                elif status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
+                    response["error"] = "Internal error from Calendly"
         except ConnectionError as e:
             pass
         return response
@@ -116,9 +116,9 @@ class CalendlyApis(object):
             req_resp_json = request_resp.json()
             status_code = request_resp.status_code
             response_parser = parser_factory.get_parser("schedule_event_details")(req_resp_json)
-            if status_code == status.HTTP_201_CREATED:
-                if response_parser.validate_201():
-                    response["data"] = response_parser.extract_201()
+            if status_code == status.HTTP_200_OK:
+                if response_parser.validate_200():
+                    response["data"] = response_parser.extract_200()
                     response["status"] = 1
                 else:
                     response["error"] = response_parser.error()
@@ -136,3 +136,4 @@ class CalendlyApis(object):
         except ConnectionError as e:
             pass
         return response
+

@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 from keel.Core.models import TimeStampedModel, SoftDeleteModel
@@ -13,6 +14,7 @@ class CallSchedule(TimeStampedModel, SoftDeleteModel):
         (RESCHEDULED, 'Rescheduled'),
         (CANCELED, 'Canceled')
     )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     visitor_user = models.ForeignKey(User, verbose_name="Customer",
                                      on_delete=models.DO_NOTHING, related_name="customer_call_schedules")
     host_user = models.ForeignKey(User, verbose_name="RCIC or Account Manager",

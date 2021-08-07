@@ -17,6 +17,10 @@ class CalendlyUsers(TimeStampedModel, SoftDeleteModel):
 
 
 class CalendlyCallSchedule(TimeStampedModel, SoftDeleteModel):
+    CALL_SCHEDULE_MAP = {
+        "active": CallSchedule.ACTIVE,
+        "canceled": CallSchedule.CANCELED
+    }
     call_schedule = models.ForeignKey(CallSchedule, on_delete=models.deletion.DO_NOTHING,
                                       related_name='calendly_schedule_details')
     scheduled_event_invitee_url = models.CharField(max_length=1024)
@@ -28,3 +32,15 @@ class CalendlyCallSchedule(TimeStampedModel, SoftDeleteModel):
 
     class Meta:
         db_table = "calendly_call_schedule"
+
+
+class CalendlyInviteeScheduleUrl(TimeStampedModel, SoftDeleteModel):
+    invitee_user = models.ForeignKey(User, verbose_name="Customer",
+                                     on_delete=models.deletion.DO_NOTHING, related_name='calendly_schedule_url')
+    host_user = models.ForeignKey(User, verbose_name="RCIC or Account Manager",
+                                  on_delete=models.DO_NOTHING, related_name="calendly_invitee_sch_url")
+    schedule_url = models.CharField(max_length=1024, null=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "calendly_invitee_schedule_url"
