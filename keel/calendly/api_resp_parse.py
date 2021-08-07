@@ -43,7 +43,9 @@ class ScheduleEventInviteeDetailsApi(IApiParseValidateResp):
 
     def validate_200(self):
         if not self.api_resp.get("resource", {}).get("cancel_url") or \
-                not self.api_resp.get("resource", {}).get("reschedule_url"):
+                not self.api_resp.get("resource", {}).get("reschedule_url") \
+                or not self.api_resp["resource"].get("status") or \
+                "rescheduled" not in self.api_resp["resource"]:
             self._error = "Invalid api response"
             return False
         return True
@@ -53,9 +55,12 @@ class ScheduleEventInviteeDetailsApi(IApiParseValidateResp):
         return {
             "cancel_url": resource["cancel_url"],
             "reschedule_url": resource["reschedule_url"],
-            "status": resource.get("status"),
+            "status": CalendlyCallSchedule.CALL_SCHEDULE_MAP.get(str(resource["status"]).lower()),
             "event_resource_url": resource["event"],
             "timezone": resource.get("timezone"),
+            "rescheduled": resource["rescheduled"],
+            "invitee_url": resource["uri"],
+            "new_invitee_url": resource["new_invitee"]
         }
 
     def error(self):
@@ -72,9 +77,8 @@ class ScheduleEventDetialsApi(IApiParseValidateResp):
         if not self.api_resp.get("resource") \
                 or not self.api_resp["resource"].get("start_time") \
                 or not self.api_resp["resource"].get("end_time") \
-                or not "location" not in self.api_resp["resource"] \
-                or not self.api_resp["resource"].get("status") or \
-                "rescheduled" not in self.api_resp["resource"]:
+                or "location" not in self.api_resp["resource"] \
+                or not self.api_resp["resource"].get("status"):
             self._error = "Invalid api response"
             return False
         return True
@@ -86,9 +90,7 @@ class ScheduleEventDetialsApi(IApiParseValidateResp):
             "location": resource["location"],
             "start_time_utc": resource["start_time"],
             "end_time_utc": resource["end_time"],
-            "new_invitee": resource.get("new_invitee"),
-            "rescheduled": resource["rescheduled"],
-            "event_invitee_url": resource["uri"]
+            "new_invitee": resource.get("new_invitee")
         }
 
     def error(self):

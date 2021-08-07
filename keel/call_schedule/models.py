@@ -14,6 +14,11 @@ class CallSchedule(TimeStampedModel, SoftDeleteModel):
         (RESCHEDULED, 'Rescheduled'),
         (CANCELED, 'Canceled')
     )
+    STATUS_MAP = {
+        ACTIVE: "active",
+        RESCHEDULED: "rescheduled",
+        CANCELED: "canceled"
+    }
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     visitor_user = models.ForeignKey(User, verbose_name="Customer",
                                      on_delete=models.DO_NOTHING, related_name="customer_call_schedules")
@@ -23,6 +28,10 @@ class CallSchedule(TimeStampedModel, SoftDeleteModel):
     start_time = models.DateTimeField(verbose_name="Starting time of call schedule in UTC from calendly")
     end_time = models.DateTimeField(verbose_name="Ending time of call schedule in UTC from calendly")
     is_active = models.BooleanField(default=True)
+
+    @property
+    def readable_status(self):
+        return self.STATUS_MAP.get(self.status)
 
     class Meta:
         db_table = "call_schedule"

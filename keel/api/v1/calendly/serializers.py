@@ -17,8 +17,4 @@ logger = logging.getLogger('app-logger')
 
 
 class ScheduleCallSerializer(serializers.Serializer):
-    calendly_schdule_event_url = serializers.CharField()
-
-
-class ReScheduleCallSerializer(serializers.Serializer):
-    calendly_schedule_event_url = serializers.CharField()
+    calendly_invitee_url = serializers.CharField()

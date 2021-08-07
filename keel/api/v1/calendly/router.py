@@ -7,5 +7,6 @@ urlpatterns = [
     path("agent/schedule-call", CallScheduleViewSet.as_view({"post": "create_call_schedule"})),
     path("reschedule-call/<str:schedule_id>", CallScheduleViewSet.as_view({"post": "reschedule_call"})),
     path("cancel-call/<str:schedule_id>", CallScheduleViewSet.as_view({"post": "cancel_scheduled_call"})),
+    path("active-schedule/details", CallScheduleViewSet.as_view({"get": "get_scheduled_call"})),
 ]
 
