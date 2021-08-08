@@ -1,11 +1,11 @@
 from django.conf import settings
 
 import requests
-from requests.exceptions import ConnectionError, ConnectTimeout
+from requests.exceptions import ConnectionError
 from rest_framework import status
 import urllib.parse
 
-from .api_resp_parse import PARSER_FACTORY as parser_factory
+from keel.calendly.parser.api_resp_parser import PARSER_FACTORY as parser_factory
 from .constants import CALENDLY_API_PATH as api_details
 
 import logging

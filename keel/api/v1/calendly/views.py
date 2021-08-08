@@ -14,8 +14,8 @@ from rest_framework import status
 from .serializers import ScheduleCallSerializer
 from keel.authentication.backends import JWTAuthentication
 from keel.authentication.models import User
-from keel.calendly.utils import calendly_business_logic
-from keel.calendly.constants import CALENDLY_WEBHOOK_PATH
+from keel.calendly.utils import calendly_business_logic, is_valid_webhook_signature
+from keel.calendly.constants import CALENDLY_WEBHOOK_PATH, CALENDLY_WEBHOOK_SIGNATURE_KEY, CALENDLY_WEBHOOK_EVENTS
 from keel.call_schedule.models import CallSchedule
 from keel.calendly.models import CalendlyCallSchedule
 
@@ -167,6 +167,8 @@ class CallScheduleViewSet(GenericViewSet):
 
 
 class WebHookViewSets(GenericViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = (IsAuthenticated,)
 
     def subscribe(self, request, **kwargs):
         response = {
@@ -177,16 +179,16 @@ class WebHookViewSets(GenericViewSet):
             return Response("User is not a superuser", status.HTTP_400_BAD_REQUEST)
         url = settings.CALENDLY_BASE_URL + CALENDLY_WEBHOOK_PATH
         payload = {
-            "url": reverse("calendly_webhook_process_events"),
-            "events": settings.CALENDLY_WEBHOOK_EVENTS,
+            "url": settings.BASE_URL + reverse("calendly_webhook_process_events"),
+            "events": CALENDLY_WEBHOOK_EVENTS,
             "organization": settings.CALENDLY_ORGANIZATION_URL,
-            "scope": settings.CALENDLY_WEBHOOK_SCOPE,
+            "scope": "organization",
             "signing_key": settings.CALENDLY_SIGNING_KEY
         }
         headers = {
             "authorization": "Bearer " + settings.CALENDLY_PERSONAL_TOKEN
         }
-        request_resp = requests.post(url=url, headers=headers, payload=payload)
+        request_resp = requests.post(url=url, headers=headers, data=payload)
         status_code = request_resp.status_code
         if status_code == status.HTTP_201_CREATED:
             response["status"] = 1
@@ -196,6 +198,20 @@ class WebHookViewSets(GenericViewSet):
             response["message"] = "Error creating webhook with status code - {}".format(status_code)
             return Response(response, status_code)
 
-    def process_events(self, request, **kwargs):
 
-        pass
+class WebHookProcessEvent(GenericViewSet):
+
+    def process_event(self, request, **kwargs):
+        response = {
+            "status": 1,
+            "error": "",
+            "message": ""
+        }
+
+        if not is_valid_webhook_signature(request.headers.get(CALENDLY_WEBHOOK_SIGNATURE_KEY)):
+            response["error"] = "Invalid signature"
+            response["status"] = 0
+            return Response(response, status.HTTP_400_BAD_REQUEST)
+
+        calendly_business_logic.process_event_data(request.data)
+        return Response(response, status.HTTP_200_OK)
