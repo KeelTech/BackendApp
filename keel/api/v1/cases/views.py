@@ -32,7 +32,8 @@ class FilterUserCases(generics.ListAPIView):
             "message" : ""
         }
         user = request.user
-        queryset = Case.objects.filter(agent=user)
+        req_data = request.GET.dict()
+        queryset = Case.objects.get_agent_cases(user, req_data)
         data = []
         for cases in queryset:
             data.append({

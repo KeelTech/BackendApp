@@ -5,6 +5,26 @@ from keel.Core.models import TimeStampedModel, SoftDeleteModel
 from keel.plans.models import Plan
 from keel.authentication.models import User
 
+from .constants import SORT_COLUMN_MAP
+
+class CaseManager(models.Manager):
+
+    def get_agent_cases(self, agent, req_dict):
+
+        sort_column = req_dict.get("sort_column")
+        sort_order = req_dict.get("sort_order")
+
+        sort_list = ["-updated_at"] # default sort
+        if sort_column:
+            colmn_value = SORT_COLUMN_MAP.get(sort_column, "")
+            if colmn_value and sort_order:
+                sort_order_value = "" if sort_order == "asc" else "-"
+                sort_list = [sort_order_value + colmn_value]
+
+        queryset = self.filter(agent = agent).order_by(*sort_list)
+
+        return queryset
+
 class Case(TimeStampedModel, SoftDeleteModel):
 
     BOOKED = 1
@@ -34,3 +54,5 @@ class Case(TimeStampedModel, SoftDeleteModel):
     
     def __str__(self):
         return str(self.case_id)
+
+    objects = CaseManager()
