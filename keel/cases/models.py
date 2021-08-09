@@ -20,6 +20,7 @@ class Case(TimeStampedModel, SoftDeleteModel):
     )
 
     case_id = models.CharField(max_length=255, primary_key=True)
+    display_id = models.CharField(max_length=5, default=None, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='users_cases')
     agent = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='agents_cases')
     account_manager_id = models.IntegerField(null=True, blank=True, default=None)
@@ -30,6 +31,8 @@ class Case(TimeStampedModel, SoftDeleteModel):
 
     def save(self, *args, **kwargs):
         self.case_id = uuid.uuid4()
+        reverse_case_id=str(self.case_id)[::-1]
+        self.display_id=(reverse_case_id[0:5])[::-1]
         super().save(*args, **kwargs)
     
     def __str__(self):
