@@ -6,7 +6,7 @@ from .models import (User, CustomToken, PasswordResetToken, UserService,
 
 
 class UserAdmin(admin.ModelAdmin):
-    search_fields = ['user_type']
+    search_fields = ['email']
 
 admin.site.register(User, UserAdmin)
 admin.site.register(UserService)
