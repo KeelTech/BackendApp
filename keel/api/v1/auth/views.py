@@ -27,6 +27,8 @@ from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.authentication.models import (CustomerProfile, CustomerProfileLabel, CustomerQualifications, CustomerWorkExperience, 
                                         UserDocument, QualificationLabel, WorkExperienceLabel, RelativeInCanadaLabel, RelativeInCanada,
                                         EducationalCreationalAssessment, EducationalCreationalAssessmentLabel)
+from keel.api.v1.cases.serializers import CasesSerializer
+from keel.cases.models import Case
 from keel.authentication.models import (CustomToken, PasswordResetToken)
 from keel.authentication.models import User as user_model
 from keel.authentication.backends import JWTAuthentication
@@ -395,6 +397,7 @@ class ProfileView(GenericViewSet):
     serializer_class_experience = serializers.WorkExperienceLabelSerializer
     serializer_class_relative_in_canada = serializers.RelativeInCanadaLabelSerializer
     serializer_class_education_assessment = serializers.EducationalCreationalAssessmentLabelSerializer
+    serializer_class_cases = CasesSerializer
 
     def get_queryset_qualification(self, request):
         get_labels = QualificationLabel.objects.filter(user_label="user")
@@ -526,6 +529,11 @@ class ProfileView(GenericViewSet):
                 "date_of_birth": {"value": "", "type": "char", "labels": "Date of Birth"}
             }
             return data
+    
+    def get_queryset_cases(self, request):
+        get_cases = Case.objects.filter(user=request.user)
+        serializer = self.serializer_class_cases(get_cases, many=True)
+        return serializer.data
 
     def create_profile(self, request):
         response = {
@@ -566,13 +574,14 @@ class ProfileView(GenericViewSet):
         work_experience = self.get_queryset_experience(request)
         relative_in_canada = self.get_queryset_relative_in_canada(request)
         education_assessment = self.get_queryset_education_assessment(request)
-        
+        cases = self.get_queryset_cases(request)
         response["message"] = {
                                 "profile" : profile, 
                                 "qualification" : qualification, 
                                 "work_experience" : work_experience, 
                                 "relative_in_canada" : relative_in_canada,
-                                "education_assessment" : education_assessment
+                                "education_assessment" : education_assessment,
+                                "cases":cases
                             }
         return Response(response)
 
