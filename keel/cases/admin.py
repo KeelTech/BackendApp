@@ -1,5 +1,5 @@
-# from django.contrib import admin
-import autocomplete_all as admin
+from django.contrib import admin
+# import autocomplete_all as admin
 from django.contrib.auth import get_user_model
 from .models import Case
 
@@ -9,7 +9,7 @@ User = get_user_model()
 class CaseAdmin(admin.ModelAdmin):
     list_display = ('case_id', 'user', 'agent', 'is_active')
     ordering = ('case_id',)
-    search_fields = ['user', 'agent', 'case_id']
+    search_fields = ['case_id']
     autocomplete_fields = ['user', 'agent']
     readonly_fields=('deleted_at',)
 
