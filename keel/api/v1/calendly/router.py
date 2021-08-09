@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ScheduleCallViewSet, RCICScheduleUrl, CallScheduleViewSet
+from .views import ScheduleCallViewSet, RCICScheduleUrl, CallScheduleViewSet, WebHookViewSets, WebHookProcessEvent
 
 urlpatterns = [
     path("page", ScheduleCallViewSet.as_view({"get": "get_schedule_page"})),
@@ -8,5 +8,7 @@ urlpatterns = [
     path("reschedule-call/<str:schedule_id>", CallScheduleViewSet.as_view({"post": "reschedule_call"})),
     path("cancel-call/<str:schedule_id>", CallScheduleViewSet.as_view({"post": "cancel_scheduled_call"})),
     path("active-schedule/details", CallScheduleViewSet.as_view({"get": "get_scheduled_call"})),
+    path("webhook/subscribe", WebHookViewSets.as_view({"post": "subscribe"})),
+    path("webhook/process-event", WebHookProcessEvent.as_view({"post": "process_event"}), name="calendly_webhook_process_events"),
 ]
 

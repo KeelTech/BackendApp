@@ -3,6 +3,7 @@ from django.db import transaction
 
 from .models import CalendlyUsers, CalendlyCallSchedule, CalendlyInviteeScheduledUrl
 from .apis import CalendlyApis
+from .parser.webhook_data import CalendlyWebHookDataParser
 
 from keel.call_schedule.models import CallSchedule
 
@@ -195,6 +196,54 @@ class BusinessLogic(object):
         response["status"] = 1
         response["data"] = response_data
         return response
+
+    def process_event_data(self, event_data):
+        logger.info("CALENDLY_WEBHOOK_EVENT_DATA received - {}".format(event_data))
+        response = {
+            "status": 0,
+            "data": "",
+            "error": ""
+        }
+        parser = CalendlyWebHookDataParser(event_data)
+
+        if not parser.is_valid_data():
+            response["error"] = parser.error
+            return response
+        extracted_event_details = parser.parse_extract_data()
+        logger.info("CALENDLY_WEBHOOK_EVENT_DATA parced data - {}".format(extracted_event_details))
+        if not CalendlyUsers.objects.filter(user_url=extracted_event_details["user_url"],
+                                            event_type_url=extracted_event_details["event_type_url"]).exists():
+            logging.error("PROCESS_EVENT_DATA: Error getting host user in CalendlyUsers for "
+                          "user url - {} and event type url - {}".format(extracted_event_details["user_url"],
+                                                                         extracted_event_details["event_type_url"]))
+            response["error"] = "No user associated with Calendly resources"
+            return response
+
+        invitee_url = extracted_event_details["old_invitee_url"] or extracted_event_details["invitee_url"] or extracted_event_details["new_invitee_url"]
+        try:
+            calendly_call_schedule_obj = CalendlyCallSchedule.objects.get(invitee_url=invitee_url).call_schedule
+        except ObjectDoesNotExist as error:
+            response["error"] = "CalendlyCallSchedule does not have any call schedule " \
+                                "for invitee url - {}".format(invitee_url)
+            return response
+        event_details = BusinessLogic.get_event_details(calendly_call_schedule_obj.invitee_url)
+
+        if not event_details["status"]:
+            response["error"] = event_details["error"]
+            return response
+
+        call_schedule_obj, calendly_call_schedule_obj = BusinessLogic.update_call_schedule(
+            calendly_call_schedule_obj.call_schedule.id, event_details["data"])
+        response["status"] = 1
+        response["message"] = "Web Hook data extraction successful"
+
+        return response
+
+
+def is_valid_webhook_signature(signature):
+    if not signature:
+        return False
+    return True
 
 
 calendly_business_logic = BusinessLogic()

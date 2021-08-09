@@ -23,7 +23,7 @@ class CalendlyCallSchedule(TimeStampedModel, SoftDeleteModel):
     }
     call_schedule = models.ForeignKey(CallSchedule, on_delete=models.deletion.DO_NOTHING,
                                       related_name='calendly_schedule_details')
-    invitee_url = models.CharField(max_length=1024)
+    invitee_url = models.CharField(max_length=1024, unique=True)
     cancel_url = models.CharField(max_length=1024, null=True)
     reschedule_url = models.CharField(max_length=1024, null=True)
     communication_means = models.JSONField(verbose_name="Stores communication means details from Calendly")
