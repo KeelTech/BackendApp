@@ -34,11 +34,15 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
     age = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
     date_of_birth = serializers.DateField(required=True)
-
+    phone_number = serializers.SerializerMethodField()
     class Meta:
         model = CustomerProfile
         fields = ('id', 'first_name', 'last_name', 'mother_fullname', 
-                    'father_fullname', 'age', 'address', 'date_of_birth')
+                    'father_fullname', 'age', 'address', 'date_of_birth', 'phone_number')
+    
+    def get_phone_number(self, obj):
+        phone_number = obj.user.phone_number
+        return phone_number
 
 
 class CustomerProfileLabelSerializer(serializers.ModelSerializer):
@@ -50,6 +54,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
     date_of_birth = serializers.SerializerMethodField()
+    phone_number = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -89,12 +94,17 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_date_of_birth(self, obj):
         var = obj.date_of_birth
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["date_of_birth_label"]}
+            return {"value": var, "type":"calendar", "labels":self.context["labels"]["date_of_birth_label"]}
+
+    def get_phone_number(self, obj):
+        var = obj.user.phone_number
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["phone_number_label"]}
 
     class Meta:
         model = CustomerProfileLabel
         fields = ('first_name', 'last_name', 'mother_fullname', 
-                    'father_fullname', 'age', 'address', 'date_of_birth', 'labels')
+                    'father_fullname', 'age', 'address', 'date_of_birth', 'labels', 'phone_number')
 
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):

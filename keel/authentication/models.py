@@ -147,6 +147,7 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     age_label = models.CharField(max_length=512)
     address_label = models.CharField(max_length=512)
     date_of_birth_label = models.CharField(max_length=512)
+    phone_number_label = models.CharField(max_length=512, blank=True, null=True, default=None)
 
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
