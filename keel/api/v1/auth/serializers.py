@@ -34,11 +34,15 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
     age = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
     date_of_birth = serializers.DateField(required=True)
-
+    phone_number = serializers.SerializerMethodField()
     class Meta:
         model = CustomerProfile
         fields = ('id', 'first_name', 'last_name', 'mother_fullname', 
-                    'father_fullname', 'age', 'address', 'date_of_birth')
+                    'father_fullname', 'age', 'address', 'date_of_birth', 'phone_number')
+    
+    def get_phone_number(self, obj):
+        phone_number = obj.user.phone_number
+        return phone_number
 
 
 class CustomerProfileLabelSerializer(serializers.ModelSerializer):
@@ -89,7 +93,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_date_of_birth(self, obj):
         var = obj.date_of_birth
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["date_of_birth_label"]}
+            return {"value": var, "type":"calendar", "labels":self.context["labels"]["date_of_birth_label"]}
 
     class Meta:
         model = CustomerProfileLabel

@@ -45,6 +45,7 @@ from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .adapter import GoogleOAuth2AdapterIdToken
+from .auth_token import generate_auth_login_token
 # from keel.authentication.models import (OtpVerifications, )
 
 import logging
@@ -122,7 +123,6 @@ class LoginViewset(GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        
         # if not user.is_verified:
         #     response["status"] = 0
         #     response["message"] = "Acount has not been verified, Please check your email for verification code"
@@ -131,6 +131,7 @@ class LoginViewset(GenericViewSet):
         try:
             token_to_save = JWTAuthentication.generate_token(user)
             obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
+            # obj = generate_auth_login_token(user)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:LoginViewset ' + str(e))
             response['message'] = str(e)
@@ -306,6 +307,7 @@ class FacebookLogin(GenericViewSet):
                 user.save()
             token_to_save = JWTAuthentication.generate_token(user)
             obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
+            # obj = generate_auth_login_token(user)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:FacebookLogin ' + str(e))
             response['message'] = str(e)
@@ -353,6 +355,7 @@ class GoogleLogin(SocialLoginView):
         try:
             token_to_save = JWTAuthentication.generate_token(user)
             obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
+            # obj = generate_auth_login_token(user)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GoogleLogin ' + str(e))
             response['message'] = str(e)
@@ -561,7 +564,11 @@ class ProfileView(GenericViewSet):
         } 
         queryset = CustomerProfile.objects.filter(user=request.user)
         serializer = self.serializer_class_pro(queryset, many=True)
-        response["message"] = serializer.data
+        if serializer.data == []:
+            response["message"] = {"profile_exists":False, "profile":serializer.data, "cases":self.get_queryset_cases(request)}
+            return Response(response)
+
+        response["message"] = {"profile_exists":True, "profile":serializer.data[0], "case":self.get_queryset_cases(request)}
         return Response(response)
 
     def get_full_profile(self, request):
