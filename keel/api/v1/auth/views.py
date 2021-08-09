@@ -531,7 +531,7 @@ class ProfileView(GenericViewSet):
             return data
     
     def get_queryset_cases(self, request):
-        get_cases = Case.objects.filter(user=request.user)
+        get_cases = Case.objects.filter(user=request.user).first()
         serializer = self.serializer_class_cases(get_cases)
         return serializer.data
 
