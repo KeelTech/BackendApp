@@ -515,6 +515,7 @@ class ProfileView(GenericViewSet):
             labels['age_label'] = label.age_label
             labels['address_label'] = label.address_label
             labels['date_of_birth_label'] = label.date_of_birth_label
+            labels['phone_number_label'] = label.phone_number_label
         profile = CustomerProfile.objects.filter(user=self.request.user.id)
         if profile:
             serializer = self.serializer_class_profile(profile, many=True, context={"labels":labels})
@@ -529,7 +530,8 @@ class ProfileView(GenericViewSet):
                 "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
                 "age": {"value": "", "type": "char", "labels": "Age"},
                 "address": {"value": "", "type": "char", "labels": "Address"},
-                "date_of_birth": {"value": "", "type": "char", "labels": "Date of Birth"}
+                "date_of_birth": {"value": "", "type": "char", "labels": "Date of Birth"},
+                "phone_number": {"value": "", "type": "char", "labels": "Phone Number"}
             }
             return data
     

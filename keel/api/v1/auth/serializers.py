@@ -54,6 +54,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
     date_of_birth = serializers.SerializerMethodField()
+    phone_number = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -95,10 +96,15 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {"value": var, "type":"calendar", "labels":self.context["labels"]["date_of_birth_label"]}
 
+    def get_phone_number(self, obj):
+        var = obj.user.phone_number
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["phone_number_label"]}
+
     class Meta:
         model = CustomerProfileLabel
         fields = ('first_name', 'last_name', 'mother_fullname', 
-                    'father_fullname', 'age', 'address', 'date_of_birth', 'labels')
+                    'father_fullname', 'age', 'address', 'date_of_birth', 'labels', 'phone_number')
 
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
