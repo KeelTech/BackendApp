@@ -24,3 +24,25 @@ class SoftDeleteModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Country(TimeStampedModel, SoftDeleteModel):
+    name = models.CharField(max_length=255, default=None, blank=True, null=True)
+    numeric_code = models.CharField(max_length=255, default=None, blank=True, null=True)
+    phone_code = models.CharField(max_length=255, default=None, blank=True, null=True)
+    capital = models.CharField(max_length=255, default=None, blank=True, null=True)
+    currency = models.CharField(max_length=255, default=None, blank=True, null=True)
+    currency_symbol = models.CharField(max_length=255, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.name)
+    
+    class Meta:
+        ordering = ['-created_at']
+
+class City(TimeStampedModel, SoftDeleteModel):
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="country")
+    city_name = models.CharField(max_length=255, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.city_name)
