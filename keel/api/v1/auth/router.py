@@ -8,7 +8,8 @@ from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, Generat
 urlpatterns = [
     # authentication
     path('signup', UserViewset.as_view({'post' : 'signup'}), name='signup'),
-    path('login', LoginViewset.as_view({'post' : 'login'}), name='login'),
+    path('customer-login', LoginViewset.as_view({'post' : 'customer_login'}), name='customer-login'),
+    path('agent-login', LoginViewset.as_view({'post' : 'agent_login'}), name='agent-login'),
     path('google-login', GoogleLogin.as_view(), name='google_login'),
     path('linkedin-login', LinkedinLogin.as_view(), name='linkedin-login'),
     path('facebook-login', FacebookLogin.as_view({'post' : 'fblogin'}), name='fb_login'),

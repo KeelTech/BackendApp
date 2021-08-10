@@ -113,21 +113,53 @@ class UserViewset(GenericViewSet):
         pass
 
 class LoginViewset(GenericViewSet):
-    serializer_class = serializers.LoginSerializer
+    serializer_class_customer = serializers.CustomerLoginSerializer
+    serializer_class_agent = serializers.AgentLoginSerializer
 
-    def login(self, request, format="json"):
+    @staticmethod
+    def login(serializer_class, request):
+        serializer = serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        return user
+
+    def customer_login(self, request, format="json"):
         response = {
             "status" : 1,
             "message" : ""
         }
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
+        user = self.login(self.serializer_class_customer, request)
         # if not user.is_verified:
         #     response["status"] = 0
         #     response["message"] = "Acount has not been verified, Please check your email for verification code"
         #     return Response(response)
-        
+        try:
+            token_to_save = JWTAuthentication.generate_token(user)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
+            # obj = generate_auth_login_token(user)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LoginViewset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        data = {
+            "email" : obj.user.email,
+            "token" : obj.token,
+        }
+        response["message"] = data
+        return Response(response, status=status.HTTP_200_OK)
+
+    def agent_login(self, request, format="json"):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        user = self.login(self.serializer_class_agent, request)
+        # if not user.is_verified:
+        #     response["status"] = 0
+        #     response["message"] = "Acount has not been verified, Please check your email for verification code"
+        #     return Response(response)
         try:
             token_to_save = JWTAuthentication.generate_token(user)
             obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])

@@ -247,7 +247,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
         fields = ('id', 'company_name', 'start_date', 'end_date', 'city', 'weekly_working_hours', 
                     'designation', 'job_type', 'labels', 'job_description')
 
-class LoginSerializer(serializers.Serializer):
+class CustomerLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     token = serializers.CharField(read_only=True)
@@ -263,6 +263,33 @@ class LoginSerializer(serializers.Serializer):
 
         if not user.is_active:
             raise serializers.ValidationError("User is not active. Contact Administrator")
+            
+        # check user type
+        if user.user_type != user.CUSTOMER:
+            raise serializers.ValidationError("Not a customer account")
+
+        return user
+
+class AgentLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    token = serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email', None)
+        password = attrs.get('password', None)
+
+        user = authenticate(email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Invalid Credentials, Try Again")
+
+        if not user.is_active:
+            raise serializers.ValidationError("User is not active. Contact Administrator")
+
+        # check user type
+        if user.user_type != user.RCIC:
+            raise serializers.ValidationError("Not an agent account")
 
         return user
 
