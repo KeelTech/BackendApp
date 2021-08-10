@@ -1,4 +1,3 @@
-from rest_framework import response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from keel.Core.models import Country, City
@@ -22,12 +21,14 @@ class CountryView(GenericViewSet):
 class CityView(GenericViewSet):
     serializer_class = CitySerializer
 
-    def get_city(self, request):
+    def get_city(self, request, **kwargs):
         response = {
             "status" : 1,
             "message" : ""
         }
-        city = City.objects.all()
-        serializer = self.serializer_class(city, many=True)
-        response["message"] = serializer.data
+        country_id = self.kwargs['id']
+        country = Country.objects.get(id=country_id)
+        city = City.objects.filter(country=country)
+        serializer = self.serializer_class(city, many=True).data
+        response["message"] = serializer
         return Response(response)
