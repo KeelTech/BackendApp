@@ -79,7 +79,7 @@ class CalendlyApis(object):
                 request_resp = requests.get(url=invitee_url, headers=headers)
                 req_resp_json = request_resp.json()
                 status_code = request_resp.status_code
-                response_parser = parser_factory.get_parser("schedule_event_invitee_details")(req_resp_json)
+                response_parser = parser_factory.get_parser("schedule_invitee_details")(req_resp_json)
                 if status_code == status.HTTP_200_OK:
                     if response_parser.validate_200():
                         response["data"] = response_parser.extract_200()
