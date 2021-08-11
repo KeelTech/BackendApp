@@ -124,6 +124,7 @@ class CustomerQualificationsSerializer(serializers.ModelSerializer):
 class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField()
     institute = serializers.SerializerMethodField()
+    grade = serializers.SerializerMethodField()
     year_of_passing = serializers.SerializerMethodField()
     city = serializers.SerializerMethodField()
     country = serializers.SerializerMethodField()
@@ -139,6 +140,11 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
         var = obj.institute
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["institute_label"]}
+
+    def get_grade(self, obj):
+        var = obj.grade
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["grade_label"]}
     
     def get_year_of_passing(self, obj):
         var = obj.year_of_passing 
@@ -167,7 +173,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = QualificationLabel
-        fields = ('id', 'institute', 'year_of_passing', 'city', 'country',
+        fields = ('id', 'institute', 'year_of_passing', 'city', 'grade', 'country',
                     'start_date', 'end_date', 'labels')
 
 
@@ -247,7 +253,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
         fields = ('id', 'company_name', 'start_date', 'end_date', 'city', 'weekly_working_hours', 
                     'designation', 'job_type', 'labels', 'job_description')
 
-class LoginSerializer(serializers.Serializer):
+class CustomerLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     token = serializers.CharField(read_only=True)
@@ -263,6 +269,33 @@ class LoginSerializer(serializers.Serializer):
 
         if not user.is_active:
             raise serializers.ValidationError("User is not active. Contact Administrator")
+            
+        # check user type
+        if user.user_type != user.CUSTOMER:
+            raise serializers.ValidationError("Not a customer account")
+
+        return user
+
+class AgentLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    token = serializers.CharField(read_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email', None)
+        password = attrs.get('password', None)
+
+        user = authenticate(email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Invalid Credentials, Try Again")
+
+        if not user.is_active:
+            raise serializers.ValidationError("User is not active. Contact Administrator")
+
+        # check user type
+        if user.user_type != user.RCIC:
+            raise serializers.ValidationError("Not an agent account")
 
         return user
 

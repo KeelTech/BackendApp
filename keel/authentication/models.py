@@ -164,6 +164,7 @@ class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
 class QualificationLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(default="user", max_length=512)
     institute_label = models.CharField(max_length=512)
+    grade_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     year_of_passing_label = models.CharField(max_length=512)
     city_label = models.CharField(max_length=512)
     country_label = models.CharField(max_length=512)

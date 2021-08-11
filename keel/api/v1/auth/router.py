@@ -8,7 +8,8 @@ from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, Generat
 urlpatterns = [
     # authentication
     path('signup', UserViewset.as_view({'post' : 'signup'}), name='signup'),
-    path('login', LoginViewset.as_view({'post' : 'login'}), name='login'),
+    path('customer-login', LoginViewset.as_view({'post' : 'customer_login'}), name='customer-login'),
+    path('agent-login', LoginViewset.as_view({'post' : 'agent_login'}), name='agent-login'),
     path('google-login', GoogleLogin.as_view(), name='google_login'),
     path('linkedin-login', LinkedinLogin.as_view(), name='linkedin-login'),
     path('facebook-login', FacebookLogin.as_view({'post' : 'fblogin'}), name='fb_login'),
@@ -20,6 +21,7 @@ urlpatterns = [
 
     # profile
     path('create-profile', ProfileView.as_view({'post' : 'create_profile'}), name='create-profile'),
+    path('create-full-profile', ProfileView.as_view({'post' : 'create_full_profile'}), name='create-full-profile'),
     path('get-profile', ProfileView.as_view({'get' : 'get_profile'}), name='get-profile'),
     path('get-full-profile', ProfileView.as_view({'get' : 'get_full_profile'}), name='get-full-profile'),
     path('create-qualification', QualificationView.as_view({'post' : 'qualification'}), name='create-qualification'),
