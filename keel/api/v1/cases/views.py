@@ -70,7 +70,7 @@ class FilterUserCasesDetails(GenericViewSet):
             user_qua = []
             for qualification in qualifications:
                 user_qua.append({
-                     "institute_name" : qualification.institute_name,
+                     "institute" : qualification.institute,
                     "grade" : qualification.grade,
                     "year_of_passing" : qualification.year_of_passing,
                     "start_date" : qualification.start_date,
