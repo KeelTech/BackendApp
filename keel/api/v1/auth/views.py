@@ -596,13 +596,13 @@ class ProfileView(GenericViewSet):
             "status" : 1,
             "message" : ""
         } 
-        queryset = CustomerProfile.objects.filter(user=request.user)
-        serializer = self.serializer_class_pro(queryset, many=True)
+        queryset = CustomerProfile.objects.filter(user=request.user).first()
+        serializer = self.serializer_class_pro(queryset)
         if serializer.data == []:
             response["message"] = {"profile_exists":False, "profile":serializer.data, "cases":self.get_queryset_cases(request)}
             return Response(response)
 
-        response["message"] = {"profile_exists":True, "profile":serializer.data[0], "case":self.get_queryset_cases(request)}
+        response["message"] = {"profile_exists":True, "profile":serializer.data, "case":self.get_queryset_cases(request)}
         return Response(response)
 
     def get_full_profile(self, request):

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from datetime import datetime
+from django.db.models.fields import BooleanField
 
 
 import pytz
@@ -40,8 +41,21 @@ class Country(TimeStampedModel, SoftDeleteModel):
     class Meta:
         ordering = ['-created_at']
 
+
+class State(TimeoutError, SoftDeleteModel):
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="state_country",
+                                    default=None, blank=True, null=True)
+    state = models.CharField(max_length=255, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.state)
+
+
 class City(TimeStampedModel, SoftDeleteModel):
-    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="country")
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="city_country",
+                                    default=None, null=True, blank=True)
+    state = models.ForeignKey(State, on_delete=models.DO_NOTHING, related_name="city_state",
+                                    default=None, null=True, blank=True)
     city_name = models.CharField(max_length=255, default=None, blank=True, null=True)
 
     def __str__(self):
