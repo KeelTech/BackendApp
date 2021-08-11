@@ -7,7 +7,7 @@ class Command(BaseCommand):
     help = "Create instance of countries. THIS COMMAND SHOULD ONLY BE USED ONCE"
 
     def handle(self, *args, **kwargs):
-        f = open('countries+cities.json')
+        f = open('countries+states.json')
         data = json.load(f)
         
         for i in data:
