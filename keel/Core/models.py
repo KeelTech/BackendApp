@@ -42,8 +42,8 @@ class Country(TimeStampedModel, SoftDeleteModel):
         ordering = ['-created_at']
 
 
-class State(TimeoutError, SoftDeleteModel):
-    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="state_country",
+class State(TimeStampedModel, SoftDeleteModel):
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="country",
                                     default=None, blank=True, null=True)
     state = models.CharField(max_length=255, default=None, blank=True, null=True)
 
@@ -52,8 +52,6 @@ class State(TimeoutError, SoftDeleteModel):
 
 
 class City(TimeStampedModel, SoftDeleteModel):
-    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="city_country",
-                                    default=None, null=True, blank=True)
     state = models.ForeignKey(State, on_delete=models.DO_NOTHING, related_name="city_state",
                                     default=None, null=True, blank=True)
     city_name = models.CharField(max_length=255, default=None, blank=True, null=True)
