@@ -1,4 +1,5 @@
 import requests
+import json
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -18,6 +19,8 @@ from keel.calendly.utils import calendly_business_logic, is_valid_webhook_signat
 from keel.calendly.constants import CALENDLY_WEBHOOK_PATH, CALENDLY_WEBHOOK_SIGNATURE_KEY, CALENDLY_WEBHOOK_EVENTS
 from keel.call_schedule.models import CallSchedule
 from keel.calendly.models import CalendlyCallSchedule
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
+from keel.Core.err_log import logging_format
 
 import logging
 logger = logging.getLogger('app-logger')
@@ -208,10 +211,19 @@ class WebHookProcessEvent(GenericViewSet):
             "message": ""
         }
 
-        if not is_valid_webhook_signature(request.headers.get(CALENDLY_WEBHOOK_SIGNATURE_KEY)):
+        try:
+            stringified_json_body = json.dumps(request.data)
+        except TypeError:
+            error = "Error converting request.body to json string for request: {}".format(request)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "WebHookProcessEvent.process_event", "", description=error))
+            response["status"] = 0
+            response["error"] = error
+            return Response(response, status.HTTP_200_OK)
+
+        if not is_valid_webhook_signature(request.headers.get(CALENDLY_WEBHOOK_SIGNATURE_KEY), stringified_json_body):
             response["error"] = "Invalid signature"
             response["status"] = 0
-            return Response(response, status.HTTP_400_BAD_REQUEST)
+            return Response(response, status.HTTP_200_OK)
 
         calendly_business_logic.process_event_data(request.data)
         return Response(response, status.HTTP_200_OK)

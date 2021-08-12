@@ -11,4 +11,6 @@ CALENDLY_EVENT_TYPE_URL_PATH = "{}/event_types/{}"
 CALENDLY_EVENT_URL_PATH = "{}/scheduled_events/{}"
 CALENDLY_INVITEE_URL_PATH = "{}/scheduled_events/{}/invitees/{}"
 
-
+CALENDLY_SIGNATURE_TKEY = "t"
+CALENDLY_SIGNATURE_VKEY = "v1"
+CALENDLY_EVENT_TOLERANCE_TIME = 300000  # in milliseconds

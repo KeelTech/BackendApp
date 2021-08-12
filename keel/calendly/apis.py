@@ -6,6 +6,8 @@ from rest_framework import status
 import urllib.parse
 
 from keel.calendly.parser.api_resp_parser import PARSER_FACTORY as parser_factory
+from keel.Core.err_log import logging_format
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
 from .constants import CALENDLY_API_PATH as api_details
 
 import logging
@@ -59,8 +61,14 @@ class CalendlyApis(object):
             elif status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
                 response["error"] = "Internal error from Calendly"
             return response
-        except ConnectionError as e:
-            pass
+        except ValueError as err:
+            logger.error(
+                logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyApis.single_use_scheduling_link", "", description=err))
+            response["error"] = "Error converting response to json object"
+        except ConnectionError as err:
+            logger.error(
+                logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyApis.single_use_scheduling_link", "", description=err))
+            response["error"] = "Connection error in get api for event type url - {}".format(event_type_url)
         return response
 
     @staticmethod
@@ -79,7 +87,7 @@ class CalendlyApis(object):
                 request_resp = requests.get(url=invitee_url, headers=headers)
                 req_resp_json = request_resp.json()
                 status_code = request_resp.status_code
-                response_parser = parser_factory.get_parser("schedule_event_invitee_details")(req_resp_json)
+                response_parser = parser_factory.get_parser("schedule_invitee_details")(req_resp_json)
                 if status_code == status.HTTP_200_OK:
                     if response_parser.validate_200():
                         response["data"] = response_parser.extract_200()
@@ -97,8 +105,14 @@ class CalendlyApis(object):
                     response["error"] = "Requested resource not found"
                 elif status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
                     response["error"] = "Internal error from Calendly"
-        except ConnectionError as e:
-            pass
+        except ValueError as err:
+            logger.error(
+                logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyApis.get_invitee_details", "", description=err))
+            response["error"] = "Error converting response to json object"
+        except ConnectionError as err:
+            logger.error(
+                logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyApis.get_invitee_details", "", description=err))
+            response["error"] = "Connection error in get api for url - {}".format(invitee_url)
         return response
 
     @staticmethod
@@ -134,7 +148,13 @@ class CalendlyApis(object):
             elif status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
                 response["error"] = "Internal error from Calendly"
             return response
-        except ConnectionError as e:
-            pass
+        except ValueError as err:
+            logger.error(
+                logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyApis.get_event_details", "", description=err))
+            response["error"] = "Error converting response to json object"
+        except ConnectionError as err:
+            logger.error(
+                logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyApis.get_event_details", "", description=err))
+            response["error"] = "Connection error in get api for event url - {}".format(event_url)
         return response
 
