@@ -1,3 +1,8 @@
+import hashlib
+import hmac
+import datetime
+
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
@@ -5,7 +10,9 @@ from .models import CalendlyUsers, CalendlyCallSchedule, CalendlyInviteeSchedule
 from .apis import CalendlyApis
 from .parser.webhook_data import CalendlyWebHookDataParser
 
+from keel.calendly.constants import CALENDLY_SIGNATURE_VKEY, CALENDLY_SIGNATURE_TKEY, CALENDLY_EVENT_TOLERANCE_TIME
 from keel.call_schedule.models import CallSchedule
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
 from keel.Core.err_log import logging_format
 
 import logging
@@ -236,9 +243,34 @@ class BusinessLogic(object):
         return response
 
 
-def is_valid_webhook_signature(signature):
-    if not signature:
+def is_valid_webhook_signature(signature, body):
+    if not (signature and body):
         return False
+    try:
+        timstamp, v1 = signature.split(",")
+        t_key, t_value = timstamp.split("=")
+        v1_key, v1_value = v1.split("=")
+    except ValueError as err:
+        logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "IS_VALID_WEBHOOK_SIGNATURE",
+                                    "", description=err))
+        return False
+    if t_key != CALENDLY_SIGNATURE_TKEY or v1_key != CALENDLY_SIGNATURE_VKEY:
+        return False
+    byte_key = settings.CALENDLY_SIGNING_KEY.encode('utf-8')
+    message = t_value + "." + body
+
+    expected_signature = hmac.new(byte_key, message.encode('utf-8'), hashlib.sha256).hexdigest()
+    if expected_signature != v1_value:
+        error = "Expected_signature - {} does not match signature {} for body - {}".format(expected_signature, v1_value, body)
+        logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "IS_VALID_WEBHOOK_SIGNATURE",
+                                    "", description=error))
+        return False
+    if int(t_value) * 1000 < int(datetime.datetime.utcnow().timestamp()) - CALENDLY_EVENT_TOLERANCE_TIME:
+        error = "Event timestamp expired"
+        logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "IS_VALID_WEBHOOK_SIGNATURE",
+                                    "", description=error))
+        return False
+
     return True
 
 
