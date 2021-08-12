@@ -26,7 +26,25 @@ class UserRegistrationSerializer(serializers.Serializer):
     token = serializers.CharField(read_only=True)
 
 
-class CustomerProfileSerializer(serializers.ModelSerializer):
+class BaseProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerProfile
+        exclude = ('created_at', 'updated_at', 'deleted_at')
+
+
+class InitialProfileSerializer(BaseProfileSerializer):
+    phone_number = serializers.CharField(write_only=True)
+    class Meta:
+        model = CustomerProfile
+        fields = ('id', 'first_name', 'last_name', 'current_country', 'phone_number',
+                    'desired_country', 'age')
+    
+    def create(self, validated_data):
+        profile = CustomerProfile.objects.create(**validated_data)
+        return profile
+
+class CustomerProfileSerializer(BaseProfileSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     mother_fullname = serializers.CharField(required=True)
@@ -35,11 +53,36 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
     address = serializers.CharField(required=True)
     date_of_birth = serializers.DateField(required=True)
     phone_number = serializers.SerializerMethodField()
+
     class Meta:
         model = CustomerProfile
         fields = ('id', 'first_name', 'last_name', 'mother_fullname', 
                     'father_fullname', 'age', 'address', 'date_of_birth', 'phone_number')
     
+    def create(self, validated_data):
+        first_name = validated_data.get('first_name')
+        last_name = validated_data.get('last_name')
+        mother_fullname = validated_data.get('mother_fullname')
+        father_fullname = validated_data.get('father_fullname')
+        age = validated_data.get('age')
+        address = validated_data.get('address')
+        date_of_birth = validated_data.get('date_of_birth')
+        user = validated_data.get('user')
+        try:
+            profile = CustomerProfile.objects.get(user=user)
+            profile.first_name = first_name
+            profile.last_name = last_name
+            profile.mother_fullname = mother_fullname
+            profile.father_fullname = father_fullname
+            profile.age = age
+            profile.address = address
+            profile.date_of_birth = date_of_birth
+            profile.save()
+        except CustomerProfile.DoesNotExist:
+            profile = CustomerProfile.objects.create(user=user, first_name=first_name, last_name=last_name, mother_fullname=mother_fullname,
+                            age=age, father_fullname=father_fullname, address=address, date_of_birth=date_of_birth)
+        return profile
+
     def get_phone_number(self, obj):
         phone_number = obj.user.phone_number
         return phone_number

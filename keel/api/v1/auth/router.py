@@ -21,6 +21,7 @@ urlpatterns = [
 
     # profile
     path('create-profile', ProfileView.as_view({'post' : 'create_profile'}), name='create-profile'),
+    path('create-initial-profile', ProfileView.as_view({'post' : 'create_initial_profile'}), name='create-initial-profile'),
     path('create-full-profile', ProfileView.as_view({'post' : 'create_full_profile'}), name='create-full-profile'),
     path('get-profile', ProfileView.as_view({'get' : 'get_profile'}), name='get-profile'),
     path('get-full-profile', ProfileView.as_view({'get' : 'get_full_profile'}), name='get-full-profile'),

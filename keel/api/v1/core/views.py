@@ -44,7 +44,6 @@ class CityView(GenericViewSet):
         }
         state_id = self.kwargs['id']
         state = State.objects.filter(id=state_id).first()
-        print(state)
         city = City.objects.filter(state=state)
         serializer = self.serializer_class(city, many=True).data
         response["message"] = serializer
