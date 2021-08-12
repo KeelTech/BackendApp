@@ -136,6 +136,8 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
     address = models.CharField(max_length=512, blank=True, null=True, default=None)
     date_of_birth = models.DateField(default=None, null=True,blank=False)
+    current_country = models.CharField(max_length=512, default=None, blank=True, null=True)
+    desired_country = models.CharField(max_length=512, default=None, blank=True, null=True)
 
 
 class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):

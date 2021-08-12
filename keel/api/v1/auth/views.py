@@ -597,6 +597,35 @@ class ProfileView(GenericViewSet):
         response["message"] = serializer.data
         return Response(response)
     
+    def create_initial_profile(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        serializer = serializers.InitialProfileSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        phone_number = validated_data['phone_number']
+        validated_data['user'] = request.user
+        try:
+            validated_data.pop('phone_number')
+            serializer.save()
+            get_user = User.objects.get(id=request.user.id)
+            get_user.phone_number = phone_number
+            get_user.save()
+        except IntegrityError as e:
+            logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
+            response['message'] = "User already has a profile"
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response["message"] = serializer.data
+        return Response(response)
+    
     def create_full_profile(self, request):
         response = {
             "status":1,
