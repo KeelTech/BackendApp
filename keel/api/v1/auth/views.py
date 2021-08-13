@@ -453,7 +453,7 @@ class ProfileView(GenericViewSet):
                 label.pop("labels")
             return serializer.data
         else:
-            data = {
+            data = [{
                 "institute": {"value": "", "type": "char", "labels": "Institute"},
                 "year_of_passing": {"value": "", "type": "char", "labels": "Year Of Passing"},
                 "grade": {"value": "", "type": "char", "labels": "Grade"},
@@ -461,7 +461,7 @@ class ProfileView(GenericViewSet):
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"}
-            }
+            }]
             return data
     
     def get_queryset_education_assessment(self, request):
@@ -476,11 +476,11 @@ class ProfileView(GenericViewSet):
             serializer = self.serializer_class_education_assessment(queryset, many=True, context={"labels":labels})
             return serializer.data
         else:
-            data = {
+            data = [{
                 "eca_authority_name": {"value": "", "type": "char", "labels": "ECA Authority Name"},
                 "eca_authority_number": {"value": "", "type": "char", "labels": "ECA Authority Number"},
                 "canadian_equivalency_summary": {"value": "", "type": "char", "labels": "Canadian Equivalency Summary"},
-            }
+            }]
             return data
     
     def get_queryset_relative_in_canada(self, request):
@@ -498,14 +498,14 @@ class ProfileView(GenericViewSet):
             serializer = self.serializer_class_relative_in_canada(queryset, many=True, context={"labels":labels})
             return serializer.data
         else:
-            data = {
+            data = [{
                 "full_name": {"value": "", "type": "char", "labels": "Full Name"},
                 "relationship": {"value": "", "type": "char", "labels": "Relationship"},
                 "immigration_status": {"value": "", "type": "char", "labels": "Immigration Status"},
                 "address": {"value": "", "type": "char", "labels": "Address"},
                 "contact_number": {"value": "", "type": "char", "labels": "Contact Number"},
                 "email_address": {"value": "", "type": "char", "labels": "Email Address"}
-            }
+            }]
             return data
     
     def get_queryset_experience(self, request):
@@ -527,7 +527,7 @@ class ProfileView(GenericViewSet):
                 label.pop("labels")
             return serializer.data
         else:
-            data = {
+            data = [{
                 "company_name": {"value": "", "type": "char", "labels": "Company Name"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"},
@@ -536,7 +536,7 @@ class ProfileView(GenericViewSet):
                 "designation": {"value": "", "type": "char", "labels": "Desgination"},
                 "job_type": {"value": "", "type": "char", "labels": "Job Type"},
                 "job_description": {"value": "", "type": "char", "labels": "Job Description"}
-            }
+            }]
             return data
 
     def get_queryset_profile(self, request):
