@@ -498,14 +498,14 @@ class ProfileView(GenericViewSet):
             serializer = self.serializer_class_relative_in_canada(queryset, many=True, context={"labels":labels})
             return serializer.data
         else:
-            data = [{
+            data = {
                 "full_name": {"value": "", "type": "char", "labels": "Full Name"},
                 "relationship": {"value": "", "type": "char", "labels": "Relationship"},
                 "immigration_status": {"value": "", "type": "char", "labels": "Immigration Status"},
                 "address": {"value": "", "type": "char", "labels": "Address"},
                 "contact_number": {"value": "", "type": "char", "labels": "Contact Number"},
                 "email_address": {"value": "", "type": "char", "labels": "Email Address"}
-            }]
+            }
             return data
     
     def get_queryset_experience(self, request):
