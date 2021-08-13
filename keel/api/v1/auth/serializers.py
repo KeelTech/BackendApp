@@ -58,6 +58,13 @@ class CustomerProfileSerializer(BaseProfileSerializer):
         model = CustomerProfile
         fields = ('id', 'first_name', 'last_name', 'mother_fullname', 
                     'father_fullname', 'age', 'address', 'date_of_birth', 'phone_number')
+
+
+class CustomerUpdateProfileSerializer(BaseProfileSerializer):
+    class Meta:
+        model = CustomerProfile
+        fields = ('id', 'first_name', 'last_name', 'mother_fullname', 
+                    'father_fullname', 'age', 'address', 'date_of_birth')
     
     def create(self, validated_data):
         first_name = validated_data.get('first_name')
@@ -70,22 +77,17 @@ class CustomerProfileSerializer(BaseProfileSerializer):
         user = validated_data.get('user')
         try:
             profile = CustomerProfile.objects.get(user=user)
-            profile.first_name = first_name
-            profile.last_name = last_name
-            profile.mother_fullname = mother_fullname
-            profile.father_fullname = father_fullname
-            profile.age = age
-            profile.address = address
-            profile.date_of_birth = date_of_birth
-            profile.save()
         except CustomerProfile.DoesNotExist:
-            profile = CustomerProfile.objects.create(user=user, first_name=first_name, last_name=last_name, mother_fullname=mother_fullname,
-                            age=age, father_fullname=father_fullname, address=address, date_of_birth=date_of_birth)
+            raise serializers.ValidationError("No profile for this user")
+        profile.first_name = first_name
+        profile.last_name = last_name
+        profile.mother_fullname = mother_fullname
+        profile.father_fullname = father_fullname
+        profile.age = age
+        profile.address = address
+        profile.date_of_birth = date_of_birth
+        profile.save()
         return profile
-
-    def get_phone_number(self, obj):
-        phone_number = obj.user.phone_number
-        return phone_number
 
 
 class CustomerProfileLabelSerializer(serializers.ModelSerializer):
@@ -164,6 +166,39 @@ class CustomerQualificationsSerializer(serializers.ModelSerializer):
         fields = ('id', 'institute', 'grade', 'year_of_passing', 'start_date', 
                     'end_date', 'city', 'country')
 
+class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerQualifications
+        fields = ('id', 'institute', 'grade', 'year_of_passing', 'start_date', 
+                    'end_date', 'city', 'country')
+    
+    def create(self, validated_data):
+        id = validated_data.get('id')
+        institute = validated_data.get('institute')
+        grade = validated_data.get('grade')
+        year_of_passing = validated_data.get('year_of_passing')
+        start_date = validated_data.get('start_date')
+        end_date = validated_data.get('end_date')
+        city = validated_data.get('city')
+        country = validated_data.get('country')
+        user = validated_data.get('user')
+        try:
+            qualification = CustomerQualifications.objects.get(id=id)
+        except CustomerQualifications.DoesNotExist:
+            raise serializers.ValidationError("Qualification ID does not exist")
+        qualification.institute = institute
+        qualification.grade = grade
+        qualification.year_of_passing = year_of_passing
+        qualification.start_date = start_date
+        qualification.end_date = end_date
+        qualification.city = city
+        qualification.country = country
+        qualification.user = user
+        qualification.save()
+        return qualification
+
+
 class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField()
     institute = serializers.SerializerMethodField()
@@ -233,7 +268,40 @@ class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
         model = CustomerWorkExperience
         fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
                     'city', 'weekly_working_hours', 'start_date', 'end_date')
-                    
+
+class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomerWorkExperience
+        fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
+                    'city', 'weekly_working_hours', 'start_date', 'end_date')
+    
+    def create(self, validated_data):
+        id = validated_data.get('id')
+        job_type = validated_data.get('job_type')
+        designation = validated_data.get('designation')
+        company_name = validated_data.get('company_name')
+        job_description = validated_data.get('job_description')
+        city = validated_data.get('city')
+        weekly_working_hours = validated_data.get('weekly_working_hours')
+        start_date = validated_data.get('start_date')
+        end_date = validated_data.get('end_date')
+        user = validated_data.get('user')
+        try:
+            work = CustomerWorkExperience.objects.get(id=id)
+        except CustomerWorkExperience.DoesNotExist:
+            raise serializers.ValidationError('Customer Work experience with ID does not exist')
+        work.job_type = job_type
+        work.designation = designation
+        work.company_name = company_name
+        work.job_description = job_description
+        work.weekly_working_hours = weekly_working_hours
+        work.city = city
+        work.start_date = start_date
+        work.end_date = end_date
+        work.user = user
+        work.save()
+        return work
 
 class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField()
@@ -485,6 +553,34 @@ class RelativeInCanadaSerializer(serializers.ModelSerializer):
         fields = ('id', 'full_name', 'relationship', 'immigration_status', 
                     'address', 'contact_number', 'email_address')
 
+class RelativeInCanadaUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RelativeInCanada
+        fields = ('id', 'full_name', 'relationship', 'immigration_status', 
+                    'address', 'contact_number', 'email_address')
+
+    def create(self, validated_data):
+        id = validated_data.get('id')
+        full_name = validated_data.get('full_name')
+        relationship = validated_data.get('relationship')
+        immigration_status = validated_data.get('immigration_status')
+        address = validated_data.get('address')
+        contact_number = validated_data.get('contact_number')
+        email_address = validated_data.get('email_address')
+        user = validated_data.get('user')
+        try:
+            relative = RelativeInCanada.objects.get(id=id)
+        except RelativeInCanada.DoesNotExist:
+            raise serializers.ValidationError("Relative with ID does not exist")
+        relative.full_name = full_name
+        relative.relationship = relationship
+        relative.immigration_status = immigration_status
+        relative.address = address
+        relative.contact_number = contact_number
+        relative.email_address = email_address
+        relative.user = user
+        relative.save()
+        return relative
 
 class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
@@ -544,6 +640,28 @@ class EducationalCreationalAssessmentSerializer(serializers.ModelSerializer):
         model = EducationalCreationalAssessment
         fields = ('id', 'eca_authority_name', 'eca_authority_number', 'canadian_equivalency_summary')
 
+
+class EducationalCreationalAssessmentUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EducationalCreationalAssessment
+        fields = ('id', 'eca_authority_name', 'eca_authority_number', 'canadian_equivalency_summary')
+    
+    def create(self, validated_data):
+        id = validated_data.get('id')
+        eca_authority_name = validated_data.get('eca_authority_name')
+        eca_authority_number = validated_data.get('eca_authority_number')
+        canadian_equivalency_summary = validated_data.get('canadian_equivalency_summary')
+        user = validated_data.get('user')
+        try:
+            education_assessment = EducationalCreationalAssessment.objects.get(id=id)
+        except EducationalCreationalAssessment.DoesNotExist:
+            raise serializers.ValidationError("Education Assessment with ID does not exist")
+        education_assessment.eca_authority_name = eca_authority_name
+        education_assessment.eca_authority_number = eca_authority_number
+        education_assessment.canadian_equivalency_summary = canadian_equivalency_summary
+        education_assessment.user = user
+        education_assessment.save()
+        return education_assessment
 
 class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer):
     eca_authority_name = serializers.SerializerMethodField()
