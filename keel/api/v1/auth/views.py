@@ -706,15 +706,16 @@ class ProfileView(GenericViewSet):
     def get_profile(self, request):
         response = {
             "status" : 1,
-            "message" : ""
+            "message" : {"profile_exists": False,  "profile":{}, "cases":self.get_queryset_cases(request)}
         } 
         queryset = CustomerProfile.objects.filter(user=request.user).first()
-        serializer = self.serializer_class_pro(queryset)
-        if serializer.data == []:
-            response["message"] = {"profile_exists":False, "profile":serializer.data, "cases":self.get_queryset_cases(request)}
+        if not queryset:
             return Response(response)
 
-        response["message"] = {"profile_exists":True, "profile":serializer.data, "case":self.get_queryset_cases(request)}
+        serializer = self.serializer_class_pro(queryset)
+        response["message"]["profile_exists"]= True
+        response["message"]["profile"]=serializer.data
+         
         return Response(response)
 
     def get_full_profile(self, request):
