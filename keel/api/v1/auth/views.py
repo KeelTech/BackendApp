@@ -620,15 +620,19 @@ class ProfileView(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         validated_data['user'] = user
-        validated_data['phone_number'] = phone_number
         try:
             serializer.save()
+            user = User.objects.get(id=user.id)
+            user.phone_number = phone_number
+            user.save()
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        response["message"] = serializer.data
+        data = serializer.data
+        data['phone_number'] = phone_number
+        response["message"] = data
         return Response(response)
     
     def create_initial_profile(self, request):
