@@ -70,7 +70,7 @@ class ChatList(GenericViewSet):
 
         req_data = request.data
         case_id = req_data.get("case_id", "")
-
+        
         try:
             chat_room = ChatRoom.objects.filter(Q(user = user_id) | Q(agent = user_id)).get(case = case_id)
         except ChatRoom.DoesNotExist as e:
