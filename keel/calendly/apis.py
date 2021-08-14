@@ -84,7 +84,7 @@ class CalendlyApis(object):
         }
         try:
             while not response["error"] and response["data"]["rescheduled"]:
-                request_resp = requests.get(url=invitee_url, headers=headers)
+                request_resp = requests.get(url=invitee_url, headers=headers, timeout=5)
                 req_resp_json = request_resp.json()
                 status_code = request_resp.status_code
                 response_parser = parser_factory.get_parser("schedule_invitee_details")(req_resp_json)
@@ -127,7 +127,7 @@ class CalendlyApis(object):
             "authorization": bearer_token,
         }
         try:
-            request_resp = requests.get(url=event_url, headers=headers)
+            request_resp = requests.get(url=event_url, headers=headers, timeout=5)
             req_resp_json = request_resp.json()
             status_code = request_resp.status_code
             response_parser = parser_factory.get_parser("schedule_event_details")(req_resp_json)
