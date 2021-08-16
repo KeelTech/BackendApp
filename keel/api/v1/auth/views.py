@@ -426,6 +426,7 @@ class UserDeleteTokenView(GenericViewSet):
 class ProfileView(GenericViewSet):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
+    serializer_class_pro_base = serializers.BaseProfileSerializer
     serializer_class_pro = serializers.CustomerProfileSerializer
     serializer_class_pro_update = serializers.CustomerUpdateProfileSerializer
     serializer_class_profile = serializers.CustomerProfileLabelSerializer
@@ -443,6 +444,7 @@ class ProfileView(GenericViewSet):
             labels['year_of_passing_label'] = label.year_of_passing_label
             labels['grade_label'] = label.grade_label
             labels['city_label'] = label.city_label
+            labels['state_label'] = label.state_label
             labels['country_label'] = label.country_label
             labels['start_date_label'] = label.start_date_label
             labels['end_date_label'] = label.end_date_label
@@ -458,6 +460,7 @@ class ProfileView(GenericViewSet):
                 "year_of_passing": {"value": "", "type": "char", "labels": "Year Of Passing"},
                 "grade": {"value": "", "type": "char", "labels": "Grade"},
                 "city": {"value": "", "type": "char", "labels": "City"},
+                "state": {"value": "", "type": "char", "labels": "State"},
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"}
@@ -489,7 +492,7 @@ class ProfileView(GenericViewSet):
         for label in get_labels:
             labels['full_name_label'] = label.full_name_label
             labels['relationship_label'] = label.relationship_label
-            labels['immigrations_status_label'] = label.immigrations_status_label
+            labels['immigration_status_label'] = label.immigration_status_label
             labels['address_label'] = label.address_label
             labels['contact_number_label'] = label.contact_number_label
             labels['email_address_label'] = label.email_address_label
@@ -551,11 +554,12 @@ class ProfileView(GenericViewSet):
             labels['address_label'] = label.address_label
             labels['date_of_birth_label'] = label.date_of_birth_label
             labels['phone_number_label'] = label.phone_number_label
+            labels['current_country_label'] = label.current_country_label
+            labels['desired_country_label'] = label.desired_country_label
         profile = CustomerProfile.objects.filter(user=self.request.user.id).first()
         if profile:
             serializer = self.serializer_class_profile(profile, context={"labels":labels})
-            # for label in serializer.data:
-            #     label.pop("labels")
+            serializer.data.pop("labels")
             return serializer.data
         else:
             data = {
@@ -566,7 +570,9 @@ class ProfileView(GenericViewSet):
                 "age": {"value": "", "type": "char", "labels": "Age"},
                 "address": {"value": "", "type": "char", "labels": "Address"},
                 "date_of_birth": {"value": "", "type": "char", "labels": "Date of Birth"},
-                "phone_number": {"value": "", "type": "char", "labels": "Phone Number"}
+                "phone_number": {"value": "", "type": "char", "labels": "Phone Number"},
+                "current_country": {"value": "", "type": "char", "labels": "Current Country"},
+                "desired_country": {"value": "", "type": "char", "labels": "Desired Country"},
             }
             return data
     
@@ -605,6 +611,8 @@ class ProfileView(GenericViewSet):
             "address" : datas['address'].get("value"),
             "phone_number" : datas['phone_number'].get("value"),
             "date_of_birth" : datas['date_of_birth'].get("value"),
+            "current_country" : datas['current_country'].get("value"),
+            "desired_country" : datas['desired_country'].get("value"),
         }
         return profile
 
@@ -716,7 +724,7 @@ class ProfileView(GenericViewSet):
         if not queryset:
             return Response(response)
 
-        serializer = self.serializer_class_pro(queryset)
+        serializer = self.serializer_class_pro_base(queryset)
         response["message"]["profile_exists"]= True
         response["message"]["profile"]=serializer.data
          
@@ -764,6 +772,7 @@ class QualificationView(GenericViewSet):
                 "institute" : info["institute"].get("value"),
                 "year_of_passing" : info["year_of_passing"].get("value"),
                 "city" : info["city"].get("value"),
+                "state" : info["state"].get("value"),
                 "country" : info["country"].get("value"),
                 "grade" : info["grade"].get("value"),
                 "start_date" : info["start_date"].get("value"),
