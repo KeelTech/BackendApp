@@ -441,6 +441,7 @@ class ProfileView(GenericViewSet):
         labels = {}
         for label in get_labels:
             labels['institute_label'] = label.institute_label
+            labels['degree_label'] = label.degree_label
             labels['year_of_passing_label'] = label.year_of_passing_label
             labels['grade_label'] = label.grade_label
             labels['city_label'] = label.city_label
@@ -457,6 +458,7 @@ class ProfileView(GenericViewSet):
         else:
             data = [{
                 "institute": {"value": "", "type": "char", "labels": "Institute"},
+                "degree": {"value": "", "type": "char", "labels": "Degree"},
                 "year_of_passing": {"value": "", "type": "char", "labels": "Year Of Passing"},
                 "grade": {"value": "", "type": "char", "labels": "Grade"},
                 "city": {"value": "", "type": "char", "labels": "City"},
@@ -770,6 +772,7 @@ class QualificationView(GenericViewSet):
             customer_work_info = {
                 "id" : info.get("id"),
                 "institute" : info["institute"].get("value"),
+                "degree" : info["degree"].get("value"),
                 "year_of_passing" : info["year_of_passing"].get("value"),
                 "city" : info["city"].get("value"),
                 "state" : info["state"].get("value"),

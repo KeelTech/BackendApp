@@ -176,6 +176,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
     institute = serializers.CharField(required=True)
+    degree = serializers.CharField(required=True)
     grade = serializers.CharField(required=True)
     year_of_passing = serializers.CharField(required=True)
     city = serializers.CharField(required=True)
@@ -186,19 +187,20 @@ class CustomerQualificationsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerQualifications
-        fields = ('id', 'institute', 'grade', 'year_of_passing', 'start_date', 
+        fields = ('id', 'institute', 'degree', 'grade', 'year_of_passing', 'start_date', 
                     'end_date', 'city', 'country', 'state')
 
 class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerQualifications
-        fields = ('id', 'institute', 'grade', 'year_of_passing', 'start_date', 
+        fields = ('id', 'institute', 'degree', 'grade', 'year_of_passing', 'start_date', 
                     'end_date', 'city', 'country', 'state')
     
     def create(self, validated_data):
         id = validated_data.get('id')
         institute = validated_data.get('institute')
+        degree = validated_data.get('degree')
         grade = validated_data.get('grade')
         year_of_passing = validated_data.get('year_of_passing')
         start_date = validated_data.get('start_date')
@@ -212,6 +214,7 @@ class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
         except CustomerQualifications.DoesNotExist:
             raise serializers.ValidationError("Qualification ID does not exist")
         qualification.institute = institute
+        qualification.degree = degree
         qualification.grade = grade
         qualification.year_of_passing = year_of_passing
         qualification.start_date = start_date
@@ -227,6 +230,7 @@ class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
 class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField()
     institute = serializers.SerializerMethodField()
+    degree = serializers.SerializerMethodField()
     grade = serializers.SerializerMethodField()
     year_of_passing = serializers.SerializerMethodField()
     city = serializers.SerializerMethodField()
@@ -244,6 +248,11 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
         var = obj.institute
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["institute_label"]}
+
+    def get_degree(self, obj):
+        var = obj.degree
+        if "labels" in self.context:
+            return {"value": var, "type":"char", "labels":self.context["labels"]["degree_label"]}
 
     def get_grade(self, obj):
         var = obj.grade
@@ -282,7 +291,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = QualificationLabel
-        fields = ('id', 'institute', 'year_of_passing', 'city', 'grade', 'country', 'state',
+        fields = ('id', 'institute', 'year_of_passing', 'city', 'degree', 'grade', 'country', 'state',
                     'start_date', 'end_date', 'labels')
 
 
