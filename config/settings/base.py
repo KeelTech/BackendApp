@@ -269,7 +269,7 @@ REST_FRAMEWORK = {
     )
 
 }
-CORS_ALLOW_HEADERS = ['accept', 'accept-encoding', 'authorization', 'content-type', 'dnt', 'origin', 'user-agent', 'x-csrftoken', 'x-requested-with', 'app-name']
+CORS_ALLOW_HEADERS = ['accept', 'accept-encoding', 'authorization', 'content-type', 'dnt', 'origin', 'user-agent', 'x-csrftoken', 'x-requested-with', 'app-name', 'limit', 'offset']
 
 JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'bearer',

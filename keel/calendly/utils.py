@@ -1,3 +1,8 @@
+import hashlib
+import hmac
+import datetime
+
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
@@ -5,7 +10,10 @@ from .models import CalendlyUsers, CalendlyCallSchedule, CalendlyInviteeSchedule
 from .apis import CalendlyApis
 from .parser.webhook_data import CalendlyWebHookDataParser
 
+from keel.calendly.constants import CALENDLY_SIGNATURE_VKEY, CALENDLY_SIGNATURE_TKEY, CALENDLY_EVENT_TOLERANCE_TIME
 from keel.call_schedule.models import CallSchedule
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
+from keel.Core.err_log import logging_format
 
 import logging
 logger = logging.getLogger('app-logger')
@@ -89,13 +97,15 @@ class BusinessLogic(object):
         try:
             calendly_user_obj = CalendlyUsers.objects.get(user=rcic_user_obj)
         except ObjectDoesNotExist as err:
-            logger.error("CALENDLY-GET_AGENT_SCHEDULE_URL: error getting "
-                         "calendly user details for user {} with error {}".format(rcic_user_obj.email, err))
+            message = "Error getting calendly user details for user {} " \
+                      "with error {}".format(rcic_user_obj.email, err)
+            logger.error(logging_format("", "CALENDLY-GET_AGENT_SCHEDULE_URL", "", description=message))
             return scheduling_url
         # event_resource_url = CalendlyApis.get_user_event_type(calendly_user_details.user_resource_url)
         if not calendly_user_obj.event_type_url:
-            logger.error("CALENDLY-GET_AGENT_SCHEDULE_URL: event resource url not present for the "
-                         "calendly user: {}".format(rcic_user_obj.email))
+            message = "Event resource url not present for the "\
+                      "calendly user: {}".format(rcic_user_obj.email)
+            logger.error(logging_format("", "CALENDLY-GET_AGENT_SCHEDULE_URL", "", description=message))
             return scheduling_url
 
         schedule_url_details = CalendlyApis.single_use_scheduling_link(
@@ -198,7 +208,6 @@ class BusinessLogic(object):
         return response
 
     def process_event_data(self, event_data):
-        logger.info("CALENDLY_WEBHOOK_EVENT_DATA received - {}".format(event_data))
         response = {
             "status": 0,
             "data": "",
@@ -209,22 +218,16 @@ class BusinessLogic(object):
         if not parser.is_valid_data():
             response["error"] = parser.error
             return response
-        extracted_event_details = parser.parse_extract_data()
-        logger.info("CALENDLY_WEBHOOK_EVENT_DATA parced data - {}".format(extracted_event_details))
-        if not CalendlyUsers.objects.filter(user_url=extracted_event_details["user_url"],
-                                            event_type_url=extracted_event_details["event_type_url"]).exists():
-            logging.error("PROCESS_EVENT_DATA: Error getting host user in CalendlyUsers for "
-                          "user url - {} and event type url - {}".format(extracted_event_details["user_url"],
-                                                                         extracted_event_details["event_type_url"]))
-            response["error"] = "No user associated with Calendly resources"
-            return response
+        extracted_details = parser.parse_extract_data()
 
-        invitee_url = extracted_event_details["old_invitee_url"] or extracted_event_details["invitee_url"] or extracted_event_details["new_invitee_url"]
+        invitee_url_to_update = extracted_details["invitee_url_to_update"]
         try:
-            calendly_call_schedule_obj = CalendlyCallSchedule.objects.get(invitee_url=invitee_url).call_schedule
-        except ObjectDoesNotExist as error:
-            response["error"] = "CalendlyCallSchedule does not have any call schedule " \
-                                "for invitee url - {}".format(invitee_url)
+            calendly_call_schedule_obj = CalendlyCallSchedule.objects.get(invitee_url=invitee_url_to_update).call_schedule
+        except ObjectDoesNotExist:
+            message = "CalendlyCallSchedule does not have any call schedule " \
+                      "for invitee url - {}".format(invitee_url_to_update)
+            logger.error(logging_format("", "CALENDLY-PROCESS_EVENT_DATA", "", description=message))
+            response["error"] = message
             return response
         event_details = BusinessLogic.get_event_details(calendly_call_schedule_obj.invitee_url)
 
@@ -240,9 +243,34 @@ class BusinessLogic(object):
         return response
 
 
-def is_valid_webhook_signature(signature):
-    if not signature:
+def is_valid_webhook_signature(signature, body):
+    if not (signature and body):
         return False
+    try:
+        timstamp, v1 = signature.split(",")
+        t_key, t_value = timstamp.split("=")
+        v1_key, v1_value = v1.split("=")
+    except ValueError as err:
+        logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "IS_VALID_WEBHOOK_SIGNATURE",
+                                    "", description=err))
+        return False
+    if t_key != CALENDLY_SIGNATURE_TKEY or v1_key != CALENDLY_SIGNATURE_VKEY:
+        return False
+    byte_key = settings.CALENDLY_SIGNING_KEY.encode('utf-8')
+    message = t_value + "." + body
+
+    expected_signature = hmac.new(byte_key, message.encode('utf-8'), hashlib.sha256).hexdigest()
+    if expected_signature != v1_value:
+        error = "Expected_signature - {} does not match signature {} for body - {}".format(expected_signature, v1_value, body)
+        logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "IS_VALID_WEBHOOK_SIGNATURE",
+                                    "", description=error))
+        return False
+    if int(t_value) * 1000 < int(datetime.datetime.utcnow().timestamp()) - CALENDLY_EVENT_TOLERANCE_TIME:
+        error = "Event timestamp expired"
+        logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "IS_VALID_WEBHOOK_SIGNATURE",
+                                    "", description=error))
+        return False
+
     return True
 
 

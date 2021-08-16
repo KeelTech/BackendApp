@@ -10,6 +10,7 @@ from .eligibility_calculator.router import urlpatterns as eligibility_url
 from .leads.router import urlpatterns as leads_url
 from .plans.router import urlpatterns as plans_url
 from .tasks.router import urlpatterns as tasks_url
+from .core.router import urlpatterns as core_url
 
 urlpatterns = [
 
@@ -21,5 +22,6 @@ urlpatterns = [
     path('chats/', include(chats_url)),
     path('cases/', include(cases_url)),
     path('plans/', include(plans_url)),
-    path('calendly/', include(calendly_url))
+    path('calendly/', include(calendly_url)),
+    path('core/', include(core_url)),
 ]
