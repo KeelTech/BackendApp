@@ -2,6 +2,9 @@ import uuid
 import os
 import boto3
 
+from django.utils.module_loading import import_module
+from django.core.exceptions import ImproperlyConfigured
+
 from urllib.parse import urlparse
 
 from django.conf import settings
@@ -52,4 +55,18 @@ def upload_file_to_s3(file):
     ## return with URLs
     return
 
+
+def get_connection(path):
+    try:
+        mod_name, class_name = path.rsplit('.', 1)
+        mod = import_module(mod_name)
+    except AttributeError as e:
+        raise ImproperlyConfigured('Error importing  backend %s: "%s"' % (mod_name, e))
+
+    try:
+        class_ref = getattr(mod, class_name)
+    except AttributeError:
+        raise ImproperlyConfigured('Module "%s" does not define a "%s" class' % (mod_name, class_name))
+
+    return class_ref()
 

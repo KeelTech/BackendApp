@@ -22,4 +22,4 @@ EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'keel.Core.notification_backend.SMTPEmailBackend'
-
+SMS_BACKEND = 'keel.Core.notification_backend.SMSBackend'

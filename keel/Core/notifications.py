@@ -2,10 +2,43 @@ import re
 
 from django.core.mail import send_mail
 from django.conf import settings
-from django.utils.module_loading import import_module
 from .err_log import log_error
-from django.core.exceptions import ImproperlyConfigured
 from .exceptions import InvalidDataType
+from .helpers import get_connection
+
+class SMSNotification:
+
+    def __init__(self, number, text):
+
+        self.number = number
+        self.text = text
+
+    def validate_sms(self):
+        try:
+            int(self.number)
+        except:
+            err = "Invalid number passed"
+            return err
+
+        if not self.text:
+            err = "Invalid SMS Text"
+        return err
+
+    def send_sms(self):
+        err = ''
+        err = self.validate_sms()
+        if err:
+            log_error("ERROR", "SMSNotification: validate_sms", "", err = err)
+            return err 
+        try:
+            path = settings.SMS_BACKEND
+            resp = get_connection(path).send_sms(self.number, self.text)
+            log_error("INFO", "SMSNotification: send_sms", "", resp = str(resp))
+        except Exception as e:
+            log_error("CRITICAL", "SMSNotification: send_sms", "", err = str(e))
+            err = str("Failed to send email")
+        return err
+
 
 class EmailNotification:
 
@@ -57,28 +90,13 @@ class EmailNotification:
             #     send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, html_message = self.content)
             # else:
             # send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list)
-            self.get_connection().send_email(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, self.content_type)
-
-
+            path = settings.EMAIL_BACKEND
+            get_connection(path).send_email(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, self.content_type)
         except Exception as e:
             log_error("CRITICAL", "EmailNotification:send_mail", "", err = str(e))
             err = str("Failed to send email")
         return err
 
-    def get_connection(self):
-        path = settings.EMAIL_BACKEND
-        try:
-            mod_name, class_name = path.rsplit('.', 1)
-            mod = import_module(mod_name)
-        except AttributeError as e:
-            raise ImproperlyConfigured('Error importing  backend %s: "%s"' % (mod_name, e))
-
-        try:
-            class_ref = getattr(mod, class_name)
-        except AttributeError:
-            raise ImproperlyConfigured('Module "%s" does not define a "%s" class' % (mod_name, class_name))
-
-        return class_ref()
 
 
 class SendNotification:
@@ -131,7 +149,6 @@ class SendNotification:
         if err:
             log_error('ERROR', "SendNotification:validate_data", "", err = err)
             raise InvalidDataType(err)
-
         for notif_type in self.notif_type_list:
 
             if notif_type == self.EMAIL:
@@ -141,7 +158,18 @@ class SendNotification:
                 else:
                     response_dict[self.EMAIL] = {"status": "Success"}
 
+            if notif_type == self.SMS:
+                mail_err = self.sms_obj.send_sms()
+                if mail_err:
+                    response_dict[self.EMAIL] = {"status": "Failed", "err":mail_err}
+                else:
+                    response_dict[self.EMAIL] = {"status": "Success"}
+
         return response_dict
+
+
+
+
 
 
 
