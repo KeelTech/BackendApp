@@ -10,30 +10,35 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class CustomerProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'first_name', 'age',)
     readonly_fields = ('deleted_at', )
 
 class CustomerProfileLabelAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )
 
 class CustomerQualificationsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'institute', 'country', 'start_date', 'end_date')
     readonly_fields = ('deleted_at', )
 
 class QualificationLabelAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )
 
 class CustomerWorkExperienceAdmin(admin.ModelAdmin):
+    list_display = ('user', 'company_name', 'designation', 'start_date', 'end_date')
     readonly_fields = ('deleted_at', )
 
 class WorkExperienceLabelAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )
 
 class RelativeInCanadaAdmin(admin.ModelAdmin):
+    list_display = ('user', 'full_name', 'email_address', 'relationship', 'immigration_status')
     readonly_fields = ('deleted_at', )
 
 class RelativeInCanadaLabelAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )
 
 class EducationalCreationalAssessmentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'eca_authority_name', 'eca_authority_number', 'canadian_equivalency_summary')
     readonly_fields = ('deleted_at', )
 
 class EducationalCreationalAssessmentLabelAdmin(admin.ModelAdmin):

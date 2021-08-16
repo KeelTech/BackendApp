@@ -106,6 +106,9 @@ class CustomToken(TimeStampedModel):
 
     class Meta:
         db_table = "custom_token"
+    
+    def __str__(self):
+        return str(self.user)
 
 class PasswordResetToken(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="password_reset_user_id", null=True)
@@ -139,6 +142,8 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     current_country = models.CharField(max_length=512, default=None, blank=True, null=True)
     desired_country = models.CharField(max_length=512, default=None, blank=True, null=True)
 
+    def __str__(self):
+        return str(self.user)
 
 class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(default="user", max_length=512)
@@ -150,6 +155,8 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     address_label = models.CharField(max_length=512)
     date_of_birth_label = models.CharField(max_length=512)
     phone_number_label = models.CharField(max_length=512, blank=True, null=True, default=None)
+    current_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
+    desired_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
 
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
@@ -158,6 +165,7 @@ class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
     year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)
     city = models.CharField(max_length=512, blank=True, null=True, default=None)
+    state = models.CharField(max_length=512, blank=True, null=True, default=None)
     country = models.CharField(max_length=512, blank=True, null=True, default=None)
     start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
     end_date = models.DateField(max_length=512, blank=True, null=True, default=None)
@@ -169,6 +177,8 @@ class QualificationLabel(TimeStampedModel, SoftDeleteModel):
     grade_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     year_of_passing_label = models.CharField(max_length=512)
     city_label = models.CharField(max_length=512)
+    city_label = models.CharField(max_length=512)
+    state_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     country_label = models.CharField(max_length=512)
     start_date_label = models.CharField(max_length=512)
     end_date_label = models.CharField(max_length=512)
@@ -220,7 +230,7 @@ class RelativeInCanadaLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=215, default="user")
     full_name_label = models.CharField(max_length=215)
     relationship_label = models.CharField(max_length=215)
-    immigrations_status_label = models.CharField(max_length=215)
+    immigration_status_label = models.CharField(max_length=215)
     address_label = models.CharField(max_length=215)
     contact_number_label = models.CharField(max_length=215)
     email_address_label = models.CharField(max_length=215)
