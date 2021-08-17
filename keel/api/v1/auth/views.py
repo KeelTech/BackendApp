@@ -441,6 +441,7 @@ class ProfileView(GenericViewSet):
         labels = {}
         for label in get_labels:
             labels['institute_label'] = label.institute_label
+            labels['degree_label'] = label.degree_label
             labels['year_of_passing_label'] = label.year_of_passing_label
             labels['grade_label'] = label.grade_label
             labels['city_label'] = label.city_label
@@ -457,6 +458,7 @@ class ProfileView(GenericViewSet):
         else:
             data = [{
                 "institute": {"value": "", "type": "char", "labels": "Institute"},
+                "degree": {"value": "", "type": "char", "labels": "Degree"},
                 "year_of_passing": {"value": "", "type": "char", "labels": "Year Of Passing"},
                 "grade": {"value": "", "type": "char", "labels": "Grade"},
                 "city": {"value": "", "type": "char", "labels": "City"},
@@ -496,9 +498,9 @@ class ProfileView(GenericViewSet):
             labels['address_label'] = label.address_label
             labels['contact_number_label'] = label.contact_number_label
             labels['email_address_label'] = label.email_address_label
-        queryset = RelativeInCanada.objects.filter(user=request.user)
+        queryset = RelativeInCanada.objects.filter(user=request.user).first()
         if queryset:
-            serializer = self.serializer_class_relative_in_canada(queryset, many=True, context={"labels":labels})
+            serializer = self.serializer_class_relative_in_canada(queryset, context={"labels":labels})
             return serializer.data
         else:
             data = {
@@ -622,7 +624,13 @@ class ProfileView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        request = self.extract(request.data.get('profile'))
+        try:
+            request = self.extract(request.data.get('profile'))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         phone_number = request.get("phone_number")
         serializer = self.serializer_class_pro_update(data=request)
         serializer.is_valid(raise_exception=True)
@@ -770,6 +778,7 @@ class QualificationView(GenericViewSet):
             customer_work_info = {
                 "id" : info.get("id"),
                 "institute" : info["institute"].get("value"),
+                "degree" : info["degree"].get("value"),
                 "year_of_passing" : info["year_of_passing"].get("value"),
                 "city" : info["city"].get("value"),
                 "state" : info["state"].get("value"),
@@ -790,10 +799,12 @@ class QualificationView(GenericViewSet):
             "message" : ""
         }
         try:
-            requests = request.data
-        except AttributeError:
-            requests = request
-        request = self.extract(requests.get('qualification'))
+            request = self.extract(request.data.get('qualification'))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:CreateQualificationView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = self.serializer_class(data=request, many=True)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
@@ -816,7 +827,13 @@ class QualificationView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        request = self.extract(request.data.get('qualification'))
+        try:
+            request = self.extract(request.data.get('qualification'))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:CreateQualificationView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         for ids in request:
             serializer = self.serializer_class_update(data=request, many=True)
             serializer.is_valid(raise_exception=True)
@@ -871,7 +888,13 @@ class WorkExperienceView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        request = self.extract(request.data.get("work_experience"))
+        try:
+            request = self.extract(request.data.get("work_experience"))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:CreateWorkExperienceView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = self.serializer_class(data=request, many=True)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
@@ -894,7 +917,13 @@ class WorkExperienceView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        request = self.extract(request.data.get("work_experience"))
+        try:
+            request = self.extract(request.data.get("work_experience"))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:CreateWorkExperienceView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         for ids in request:
             id = ids.get('id')
             serializer = self.serializer_class_update(data=request, many=True)
@@ -931,19 +960,16 @@ class RelativeInCanadaView(GenericViewSet):
     
     @staticmethod
     def extract(datas):
-        data = []
-        for info in datas:
-            customer_work_info = {
-                "id" : info.get("id"),
-                "full_name" : info["full_name"].get("value"),
-                "relationship" : info["relationship"].get("value"),
-                "immigration_status" : info["immigration_status"].get("value"),
-                "address" : info["address"].get("value"),
-                "contact_number" : info["contact_number"].get("value"),
-                "email_address" : info["email_address"].get("value"),
-            }
-            data.append(customer_work_info)
-        return data
+        customer_work_info = {
+            "id" : datas.get("id"),
+            "full_name" : datas["full_name"].get("value"),
+            "relationship" : datas["relationship"].get("value"),
+            "immigration_status" : datas["immigration_status"].get("value"),
+            "address" : datas["address"].get("value"),
+            "contact_number" : datas["contact_number"].get("value"),
+            "email_address" : datas["email_address"].get("value"),
+        }
+        return customer_work_info
 
     @classmethod
     def relative_in_canada(self, request):
@@ -952,12 +978,17 @@ class RelativeInCanadaView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        request = self.extract(request.data.get("relative_in_canada"))
-        serializer = self.serializer_class(data=request, many=True)
+        try:
+            request = self.extract(request.data.get("relative_in_canada"))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer = self.serializer_class(data=request)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
-        for data in validated_data:
-            data['user'] = user
+        validated_data['user'] = user
         try:
             serializer.save()
         except Exception as e:
@@ -975,7 +1006,13 @@ class RelativeInCanadaView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        request = self.extract(request.data.get("relative_in_canada"))
+        try:
+            request = self.extract(request.data.get("relative_in_canada"))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         for ids in request:
             id = ids.get('id')
             serializer = self.serializer_class_update(data=request, many=True)
@@ -1031,7 +1068,13 @@ class EducationalCreationalAssessmentView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        request = self.extract(request.data.get("education_assessment"))
+        try:
+            request = self.extract(request.data.get("education_assessment"))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = self.serializer_class(data=request, many=True)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
@@ -1054,7 +1097,13 @@ class EducationalCreationalAssessmentView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        request = self.extract(request.data.get("education_assessment"))
+        try:
+            request = self.extract(request.data.get("education_assessment"))
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         for ids in request:
             id = ids.get('id')
             serializer = self.serializer_class_update(data=request, many=True)
