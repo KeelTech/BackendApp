@@ -498,9 +498,9 @@ class ProfileView(GenericViewSet):
             labels['address_label'] = label.address_label
             labels['contact_number_label'] = label.contact_number_label
             labels['email_address_label'] = label.email_address_label
-        queryset = RelativeInCanada.objects.filter(user=request.user)
+        queryset = RelativeInCanada.objects.filter(user=request.user).first()
         if queryset:
-            serializer = self.serializer_class_relative_in_canada(queryset, many=True, context={"labels":labels})
+            serializer = self.serializer_class_relative_in_canada(queryset, context={"labels":labels})
             return serializer.data
         else:
             data = {
@@ -960,19 +960,16 @@ class RelativeInCanadaView(GenericViewSet):
     
     @staticmethod
     def extract(datas):
-        data = []
-        for info in datas:
-            customer_work_info = {
-                "id" : info.get("id"),
-                "full_name" : info["full_name"].get("value"),
-                "relationship" : info["relationship"].get("value"),
-                "immigration_status" : info["immigration_status"].get("value"),
-                "address" : info["address"].get("value"),
-                "contact_number" : info["contact_number"].get("value"),
-                "email_address" : info["email_address"].get("value"),
-            }
-            data.append(customer_work_info)
-        return data
+        customer_work_info = {
+            "id" : datas.get("id"),
+            "full_name" : datas["full_name"].get("value"),
+            "relationship" : datas["relationship"].get("value"),
+            "immigration_status" : datas["immigration_status"].get("value"),
+            "address" : datas["address"].get("value"),
+            "contact_number" : datas["contact_number"].get("value"),
+            "email_address" : datas["email_address"].get("value"),
+        }
+        return customer_work_info
 
     @classmethod
     def relative_in_canada(self, request):
@@ -988,11 +985,10 @@ class RelativeInCanadaView(GenericViewSet):
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        serializer = self.serializer_class(data=request, many=True)
+        serializer = self.serializer_class(data=request)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
-        for data in validated_data:
-            data['user'] = user
+        validated_data['user'] = user
         try:
             serializer.save()
         except Exception as e:
