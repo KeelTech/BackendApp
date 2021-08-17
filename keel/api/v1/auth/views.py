@@ -685,6 +685,7 @@ class ProfileView(GenericViewSet):
             "status":1,
             "message":""
         }
+        update_profile = self.update_profile(request)
         # create qualification instance
         create_qualification = QualificationView.qualification(request)
         # create work experience instance
@@ -694,8 +695,9 @@ class ProfileView(GenericViewSet):
         # create education instance
         create_education_assessment = EducationalCreationalAssessmentView.educational_creational_assessment(request)
 
-        response["message"] = {"qualification":create_qualification.data, "work_experience":create_work_experience.data,
-                                "relative_in_canada":create_relative_in_canada.data, "education_assessment":create_education_assessment.data}
+        response["message"] = {"profile":update_profile.data, "qualification":create_qualification.data, 
+                                "work_experience":create_work_experience.data, "relative_in_canada":create_relative_in_canada.data, 
+                                "education_assessment":create_education_assessment.data}
         return Response(response)
     
     def update_full_profile(self, request):
@@ -1013,21 +1015,19 @@ class RelativeInCanadaView(GenericViewSet):
             response['message'] = str(e)
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        for ids in request:
-            id = ids.get('id')
-            serializer = self.serializer_class_update(data=request, many=True)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-            for data in validated_data:
-                data['user'] = user
-                data['id'] = id
-            try:
-                serializer.save()
-            except Exception as e:
-                logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
-                response['message'] = str(e)
-                response['status'] = 0
-                return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        id = request.get('id')
+        serializer = self.serializer_class_update(data=request)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        validated_data['user'] = user
+        validated_data['id'] = id
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["message"] = serializer.data
         return Response(response)
 

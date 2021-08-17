@@ -171,7 +171,7 @@ class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
 
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
     institute = models.CharField(max_length=512, default=None, blank=True, null=True)
-    degree = models.CharField(max_length=20, choices=DEGREE_TYPE, default=BACHELORS,  blank=True, null=True)
+    degree = models.PositiveSmallIntegerField(choices=DEGREE_TYPE, default=BACHELORS,  blank=True, null=True)
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
     city = models.CharField(max_length=512, blank=True, null=True, default=None)
     state = models.CharField(max_length=512, blank=True, null=True, default=None)
@@ -207,7 +207,7 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_workexp")
     start_date = models.DateField(max_length=512, default=None, blank=True, null=True)
     end_date = models.DateField(max_length=512, default=None, blank=True, null=True)
-    job_type = models.CharField(max_length=512, default=FULL_TIME, blank=True, null=True)
+    job_type = models.PositiveSmallIntegerField(choices=JOB_TYPE, default=FULL_TIME, blank=True, null=True)
     designation = models.CharField(max_length=512, default=None, blank=True, null=True)
     job_description = models.CharField(max_length=512, default=None, blank=True, null=True)
     company_name = models.CharField(max_length=512, default=None, blank=True, null=True)
