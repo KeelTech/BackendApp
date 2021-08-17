@@ -12,7 +12,9 @@ from keel.Core.err_log import log_error
 from keel.Core.constants import GENERIC_ERROR
 from keel.chats.models import Chat, ChatRoom
 
-from .serializers import ChatCreateSerializer
+from keel.api.v1.cases.serializers import CaseIDSerializer
+
+from .serializers import ChatCreateSerializer, ChatRoomSerializer
 from .pagination import ChatsPagination, CHAT_PAGINATION_LIMIT
 
 
@@ -32,18 +34,22 @@ class ChatList(GenericViewSet):
         user = request.user
         user_id = user.id
 
-        # req_data = request.data
         case_id = kwargs.get("case_id","")
-        if not case_id:
-            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
             
+        # validate Case ID against User/Agent
+        case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
+        case_serializer.is_valid(raise_exception=True)
+        case_obj = case_serializer.validated_data
+
         try:
             chat_room = ChatRoom.objects.filter(Q(user = user_id) | Q(agent = user_id)).get(case = case_id)
         except ChatRoom.DoesNotExist as e:
-            log_error("ERROR", "ChatList: listChats", str(user_id), err = str(e), msg = "invalid case_id", case_id = case_id)
-            response["status"] = 1
-            response["message"] = "Invalid Request"
-            return Response(response, status = HTTP_STATUS.HTTP_400_BAD_REQUEST)
+            log_error("INFO", "ChatList: listChats", str(user_id), err = str(e), msg = "invalid case_id", case_id = case_id)
+
+            # if not found create ChatRoom between user and agents
+            chat_room_serializer = ChatRoomSerializer(data = {'user': case_obj.user_id, 'agent': case_obj.agent_id, 'case': case_id})
+            chat_room_serializer.is_valid(raise_exception = True)
+            chat_room = chat_room_serializer.save()
 
         pagination_class = ChatsPagination()
 
