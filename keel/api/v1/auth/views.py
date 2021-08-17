@@ -685,6 +685,7 @@ class ProfileView(GenericViewSet):
             "status":1,
             "message":""
         }
+        update_profile = self.update_profile(request)
         # create qualification instance
         create_qualification = QualificationView.qualification(request)
         # create work experience instance
@@ -694,8 +695,9 @@ class ProfileView(GenericViewSet):
         # create education instance
         create_education_assessment = EducationalCreationalAssessmentView.educational_creational_assessment(request)
 
-        response["message"] = {"qualification":create_qualification.data, "work_experience":create_work_experience.data,
-                                "relative_in_canada":create_relative_in_canada.data, "education_assessment":create_education_assessment.data}
+        response["message"] = {"profile":update_profile.data, "qualification":create_qualification.data, 
+                                "work_experience":create_work_experience.data, "relative_in_canada":create_relative_in_canada.data, 
+                                "education_assessment":create_education_assessment.data}
         return Response(response)
     
     def update_full_profile(self, request):
