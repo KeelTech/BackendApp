@@ -1,19 +1,22 @@
-from django.db import models
+import uuid
 
-from keel.Core.models import TimeStampedModel, SoftDeleteModel
+from django.db import models
 from keel.authentication.models import User
+from keel.Core.models import SoftDeleteModel, TimeStampedModel
 from keel.plans.models import Plan
 
 # Create your models here.
 
 class Quotation(TimeStampedModel, SoftDeleteModel):
     
-    ACCEPTED = 1
-    REJECTED = 2
+    CREATED = 1
+    ACCEPTED = 2
+    REJECTED = 3
 
     QUO_STATUS_TYPE_CHOICES = (
-        (ACCEPTED, 'Accpeted'),
-        (REJECTED, 'Rejected'),
+        (CREATED, 'CREATED'),
+        (ACCEPTED, 'ACCEPTED'),
+        (REJECTED, 'REJECTED'),
     )
 
     q_id = models.CharField(max_length=255, primary_key=True)
@@ -24,7 +27,11 @@ class Quotation(TimeStampedModel, SoftDeleteModel):
                                     related_name = "plan_quotations")
     total_amount = models.DecimalField(max_digits = 12, decimal_places=2)
     status = models.PositiveSmallIntegerField(choices=QUO_STATUS_TYPE_CHOICES, 
-                                        verbose_name="quo_status", default=ACCEPTED)
+                                        verbose_name="quo_status", default=CREATED)
+    
+    def save(self, *args, **kwargs):
+        self.q_id = uuid.uuid4()
+        super().save(*args, **kwargs)
 
 class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
 
