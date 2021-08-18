@@ -497,6 +497,11 @@ class OTPSerializer(serializers.Serializer):
         #     attrs['otp_obj'] = otp_obj
         return attrs
 
+class VerifyOTPSerializer(serializers.Serializer):
+    otp = serializers.IntegerField()
+    token = serializers.CharField()
+
+
 class UserDocumentSerializer(serializers.ModelSerializer):
     doc_type = serializers.SerializerMethodField()
 
