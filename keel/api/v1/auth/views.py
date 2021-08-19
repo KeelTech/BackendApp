@@ -2,10 +2,11 @@ from datetime import date, timedelta
 import datetime
 import facebook
 import requests
+import json
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
-from django.utils import timezone
 
+from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
@@ -1167,9 +1168,10 @@ class LoginOTP(GenericViewSet):
         phone_number = data['phone_number']
 
         otp = generate_random_int(4)
+        token_data = {"otp": otp, "phone_number": phone_number}
         # token = generate_unique_id("mv_") 
         token = "MOBILE_VERIFICATION_" + str(user.id)
-        create_token(token, otp, 10*60*60) # cache for 10 mins
+        create_token(token, json.dumps(token_data), 10*60*60) # cache for 10 mins
         text = "{0} is the OTP for mobile verification".format(otp)
         sms = SMSNotification(phone_number, text)
         err = sms.send_sms()
@@ -1204,14 +1206,21 @@ class LoginOTP(GenericViewSet):
         token = "MOBILE_VERIFICATION_" + str(user.id)
         otp = data['otp']
 
-        value = get_token(token)
-        if not value:
+        redis_data = get_token(token)
+        if not redis_data:
             log_error("CRITICAL", "LoginOTP.verify", "OTP is expired")
             response["status"] = "1"
             response["data"] = "OTP has expired. please re-generate"
             return Response(response, status = status.HTTP_400_BAD_REQUEST)
 
+        token_data = json.loads(redis_data)
+        value = token_data.get("otp")
+        phone_number = token_data.get("phone_number")
+
         if int(value) == otp:
+            
+            user.phone_number = phone_number
+            user.save()
             response["data"] = "OTP validated successfully"
             return Response(response, status = status.HTTP_200_OK)
 
