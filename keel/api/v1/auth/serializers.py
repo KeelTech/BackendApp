@@ -499,7 +499,7 @@ class OTPSerializer(serializers.Serializer):
 
 class VerifyOTPSerializer(serializers.Serializer):
     otp = serializers.IntegerField()
-    token = serializers.CharField()
+    # token = serializers.CharField()
 
 
 class UserDocumentSerializer(serializers.ModelSerializer):
