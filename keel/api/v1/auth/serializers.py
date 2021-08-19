@@ -141,7 +141,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_age(self, obj):
         var = obj.age
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["age_label"]}
+            return {"value": var, "type":"int", "labels":self.context["labels"]["age_label"]}
 
     def get_address(self, obj):
         var = obj.address
@@ -156,7 +156,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_phone_number(self, obj):
         var = obj.user.phone_number
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["phone_number_label"]}
+            return {"value": var, "type":"int", "labels":self.context["labels"]["phone_number_label"]}
 
     def get_current_country(self, obj):
         var = obj.current_country
@@ -252,7 +252,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     def get_degree(self, obj):
         var = obj.degree
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["degree_label"]}
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["degree_label"]}
 
     def get_grade(self, obj):
         var = obj.grade
@@ -362,7 +362,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     def get_job_type(self, obj):
         var = obj.job_type
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["job_type_label"]}
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["job_type_label"]}
 
     def get_designation(self, obj):
         var = obj.designation

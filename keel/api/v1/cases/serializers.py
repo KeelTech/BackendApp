@@ -8,7 +8,7 @@ class CasesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Case
         fields = ('case_id', 'display_id', 'user', 'agent', 'account_manager_id', 'ref_id', 
-                    'plan', 'status', 'is_active')
+                    'plan', 'status', 'is_active', 'created_at', 'updated_at')
 
 class CaseIDSerializer(serializers.Serializer):
 
