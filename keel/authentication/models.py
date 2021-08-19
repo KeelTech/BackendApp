@@ -91,6 +91,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         unique_together = (("email", "phone_number"))
         db_table = "auth_user"
+        ordering = ['-id']
 
 class UserDocument(TimeStampedModel, SoftDeleteModel):
 

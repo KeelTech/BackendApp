@@ -50,9 +50,11 @@ class Case(TimeStampedModel, SoftDeleteModel):
     plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_cases')
 
     def save(self, *args, **kwargs):
-        self.case_id = uuid.uuid4()
-        reverse_case_id=str(self.case_id)[::-1]
-        self.display_id=(reverse_case_id[0:5])[::-1]
+        if not self.case_id:
+            self.case_id = uuid.uuid4()
+        if not self.display_id:
+            reverse_case_id=str(self.case_id)[::-1]
+            self.display_id=(reverse_case_id[0:5])[::-1]
         super().save(*args, **kwargs)
     
     def __str__(self):

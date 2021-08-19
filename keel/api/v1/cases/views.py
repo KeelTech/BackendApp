@@ -1,16 +1,18 @@
+import logging
+
+from keel.api.permissions import IsRCICUser
+from keel.api.v1.auth.serializers import (BaseProfileSerializer,
+                                          CustomerQualificationsSerializer)
+from keel.authentication.backends import JWTAuthentication
+from keel.cases.models import Case
+from keel.tasks.models import Task
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-from rest_framework import permissions, generics, status
-from rest_framework.response import Response
-
-from keel.authentication.backends import JWTAuthentication
-from keel.tasks.models import Task
-from keel.cases.models import Case
-from keel.api.permissions import IsRCICUser
 
 from .serializers import CasesSerializer
 
-import logging
 logger = logging.getLogger('app-logger')
 
 
@@ -34,30 +36,18 @@ class FilterUserCases(generics.ListAPIView):
         user = request.user
         req_data = request.GET.dict()
         queryset = Case.objects.get_agent_cases(user, req_data)
-        data = []
-        for cases in queryset:
-            data.append({
-                "case_id": cases.case_id,
-                "user": cases.user.email,
-                "account_manager_id": cases.account_manager_id,
-                "agent": cases.agent.email,
-                "plan": cases.plan.title,
-                "status": cases.status,
-                "is_active": cases.is_active,
-                "start_date": cases.created_at,
-                "updated_at": cases.updated_at,
-            })
-        response["message"] = data
+        serializer = self.serializer_class(queryset, many=True)
+        response["message"] = serializer.data
         return Response(response)
 
-
+  
 class FilterUserCasesDetails(GenericViewSet):
 
     serializer_class = CasesSerializer
     permission_classes = (permissions.IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
 
-    def get_case(self,request, **kwargs):
+    def get_case(self, request, **kwargs):
         response = {
             "status" : 1,
             "message" : ""
@@ -65,42 +55,24 @@ class FilterUserCasesDetails(GenericViewSet):
         pk = kwargs.get('case_id')
         try:
             queryset = Case.objects.get(case_id=pk)
+            serializer_cases = self.serializer_class(queryset)
+            
             # get all user qualifications
             qualifications = queryset.user.user_qualification.all()
-            user_qua = []
-            for qualification in qualifications:
-                user_qua.append({
-                    "institute" : qualification.institute,
-                    "degree" : qualification.degree,
-                    "grade" : qualification.grade,
-                    "year_of_passing" : qualification.year_of_passing,
-                    "start_date" : qualification.start_date,
-                    "city" : qualification.city,
-                    "country" : qualification.country,
-                })
+            serializer_qua = CustomerQualificationsSerializer(qualifications, many=True)
+            
+            # get user profile
+            serializer_profile = BaseProfileSerializer(queryset.user.user_profile)
             
             # get number of tasks related to cases from Task Model
             tasks = Task.objects.filter(case=queryset).count()
-            data = []
-            data.append({
-                "case_details" : {
-                    "case_id" : queryset.case_id,
-                    "account_manager_id" : queryset.account_manager_id,
-                    "case_type" : queryset.plan.title,
-                    "status" : queryset.status,
-                    "is_active" : queryset.is_active
-                },
-                "user_details" : {
-                    "fullname" : "{} {}".format(queryset.user.user_profile.first_name, queryset.user.user_profile.last_name),
-                    "mother_fullname" : queryset.user.user_profile.mother_fullname,
-                    "father_fullname" : queryset.user.user_profile.father_fullname,
-                    "age" : queryset.user.user_profile.age,
-                    "address" : queryset.user.user_profile.address,
-                    "date_of_birth" : queryset.user.user_profile.date_of_birth,
-                },
-                "user_qualifications" : user_qua,
+            
+            data = {
+                "case_details" : serializer_cases.data,
+                "user_qualifications" : serializer_qua.data,
+                "user_details" : serializer_profile.data,
                 "task_count" : tasks
-            })
+            }
         except Exception as e:
             logger.error('ERROR: CASE:FilterUserCasesDetails ' + str(e))
             response['message'] = str(e)
