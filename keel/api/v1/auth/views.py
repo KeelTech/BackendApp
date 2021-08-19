@@ -1127,8 +1127,9 @@ class EducationalCreationalAssessmentView(GenericViewSet):
 
 class LoginOTP(GenericViewSet):
 
-    authentication_classes = []
-    serializer_class = serializers.OTPSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+    # serializer_class = serializers.OTPSerializer
 
     @transaction.atomic
     def generate(self, request, format=None):
@@ -1157,7 +1158,8 @@ class LoginOTP(GenericViewSet):
             "data": ""
         }
         resp_status = status.HTTP_200_OK
-
+        user = request.user
+        user_id = user.id
         serializer = serializers.OTPSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -1165,7 +1167,8 @@ class LoginOTP(GenericViewSet):
         phone_number = data['phone_number']
 
         otp = generate_random_int(4)
-        token = generate_unique_id("mv_") 
+        # token = generate_unique_id("mv_") 
+        token = "MOBILE_VERIFICATION_" + str(user.id)
         create_token(token, otp, 10*60*60) # cache for 10 mins
         text = "{0} is the OTP for mobile verification".format(otp)
         sms = SMSNotification(phone_number, text)
@@ -1190,12 +1193,15 @@ class LoginOTP(GenericViewSet):
         }
 
         req_data = request.data
+        user = request.user
+        user_id = user.id
 
         otp_verify = serializers.VerifyOTPSerializer(data = req_data)
         otp_verify.is_valid(raise_exception = True)
         data = otp_verify.validated_data
 
-        token = data['token']
+        # token = data['token']
+        token = "MOBILE_VERIFICATION_" + str(user.id)
         otp = data['otp']
 
         value = get_token(token)
