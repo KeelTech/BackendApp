@@ -30,7 +30,8 @@ class Quotation(TimeStampedModel, SoftDeleteModel):
                                         verbose_name="quo_status", default=CREATED)
     
     def save(self, *args, **kwargs):
-        self.q_id = uuid.uuid4()
+        if not self.q_id:
+            self.q_id = uuid.uuid4()
         super().save(*args, **kwargs)
 
 class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
