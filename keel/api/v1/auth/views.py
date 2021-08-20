@@ -24,7 +24,7 @@ from rest_framework.exceptions import ValidationError
 
 from keel.document.models import Documents
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import (CustomerProfile, CustomerProfileLabel, CustomerQualifications, CustomerWorkExperience, 
+from keel.authentication.models import (AgentProfile, CustomerProfile, CustomerProfileLabel, CustomerQualifications, CustomerWorkExperience, 
                                         UserDocument, QualificationLabel, WorkExperienceLabel, RelativeInCanadaLabel, RelativeInCanada,
                                         EducationalCreationalAssessment, EducationalCreationalAssessmentLabel)
 from keel.api.v1.cases.serializers import CasesSerializer
@@ -579,9 +579,12 @@ class ProfileView(GenericViewSet):
             return data
     
     def get_queryset_cases(self, request):
-        get_cases = Case.objects.filter(user=request.user).first()
-        serializer = self.serializer_class_cases(get_cases)
-        return serializer.data
+        get_case = Case.objects.filter(user=request.user).first()
+        serializer = self.serializer_class_cases(get_case).data
+        agent = serializer['agent']
+        get_agent = AgentProfile.objects.filter(user=agent).first()
+        agent = serializers.AgentProfileSerializer(get_agent).data
+        return {"case_details":serializer, "agent":agent}
 
     def create_profile(self, request):
         response = {
@@ -726,9 +729,10 @@ class ProfileView(GenericViewSet):
         return Response(response)
     
     def get_profile(self, request):
+        case = self.get_queryset_cases(request)
         response = {
             "status" : 1,
-            "message" : {"profile_exists": False,  "profile":{}, "cases":self.get_queryset_cases(request)}
+            "message" : {"profile_exists": False,  "profile":{}, "cases":case["case_details"], "agent":case["agent"]}
         } 
         queryset = CustomerProfile.objects.filter(user=request.user).first()
         if not queryset:
@@ -757,7 +761,7 @@ class ProfileView(GenericViewSet):
                                 "work_experience" : work_experience, 
                                 "relative_in_canada" : relative_in_canada,
                                 "education_assessment" : education_assessment,
-                                "cases":cases
+                                # "cases":cases
                             }
         return Response(response)
 

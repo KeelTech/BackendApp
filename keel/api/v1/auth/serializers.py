@@ -2,7 +2,7 @@ from rest_framework import serializers
 from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, WorkExperienceLabel,
                                         CustomerProfile,  CustomerProfileLabel, QualificationLabel, CustomerQualifications,
                                         RelativeInCanada, RelativeInCanadaLabel, EducationalCreationalAssessment, 
-                                        EducationalCreationalAssessmentLabel)
+                                        EducationalCreationalAssessmentLabel, AgentProfile)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -30,6 +30,13 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerProfile
+        exclude = ('created_at', 'updated_at', 'deleted_at')
+
+
+class AgentProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AgentProfile
         exclude = ('created_at', 'updated_at', 'deleted_at')
 
 
@@ -265,17 +272,17 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
             return {"value": var, "type":"char", "labels":self.context["labels"]["year_of_passing_label"]}
     
     def get_city(self, obj):
-        var = obj.city
+        var = obj.city.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
     
     def get_country(self, obj):
-        var = obj.country
+        var = obj.country.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
     
     def get_state(self, obj):
-        var = obj.state
+        var = obj.state.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["state_label"]}
     
@@ -390,7 +397,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
             return {"value": var, "type":"char", "labels":self.context["labels"]["company_name_label"]}
 
     def get_city(self, obj):
-        var = obj.city
+        var = obj.city.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
 

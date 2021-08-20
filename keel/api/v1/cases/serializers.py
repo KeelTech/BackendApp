@@ -4,8 +4,8 @@ from keel.Core.err_log import log_error
 
 
 class CasesSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source="user.email")
-    agent = serializers.ReadOnlyField(source="agent.email")
+    # user = serializers.ReadOnlyField(source="user.email")
+    # agent = serializers.ReadOnlyField(source="agent.email")
     plan = serializers.ReadOnlyField(source="plan.title")
     
     class Meta:
