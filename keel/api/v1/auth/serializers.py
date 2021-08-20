@@ -2,7 +2,7 @@ from rest_framework import serializers
 from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, WorkExperienceLabel,
                                         CustomerProfile,  CustomerProfileLabel, QualificationLabel, CustomerQualifications,
                                         RelativeInCanada, RelativeInCanadaLabel, EducationalCreationalAssessment, 
-                                        EducationalCreationalAssessmentLabel)
+                                        EducationalCreationalAssessmentLabel, AgentProfile)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -30,6 +30,13 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerProfile
+        exclude = ('created_at', 'updated_at', 'deleted_at')
+
+
+class AgentProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AgentProfile
         exclude = ('created_at', 'updated_at', 'deleted_at')
 
 
@@ -141,7 +148,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_age(self, obj):
         var = obj.age
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["age_label"]}
+            return {"value": var, "type":"int", "labels":self.context["labels"]["age_label"]}
 
     def get_address(self, obj):
         var = obj.address
@@ -156,7 +163,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_phone_number(self, obj):
         var = obj.user.phone_number
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["phone_number_label"]}
+            return {"value": var, "type":"int", "labels":self.context["labels"]["phone_number_label"]}
 
     def get_current_country(self, obj):
         var = obj.current_country
@@ -265,17 +272,17 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
             return {"value": var, "type":"char", "labels":self.context["labels"]["year_of_passing_label"]}
     
     def get_city(self, obj):
-        var = obj.city
+        var = obj.city.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
     
     def get_country(self, obj):
-        var = obj.country
+        var = obj.country.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
     
     def get_state(self, obj):
-        var = obj.state
+        var = obj.state.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["state_label"]}
     
@@ -362,7 +369,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     def get_job_type(self, obj):
         var = obj.job_type
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["job_type_label"]}
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["job_type_label"]}
 
     def get_designation(self, obj):
         var = obj.designation
@@ -390,7 +397,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
             return {"value": var, "type":"char", "labels":self.context["labels"]["company_name_label"]}
 
     def get_city(self, obj):
-        var = obj.city
+        var = obj.city.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
 

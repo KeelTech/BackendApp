@@ -4,11 +4,14 @@ from keel.Core.err_log import log_error
 
 
 class CasesSerializer(serializers.ModelSerializer):
-
+    # user = serializers.ReadOnlyField(source="user.email")
+    # agent = serializers.ReadOnlyField(source="agent.email")
+    plan = serializers.ReadOnlyField(source="plan.title")
+    
     class Meta:
         model = Case
         fields = ('case_id', 'display_id', 'user', 'agent', 'account_manager_id', 'ref_id', 
-                    'plan', 'status', 'is_active')
+                    'plan', 'status', 'is_active', 'created_at', 'updated_at')
 
 class CaseIDSerializer(serializers.Serializer):
 

@@ -3,6 +3,7 @@ from django.db import models, transaction
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from keel.Core.models import Country, City, State
 
 # from safedelete import SOFT_DELETE
 # from safedelete.models import SafeDeleteModel
@@ -146,6 +147,19 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     def __str__(self):
         return str(self.user)
 
+
+class AgentProfile(TimeStampedModel, SoftDeleteModel):
+    user = models.OneToOneField(User, related_name="agent_user_profile", on_delete=models.DO_NOTHING)
+    full_name = models.CharField(max_length=512, default=None, null=True, blank=True)
+    license = models.CharField(max_length=512, default=None, blank=True, null=True)
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="country_agent_profile", default=None, blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.full_name
+    
+    class Meta:
+        db_table = "agent_profile"
+
 class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(default="user", max_length=512)
     first_name_label = models.CharField(max_length=512)
@@ -162,21 +176,24 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
 
-    BACHELORS = 1
-    MASTERS = 2
+    # BACHELORS = 1
+    # MASTERS = 2
 
-    DEGREE_TYPE = (
-        (BACHELORS, 'BACHELORS'),
-        (MASTERS, 'MASTERS'),
-    )
+    # DEGREE_TYPE = (
+    #     (BACHELORS, 'BACHELORS'),
+    #     (MASTERS, 'MASTERS'),
+    # )
 
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
     institute = models.CharField(max_length=512, default=None, blank=True, null=True)
-    degree = models.PositiveSmallIntegerField(choices=DEGREE_TYPE, default=BACHELORS,  blank=True, null=True)
+    degree = models.CharField(max_length=512, default=None,  blank=True, null=True)
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
-    city = models.CharField(max_length=512, blank=True, null=True, default=None)
-    state = models.CharField(max_length=512, blank=True, null=True, default=None)
-    country = models.CharField(max_length=512, blank=True, null=True, default=None)
+    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, related_name="city_customer_qualification", 
+                                max_length=512, blank=True, null=True, default=None)
+    state = models.ForeignKey(State, on_delete=models.DO_NOTHING, related_name="state_customer_qualification", 
+                                            blank=True, null=True, default=None)
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="country_customer_qualifcation",
+                                        max_length=512, blank=True, null=True, default=None)
     year_of_passing = models.CharField(max_length=512, blank=True, null=True, default=None)
     start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
     end_date = models.DateField(max_length=512, blank=True, null=True, default=None)
@@ -212,7 +229,8 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     designation = models.CharField(max_length=512, default=None, blank=True, null=True)
     job_description = models.CharField(max_length=512, default=None, blank=True, null=True)
     company_name = models.CharField(max_length=512, default=None, blank=True, null=True)
-    city = models.CharField(max_length=512, default=None, blank=True, null=True)
+    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, related_name="city_customer_experience", 
+                                max_length=512, blank=True, null=True, default=None)
     weekly_working_hours = models.CharField(max_length=512, default=None, blank=True, null=True)
 
 
