@@ -175,17 +175,17 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
 
-    BACHELORS = 1
-    MASTERS = 2
+    # BACHELORS = 1
+    # MASTERS = 2
 
-    DEGREE_TYPE = (
-        (BACHELORS, 'BACHELORS'),
-        (MASTERS, 'MASTERS'),
-    )
+    # DEGREE_TYPE = (
+    #     (BACHELORS, 'BACHELORS'),
+    #     (MASTERS, 'MASTERS'),
+    # )
 
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_qualification")
     institute = models.CharField(max_length=512, default=None, blank=True, null=True)
-    degree = models.PositiveSmallIntegerField(choices=DEGREE_TYPE, default=BACHELORS,  blank=True, null=True)
+    degree = models.CharField(max_length=512, default=None,  blank=True, null=True)
     grade = models.CharField(max_length=512, blank=True, null=True, default=None)
     city = models.CharField(max_length=512, blank=True, null=True, default=None)
     state = models.CharField(max_length=512, blank=True, null=True, default=None)

@@ -252,7 +252,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     def get_degree(self, obj):
         var = obj.degree
         if "labels" in self.context:
-            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["degree_label"]}
+            return {"value": var, "type":"char", "labels":self.context["labels"]["degree_label"]}
 
     def get_grade(self, obj):
         var = obj.grade
