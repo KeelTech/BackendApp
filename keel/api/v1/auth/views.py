@@ -1,54 +1,64 @@
-from datetime import date, timedelta
 import datetime
+import logging
+from datetime import date, timedelta
+
 import facebook
 import requests
+from allauth.socialaccount.providers.facebook.views import \
+    FacebookOAuth2Adapter
+from allauth.socialaccount.providers.linkedin_oauth2.views import \
+    LinkedInOAuth2Adapter
+from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
-from django.utils import timezone
-
-from django.http import HttpResponseRedirect
+from dj_rest_auth.registration.views import SocialLoginView
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
-from django.db import transaction, IntegrityError, utils
-from django.db.models import F, Sum, Max, Q, Prefetch, Case, When, Count, Value
+from django.db import IntegrityError, transaction, utils
+from django.db.models import Case, Count, F, Max, Prefetch, Q, Sum, Value, When
+from django.http import HttpResponseRedirect
 from django.template.loader import get_template
-from rest_framework.views import APIView
-
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import generics, mixins, viewsets, status
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework.parsers import JSONParser
-from rest_framework.exceptions import ValidationError
-
-from keel.document.models import Documents
-from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
-from keel.authentication.models import (AgentProfile, CustomerProfile, CustomerProfileLabel, CustomerQualifications, CustomerWorkExperience, 
-                                        UserDocument, QualificationLabel, WorkExperienceLabel, RelativeInCanadaLabel, RelativeInCanada,
-                                        EducationalCreationalAssessment, EducationalCreationalAssessmentLabel)
+from django.utils import timezone
+from keel.api.permissions import IsRCICUser
+from keel.api.v1.auth import serializers
 from keel.api.v1.cases.serializers import CasesSerializer
-from keel.cases.models import Case
-from keel.authentication.models import (CustomToken, PasswordResetToken)
-from keel.authentication.models import User as user_model
+from keel.api.v1.document.serializers import (DocumentCreateSerializer,
+                                              DocumentTypeSerializer)
 from keel.authentication.backends import JWTAuthentication
 from keel.authentication.interface import get_rcic_item_counts
+from keel.authentication.models import (AgentProfile, CustomerProfile,
+                                        CustomerProfileLabel,
+                                        CustomerQualifications,
+                                        CustomerWorkExperience, CustomToken,
+                                        EducationalCreationalAssessment,
+                                        EducationalCreationalAssessmentLabel,
+                                        PasswordResetToken, QualificationLabel,
+                                        RelativeInCanada,
+                                        RelativeInCanadaLabel)
+from keel.authentication.models import User as user_model
+from keel.authentication.models import UserDocument, WorkExperienceLabel
+from keel.cases.models import Case
+from keel.Core.models import City, State, Country
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.notifications import EmailNotification
-from keel.api.v1.auth import serializers
-from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer
-from keel.api.permissions import IsRCICUser 
+from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
+from keel.document.models import Documents
+from rest_framework import generics, mixins, status, viewsets
+from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import ValidationError
+from rest_framework.parsers import JSONParser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-from allauth.socialaccount.providers.linkedin_oauth2.views import LinkedInOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dj_rest_auth.registration.views import SocialLoginView
 from .adapter import GoogleOAuth2AdapterIdToken
 from .auth_token import generate_auth_login_token
+from .helpers import instances
+
 # from keel.authentication.models import (OtpVerifications, )
 
-import logging
 logger = logging.getLogger('app-logger')
 
 User = get_user_model()
@@ -522,6 +532,8 @@ class ProfileView(GenericViewSet):
             labels['job_description_label'] = label.job_description_label
             labels['company_name_label'] = label.company_name_label
             labels['city_label'] = label.city_label
+            labels['state_label'] = label.state_label
+            labels['country_label'] = label.country_label
             labels['weekly_working_hours_label'] = label.weekly_working_hours_label
             labels['start_date_label'] = label.start_date_label
             labels['end_date_label'] = label.end_date_label
@@ -537,6 +549,8 @@ class ProfileView(GenericViewSet):
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"},
                 "city": {"value": "", "type": "char", "labels": "City"},
+                "state": {"value": "", "type": "char", "labels": "State"},
+                "country": {"value": "", "type": "char", "labels": "Country"},
                 "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
                 "designation": {"value": "", "type": "char", "labels": "Desgination"},
                 "job_type": {"value": "", "type": "char", "labels": "Job Type"},
@@ -793,6 +807,18 @@ class QualificationView(GenericViewSet):
                 "start_date" : info["start_date"].get("value"),
                 "end_date" : info["end_date"].get("value"),
             }
+            try:
+                # get city instance
+                city = instances.city_instance(customer_work_info.get('city'))
+                customer_work_info['city'] = city.id
+                # get state instance
+                state = instances.state_instance(customer_work_info.get('state'))
+                customer_work_info['state'] = state.id
+                # get country
+                country = instances.country_instance(customer_work_info.get('country'))
+                customer_work_info['country'] = country.id
+            except Exception as e:
+                logger.error('ERROR: AUTHENTICATION:CreateQualificationView:extract ' + str(e))
             data.append(customer_work_info)
         return data
 
@@ -880,6 +906,8 @@ class WorkExperienceView(GenericViewSet):
                 "designation" : info["designation"].get("value"),
                 "job_description" : info["job_description"].get("value"),
                 "city" : info["city"].get("value"),
+                "state" : info["state"].get("value"),
+                "country" : info["country"].get("value"),
                 "weekly_working_hours" : info["weekly_working_hours"].get("value"),
                 "start_date" : info["start_date"].get("value"),
                 "end_date" : info["end_date"].get("value")

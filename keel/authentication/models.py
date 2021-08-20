@@ -141,9 +141,11 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
     address = models.CharField(max_length=512, blank=True, null=True, default=None)
     date_of_birth = models.DateField(default=None, null=True,blank=False)
-    current_country = models.CharField(max_length=512, default=None, blank=True, null=True)
-    desired_country = models.CharField(max_length=512, default=None, blank=True, null=True)
-
+    current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="current_country_profile", 
+                                        default=None, blank=True, null=True)
+    desired_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="desired_country_profile", 
+                                        default=None, blank=True, null=True)
+    
     def __str__(self):
         return str(self.user)
 
@@ -206,7 +208,6 @@ class QualificationLabel(TimeStampedModel, SoftDeleteModel):
     grade_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     year_of_passing_label = models.CharField(max_length=512)
     city_label = models.CharField(max_length=512)
-    city_label = models.CharField(max_length=512)
     state_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     country_label = models.CharField(max_length=512)
     start_date_label = models.CharField(max_length=512)
@@ -231,6 +232,10 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     company_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING, related_name="city_customer_experience", 
                                 max_length=512, blank=True, null=True, default=None)
+    state = models.ForeignKey(State, on_delete=models.DO_NOTHING, related_name="state_customer_experience", 
+                                            blank=True, null=True, default=None)
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="country_customer_experience",
+                                        max_length=512, blank=True, null=True, default=None)
     weekly_working_hours = models.CharField(max_length=512, default=None, blank=True, null=True)
 
 
@@ -241,6 +246,8 @@ class WorkExperienceLabel(TimeStampedModel, SoftDeleteModel):
     job_description_label = models.CharField(max_length=255)
     company_name_label = models.CharField(max_length=255)
     city_label = models.CharField(max_length=255)
+    state_label = models.CharField(max_length=255, default=None, null=True, blank=True)
+    country_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     weekly_working_hours_label = models.CharField(max_length=255)
     start_date_label = models.CharField(max_length=255)
     end_date_label = models.CharField(max_length=255)

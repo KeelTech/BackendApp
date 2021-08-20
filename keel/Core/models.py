@@ -39,7 +39,7 @@ class Country(TimeStampedModel, SoftDeleteModel):
         return str(self.name)
     
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-id']
 
 
 class State(TimeStampedModel, SoftDeleteModel):
