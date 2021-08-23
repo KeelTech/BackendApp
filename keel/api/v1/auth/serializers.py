@@ -218,9 +218,19 @@ class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
         user = validated_data.get('user')
         
         try:
-            qualification, created = CustomerQualifications.objects.update_or_create(id=id, defaults={"institute":institute, "degree":degree, 
-                                                        "grade":grade, "year_of_passing":year_of_passing, "start_date":start_date, "end_date":end_date, 
-                                                        "city":city, "state":state, "country":country, "user":user})
+            qualification, created = CustomerQualifications.objects.update_or_create(id=id, 
+                                                defaults={
+                                                    "institute":institute, 
+                                                    "degree":degree,
+                                                    "grade":grade, 
+                                                    "year_of_passing":year_of_passing, 
+                                                    "start_date":start_date, 
+                                                    "end_date":end_date, 
+                                                    "city":city, 
+                                                    "state":state, 
+                                                    "country":country, 
+                                                    "user":user
+                                                })
         except CustomerQualifications.DoesNotExist:
             raise serializers.ValidationError("Qualification ID does not exist")
         
@@ -333,10 +343,20 @@ class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
         user = validated_data.get('user')
         
         try:
-            work, created = CustomerWorkExperience.objects.update_or_create(id=id, defaults={"job_type":job_type, "designation":designation, 
-                                                    "company_name":company_name, "job_description":job_description, "city":city, "state":state, 
-                                                    "country":country, "weekly_working_hours":weekly_working_hours, "start_date":start_date, 
-                                                    "end_date":end_date, "user":user})
+            work, created = CustomerWorkExperience.objects.update_or_create(id=id, 
+                                        defaults={
+                                            "job_type":job_type, 
+                                            "designation":designation,
+                                            "company_name":company_name, 
+                                            "job_description":job_description, 
+                                            "city":city, 
+                                            "state":state,
+                                            "country":country, 
+                                            "weekly_working_hours":weekly_working_hours, 
+                                            "start_date":start_date,
+                                            "end_date":end_date, 
+                                            "user":user
+                                        })
         except CustomerWorkExperience.DoesNotExist:
             raise serializers.ValidationError('Customer Work experience with ID does not exist')
         
@@ -620,9 +640,15 @@ class RelativeInCanadaUpdateSerializer(serializers.ModelSerializer):
         email_address = validated_data.get('email_address')
         user = validated_data.get('user')
         try:
-            relative, created = RelativeInCanada.objects.update_or_create(id=id, defaults={"full_name":full_name, "relationship":relationship,
-                                                                        "immigration_status":immigration_status, "address":address, 
-                                                                        "contact_number":contact_number, "email_address":email_address, "user":user})
+            relative, created = RelativeInCanada.objects.update_or_create(id=id, 
+                                        defaults={
+                                            "full_name":full_name, 
+                                            "relationship":relationship,
+                                            "immigration_status":immigration_status, "address":address,
+                                            "contact_number":contact_number, 
+                                            "email_address":email_address, 
+                                            "user":user
+                                        })
         except RelativeInCanada.DoesNotExist:
             raise serializers.ValidationError("Relative with ID does not exist")
         
@@ -700,11 +726,12 @@ class EducationalCreationalAssessmentUpdateSerializer(serializers.ModelSerialize
         user = validated_data.get('user')
         try:
             education_assessment, created = EducationalCreationalAssessment.objects.update_or_create(id=id, 
-                                                                        defaults={"eca_authority_name":eca_authority_name, 
-                                                                                "eca_authority_number":eca_authority_number, 
-                                                                                "canadian_equivalency_summary":canadian_equivalency_summary,
-                                                                                "user":user
-                                                                            })
+                                defaults={
+                                        "eca_authority_name":eca_authority_name, 
+                                        "eca_authority_number":eca_authority_number, 
+                                        "canadian_equivalency_summary":canadian_equivalency_summary,
+                                        "user":user
+                                    })
         except EducationalCreationalAssessment.DoesNotExist:
             raise serializers.ValidationError("Education Assessment with ID does not exist")
         education_assessment.eca_authority_name = eca_authority_name
