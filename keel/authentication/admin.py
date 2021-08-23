@@ -10,7 +10,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class CustomerProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'first_name', 'age',)
+    list_display = ('user', 'first_name', 'last_name', 'age',)
     readonly_fields = ('deleted_at', )
 
 class AgentProfileAdmin(admin.ModelAdmin):
