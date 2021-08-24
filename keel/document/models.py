@@ -55,4 +55,11 @@ class Documents(TimeStampedModel,SoftDeleteModel):
     objects = DocumentsManager()
 
 
+class PublicDocuments(TimeStampedModel, SoftDeleteModel):
+
+
+    avatar = models.FileField(("PublicDocuments"),blank=True)
+    original_name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True, default=None)
+
 
