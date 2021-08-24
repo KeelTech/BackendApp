@@ -587,14 +587,20 @@ class UserDetailsSerializer(serializers.ModelSerializer):
 
     user_name = serializers.SerializerMethodField()
 
+    # def get_user_name(self, obj):
+    #     email = obj.email
+    #     username = ''
+    #     try:
+    #         username = email.split("@")[0]
+    #     except Exception as e:
+    #         log_error("ERROR", "UserDetailsSerializer: get_user_name","", err = str(e), email = email)
+    #     return username
+
     def get_user_name(self, obj):
-        email = obj.email
-        username = ''
         try:
-            username = email.split("@")[0]
-        except Exception as e:
-            log_error("ERROR", "UserDetailsSerializer: get_user_name","", err = str(e), email = email)
-        return username
+            return obj.user_profile.get_user_name
+        except:
+            return ""
 
     class Meta:
         model = User
