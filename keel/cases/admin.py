@@ -11,7 +11,7 @@ class CaseAdmin(admin.ModelAdmin):
     ordering = ('case_id',)
     search_fields = ['case_id']
     autocomplete_fields = ['user', 'agent']
-    readonly_fields=('deleted_at',)
+    readonly_fields=('deleted_at', 'case_id', 'display_id')
 
     # def get_queryset(self, request):
     #     qs = super(CaseAdmin, self).get_queryset(request)

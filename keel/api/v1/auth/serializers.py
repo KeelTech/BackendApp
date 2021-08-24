@@ -2,7 +2,7 @@ from rest_framework import serializers
 from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, WorkExperienceLabel,
                                         CustomerProfile,  CustomerProfileLabel, QualificationLabel, CustomerQualifications,
                                         RelativeInCanada, RelativeInCanadaLabel, EducationalCreationalAssessment, 
-                                        EducationalCreationalAssessmentLabel)
+                                        EducationalCreationalAssessmentLabel, AgentProfile)
 from keel.Core.err_log import log_error
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
 from django.utils import timezone
@@ -30,6 +30,13 @@ class BaseProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerProfile
+        exclude = ('created_at', 'updated_at', 'deleted_at')
+
+
+class AgentProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AgentProfile
         exclude = ('created_at', 'updated_at', 'deleted_at')
 
 
@@ -141,7 +148,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_age(self, obj):
         var = obj.age
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["age_label"]}
+            return {"value": var, "type":"int", "labels":self.context["labels"]["age_label"]}
 
     def get_address(self, obj):
         var = obj.address
@@ -156,15 +163,15 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_phone_number(self, obj):
         var = obj.user.phone_number
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["phone_number_label"]}
+            return {"value": var, "type":"int", "labels":self.context["labels"]["phone_number_label"]}
 
     def get_current_country(self, obj):
-        var = obj.current_country
+        var = obj.current_country.id
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["current_country_label"]}
 
     def get_desired_country(self, obj):
-        var = obj.desired_country
+        var = obj.desired_country.id
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["desired_country_label"]}
 
@@ -175,15 +182,15 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
 
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
-    institute = serializers.CharField(required=True)
-    degree = serializers.CharField(required=True)
-    grade = serializers.CharField(required=True)
-    year_of_passing = serializers.CharField(required=True)
-    city = serializers.CharField(required=True)
-    state = serializers.CharField(required=True)
-    country = serializers.CharField(required=True)
-    start_date = serializers.DateField(required=True)
-    end_date = serializers.DateField(required=True)
+    # institute = serializers.CharField(required=True)
+    # degree = serializers.CharField(required=True)
+    # grade = serializers.CharField(required=True)
+    # year_of_passing = serializers.CharField(required=True)
+    # city = serializers.CharField(required=True)
+    # state = serializers.CharField(required=True)
+    # country = serializers.CharField(required=True)
+    # start_date = serializers.DateField(required=True)
+    # end_date = serializers.DateField(required=True)
 
     class Meta:
         model = CustomerQualifications
@@ -209,21 +216,24 @@ class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
         state = validated_data.get('state')
         country = validated_data.get('country')
         user = validated_data.get('user')
+        
         try:
-            qualification = CustomerQualifications.objects.get(id=id)
+            qualification, created = CustomerQualifications.objects.update_or_create(id=id, 
+                                                defaults={
+                                                    "institute":institute, 
+                                                    "degree":degree,
+                                                    "grade":grade, 
+                                                    "year_of_passing":year_of_passing, 
+                                                    "start_date":start_date, 
+                                                    "end_date":end_date, 
+                                                    "city":city, 
+                                                    "state":state, 
+                                                    "country":country, 
+                                                    "user":user
+                                                })
         except CustomerQualifications.DoesNotExist:
             raise serializers.ValidationError("Qualification ID does not exist")
-        qualification.institute = institute
-        qualification.degree = degree
-        qualification.grade = grade
-        qualification.year_of_passing = year_of_passing
-        qualification.start_date = start_date
-        qualification.end_date = end_date
-        qualification.city = city
-        qualification.state = state
-        qualification.country = country
-        qualification.user = user
-        qualification.save()
+        
         return qualification
 
 
@@ -265,17 +275,17 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
             return {"value": var, "type":"char", "labels":self.context["labels"]["year_of_passing_label"]}
     
     def get_city(self, obj):
-        var = obj.city
+        var = obj.city.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
     
     def get_country(self, obj):
-        var = obj.country
+        var = obj.country.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
     
     def get_state(self, obj):
-        var = obj.state
+        var = obj.state.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["state_label"]}
     
@@ -296,25 +306,27 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
 
 
 class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
-    start_date = serializers.DateField(required=True)
-    end_date = serializers.DateField(required=True)
-    job_type = serializers.CharField(required=True)
-    designation = serializers.CharField(required=True)
-    job_description = serializers.CharField(required=True)
-    company_name = serializers.CharField(required=True)
-    city = serializers.CharField(required=True)
-    weekly_working_hours = serializers.CharField(required=True)
+    # start_date = serializers.DateField(required=True)
+    # end_date = serializers.DateField(required=True)
+    # job_type = serializers.CharField(required=True)
+    # designation = serializers.CharField(required=True)
+    # job_description = serializers.CharField(required=True)
+    # company_name = serializers.CharField(required=True)
+    # city = serializers.CharField(required=True)
+    # state = serializers.CharField(required=True)
+    # country = serializers.CharField(required=True)
+    # weekly_working_hours = serializers.CharField(required=True)
     class Meta:
         model = CustomerWorkExperience
         fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
-                    'city', 'weekly_working_hours', 'start_date', 'end_date')
+                    'city', 'state', 'country', 'weekly_working_hours', 'start_date', 'end_date')
 
 class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerWorkExperience
         fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
-                    'city', 'weekly_working_hours', 'start_date', 'end_date')
+                    'city', 'state', 'country', 'weekly_working_hours', 'start_date', 'end_date')
     
     def create(self, validated_data):
         id = validated_data.get('id')
@@ -323,24 +335,31 @@ class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
         company_name = validated_data.get('company_name')
         job_description = validated_data.get('job_description')
         city = validated_data.get('city')
+        state = validated_data.get('state')
+        country = validated_data.get('country')
         weekly_working_hours = validated_data.get('weekly_working_hours')
         start_date = validated_data.get('start_date')
         end_date = validated_data.get('end_date')
         user = validated_data.get('user')
+        
         try:
-            work = CustomerWorkExperience.objects.get(id=id)
+            work, created = CustomerWorkExperience.objects.update_or_create(id=id, 
+                                        defaults={
+                                            "job_type":job_type, 
+                                            "designation":designation,
+                                            "company_name":company_name, 
+                                            "job_description":job_description, 
+                                            "city":city, 
+                                            "state":state,
+                                            "country":country, 
+                                            "weekly_working_hours":weekly_working_hours, 
+                                            "start_date":start_date,
+                                            "end_date":end_date, 
+                                            "user":user
+                                        })
         except CustomerWorkExperience.DoesNotExist:
             raise serializers.ValidationError('Customer Work experience with ID does not exist')
-        work.job_type = job_type
-        work.designation = designation
-        work.company_name = company_name
-        work.job_description = job_description
-        work.weekly_working_hours = weekly_working_hours
-        work.city = city
-        work.start_date = start_date
-        work.end_date = end_date
-        work.user = user
-        work.save()
+        
         return work
 
 class WorkExperienceLabelSerializer(serializers.ModelSerializer):
@@ -352,6 +371,8 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     job_description = serializers.SerializerMethodField()
     company_name = serializers.SerializerMethodField()
     city = serializers.SerializerMethodField()
+    state = serializers.SerializerMethodField()
+    country = serializers.SerializerMethodField()
     weekly_working_hours = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
@@ -362,7 +383,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     def get_job_type(self, obj):
         var = obj.job_type
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["job_type_label"]}
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["job_type_label"]}
 
     def get_designation(self, obj):
         var = obj.designation
@@ -390,9 +411,19 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
             return {"value": var, "type":"char", "labels":self.context["labels"]["company_name_label"]}
 
     def get_city(self, obj):
-        var = obj.city
+        var = obj.city.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
+
+    def get_state(self, obj):
+        var = obj.state.id
+        if "labels" in self.context:
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["state_label"]}
+
+    def get_country(self, obj):
+        var = obj.country.id
+        if "labels" in self.context:
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
 
     def get_weekly_working_hours(self, obj):
         var = obj.weekly_working_hours
@@ -401,8 +432,8 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = WorkExperienceLabel
-        fields = ('id', 'company_name', 'start_date', 'end_date', 'city', 'weekly_working_hours', 
-                    'designation', 'job_type', 'labels', 'job_description')
+        fields = ('id', 'company_name', 'start_date', 'end_date', 'city', 'state', 'country', 
+                    'weekly_working_hours', 'designation', 'job_type', 'labels', 'job_description')
 
 class CustomerLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -614,17 +645,18 @@ class RelativeInCanadaUpdateSerializer(serializers.ModelSerializer):
         email_address = validated_data.get('email_address')
         user = validated_data.get('user')
         try:
-            relative = RelativeInCanada.objects.get(id=id)
+            relative, created = RelativeInCanada.objects.update_or_create(id=id, 
+                                        defaults={
+                                            "full_name":full_name, 
+                                            "relationship":relationship,
+                                            "immigration_status":immigration_status, "address":address,
+                                            "contact_number":contact_number, 
+                                            "email_address":email_address, 
+                                            "user":user
+                                        })
         except RelativeInCanada.DoesNotExist:
             raise serializers.ValidationError("Relative with ID does not exist")
-        relative.full_name = full_name
-        relative.relationship = relationship
-        relative.immigration_status = immigration_status
-        relative.address = address
-        relative.contact_number = contact_number
-        relative.email_address = email_address
-        relative.user = user
-        relative.save()
+        
         return relative
 
 class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
@@ -698,7 +730,13 @@ class EducationalCreationalAssessmentUpdateSerializer(serializers.ModelSerialize
         canadian_equivalency_summary = validated_data.get('canadian_equivalency_summary')
         user = validated_data.get('user')
         try:
-            education_assessment = EducationalCreationalAssessment.objects.get(id=id)
+            education_assessment, created = EducationalCreationalAssessment.objects.update_or_create(id=id, 
+                                defaults={
+                                        "eca_authority_name":eca_authority_name, 
+                                        "eca_authority_number":eca_authority_number, 
+                                        "canadian_equivalency_summary":canadian_equivalency_summary,
+                                        "user":user
+                                    })
         except EducationalCreationalAssessment.DoesNotExist:
             raise serializers.ValidationError("Education Assessment with ID does not exist")
         education_assessment.eca_authority_name = eca_authority_name
