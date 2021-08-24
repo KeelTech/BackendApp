@@ -38,7 +38,6 @@ from keel.authentication.models import (AgentProfile, CustomerProfile,
 from keel.authentication.models import User as user_model
 from keel.authentication.models import UserDocument, WorkExperienceLabel
 from keel.cases.models import Case
-from keel.Core.models import City, State, Country
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.notifications import EmailNotification
@@ -55,7 +54,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from .adapter import GoogleOAuth2AdapterIdToken
 from .auth_token import generate_auth_login_token
-from .helpers import instances
+from .helpers import instances, password_reset_email
 
 # from keel.authentication.models import (OtpVerifications, )
 
@@ -106,6 +105,10 @@ class UserViewset(GenericViewSet):
         try:
             emails = EmailNotification(subject, html_content, [user.email])
             emails.send_email()
+
+            # send welcome email
+            password_reset_email.send_welcome_email(user)
+
         except Exception as e:
                 logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
                 response['message'] = str(e)
