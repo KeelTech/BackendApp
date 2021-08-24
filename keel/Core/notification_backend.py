@@ -3,7 +3,6 @@ from django.core.mail.backends.smtp import EmailBackend as SMTP
 from django.core.mail import send_mail
 from django.conf import settings
 
-from .constants import TEXT_LOCAL_API_URL
 import requests
 
 class ConsoleEmailBackend(object):

@@ -4,6 +4,14 @@ from datetime import date, timedelta
 
 import facebook
 import requests
+
+import json
+from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
+
+from django.utils import timezone
+from django.http import HttpResponseRedirect
+
 from allauth.socialaccount.providers.facebook.views import \
     FacebookOAuth2Adapter
 from allauth.socialaccount.providers.linkedin_oauth2.views import \
@@ -12,6 +20,7 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from dj_rest_auth.registration.views import SocialLoginView
+
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import IntegrityError, transaction, utils
@@ -41,6 +50,13 @@ from keel.cases.models import Case
 from keel.Core.models import City, State, Country
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
+from keel.Core.notifications import EmailNotification, SMSNotification
+from keel.Core.helpers import generate_random_int, generate_unique_id
+from keel.Core.redis import create_token, get_token
+from keel.api.v1.auth import serializers
+from keel.api.v1.document.serializers import DocumentCreateSerializer, DocumentTypeSerializer
+from keel.api.permissions import IsRCICUser 
+
 from keel.Core.notifications import EmailNotification
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.document.models import Documents
@@ -1157,30 +1173,59 @@ class EducationalCreationalAssessmentView(GenericViewSet):
 
 class LoginOTP(GenericViewSet):
 
-    authentication_classes = []
-    serializer_class = serializers.OTPSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+    # serializer_class = serializers.OTPSerializer
 
     @transaction.atomic
     def generate(self, request, format=None):
-        response = {'exists': 0}
+        # response = {'exists': 0}
+        # serializer = serializers.OTPSerializer(data=request.data)
+        # serializer.is_valid(raise_exception=True)
+
+        # data = serializer.validated_data
+        # phone_number = data['phone_number']
+
+        # otp_obj = data.get('otp_obj')
+
+        # req_type = request.query_params.get('type')
+        # via_sms = data.get('via_sms', True)
+        # via_whatsapp = data.get('via_whatsapp', False)
+        # call_source = data.get('request_source')
+        # retry_send = request.query_params.get('retry', False)
+        # otp_message = OtpVerifications.get_otp_message(request.META.get('HTTP_PLATFORM'), req_type, version=request.META.get('HTTP_APP_VERSION'))
+        # otp_message = "test"
+        # send_otp(otp_message, phone_number, retry_send, via_sms=via_sms, via_whatsapp=via_whatsapp, call_source=call_source)
+        # if User.objects.filter(phone_number=phone_number, user_type=User.CONSUMER).exists():
+        #     response['exists'] = 1
+
+        response = {
+            "status": "0",
+            "data": ""
+        }
+        resp_status = status.HTTP_200_OK
+        user = request.user
+        user_id = user.id
         serializer = serializers.OTPSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         data = serializer.validated_data
         phone_number = data['phone_number']
 
-        otp_obj = data.get('otp_obj')
-
-        req_type = request.query_params.get('type')
-        via_sms = data.get('via_sms', True)
-        via_whatsapp = data.get('via_whatsapp', False)
-        call_source = data.get('request_source')
-        retry_send = request.query_params.get('retry', False)
-        # otp_message = OtpVerifications.get_otp_message(request.META.get('HTTP_PLATFORM'), req_type, version=request.META.get('HTTP_APP_VERSION'))
-        otp_message = "test"
-        send_otp(otp_message, phone_number, retry_send, via_sms=via_sms, via_whatsapp=via_whatsapp, call_source=call_source)
-        if User.objects.filter(phone_number=phone_number, user_type=User.CONSUMER).exists():
-            response['exists'] = 1
+        otp = generate_random_int(4)
+        token_data = {"otp": otp, "phone_number": phone_number}
+        # token = generate_unique_id("mv_") 
+        token = "MOBILE_VERIFICATION_" + str(user.id)
+        create_token(token, json.dumps(token_data), 10*60*60) # cache for 10 mins
+        text = "{0} is the OTP for mobile verification".format(otp)
+        sms = SMSNotification(phone_number, text)
+        err = sms.send_sms()
+        if err:
+            log_error("CRITICAL","LoginOTP.generate" ,"Failed to send SMS", err = str(err))
+            response["status"] = 1
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+        else:
+            response["data"] = {"token": token}
 
         return Response(response)
 
@@ -1189,7 +1234,44 @@ class LoginOTP(GenericViewSet):
         # serializer = serializers.OTPVerificationSerializer(data=request.data)
         # serializer.is_valid(raise_exception=True)
 
-        return Response({"message": "OTP Generated Sucessfuly."})
+        response = {
+            "status": "0",
+            "data": "",
+        }
+
+        req_data = request.data
+        user = request.user
+        user_id = user.id
+
+        otp_verify = serializers.VerifyOTPSerializer(data = req_data)
+        otp_verify.is_valid(raise_exception = True)
+        data = otp_verify.validated_data
+
+        # token = data['token']
+        token = "MOBILE_VERIFICATION_" + str(user.id)
+        otp = data['otp']
+
+        redis_data = get_token(token)
+        if not redis_data:
+            log_error("CRITICAL", "LoginOTP.verify", "OTP is expired")
+            response["status"] = "1"
+            response["data"] = "OTP has expired. please re-generate"
+            return Response(response, status = status.HTTP_400_BAD_REQUEST)
+
+        token_data = json.loads(redis_data)
+        value = token_data.get("otp")
+        phone_number = token_data.get("phone_number")
+
+        if int(value) == otp:
+            
+            user.phone_number = phone_number
+            user.save()
+            response["data"] = "OTP validated successfully"
+            return Response(response, status = status.HTTP_200_OK)
+
+        else:
+            response["data"] = "Incorrect OTP entered"
+            return Response(response, status = status.HTTP_400_BAD_REQUEST)
 
 class UploadDocument(GenericViewSet):
 
