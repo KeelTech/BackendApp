@@ -2,12 +2,13 @@ import uuid
 import os
 import boto3
 
+from random import randint
+
 from django.utils.module_loading import import_module
 from django.core.exceptions import ImproperlyConfigured
+from django.conf import settings
 
 from urllib.parse import urlparse
-
-from django.conf import settings
 # from config.settings.production import (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, 
 #                                     AWS_S3_REGION, AWS_STORAGE_BUCKET_NAME)
 
@@ -69,4 +70,10 @@ def get_connection(path):
         raise ImproperlyConfigured('Module "%s" does not define a "%s" class' % (mod_name, class_name))
 
     return class_ref()
+
+def generate_random_int(n):
+
+    start_range = 10**(n-1)
+    end_range = 10**n - 1
+    return randint(start_range,end_range)
 
