@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models, transaction
 from django.utils import timezone
+from django.utils.functional import cached_property
 from datetime import timedelta
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from keel.Core.models import Country, City, State
@@ -149,6 +150,16 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     def __str__(self):
         return str(self.user)
 
+    @cached_property
+    def get_user_name(self):
+        full_name = ""
+        if self.first_name:
+            full_name = self.first_name
+
+        if self.last_name:
+            full_name = full_name + " " + self.last_name
+
+        return full_name
 
 class AgentProfile(TimeStampedModel, SoftDeleteModel):
     user = models.OneToOneField(User, related_name="agent_user_profile", on_delete=models.DO_NOTHING)
