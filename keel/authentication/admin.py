@@ -3,7 +3,7 @@ from .models import (User, CustomToken, PasswordResetToken, UserService,
                     CustomerProfile, CustomerQualifications, QualificationLabel, WorkExperienceLabel,
                     CustomerWorkExperience, CustomerProfileLabel, RelativeInCanada, RelativeInCanadaLabel,
                     EducationalCreationalAssessment, EducationalCreationalAssessmentLabel, AgentProfile)
-
+from keel.Core.models import Country, State, City
 
 class UserAdmin(admin.ModelAdmin):
     search_fields = ['email']
@@ -24,12 +24,39 @@ class CustomerQualificationsAdmin(admin.ModelAdmin):
     list_display = ('user', 'institute', 'country', 'start_date', 'end_date')
     readonly_fields = ('deleted_at', )
 
+    class Media:
+        js = ("selectajax.js", )
+
+    def get_form(self, request, obj=None, **kwargs):
+        if obj:
+            form = super(CustomerQualificationsAdmin, self).get_form(request, obj, **kwargs)
+            form.base_fields['state'].queryset = State.objects.filter(country=obj.country)
+            form.base_fields['city'].queryset = City.objects.filter(state=obj.state)
+            return form
+        return super().get_form(request, obj=obj, **kwargs)
+
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     print(kwargs)
+    #     if db_field.name == "state":
+    #         kwargs['queryset'] = State.objects.filter()
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 class QualificationLabelAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )
 
 class CustomerWorkExperienceAdmin(admin.ModelAdmin):
     list_display = ('user', 'company_name', 'designation', 'start_date', 'end_date')
     readonly_fields = ('deleted_at', )
+
+    class Media:
+        js = ("selectajax.js", )
+
+    def get_form(self, request, obj=None, **kwargs):
+        if obj:
+            form = super(CustomerWorkExperienceAdmin, self).get_form(request, obj, **kwargs)
+            form.base_fields['state'].queryset = State.objects.filter(country=obj.country)
+            form.base_fields['city'].queryset = City.objects.filter(state=obj.state)
+            return form
+        return super().get_form(request, obj=obj, **kwargs)
 
 class WorkExperienceLabelAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )

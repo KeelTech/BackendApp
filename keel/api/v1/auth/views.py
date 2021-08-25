@@ -47,7 +47,6 @@ from keel.authentication.models import (AgentProfile, CustomerProfile,
 from keel.authentication.models import User as user_model
 from keel.authentication.models import UserDocument, WorkExperienceLabel
 from keel.cases.models import Case
-from keel.Core.models import City, State, Country
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.notifications import EmailNotification, SMSNotification
@@ -71,7 +70,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from .adapter import GoogleOAuth2AdapterIdToken
 from .auth_token import generate_auth_login_token
-from .helpers import instances
+from .helpers import instances, email_helper
 
 # from keel.authentication.models import (OtpVerifications, )
 
@@ -122,6 +121,10 @@ class UserViewset(GenericViewSet):
         try:
             emails = EmailNotification(subject, html_content, [user.email])
             emails.send_email()
+
+            # send welcome email
+            email_helper.send_welcome_email(user)
+
         except Exception as e:
                 logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
                 response['message'] = str(e)
@@ -485,11 +488,11 @@ class ProfileView(GenericViewSet):
             data = [{
                 "institute": {"value": "", "type": "char", "labels": "Institute"},
                 "degree": {"value": "", "type": "char", "labels": "Degree"},
-                "year_of_passing": {"value": "", "type": "char", "labels": "Year Of Passing"},
+                "year_of_passing": {"value": "", "type": "int", "labels": "Year Of Passing"},
                 "grade": {"value": "", "type": "char", "labels": "Grade"},
-                "city": {"value": "", "type": "char", "labels": "City"},
-                "state": {"value": "", "type": "char", "labels": "State"},
                 "country": {"value": "", "type": "char", "labels": "Country"},
+                "state": {"value": "", "type": "char", "labels": "State"},
+                "city": {"value": "", "type": "char", "labels": "City"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"}
             }]
@@ -564,9 +567,9 @@ class ProfileView(GenericViewSet):
                 "company_name": {"value": "", "type": "char", "labels": "Company Name"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"},
-                "city": {"value": "", "type": "char", "labels": "City"},
-                "state": {"value": "", "type": "char", "labels": "State"},
                 "country": {"value": "", "type": "char", "labels": "Country"},
+                "state": {"value": "", "type": "char", "labels": "State"},
+                "city": {"value": "", "type": "char", "labels": "City"},
                 "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
                 "designation": {"value": "", "type": "char", "labels": "Desgination"},
                 "job_type": {"value": "", "type": "char", "labels": "Job Type"},
