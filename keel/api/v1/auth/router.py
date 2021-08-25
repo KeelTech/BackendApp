@@ -18,6 +18,7 @@ urlpatterns = [
     path('confirm-password', ConfirmPasswordReset.as_view({'post' : 'confirm_reset'}), name='confirm-password'),
     path('change-password', ChangePasswordView.as_view({'post' : 'change_password_without_email'}), name='change-password'),
     path('otp/generate', LoginOTP.as_view({'post': 'generate'}), name='otp-generate'),
+    path('otp/verify', LoginOTP.as_view({'post': 'verify'}), name='otp-verify'),
 
     # profile
     path('create-profile', ProfileView.as_view({'post' : 'create_profile'}), name='create-profile'),

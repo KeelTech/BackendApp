@@ -266,7 +266,7 @@ class CommentService(GenericViewSet):
 class TaskStatusChange(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = (IsAuthenticated,IsRCICUser)
+    permission_classes = (IsAuthenticated)
 
     def StatusEdit(self, request, format = 'json', **kwargs):
 
