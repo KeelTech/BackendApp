@@ -272,17 +272,17 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     def get_year_of_passing(self, obj):
         var = obj.year_of_passing 
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["year_of_passing_label"]}
-    
-    def get_city(self, obj):
-        var = obj.city.id
-        if "labels" in self.context:
-            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
+            return {"value": var, "type":"int", "labels":self.context["labels"]["year_of_passing_label"]}
     
     def get_country(self, obj):
         var = obj.country.id
         if "labels" in self.context:
             return {"value": var, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
+    
+    def get_city(self, obj):
+        var = obj.city.id
+        if "labels" in self.context:
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
     
     def get_state(self, obj):
         var = obj.state.id
@@ -301,7 +301,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = QualificationLabel
-        fields = ('id', 'institute', 'year_of_passing', 'city', 'degree', 'grade', 'country', 'state',
+        fields = ('id', 'institute', 'year_of_passing', 'degree', 'grade', 'country', 'state', 'city',
                     'start_date', 'end_date', 'labels')
 
 
@@ -325,8 +325,8 @@ class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerWorkExperience
-        fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
-                    'city', 'state', 'country', 'weekly_working_hours', 'start_date', 'end_date')
+        fields = ('id', 'job_type', 'designation', 'job_description', 'company_name', 'country',
+                    'state', 'city', 'weekly_working_hours', 'start_date', 'end_date')
     
     def create(self, validated_data):
         id = validated_data.get('id')
@@ -383,7 +383,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     def get_job_type(self, obj):
         var = obj.job_type
         if "labels" in self.context:
-            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["job_type_label"]}
+            return {"value": var, "type":"char", "labels":self.context["labels"]["job_type_label"]}
 
     def get_designation(self, obj):
         var = obj.designation
@@ -432,7 +432,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = WorkExperienceLabel
-        fields = ('id', 'company_name', 'start_date', 'end_date', 'city', 'state', 'country', 
+        fields = ('id', 'company_name', 'start_date', 'end_date', 'country', 'state', 'city',
                     'weekly_working_hours', 'designation', 'job_type', 'labels', 'job_description')
 
 class CustomerLoginSerializer(serializers.Serializer):

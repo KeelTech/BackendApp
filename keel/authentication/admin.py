@@ -27,7 +27,6 @@ class CustomerQualificationsAdmin(admin.ModelAdmin):
     class Media:
         js = ("selectajax.js", )
 
-
     def get_form(self, request, obj=None, **kwargs):
         if obj:
             form = super(CustomerQualificationsAdmin, self).get_form(request, obj, **kwargs)
@@ -48,11 +47,16 @@ class CustomerWorkExperienceAdmin(admin.ModelAdmin):
     list_display = ('user', 'company_name', 'designation', 'start_date', 'end_date')
     readonly_fields = ('deleted_at', )
 
+    class Media:
+        js = ("selectajax.js", )
+
     def get_form(self, request, obj=None, **kwargs):
-        form = super(CustomerQualificationsAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['state'].queryset = State.objects.filter(country=obj.country)
-        form.base_fields['city'].queryset = City.objects.filter(state=obj.state)
-        return form
+        if obj:
+            form = super(CustomerWorkExperienceAdmin, self).get_form(request, obj, **kwargs)
+            form.base_fields['state'].queryset = State.objects.filter(country=obj.country)
+            form.base_fields['city'].queryset = City.objects.filter(state=obj.state)
+            return form
+        return super().get_form(request, obj=obj, **kwargs)
 
 class WorkExperienceLabelAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )

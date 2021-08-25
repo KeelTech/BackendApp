@@ -488,11 +488,11 @@ class ProfileView(GenericViewSet):
             data = [{
                 "institute": {"value": "", "type": "char", "labels": "Institute"},
                 "degree": {"value": "", "type": "char", "labels": "Degree"},
-                "year_of_passing": {"value": "", "type": "char", "labels": "Year Of Passing"},
+                "year_of_passing": {"value": "", "type": "int", "labels": "Year Of Passing"},
                 "grade": {"value": "", "type": "char", "labels": "Grade"},
-                "city": {"value": "", "type": "char", "labels": "City"},
-                "state": {"value": "", "type": "char", "labels": "State"},
                 "country": {"value": "", "type": "char", "labels": "Country"},
+                "state": {"value": "", "type": "char", "labels": "State"},
+                "city": {"value": "", "type": "char", "labels": "City"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"}
             }]
@@ -567,9 +567,9 @@ class ProfileView(GenericViewSet):
                 "company_name": {"value": "", "type": "char", "labels": "Company Name"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"},
-                "city": {"value": "", "type": "char", "labels": "City"},
-                "state": {"value": "", "type": "char", "labels": "State"},
                 "country": {"value": "", "type": "char", "labels": "Country"},
+                "state": {"value": "", "type": "char", "labels": "State"},
+                "city": {"value": "", "type": "char", "labels": "City"},
                 "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
                 "designation": {"value": "", "type": "char", "labels": "Desgination"},
                 "job_type": {"value": "", "type": "char", "labels": "Job Type"},
