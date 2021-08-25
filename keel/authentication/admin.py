@@ -24,12 +24,18 @@ class CustomerQualificationsAdmin(admin.ModelAdmin):
     list_display = ('user', 'institute', 'country', 'start_date', 'end_date')
     readonly_fields = ('deleted_at', )
 
+    class Media:
+        js = ("selectajax.js", )
+
+
     def get_form(self, request, obj=None, **kwargs):
-        form = super(CustomerQualificationsAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['state'].queryset = State.objects.filter(country=obj.country)
-        form.base_fields['city'].queryset = City.objects.filter(state=obj.state)
-        return form
-    
+        if obj:
+            form = super(CustomerQualificationsAdmin, self).get_form(request, obj, **kwargs)
+            form.base_fields['state'].queryset = State.objects.filter(country=obj.country)
+            form.base_fields['city'].queryset = City.objects.filter(state=obj.state)
+            return form
+        return super().get_form(request, obj=obj, **kwargs)
+
     # def formfield_for_foreignkey(self, db_field, request, **kwargs):
     #     print(kwargs)
     #     if db_field.name == "state":

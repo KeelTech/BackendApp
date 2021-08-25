@@ -1,4 +1,7 @@
 from os import stat
+from typing import List
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from keel.Core.models import Country, City, State
@@ -48,3 +51,22 @@ class CityView(GenericViewSet):
         serializer = self.serializer_class(city, many=True).data
         response["message"] = serializer
         return Response(response)
+
+
+@csrf_exempt
+def get_states(request):
+    country = request.POST.get('country')
+    country = Country.objects.filter(id=country).first()
+    states = State.objects.filter(country=country)
+    states = [{"id":int(i.id), "state":i.state} for i in states]
+    return JsonResponse(data=states, safe=False)
+
+
+@csrf_exempt
+def get_city(request):
+    state = request.POST.get('state')
+    state = State.objects.filter(id=state).first()
+    cities = City.objects.filter(state=state)
+    cities = [{"id":i.id, "city":i.city_name} for i in cities]
+    return JsonResponse(data=cities, safe=False)
+

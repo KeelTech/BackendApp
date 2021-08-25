@@ -201,9 +201,9 @@ AUTH_PASSWORD_VALIDATORS = [
 STATIC_ROOT = str(ROOT_DIR('static'))
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = (
-#      str(APPS_DIR.path('static')),
-#  )
+STATICFILES_DIRS = (
+     str(APPS_DIR.path('static')),
+ )
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
