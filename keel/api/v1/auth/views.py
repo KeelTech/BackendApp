@@ -70,7 +70,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from .adapter import GoogleOAuth2AdapterIdToken
 from .auth_token import generate_auth_login_token
-from .helpers import instances, password_reset_email
+from .helpers import instances, email_helper
 
 # from keel.authentication.models import (OtpVerifications, )
 
@@ -123,7 +123,7 @@ class UserViewset(GenericViewSet):
             emails.send_email()
 
             # send welcome email
-            password_reset_email.send_welcome_email(user)
+            email_helper.send_welcome_email(user)
 
         except Exception as e:
                 logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
