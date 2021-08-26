@@ -177,8 +177,8 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerProfileLabel
-        fields = ('first_name', 'last_name', 'mother_fullname', 'current_country', 'desired_country',
-                    'father_fullname', 'age', 'address', 'date_of_birth', 'labels', 'phone_number')
+        fields = ('first_name', 'last_name', 'date_of_birth', 'age', 'phone_number', 'mother_fullname', 'father_fullname', 
+                        'current_country', 'desired_country', 'address',  'labels', )
 
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
@@ -432,8 +432,8 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = WorkExperienceLabel
-        fields = ('id', 'company_name', 'start_date', 'end_date', 'country', 'state', 'city',
-                    'weekly_working_hours', 'designation', 'job_type', 'labels', 'job_description')
+        fields = ('id', 'company_name', 'designation', 'job_type', 'job_description', 'weekly_working_hours', 
+                    'start_date', 'end_date', 'country', 'state', 'city', 'labels', )
 
 class CustomerLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()

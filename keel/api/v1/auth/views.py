@@ -565,15 +565,15 @@ class ProfileView(GenericViewSet):
         else:
             data = [{
                 "company_name": {"value": "", "type": "char", "labels": "Company Name"},
+                "designation": {"value": "", "type": "char", "labels": "Desgination"},
+                "job_type": {"value": "", "type": "char", "labels": "Job Type"},
+                "job_description": {"value": "", "type": "char", "labels": "Job Description"},
+                "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
                 "start_date": {"value": "", "type": "char", "labels": "Start Date"},
                 "end_date": {"value": "", "type": "char", "labels": "End Date"},
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "state": {"value": "", "type": "char", "labels": "State"},
                 "city": {"value": "", "type": "char", "labels": "City"},
-                "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
-                "designation": {"value": "", "type": "char", "labels": "Desgination"},
-                "job_type": {"value": "", "type": "char", "labels": "Job Type"},
-                "job_description": {"value": "", "type": "char", "labels": "Job Description"}
             }]
             return data
 
@@ -600,14 +600,14 @@ class ProfileView(GenericViewSet):
             data = {
                 "first_name": {"value": "", "type": "char", "labels": "First Name"},
                 "last_name": {"value": "", "type": "char", "labels": "Last Name"},
+                "date_of_birth": {"value": "", "type": "char", "labels": "Date of Birth"},
+                "age": {"value": "", "type": "char", "labels": "Age"},
+                "phone_number": {"value": "", "type": "char", "labels": "Phone Number"},
                 "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
                 "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
-                "age": {"value": "", "type": "char", "labels": "Age"},
-                "address": {"value": "", "type": "char", "labels": "Address"},
-                "date_of_birth": {"value": "", "type": "char", "labels": "Date of Birth"},
-                "phone_number": {"value": "", "type": "char", "labels": "Phone Number"},
                 "current_country": {"value": "", "type": "char", "labels": "Current Country"},
                 "desired_country": {"value": "", "type": "char", "labels": "Desired Country"},
+                "address": {"value": "", "type": "char", "labels": "Address"},
             }
             return data
     
