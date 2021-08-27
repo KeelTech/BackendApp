@@ -141,8 +141,7 @@ class TaskAdminOperations(GenericViewSet):
         response['data'] = TaskSerializer(task_obj).data
 
         # send email to user after creating task
-        user_id = case_obj.user_id
-        user = User.objects.get(id=user_id)
+        user = case_obj.user
         context = {
             'name' : user.user_profile.first_name,
             'task_name' : response["data"]['title']
