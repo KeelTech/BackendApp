@@ -26,13 +26,21 @@ def send_email(user, site, current_time):
     return status    
 
 
+def base_send_email(subject, html_content, to_email):
+    emails = EmailNotification(subject, html_content, [to_email])
+    emails.send_email()
+
+
 def send_welcome_email(user):
-    print(user)
     context = {
         'name' : user.email
     }
     subject = 'Welcome'
     html_content = get_template('welcome_email.html').render(context)
-    # send email
-    emails = EmailNotification(subject, html_content, [user.email])
-    emails.send_email()
+    base_send_email(subject, html_content, user.email)
+
+
+def send_create_task_email(context, to_email):
+    subject = 'Task Created'
+    html_content = get_template('task_created.html').render(context)
+    base_send_email(subject, html_content, to_email)
