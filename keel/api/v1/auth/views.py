@@ -88,12 +88,11 @@ class UserViewset(GenericViewSet):
         user = User.objects.create_user(**validated_data)
         return user
 
-
     def signup(self, request, format="json"):
         response = {
             'status' : 1,
             "message" : ''
-        } 
+        }
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
@@ -1449,3 +1448,32 @@ class ItemCount(GenericViewSet):
         response['data'] = resp_data
         return Response(response, status = status.HTTP_200_OK)
 
+
+class AgentView(GenericViewSet):
+    serializer_class = serializers.AgentProfileSerializer
+    authentication_classes = (JWTAuthentication, )
+    permission_classes = (IsRCICUser, )
+
+    def agent_profile(self, request):
+        response = {
+            "status" : 1,
+            "message" : ""
+        }
+        try:
+            queryset = AgentProfile.objects.get(user=request.user)
+        except AgentProfile.DoesNotExist as e:
+            logger.error('ERROR: AUTHENTICATION:AgentView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:AgentView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer = serializers.AgentProfileSerializer(queryset).data
+        user = queryset.user
+        user_serializer = serializers.UserSerializer(user).data
+        response["message"] = {"agent_details" : user_serializer, "agent_profile" : serializer}
+        return Response(response)
+        

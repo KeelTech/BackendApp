@@ -20,6 +20,12 @@ logger = logging.getLogger('app-logger')
 
 User = get_user_model()
 
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('email', 'phone_number', 'user_type', 'is_active', 'is_verified', 'date_joined')
+
 class UserRegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
