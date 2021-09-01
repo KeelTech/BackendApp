@@ -1,4 +1,6 @@
 from django.contrib import admin
+from keel.Core.admin import CustomBaseModelAdmin
+from django.db.models import query
 from .models import (User, CustomToken, PasswordResetToken, UserService, 
                     CustomerProfile, CustomerQualifications, QualificationLabel, WorkExperienceLabel,
                     CustomerWorkExperience, CustomerProfileLabel, RelativeInCanada, RelativeInCanadaLabel,
@@ -8,19 +10,21 @@ from keel.Core.models import Country, State, City
 class UserAdmin(admin.ModelAdmin):
     search_fields = ['email']
 
+class UserServiceAdmin(CustomBaseModelAdmin):
+    pass
 
-class CustomerProfileAdmin(admin.ModelAdmin):
+class CustomerProfileAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'first_name', 'last_name', 'age',)
-    readonly_fields = ('deleted_at', )
 
-class AgentProfileAdmin(admin.ModelAdmin):
+class AgentProfileAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'full_name', 'license', 'country')
+    autocomplete_fields = ('user', )
     readonly_fields = ('deleted_at', )
 
-class CustomerProfileLabelAdmin(admin.ModelAdmin):
+class CustomerProfileLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
 
-class CustomerQualificationsAdmin(admin.ModelAdmin):
+class CustomerQualificationsAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'institute', 'country', 'start_date', 'end_date')
     readonly_fields = ('deleted_at', )
 
@@ -40,10 +44,10 @@ class CustomerQualificationsAdmin(admin.ModelAdmin):
     #     if db_field.name == "state":
     #         kwargs['queryset'] = State.objects.filter()
     #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
-class QualificationLabelAdmin(admin.ModelAdmin):
+class QualificationLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
 
-class CustomerWorkExperienceAdmin(admin.ModelAdmin):
+class CustomerWorkExperienceAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'company_name', 'designation', 'start_date', 'end_date')
     readonly_fields = ('deleted_at', )
 
@@ -58,25 +62,25 @@ class CustomerWorkExperienceAdmin(admin.ModelAdmin):
             return form
         return super().get_form(request, obj=obj, **kwargs)
 
-class WorkExperienceLabelAdmin(admin.ModelAdmin):
+class WorkExperienceLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
 
-class RelativeInCanadaAdmin(admin.ModelAdmin):
+class RelativeInCanadaAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'full_name', 'email_address', 'relationship', 'immigration_status')
     readonly_fields = ('deleted_at', )
 
-class RelativeInCanadaLabelAdmin(admin.ModelAdmin):
+class RelativeInCanadaLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
 
-class EducationalCreationalAssessmentAdmin(admin.ModelAdmin):
+class EducationalCreationalAssessmentAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'eca_authority_name', 'eca_authority_number', 'canadian_equivalency_summary')
     readonly_fields = ('deleted_at', )
 
-class EducationalCreationalAssessmentLabelAdmin(admin.ModelAdmin):
+class EducationalCreationalAssessmentLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
 
 admin.site.register(User, UserAdmin)
-admin.site.register(UserService)
+admin.site.register(UserService, UserServiceAdmin)
 admin.site.register(PasswordResetToken)
 admin.site.register(CustomToken)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)

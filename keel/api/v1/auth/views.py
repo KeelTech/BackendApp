@@ -604,8 +604,8 @@ class ProfileView(GenericViewSet):
                 "phone_number": {"value": "", "type": "char", "labels": "Phone Number"},
                 "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
                 "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
-                "current_country": {"value": "", "type": "char", "labels": "Current Country"},
-                "desired_country": {"value": "", "type": "char", "labels": "Desired Country"},
+                "current_country": {"value": "", "type": "drop-down", "labels": "Current Country"},
+                "desired_country": {"value": "", "type": "drip-down", "labels": "Desired Country"},
                 "address": {"value": "", "type": "char", "labels": "Address"},
             }
             return data
