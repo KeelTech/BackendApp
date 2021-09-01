@@ -95,7 +95,7 @@ EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'keel.Core.notification_backend.SMTPEmailBackend'
+EMAIL_BACKEND = 'keel.Core.notification_backend.ConsoleEmailBackend'
 SMS_BACKEND = 'keel.Core.notification_backend.ConsoleSMSBackend'
 
 FAST_2_SMS_URL = os.getenv("FAST_2_SMS_URL")
