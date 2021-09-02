@@ -201,9 +201,9 @@ AUTH_PASSWORD_VALIDATORS = [
 STATIC_ROOT = str(ROOT_DIR('static'))
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = (
-#      str(APPS_DIR.path('static')),
-#  )
+STATICFILES_DIRS = (
+     str(APPS_DIR.path('static')),
+ )
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -295,13 +295,16 @@ PRIVATE_FILE_STORAGE='django.core.files.storage.FileSystemStorage'
 
 
 # Calendly settings
-
 CALENDLY_PERSONAL_TOKEN = env('CALENDLY_PERSONAL_TOKEN')
 CALENDLY_BASE_URL = env('CALENDLY_BASE_URL')
 CALENDLY_SIGNING_KEY = env('CALENDLY_SIGNING_KEY')
 CALENDLY_ORGANIZATION_URL = env('CALENDLY_ORGANIZATION_URL')
 
 
+# REDIS SETTINGS
+REDIS_HOST=env("REDIS_HOST")
+REDIS_PORTNAME=6379
+REDIS_DBNAME=0
 
 
 

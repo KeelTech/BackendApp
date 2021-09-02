@@ -1,0 +1,101 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+​
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML email template</title>
+    <style type="text/css"> </style>
+</head>
+​
+<body style="Margin: 0;padding: 0;background-color: #F7F8F9;">
+    <center class="wrapper" style=" width: 100%;table-layout: fixed;background-color: #F7F8F9;padding-bottom: 40px;">
+        <table cellpadding="0" cellspacing="0" border="0" class="webkit" style="max-width: 600px;background-color: #FFFFFF;">
+            <tr>
+                <td style="padding: 0">
+                    <table class="outer" align="center" style="Margin: 0 auto;width: 100%;max-width: 600px; border-spacing: 0;font-family: sans-serif;color: #4a4a4a;border-style: solid;border-width: 0px;">
+                        <!-- logo -->
+                        <tr>
+                            <td style="padding: 0">
+                                <table width="100%" style="border-spacing: 0;">
+                                    <tr>
+                                        <td style="background-color:#F7F8F9;padding:10px;">
+                                            <!-- It is not recommended to use spaces in inline styles for email templates -->
+                                            <a href="https://www.getkeel.com/">
+                                                <img src="https://keeldocs.s3.amazonaws.com/media/public/Logo.png" alt="Keel Logo" width="94"
+                                                    style="padding-left: 10px;padding-right:10px;padding-bottom: 10px;padding-top: 10px;">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <!-- text -->
+                        <tr>
+                            <td style="padding: 0">
+                                <p
+                                    style="padding-left:20px;padding-right:20px;padding-bottom:10px;padding-top:20px;color:#6C757D;font-size: 16px;">
+                                    Hello {{ name }},
+                                </p>
+                                <p
+                                    style="padding-left:20px;padding-right:20px;padding-bottom:10px; color:#6C757D;font-size: 16px;">
+                                    New task "{{ task_name }}" has been created for you.
+                                    </p>
+                                <!-- <table cellspacing="0" cellpadding="0" style="padding-left:20px;padding-right:20px">
+                                    <tr>
+                                        <td style="border-radius: 2px; padding: 0;" bgcolor="#4267B2">
+                                            <a href="https://www.getkeel.com" target="_blank"
+                                                style="padding: 8px 12px;border-radius: 4px;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block; text-decoration: none;">
+                                                Check Eligibility
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table> -->
+                                <!-- <p
+                                    style="padding-left:20px;padding-right:20px;padding-bottom:30px; color:#6C757D;font-size: 16px;border-bottom: 1px solid #EBEBEB;">
+                                    If you have any question, feel free to reach us. Thank your for being a valued Keel
+                                    Customer</p>
+                                <p
+                                    style="padding-left:20px;padding-right:20px;padding-bottom:00px; color:#6C757D;font-size: 16px; margin:0px;">
+                                    Sincerely,</p>
+                                <p
+                                    style="padding-left:20px;padding-right:20px;padding-bottom:00px; color:#6C757D;font-size: 16px;margin:0px;">
+                                    Shubh Wadekar
+                                </p>
+                                <p
+                                    style="padding-left:20px;padding-right:20px;padding-bottom:00px; color:#6C757D;font-size: 16px;margin:0px;">
+                                    Product Designer</p> -->
+                                    <p
+                                    style="padding-left:20px;padding-right:20px;padding-bottom:20px; color:#4998DE;font-size: 16px;margin-top: 0px;">
+                                    <a href="https://getkeel.com"
+                                    style=" text-decoration: none;
+                                    color: #388CDA;
+                                    font-size: 16px;">
+                                    www.getkeel.com</a></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0">
+                                <table width="100%" style="border-spacing: 0;">
+                                    <tr>
+                                        <td style="background-color: #F7F8F9;padding:15px;text-align: center;">
+                                            <p style="font-size: 18px; color:#6C757D;Margin-bottom: 13px;">&copy2021 Getkeel Pvt. Ltd.</p>
+                                            <p style="font-size: 18px; color:#6C757D;Margin-bottom: 13px;">Connect with us</p>
+                                            <a href="" style="margin: 5px;"><img src="https://keeldocs.s3.amazonaws.com/media/public/fb.png" width="24px" alt="Keel Facebook"></a>
+                                            <a href="" style="margin: 5px;"><img src="https://keeldocs.s3.amazonaws.com/media/public/tw.png" width="24px" alt="Keel Twitter"></a>
+                                            <a href="" style="margin: 5px;"><img src="https://keeldocs.s3.amazonaws.com/media/public/lin.png" width="24px" alt="Keel Linkedin"></a>
+                                            <a href="" style="margin: 5px;"><img src="https://keeldocs.s3.amazonaws.com/media/public/in.png" width="24px" alt="Keel Instagram"></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </center>
+</body>
+</html>

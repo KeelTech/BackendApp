@@ -1,14 +1,18 @@
 from rest_framework import serializers
 from keel.cases.models import Case
 from keel.Core.err_log import log_error
-
+from keel.api.v1.auth.serializers import UserDetailsSerializer
 
 class CasesSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source="user.email")
+    # agent = serializers.ReadOnlyField(source="agent.email")
+    plan = serializers.ReadOnlyField(source="plan.title")
+    user_details = UserDetailsSerializer(source = 'user',many = False)
 
     class Meta:
         model = Case
         fields = ('case_id', 'display_id', 'user', 'agent', 'account_manager_id', 'ref_id', 
-                    'plan', 'status', 'is_active')
+                    'plan', 'status', 'is_active', 'created_at', 'updated_at','user_details')
 
 class CaseIDSerializer(serializers.Serializer):
 

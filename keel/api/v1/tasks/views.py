@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 from datetime import datetime
 import pytz
@@ -18,11 +19,13 @@ from keel.tasks.models import Task, TaskComments
 from keel.api.permissions import IsRCICUser
 from keel.cases.models import Case
 from keel.api.v1.cases.serializers import CaseIDSerializer
+from keel.api.v1.auth.helpers import email_helper
 
 from .serializers import (ListTaskSerializer, TaskSerializer, TaskCreateSerializer, 
                             TaskUpdateSerializer, CreateTaskCommentSerializer, TaskStatusChangeSerializer,
                             TaskIDCheckSerializer)
 
+User = get_user_model()
 
 class ListTask(GenericViewSet):
 
@@ -134,7 +137,16 @@ class TaskAdminOperations(GenericViewSet):
         task_serializer = TaskCreateSerializer(data = req_data)
         task_serializer.is_valid(raise_exception = True)
         task_obj = task_serializer.save()
+        
         response['data'] = TaskSerializer(task_obj).data
+
+        # send email to user after creating task
+        user = case_obj.user
+        context = {
+            'name' : user.user_profile.first_name,
+            'task_name' : response["data"]['title']
+        }
+        email_helper.send_create_task_email(context, user.email)
 
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
@@ -266,7 +278,7 @@ class CommentService(GenericViewSet):
 class TaskStatusChange(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = (IsAuthenticated,IsRCICUser)
+    permission_classes = (IsAuthenticated)
 
     def StatusEdit(self, request, format = 'json', **kwargs):
 

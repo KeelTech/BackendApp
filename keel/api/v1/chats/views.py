@@ -104,5 +104,3 @@ class ChatList(GenericViewSet):
 
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
-
-

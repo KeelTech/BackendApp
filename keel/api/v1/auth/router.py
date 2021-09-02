@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, GeneratePasswordReset,
                     FacebookLogin, GoogleLogin, LinkedinLogin, UserDeleteTokenView, ConfirmPasswordReset, 
                     ChangePasswordView, ProfileView, WorkExperienceView, QualificationView, ItemCount,
-                    RelativeInCanadaView, EducationalCreationalAssessmentView)
+                    RelativeInCanadaView, EducationalCreationalAssessmentView, AgentView)
 
 urlpatterns = [
     # authentication
@@ -18,6 +18,7 @@ urlpatterns = [
     path('confirm-password', ConfirmPasswordReset.as_view({'post' : 'confirm_reset'}), name='confirm-password'),
     path('change-password', ChangePasswordView.as_view({'post' : 'change_password_without_email'}), name='change-password'),
     path('otp/generate', LoginOTP.as_view({'post': 'generate'}), name='otp-generate'),
+    path('otp/verify', LoginOTP.as_view({'post': 'verify'}), name='otp-verify'),
 
     # profile
     path('create-profile', ProfileView.as_view({'post' : 'create_profile'}), name='create-profile'),
@@ -26,6 +27,7 @@ urlpatterns = [
     path('update-full-profile', ProfileView.as_view({'post' : 'update_full_profile'}), name='update-full-profile'),
     path('get-profile', ProfileView.as_view({'get' : 'get_profile'}), name='get-profile'),
     path('get-full-profile', ProfileView.as_view({'get' : 'get_full_profile'}), name='get-full-profile'),
+    path('get-agent-profile', AgentView.as_view({'get' : 'agent_profile'}), name='agent_profile'),
     path('create-qualification', QualificationView.as_view({'post' : 'qualification'}), name='create-qualification'),
     path('get-qualification', QualificationView.as_view({'get' : 'get_qualification'}), name='get-qualification'),
     path('create-work-experience', WorkExperienceView.as_view({'post':'work_exp'}), name='create-work-experience'),

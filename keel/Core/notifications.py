@@ -14,6 +14,7 @@ class SMSNotification:
         self.text = text
 
     def validate_sms(self):
+        err = ''
         try:
             int(self.number)
         except:

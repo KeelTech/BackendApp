@@ -14,6 +14,7 @@ from keel.Core.err_log import log_error
 from .serializers import DocumentsSerializer
 
 import magic
+import base64 
 
 class GetDocumentTypeChoices(GenericViewSet):
 
@@ -62,7 +63,7 @@ class GetDocument(GenericViewSet):
             resp_status = status.HTTP_400_BAD_REQUEST
             return Response(response, status = resp_status)
         try:
-            file_object = doc.avatar.open()
+            file_object = base64.b64encode(doc.avatar.open().read())
         except FileNotFoundError as e:
             log_error('ERROR', 'GetDocument/generate', str(user.id), msg = 'FileNotFoundError', doc_id = str(doc_id),
                                             err = str(e))
@@ -72,8 +73,9 @@ class GetDocument(GenericViewSet):
             return Response(response, status = resp_status)
 
         content_type = magic.from_buffer(doc.avatar.open().read(2048), mime = True)
-        response = FileResponse(file_object, content_type=content_type)
-
+        
+        resp_data = {"file_data": file_object, "content_type":content_type}
+        response = Response(resp_data, resp_status)
         response['Content-Length'] = doc.avatar.size
         response['Content-Disposition'] = 'attachment; filename="%s"' % doc.avatar.name
         response['Original-File-Name'] = doc.original_name
