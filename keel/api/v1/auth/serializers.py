@@ -174,12 +174,12 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     def get_current_country(self, obj):
         var = obj.current_country.id
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["current_country_label"]}
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["current_country_label"]}
 
     def get_desired_country(self, obj):
         var = obj.desired_country.id
         if "labels" in self.context:
-            return {"value": var, "type":"char", "labels":self.context["labels"]["desired_country_label"]}
+            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["desired_country_label"]}
 
     class Meta:
         model = CustomerProfileLabel

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from keel.Core.admin import CustomBaseModelAdmin
 from .models import Plan, Vendor, Service, ServicesPlans
 # Register your models here.
 
@@ -19,5 +20,5 @@ class ServiceAdmin(admin.ModelAdmin):
 admin.site.register(Plan, PlanAdmin)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(Service, ServiceAdmin)
-admin.site.register(ServicesPlans)
+admin.site.register(ServicesPlans, CustomBaseModelAdmin)
 

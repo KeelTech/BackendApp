@@ -2,6 +2,9 @@ from django.contrib import admin
 from .models import Country, City, State
 # Register your models here.
 
+class CustomBaseModelAdmin(admin.ModelAdmin):
+    readonly_fields = ('deleted_at', )
+
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     readonly_fields = ('deleted_at', )

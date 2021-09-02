@@ -1,4 +1,5 @@
 from django.contrib import admin
+from keel.Core.admin import CustomBaseModelAdmin
 from .models import Quotation, QuotationMilestone
 class QuotationMilestoneLine(admin.TabularInline):
     model = QuotationMilestone
@@ -14,6 +15,8 @@ class QuotationAdmin(admin.ModelAdmin):
     inlines = [QuotationMilestoneLine]
 
 
+class QuotationMilestioneAdmin(CustomBaseModelAdmin):
+    pass
 
 admin.site.register(Quotation, QuotationAdmin)
-admin.site.register(QuotationMilestone)
+admin.site.register(QuotationMilestone, QuotationMilestioneAdmin)
