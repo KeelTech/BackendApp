@@ -16,7 +16,18 @@ class CountryView(GenericViewSet):
             "status" : 1,
             "message" : ""
         }
-        countries = Country.objects.all().order_by("name")
+        params = request.query_params.get('type')
+        if not params:
+            countries = Country.objects.all().order_by("name")
+            serializer = self.serializer_class(countries, many=True)
+            response["message"] = serializer.data
+            return Response(response)
+        if params != "desired":
+            countries = Country.objects.all().order_by("name")
+            serializer = self.serializer_class(countries, many=True)
+            response["message"] = serializer.data
+            return Response(response)
+        countries = Country.objects.filter(name="Canada")
         serializer = self.serializer_class(countries, many=True)
         response["message"] = serializer.data
         return Response(response)
