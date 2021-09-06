@@ -44,3 +44,15 @@ def send_create_task_email(context, to_email):
     subject = 'Task Created'
     html_content = get_template('task_created.html').render(context)
     base_send_email(subject, html_content, to_email)
+
+
+def send_update_task_email(context, to_email):
+    subject = 'Task Updated'
+    html_content = get_template('task_updated.html').render(context)
+    base_send_email(subject, html_content, to_email)
+
+
+def send_delete_task_email(context, to_email):
+    subject = 'Task Deleted'
+    html_content = get_template('task_deleted.html').render(context)
+    base_send_email(subject, html_content, to_email)

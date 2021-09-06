@@ -103,6 +103,13 @@ class ListTask(GenericViewSet):
         task_obj = task_serializer.save()
         response['data'] = TaskSerializer(task_obj).data
 
+        # send email to user after updating task
+        context = {
+            'name' : task_obj.user.user_profile.first_name,
+            'task_name' : response["data"]['title']
+        }
+        email_helper.send_update_task_email(context, user.email)
+
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
 
@@ -177,6 +184,15 @@ class TaskAdminOperations(GenericViewSet):
 
         task.mark_delete()
         task.tasks_comment.update(deleted_at = datetime.now(pytz.timezone(settings.TIME_ZONE)))
+        
+        # send email to user after creating task
+        user = task.user
+        context = {
+            'name' : user.user_profile.first_name,
+            'task_name' : task.title
+        }
+        email_helper.send_delete_task_email(context, user.email)
+
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
 

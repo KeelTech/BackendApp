@@ -162,7 +162,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
         return full_name
 
 class AgentProfile(TimeStampedModel, SoftDeleteModel):
-    user = models.OneToOneField(User, related_name="agent_user_profile", on_delete=models.DO_NOTHING)
+    agent = models.OneToOneField(User, related_name="agent_user_profile", on_delete=models.DO_NOTHING)
     full_name = models.CharField(max_length=512, default=None, null=True, blank=True)
     license = models.CharField(max_length=512, default=None, blank=True, null=True)
     country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="country_agent_profile", default=None, blank=True, null=True)

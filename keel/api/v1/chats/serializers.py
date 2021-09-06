@@ -1,15 +1,21 @@
 from rest_framework import serializers
 from keel.chats.models import Chat, ChatRoom 
 from keel.cases.models import Case
+from .utils import extract_user_details
+
 
 class ChatCreateSerializer(serializers.ModelSerializer):
-
+    sender = serializers.SerializerMethodField("get_sender")
+    
     class Meta:
         model = Chat
         fields = ('id','sender','chatroom','message','created_at')
+    
+    def get_sender(self, obj):
+        user = extract_user_details(obj.sender)
+        return user
 
     def create(self, validated_data):
-
         chat_obj = Chat.objects.create(**validated_data)
         return chat_obj
 
