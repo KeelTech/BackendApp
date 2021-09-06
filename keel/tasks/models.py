@@ -15,10 +15,10 @@ class Task(TimeStampedModel, SoftDeleteModel):
                      (MEDIUM,'Medium'))
 
     PENDING = 0
-    IN_PROGESS = 1
+    IN_REVIEW = 1
     COMPLETED = 2
     STATUS_CHOICE = ((PENDING,'Pending'),
-                    (IN_PROGESS,'In Progress'),
+                    (IN_REVIEW,'In Review'),
                     (COMPLETED, 'Completed'))
 
     task_id = models.CharField(max_length=255, primary_key=True)
