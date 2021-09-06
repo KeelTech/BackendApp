@@ -11,6 +11,7 @@ from .leads.router import urlpatterns as leads_url
 from .plans.router import urlpatterns as plans_url
 from .tasks.router import urlpatterns as tasks_url
 from .core.router import urlpatterns as core_url
+from .payment.router import urlpatterns as payment_url
 
 urlpatterns = [
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('plans/', include(plans_url)),
     path('calendly/', include(calendly_url)),
     path('core/', include(core_url)),
+    path('payment/', include(payment_url)),
 ]
