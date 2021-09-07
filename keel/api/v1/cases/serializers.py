@@ -29,7 +29,7 @@ class CaseIDSerializer(serializers.Serializer):
         try:
             case_obj = Case.objects.get(pk = case_id, deleted_at__isnull = True)
         except Case.DoesNotExist as e:
-            log_error("ERROR", "CaseIDSerializer: validate", "", str(e), case_id = case_id)
+            log_error("ERROR", "CaseIDSerializer: validate", "", err = str(e), case_id = case_id)
             raise serializers.ValidationError("Case Id does not exist")
 
         if attrs.get("user_id"):
