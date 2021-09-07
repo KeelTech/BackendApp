@@ -1,23 +1,27 @@
+import json
+import logging
+import uuid
+from datetime import timedelta
+
+import requests
 from django.conf import settings
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
 from django.db import models, transaction
 from django.utils import timezone
+
+from keel.Core.models import SoftDeleteModel, TimeStampedModel
+from keel.document.models import Documents
+from keel.plans.models import Service
+from rest_framework import status
 from django.utils.functional import cached_property
-from datetime import timedelta
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from keel.Core.models import Country, City, State
+
 
 # from safedelete import SOFT_DELETE
 # from safedelete.models import SafeDeleteModel
 
-import requests
-import json
-import uuid
-from rest_framework import status
-import logging
 
-from keel.document.models import Documents
-from keel.Core.models import TimeStampedModel,SoftDeleteModel
-from keel.plans.models import Service
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +60,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     CUSTOMER=1
     RCIC=2
+    ACCOUNT_MANAGER=3
 
     USER_TYPE_CHOICES = (
         (CUSTOMER, 'CUSTOMER'),
         (RCIC, 'RCIC'),
+        (ACCOUNT_MANAGER, 'ACCOUNT_MANAGER'),
     )
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username=None
