@@ -492,8 +492,8 @@ class ProfileView(GenericViewSet):
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "state": {"value": "", "type": "char", "labels": "State"},
                 "city": {"value": "", "type": "char", "labels": "City"},
-                "start_date": {"value": "", "type": "char", "labels": "Start Date"},
-                "end_date": {"value": "", "type": "char", "labels": "End Date"}
+                "start_date": {"value": None, "type": "char", "labels": "Start Date"},
+                "end_date": {"value": None, "type": "char", "labels": "End Date"}
             }]
             return data
     
@@ -568,8 +568,8 @@ class ProfileView(GenericViewSet):
                 "job_type": {"value": "", "type": "char", "labels": "Job Type"},
                 "job_description": {"value": "", "type": "char", "labels": "Job Description"},
                 "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
-                "start_date": {"value": "", "type": "char", "labels": "Start Date"},
-                "end_date": {"value": "", "type": "char", "labels": "End Date"},
+                "start_date": {"value": None, "type": "char", "labels": "Start Date"},
+                "end_date": {"value": None, "type": "char", "labels": "End Date"},
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "state": {"value": "", "type": "char", "labels": "State"},
                 "city": {"value": "", "type": "char", "labels": "City"},
@@ -599,7 +599,7 @@ class ProfileView(GenericViewSet):
             data = {
                 "first_name": {"value": "", "type": "char", "labels": "First Name"},
                 "last_name": {"value": "", "type": "char", "labels": "Last Name"},
-                "date_of_birth": {"value": "", "type": "char", "labels": "Date of Birth"},
+                "date_of_birth": {"value": None, "type": "char", "labels": "Date of Birth"},
                 "age": {"value": "", "type": "char", "labels": "Age"},
                 "phone_number": {"value": "", "type": "char", "labels": "Phone Number"},
                 "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
@@ -614,7 +614,7 @@ class ProfileView(GenericViewSet):
         get_case = Case.objects.filter(user=request.user).first()
         serializer = self.serializer_class_cases(get_case).data
         agent = serializer['agent']
-        get_agent = AgentProfile.objects.filter(user=agent).first()
+        get_agent = AgentProfile.objects.filter(agent=agent).first()
         agent = serializers.AgentProfileSerializer(get_agent).data
         return {"case_details":serializer, "agent":agent}
 

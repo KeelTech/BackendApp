@@ -8,17 +8,31 @@ from .models import (User, CustomToken, PasswordResetToken, UserService,
 from keel.Core.models import Country, State, City
 
 class UserAdmin(admin.ModelAdmin):
+    list_display = ['email', 'user_type', 'is_active', 'is_verified', 'is_staff']
     search_fields = ['email']
+
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        if 'autocomplete' in request.path:
+            field_name = request.GET.get('field_name')
+            user = ['user', 'customer']
+            agent = ['agent', 'rcic', 'account manager']
+            if field_name.lower() in user:
+                queryset = queryset.filter(user_type=User.CUSTOMER)
+            if field_name.lower() in agent:
+                queryset = queryset.filter(user_type=User.RCIC)
+        return queryset, use_distinct
 
 class UserServiceAdmin(CustomBaseModelAdmin):
     pass
 
 class CustomerProfileAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'first_name', 'last_name', 'age',)
+    autocomplete_fields = ('user', )
 
 class AgentProfileAdmin(CustomBaseModelAdmin):
-    list_display = ('user', 'full_name', 'license', 'country')
-    autocomplete_fields = ('user', )
+    list_display = ('agent', 'full_name', 'license', 'country')
+    autocomplete_fields = ('agent', )
     readonly_fields = ('deleted_at', )
 
 class CustomerProfileLabelAdmin(CustomBaseModelAdmin):

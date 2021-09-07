@@ -5,7 +5,6 @@ from .models import Case
 
 User = get_user_model()
 
-
 class CaseAdmin(admin.ModelAdmin):
     list_display = ('case_id', 'user', 'agent', 'is_active')
     ordering = ('case_id',)
@@ -13,17 +12,11 @@ class CaseAdmin(admin.ModelAdmin):
     autocomplete_fields = ['user', 'agent']
     readonly_fields=('deleted_at', 'case_id', 'display_id')
 
-    # def get_queryset(self, request):
-    #     qs = super(CaseAdmin, self).get_queryset(request)
-    #     if request.user.is_superuser:
-    #         return qs
-    #     else:
-    #         return qs.filter(user=request.user)
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super(CaseAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['user'].queryset = User.objects.filter(user_type="1")
-        form.base_fields['agent'].queryset = User.objects.filter(user_type="2")
-        return form
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "user":
+            kwargs["queryset"] = User.objects.filter(user_type=User.CUSTOMER)
+        if db_field.name == "agent":
+            kwargs["queryset"] = User.objects.filter(user_type=User.RCIC)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(Case, CaseAdmin)
