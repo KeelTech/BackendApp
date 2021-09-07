@@ -33,7 +33,10 @@ class OrderViewSet(GenericViewSet):
 class WebHookViewSet(GenericViewSet):
 
     def process_event(self, request, **kwargs):
+        sig_header = request.headers.get('stripe-signature')
         try:
-            STRIPE_EVENT_MANAGER.process_event(request.data)
+                STRIPE_EVENT_MANAGER.process(request.body, sig_header)
         except Exception as err:
-            return Response(status.HTTP_400_BAD_REQUEST)
+            return Response({"success": False}, status.HTTP_400_BAD_REQUEST)
+
+        return Response({"success": True}, status.HTTP_200_OK)

@@ -30,9 +30,6 @@ class Quotation(TimeStampedModel, SoftDeleteModel):
     status = models.PositiveSmallIntegerField(choices=QUO_STATUS_TYPE_CHOICES, 
                                         verbose_name="quo_status", default=CREATED)
 
-    def get_total_amount(self):
-        return self.total_amount
-
     def save(self, *args, **kwargs):
         if not self.q_id:
             self.q_id = uuid.uuid4()
@@ -61,5 +58,8 @@ class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
         return self.quotation.plan
 
     def get_total_amount(self):
+        return self.quotation.total_amount
+
+    def get_payment_amount(self):
         return self.amount
 

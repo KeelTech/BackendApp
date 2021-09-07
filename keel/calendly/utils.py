@@ -1,6 +1,7 @@
+import datetime
 import hashlib
 import hmac
-import datetime
+import json
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -247,6 +248,12 @@ def is_valid_webhook_signature(signature, body):
     if not (signature and body):
         return False
     try:
+        string_body = json.dumps(body)
+    except TypeError:
+        error = "Error converting request.body to json string for body: {}".format(body)
+        logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "WebHookProcessEvent.process_event", "", description=error))
+        return False
+    try:
         timstamp, v1 = signature.split(",")
         t_key, t_value = timstamp.split("=")
         v1_key, v1_value = v1.split("=")
@@ -257,11 +264,11 @@ def is_valid_webhook_signature(signature, body):
     if t_key != CALENDLY_SIGNATURE_TKEY or v1_key != CALENDLY_SIGNATURE_VKEY:
         return False
     byte_key = settings.CALENDLY_SIGNING_KEY.encode('utf-8')
-    message = t_value + "." + body
+    message = t_value + "." + string_body
 
     expected_signature = hmac.new(byte_key, message.encode('utf-8'), hashlib.sha256).hexdigest()
     if expected_signature != v1_value:
-        error = "Expected_signature - {} does not match signature {} for body - {}".format(expected_signature, v1_value, body)
+        error = "Expected_signature - {} does not match signature {} for body - {}".format(expected_signature, v1_value, string_body)
         logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "IS_VALID_WEBHOOK_SIGNATURE",
                                     "", description=error))
         return False

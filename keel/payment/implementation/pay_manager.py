@@ -2,11 +2,10 @@ from typing import NamedTuple
 
 from django.conf import settings
 from django.db import transaction
-from django.core.exceptions import ObjectDoesNotExist
 
 from .order import PaymentOrder
 from .transaction import PaymentTransaction
-from keel.payment.models import CasePlanPaymentProfile, Transaction, Order
+from .payment_profile import PaymentProfile
 from keel.stripe.utils import STRIPE_PAYMENT_OBJECT
 from keel.Core.err_log import log_error
 from keel.Core.constants import LOGGER_LOW_SEVERITY
@@ -45,6 +44,7 @@ class PaymentManager(object):
     def __init__(self):
         self._order = PaymentOrder()
         self._transaction = PaymentTransaction()
+        self._payment_profile = PaymentProfile()
         self._payment_client = None
         self._new_payment_args = None
         self._case_id = None
@@ -81,14 +81,16 @@ class PaymentManager(object):
         return create_payment_url(payment_details["unique_identifier"])
 
     def complete_payment_transaction(self, unique_identifier):
+        unique_identifier = ""
         with transaction.atomic():
             self._transaction.validate_transaction_id(unique_identifier)
             self._order.complete(self._transaction.order_id)
             self._transaction.complete()
             case_id = self._order.case_id
             if not case_id:
-                Case.objects.create_from_payment(self._order.customer_id, self._order.related_plan_id)
-            self._order.create_update_payment_profile()
+                case_id = Case.objects.create_from_payment(self._order.customer_id, self._order.related_plan_id).id
+            self._payment_profile.case_id = case_id
+            self._payment_profile.update_payment_profile(self._order.order_items)
 
     def cancel_payment_transaction(self, unique_identifier):
         pass

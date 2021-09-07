@@ -211,17 +211,8 @@ class WebHookProcessEvent(GenericViewSet):
             "message": ""
         }
 
-        try:
-            stringified_json_body = json.dumps(request.data)
-        except TypeError:
-            error = "Error converting request.body to json string for request: {}".format(request)
-            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "WebHookProcessEvent.process_event", "", description=error))
-            response["status"] = 0
-            response["error"] = error
-            return Response(response, status.HTTP_200_OK)
-
-        if not is_valid_webhook_signature(request.headers.get(CALENDLY_WEBHOOK_SIGNATURE_KEY), stringified_json_body):
-            response["error"] = "Invalid signature"
+        if not is_valid_webhook_signature(request.headers.get(CALENDLY_WEBHOOK_SIGNATURE_KEY), request.data):
+            response["error"] = "Invalid signature/body"
             response["status"] = 0
             return Response(response, status.HTTP_200_OK)
 

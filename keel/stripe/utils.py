@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from decimal import Decimal
 
@@ -9,6 +11,7 @@ import logging
 logger = logging.getLogger('app-logger')
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe_webhook_event_signing_secret = settings.STRIPE_WEBHOOK_SIGNING_SECRET
 
 
 class StripePaymentUtility(object):
@@ -48,44 +51,59 @@ class StripePaymentUtility(object):
 
 class IPaymentEventHandler(object):
 
-    def __init__(self, transaction_identifier):
-        self.transaction_identifier = transaction_identifier
+    def __init__(self):
+        from keel.payment.implementation.pay_manager import PaymentManager
+        self._payment_manager = PaymentManager()
 
     def process_event(self):
-        from keel.payment.implementation.pay_manager import PaymentManager
-        payment_manager = PaymentManager()
-        payment_manager.complete_payment_transaction(self.transaction_identifier)
+        raise NotImplementedError
 
 
 class PaymentIntentEventHandler(IPaymentEventHandler):
 
-    def __init__(self, intent_id):
-        super().__init__(intent_id)
+    def __init__(self, event_data):
+        super().__init__()
+        self._payment_intent_id = event_data.id
+
+    def process_event(self):
+        self._payment_manager.complete_payment_transaction(self._payment_intent_id)
 
 
 class PaymentEventManager:
     eventHandlers = {
-        "payment_intent.succeeded": PaymentIntentEventHandler
+        "payment_intent.succeeded": PaymentIntentEventHandler,
+        # "charge.succeeded":
     }
 
-    def process(self, webhook_payload):
+    def process(self, webhook_payload, signature):
         try:
-            event = stripe.Event.construct_from(
-                webhook_payload, stripe.api_key
+            event = stripe.Webhook.construct_event(
+                webhook_payload, signature, stripe_webhook_event_signing_secret
             )
-            handler = self.eventHandlers.get(event.type)
-            if handler:
-                handler_obj = handler(event.data.object)
+        except ValueError as err:
+            err_msg = "Invalid stripe payload - {} with error - {}".format(webhook_payload, err)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentEventManager.process_event", "", description=err_msg))
+            raise ValueError("Invalid payload")
+        except stripe.error.SignatureVerificationError as err:
+            err_msg = "Inavlid stripe signature - {} with error - {}".format(signature, err)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentEventManager.process_event", "", description=err_msg))
+            raise ValueError("Invalid signature")
+
+        handler = self.eventHandlers.get(event.type)
+        if handler:
+            handler_obj = handler(event.data.object)
+            try:
                 handler_obj.process_event()
-            else:
-                err_msg = ""
+            except Exception as err:
+                err_msg = "Error while processing event - {} with error - {}".format(event, err)
                 logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentEventManager.process_event", "",
                                             description=err_msg))
-                raise NotImplementedError("Event is not handled - {}".format(event))
-        except ValueError as e:
-            err_msg = ""
-            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentEventManager.process_event", "", description=err_msg))
-            raise ValueError("")
+                raise ValueError("Error while handling the event")
+        else:
+            err_msg = "Handler not implemented for event type - {} & event - {}".format(event.type, event)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentEventManager.process_event", "",
+                                        description=err_msg))
+            # raise NotImplementedError("Event is not handled - {}".format(event))
 
 
 STRIPE_PAYMENT_OBJECT = StripePaymentUtility()

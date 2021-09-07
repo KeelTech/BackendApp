@@ -67,20 +67,25 @@ class Transaction(TimeStampedModel, SoftDeleteModel):
         db_table = "transaction"
 
 
-class CasePlanPaymentProfile(TimeStampedModel, SoftDeleteModel):
+class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
     PAYMENT_CLIENT_STRIPE = 1
     PAYMENT_CLIENT_CHOICE = {
         ("Stripe", PAYMENT_CLIENT_STRIPE)
     }
 
     case = models.ForeignKey(Case, on_delete=models.DO_NOTHING)
-    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
+
+    entity_type = models.ForeignKey(ContentType, on_delete=models.DO_NOTHING)
+    entity_id = models.PositiveIntegerField()
+    entity = GenericForeignKey('entity_type', 'entity_id')
+
     # payment_client = models.PositiveSmallIntegerField(choices=PAYMENT_CLIENT_CHOICE, default=PAYMENT_CLIENT_STRIPE)
     total_initial_amount = models.DecimalField(verbose_name="Amount of Plan/Service taken by customer",
                                                max_digits=12, decimal_places=2)
     total_paid_amount = models.DecimalField(verbose_name="Total amount paid in instalment till now",
                                             max_digits=12, decimal_places=2)
     fully_paid = models.BooleanField(verbose_name="Amount fully paid for the plan/service", default=False)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = "case_payment_profile"

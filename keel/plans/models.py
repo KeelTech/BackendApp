@@ -19,6 +19,9 @@ class Plan(TimeStampedModel, SoftDeleteModel):
     def get_total_amount(self):
         return self.price
 
+    def get_payment_amount(self):
+        return self.price
+
     class Meta:
         ordering = ['-id']
 
@@ -39,11 +42,14 @@ class Service(TimeStampedModel, SoftDeleteModel):
     country_iso = models.CharField(max_length=512, null=True, blank=True, default=None)
     plans = models.ManyToManyField(Plan, through = "ServicesPlans", blank = True)
 
+    def get_plan(self):
+        return None
+
     def get_total_amount(self):
         return self.price
 
-    def get_plan(self):
-        return None
+    def get_payment_amount(self):
+        return self.price
 
 
 class ServicesPlans(TimeStampedModel, SoftDeleteModel):
