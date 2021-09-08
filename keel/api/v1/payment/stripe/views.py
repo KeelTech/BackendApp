@@ -5,12 +5,11 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from keel.authentication.backends import JWTAuthentication
-from keel.authentication.models import User
 from keel.payment.implementation.pay_manager import PaymentManager, StructNewPaymentDetailArgs
-from keel.payment.models import CasePlanPaymentProfile
-from keel.stripe.utils import STRIPE_PAYMENT_OBJECT, STRIPE_EVENT_MANAGER
+from keel.payment.models import Order
+from keel.stripe.utils import STRIPE_EVENT_MANAGER
 
-PAYMENT_CLIENT_TYPE = CasePlanPaymentProfile.PAYMENT_CLIENT_STRIPE
+PAYMENT_CLIENT_TYPE = Order.PAYMENT_CLIENT_STRIPE
 
 
 class OrderViewSet(GenericViewSet):
@@ -35,7 +34,8 @@ class WebHookViewSet(GenericViewSet):
     def process_event(self, request, **kwargs):
         sig_header = request.headers.get('stripe-signature')
         try:
-                STRIPE_EVENT_MANAGER.process(request.body, sig_header)
+            payment_manager = PaymentManager()
+            payment_manager.payment_webhook_event_handler(PAYMENT_CLIENT_TYPE, request.body, sig_header)
         except Exception as err:
             return Response({"success": False}, status.HTTP_400_BAD_REQUEST)
 

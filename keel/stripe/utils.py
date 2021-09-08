@@ -51,9 +51,8 @@ class StripePaymentUtility(object):
 
 class IPaymentEventHandler(object):
 
-    def __init__(self):
-        from keel.payment.implementation.pay_manager import PaymentManager
-        self._payment_manager = PaymentManager()
+    def __init__(self, payment_manager):
+        self._payment_manager = payment_manager
 
     def process_event(self):
         raise NotImplementedError
@@ -61,8 +60,8 @@ class IPaymentEventHandler(object):
 
 class PaymentIntentEventHandler(IPaymentEventHandler):
 
-    def __init__(self, event_data):
-        super().__init__()
+    def __init__(self, payment_manager, event_data):
+        super().__init__(payment_manager)
         self._payment_intent_id = event_data.id
 
     def process_event(self):
@@ -75,7 +74,7 @@ class PaymentEventManager:
         # "charge.succeeded":
     }
 
-    def process(self, webhook_payload, signature):
+    def process(self, payment_manager, webhook_payload, signature):
         try:
             event = stripe.Webhook.construct_event(
                 webhook_payload, signature, stripe_webhook_event_signing_secret
@@ -91,7 +90,7 @@ class PaymentEventManager:
 
         handler = self.eventHandlers.get(event.type)
         if handler:
-            handler_obj = handler(event.data.object)
+            handler_obj = handler(payment_manager, event.data.object)
             try:
                 handler_obj.process_event()
             except Exception as err:

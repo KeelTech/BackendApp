@@ -38,12 +38,19 @@ class Order(TimeStampedModel, SoftDeleteModel):
         ("Completed", STATUS_COMPLETED),
         ("Cancelled", STATUS_CANCELLED)
     )
+
+    PAYMENT_CLIENT_STRIPE = 1
+    PAYMENT_CLIENT_CHOICE = {
+        ("Stripe", PAYMENT_CLIENT_STRIPE)
+    }
+
     customer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="customer_order")
     initiator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="initiator_order")
     case = models.ForeignKey(Case, on_delete=models.DO_NOTHING, null=True)
     order_items = models.ManyToManyField(OrderItem)
-    status = models.BooleanField(choices=STATUS_CHOICES, default=STATUS_PENDING)
+    status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    payment_client_type = models.PositiveSmallIntegerField(choices=PAYMENT_CLIENT_CHOICE, default=PAYMENT_CLIENT_STRIPE)
 
     class Meta:
         db_table = "order"
@@ -61,17 +68,13 @@ class Transaction(TimeStampedModel, SoftDeleteModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     payment_clients_unique_id = models.CharField(max_length=1024, unique=True)
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
-    status = models.BooleanField(choices=STATUS_CHOICES, default=STATUS_PENDING)
+    status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
 
     class Meta:
         db_table = "transaction"
 
 
 class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
-    PAYMENT_CLIENT_STRIPE = 1
-    PAYMENT_CLIENT_CHOICE = {
-        ("Stripe", PAYMENT_CLIENT_STRIPE)
-    }
 
     case = models.ForeignKey(Case, on_delete=models.DO_NOTHING)
 
@@ -88,4 +91,4 @@ class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        db_table = "case_payment_profile"
+        db_table = "user_case_payment_profile"

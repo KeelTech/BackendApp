@@ -6,7 +6,8 @@ from django.db import transaction
 from .order import PaymentOrder
 from .transaction import PaymentTransaction
 from .payment_profile import PaymentProfile
-from keel.stripe.utils import STRIPE_PAYMENT_OBJECT
+from keel.payment.models import Order
+from keel.stripe.utils import STRIPE_PAYMENT_OBJECT, STRIPE_EVENT_MANAGER
 from keel.Core.err_log import log_error
 from keel.Core.constants import LOGGER_LOW_SEVERITY
 from keel.cases.models import Case
@@ -48,11 +49,13 @@ class PaymentManager(object):
         self._payment_client = None
         self._new_payment_args = None
         self._case_id = None
+        self._payment_client_event_handler = None
 
     def _trigger_create_payment(self, items_list, **kwargs):
         with transaction.atomic():
             order_id, amount = self._order.create(
-                self._new_payment_args.customer_id, self._new_payment_args.initiator_id, items_list)
+                self._new_payment_args.customer_id, self._new_payment_args.initiator_id, items_list,
+                self._new_payment_args.payment_client_type)
             self._transaction.order_id = order_id
             client_payment_response = self._payment_client.create_new_payment(
                 amount, self._new_payment_args.customer_currency)
@@ -80,15 +83,18 @@ class PaymentManager(object):
         payment_details = self._trigger_create_payment(items_list, **kwargs)
         return create_payment_url(payment_details["unique_identifier"])
 
+    def payment_webhook_event_handler(self, payment_client_type, webhook_payload, signature=None):
+        self._payment_client_event_handler = PAYMENT_CLIENT_FACTORY.get_payment_event_client_handler(payment_client_type)
+        self._payment_client_event_handler.process(self, webhook_payload, signature)
+
     def complete_payment_transaction(self, unique_identifier):
-        unique_identifier = ""
         with transaction.atomic():
             self._transaction.validate_transaction_id(unique_identifier)
             self._order.complete(self._transaction.order_id)
             self._transaction.complete()
             case_id = self._order.case_id
             if not case_id:
-                case_id = Case.objects.create_from_payment(self._order.customer_id, self._order.related_plan_id).id
+                case_id = Case.objects.create_from_payment(self._order.customer_id, self._order.related_plan_id).pk
             self._payment_profile.case_id = case_id
             self._payment_profile.update_payment_profile(self._order.order_items)
 
@@ -104,12 +110,20 @@ class PaymentManager(object):
 
 class PaymentClientFactory(object):
     payment_client_map = {
-        CasePlanPaymentProfile.PAYMENT_CLIENT_STRIPE: STRIPE_PAYMENT_OBJECT
+        Order.PAYMENT_CLIENT_STRIPE: STRIPE_PAYMENT_OBJECT
     }
     default_payment_client = STRIPE_PAYMENT_OBJECT
 
+    payment_client_event_handler_map = {
+        Order.PAYMENT_CLIENT_STRIPE: STRIPE_EVENT_MANAGER
+    }
+    default_client_event_handler = STRIPE_EVENT_MANAGER
+
     def get_payment_client(self, payment_client_type):
         return self.payment_client_map.get(payment_client_type) or self.default_payment_client
+
+    def get_payment_event_client_handler(self, payment_client_type):
+        return self.payment_client_event_handler_map.get(payment_client_type) or self.default_client_event_handler
 
 
 def create_payment_url(unique_identifier):

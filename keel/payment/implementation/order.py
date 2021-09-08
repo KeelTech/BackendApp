@@ -24,7 +24,7 @@ class StructOrder(NamedTuple):
 
 
 class IPaymentOrder(object):
-    def create(self, customer_id, initiator_id, case_id):
+    def create(self, customer_id, initiator_id, item_list, payment_client_type, case_id=None):
         raise NotImplementedError
 
     def complete(self, order_id):
@@ -42,18 +42,19 @@ class PaymentOrder(IPaymentOrder):
         self._case_id = None
         self._order_model_obj = None
         self._related_plan_id = None
+        self._payment_client_type = None
 
     @property
     def customer_id(self):
         return self._customer_id
 
     @property
-    def case_id(self):
-        return self._case_id
+    def order_items(self):
+        return self._order_model_obj.order_items.all()
 
     @property
-    def order_items(self):
-        return self._order_model_obj.order_items
+    def case_id(self):
+        return self._case_id
 
     @case_id.setter
     def case_id(self, value):
@@ -90,13 +91,13 @@ class PaymentOrder(IPaymentOrder):
 
     def _try_get_plan_from_order_items(self, order_items):
         plan = None
-        for item in order_items:
+        for order_item in order_items:
             try:
-                plan = item.content_object.get_plan()
+                plan = order_item.item.get_plan()
                 if plan:
                     break
             except Exception as err:
-                err_msg = "GetPlan not implemented for item - {} with error - {}".format(item, err)
+                err_msg = "GetPlan not implemented for item - {} with error - {}".format(order_item, err)
                 logger.info(logging_format(LOGGER_LOW_SEVERITY, "PaymentOrder._try_get_plan_from_order_items", "",
                                            description=err_msg))
         return plan.id
@@ -110,11 +111,12 @@ class PaymentOrder(IPaymentOrder):
         order_model_obj = self.order_model_obj
         if order_model_obj.case:
             return order_model_obj.case.plan.id
-        return self._try_get_plan_from_order_items(order_model_obj.order_items)
+        return self._try_get_plan_from_order_items(order_model_obj.order_items.all())
 
-    def create(self, customer_id, initiator_id, item_list, case_id=None):
+    def create(self, customer_id, initiator_id, item_list, payment_client_type, case_id=None):
         self._customer_id = customer_id
         self._initiator_id = initiator_id
+        self._payment_client_type = payment_client_type
         self._case_id = case_id
         total_payable_amount = Decimal(0.00)
         order_items = []
@@ -129,7 +131,8 @@ class PaymentOrder(IPaymentOrder):
         customer_obj, initiator_obj = self._get_users_obj()
         case_obj = Case.objects.get(id=self._case_id) if self._case_id else None
         order = Order.objects.create(
-            customer=customer_obj, initiator=initiator_obj, case=case_obj, total_amount=total_payable_amount)
+            customer=customer_obj, initiator=initiator_obj, case=case_obj, total_amount=total_payable_amount,
+            payment_client_type=payment_client_type)
         order.order_items.add(*order_items)
         self._order_id = order.id
         return self._order_id, total_payable_amount
