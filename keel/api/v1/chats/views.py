@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, query
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, viewsets, status as HTTP_STATUS
@@ -14,7 +14,7 @@ from keel.chats.models import Chat, ChatRoom
 
 from keel.api.v1.cases.serializers import CaseIDSerializer
 
-from .serializers import ChatCreateSerializer, ChatRoomSerializer
+from .serializers import ChatCreateSerializer, ChatRoomSerializer, BaseChatListSerializer
 from .pagination import ChatsPagination, CHAT_PAGINATION_LIMIT
 
 
@@ -55,7 +55,7 @@ class ChatList(GenericViewSet):
 
         queryset = Chat.objects.filter(chatroom = chat_room).order_by("-id")
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
-        serializer_class = ChatCreateSerializer(paginate_queryset, many = True)
+        serializer_class = BaseChatListSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
 
         response["data"] = resp_data
@@ -93,6 +93,7 @@ class ChatList(GenericViewSet):
 
         try:
             validated_data = serializer_class.validated_data
+            print(validated_data)
             chat_obj = serializer_class.create(validated_data)
             queryset = Chat.objects.filter(chatroom = chat_room).order_by("-created_at")[:CHAT_PAGINATION_LIMIT]
             response['data'] = ChatCreateSerializer(queryset, many = True).data
