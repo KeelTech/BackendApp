@@ -1,4 +1,4 @@
-from django.db.models import Q, query
+from django.db.models import Q
 
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, viewsets, status as HTTP_STATUS
@@ -93,7 +93,6 @@ class ChatList(GenericViewSet):
 
         try:
             validated_data = serializer_class.validated_data
-            print(validated_data)
             chat_obj = serializer_class.create(validated_data)
             queryset = Chat.objects.filter(chatroom = chat_room).order_by("-created_at")[:CHAT_PAGINATION_LIMIT]
             response['data'] = ChatCreateSerializer(queryset, many = True).data
