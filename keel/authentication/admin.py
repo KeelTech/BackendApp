@@ -1,10 +1,10 @@
 from django.contrib import admin
 from keel.Core.admin import CustomBaseModelAdmin
-from django.db.models import query
+from django.db.models import query, Q
 from .models import (User, CustomToken, PasswordResetToken, UserService, 
                     CustomerProfile, CustomerQualifications, QualificationLabel, WorkExperienceLabel,
                     CustomerWorkExperience, CustomerProfileLabel, RelativeInCanada, RelativeInCanadaLabel,
-                    EducationalCreationalAssessment, EducationalCreationalAssessmentLabel, AgentProfile)
+                    EducationalCreationalAssessment, EducationalCreationalAssessmentLabel, AgentProfile, AccountManagerProfile)
 from keel.Core.models import Country, State, City
 
 class UserAdmin(admin.ModelAdmin):
@@ -20,7 +20,7 @@ class UserAdmin(admin.ModelAdmin):
             if field_name.lower() in user:
                 queryset = queryset.filter(user_type=User.CUSTOMER)
             if field_name.lower() in agent:
-                queryset = queryset.filter(user_type=User.RCIC)
+                queryset = queryset.filter(Q(user_type=User.RCIC) | Q(user_type=User.ACCOUNT_MANAGER))
         return queryset, use_distinct
 
 class UserServiceAdmin(CustomBaseModelAdmin):
@@ -34,6 +34,9 @@ class AgentProfileAdmin(CustomBaseModelAdmin):
     list_display = ('agent', 'full_name', 'license', 'country')
     autocomplete_fields = ('agent', )
     readonly_fields = ('deleted_at', )
+
+class AccountManagerProfileAdmin(AgentProfileAdmin):
+    pass
 
 class CustomerProfileLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
@@ -99,6 +102,7 @@ admin.site.register(PasswordResetToken)
 admin.site.register(CustomToken)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)
 admin.site.register(AgentProfile, AgentProfileAdmin)
+admin.site.register(AccountManagerProfile, AccountManagerProfileAdmin)
 admin.site.register(CustomerProfileLabel, CustomerProfileLabelAdmin)
 admin.site.register(CustomerQualifications, CustomerQualificationsAdmin)
 admin.site.register(QualificationLabel, QualificationLabelAdmin)
