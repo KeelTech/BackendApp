@@ -49,7 +49,8 @@ class PaymentProfile:
 
     def _update_entity_payment_profile(self, entity_obj, payable_amount, total_amount):
         entity_type = ContentType.objects.get_for_model(entity_obj)
-        payment_profiles = CasePaymentProfile.objects.select_for_update().filter(is_active=True, case__pk=self._case_id, entity_type=entity_type, entity_id=entity_obj.pk)
+        payment_profiles = CasePaymentProfile.objects.select_for_update().filter(
+            is_active=True, case__pk=self._case_id, entity_type=entity_type, entity_id=entity_obj.pk, fully_paid=False)
         if not payment_profiles:
             case = Case.objects.get(pk=self._case_id)
             CasePaymentProfile.objects.create(
@@ -60,5 +61,6 @@ class PaymentProfile:
             payment_profile = payment_profiles[0]
             paid_amount = payment_profile.total_paid_amount
             total_amount = payment_profile.total_initial_amount
-            payment_profile.update(total_paid_amount=F("total_paid_amount") + payable_amount,
-                                   fully_paid=(total_amount == paid_amount+payable_amount))
+            payment_profile.total_paid_amount = F("total_paid_amount") + total_amount
+            payment_profile.fully_paid = (total_amount == paid_amount+payable_amount)
+            payment_profile.save()

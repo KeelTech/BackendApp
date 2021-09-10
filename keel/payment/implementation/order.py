@@ -129,7 +129,7 @@ class PaymentOrder(IPaymentOrder):
                 total_payable_amount += item_payable_amount
                 order_items.append(OrderItem.objects.create(item=item_obj, amount=item_payable_amount))
         customer_obj, initiator_obj = self._get_users_obj()
-        case_obj = Case.objects.get(id=self._case_id) if self._case_id else None
+        case_obj = Case.objects.get(pk=self._case_id) if self._case_id else None
         order = Order.objects.create(
             customer=customer_obj, initiator=initiator_obj, case=case_obj, total_amount=total_payable_amount,
             payment_client_type=payment_client_type)
@@ -142,7 +142,7 @@ class PaymentOrder(IPaymentOrder):
         order_model_obj = Order.objects.select_for_update().get(pk=order_id)
         order_model_obj.status = Order.STATUS_COMPLETED
         order_model_obj.save()
-        self._case_id = order_model_obj.case.id if order_model_obj.case else None
+        self._case_id = order_model_obj.case.pk if order_model_obj.case else None
         self._customer_id = order_model_obj.customer.id
         self._order_model_obj = order_model_obj
 

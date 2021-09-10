@@ -21,6 +21,7 @@ class StructNewPaymentDetailArgs(NamedTuple):
     customer_currency: str
     initiator_id: str
     payment_client_type: str
+    case_id: str
 
 
 class IPaymentManager(object):
@@ -55,7 +56,7 @@ class PaymentManager(object):
         with transaction.atomic():
             order_id, amount = self._order.create(
                 self._new_payment_args.customer_id, self._new_payment_args.initiator_id, items_list,
-                self._new_payment_args.payment_client_type)
+                self._new_payment_args.payment_client_type, self._new_payment_args.case_id)
             self._transaction.order_id = order_id
             client_payment_response = self._payment_client.create_new_payment(
                 amount, self._new_payment_args.customer_currency)
