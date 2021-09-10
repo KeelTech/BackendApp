@@ -179,6 +179,12 @@ class AgentProfile(TimeStampedModel, SoftDeleteModel):
     class Meta:
         db_table = "agent_profile"
 
+
+class AccountManagerProfile(AgentProfile):
+
+    class Meta:
+        db_table = "account_manager_profile"
+
 class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(default="user", max_length=512)
     first_name_label = models.CharField(max_length=512)

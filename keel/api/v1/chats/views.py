@@ -14,7 +14,7 @@ from keel.chats.models import Chat, ChatRoom
 
 from keel.api.v1.cases.serializers import CaseIDSerializer
 
-from .serializers import ChatCreateSerializer, ChatRoomSerializer
+from .serializers import ChatCreateSerializer, ChatRoomSerializer, BaseChatListSerializer
 from .pagination import ChatsPagination, CHAT_PAGINATION_LIMIT
 
 
@@ -55,7 +55,7 @@ class ChatList(GenericViewSet):
 
         queryset = Chat.objects.filter(chatroom = chat_room).order_by("-id")
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
-        serializer_class = ChatCreateSerializer(paginate_queryset, many = True)
+        serializer_class = BaseChatListSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
 
         response["data"] = resp_data
