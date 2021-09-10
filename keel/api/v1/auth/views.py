@@ -1496,7 +1496,7 @@ class ItemCount(GenericViewSet):
 class AgentView(GenericViewSet):
     serializer_class = serializers.AgentProfileSerializer
     authentication_classes = (JWTAuthentication, )
-    permission_classes = (IsRCICUser, )
+    permission_classes = (IsAuthenticated, IsRCICUser, )
 
     def agent_profile(self, request):
         response = {
@@ -1504,7 +1504,7 @@ class AgentView(GenericViewSet):
             "message" : ""
         }
         try:
-            queryset = AgentProfile.objects.get(user=request.user)
+            queryset = AgentProfile.objects.get(agent=request.user)
         except AgentProfile.DoesNotExist as e:
             logger.error('ERROR: AUTHENTICATION:AgentView ' + str(e))
             response['message'] = str(e)
@@ -1516,7 +1516,7 @@ class AgentView(GenericViewSet):
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = serializers.AgentProfileSerializer(queryset).data
-        user = queryset.user
+        user = queryset.agent
         user_serializer = serializers.UserSerializer(user).data
         response["message"] = {"agent_details" : user_serializer, "agent_profile" : serializer}
         return Response(response)
