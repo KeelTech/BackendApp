@@ -106,7 +106,9 @@ LOCAL_APPS = (
     'keel.chats',
     'keel.quotations',
     'keel.calendly',
-    'keel.call_schedule'
+    'keel.call_schedule',
+    'keel.payment',
+    'keel.stripe'
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -300,6 +302,8 @@ CALENDLY_BASE_URL = env('CALENDLY_BASE_URL')
 CALENDLY_SIGNING_KEY = env('CALENDLY_SIGNING_KEY')
 CALENDLY_ORGANIZATION_URL = env('CALENDLY_ORGANIZATION_URL')
 
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SIGNING_SECRET = env('STRIPE_WEBHOOK_SIGNING_SECRET')
 
 # REDIS SETTINGS
 REDIS_HOST=env("REDIS_HOST")

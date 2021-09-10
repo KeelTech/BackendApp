@@ -7,6 +7,7 @@ from keel.authentication.models import User
 
 from .constants import SORT_COLUMN_MAP
 
+
 class CaseManager(models.Manager):
 
     def get_agent_cases(self, agent, req_dict):
@@ -24,6 +25,13 @@ class CaseManager(models.Manager):
         queryset = self.filter(agent = agent).order_by(*sort_list)
 
         return queryset
+
+    def create_from_payment(self, customer_id, plan_id):
+        agent = User.objects.filter(is_active=True, user_type=User.RCIC).first()
+        user = User.objects.get(pk=customer_id)
+        plan = Plan.objects.get(pk=plan_id)
+        return self.create(user=user, plan=plan, agent=agent)
+
 
 class Case(TimeStampedModel, SoftDeleteModel):
 
@@ -46,7 +54,7 @@ class Case(TimeStampedModel, SoftDeleteModel):
     account_manager_id = models.IntegerField(null=True, blank=True, default=None)
     status = models.PositiveSmallIntegerField(choices=CASES_TYPE_CHOICES, verbose_name="case_status", default=BOOKED)
     is_active = models.BooleanField(verbose_name= 'Active', default=True)
-    ref_id = models.ForeignKey('self',null=True, blank=True, on_delete=models.deletion.DO_NOTHING)
+    ref_id = models.ForeignKey('self', null=True, blank=True, on_delete=models.deletion.DO_NOTHING)
     plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_cases')
 
     def save(self, *args, **kwargs):

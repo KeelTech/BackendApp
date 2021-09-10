@@ -1,0 +1,4 @@
+ORDER_ITEM_QUOTATION_TYPE = "quotation_milestone"
+ORDER_ITEM_PLAN_TYPE = "plan"
+ORDER_ITEM_SERVICE_TYPE = "service"
+
