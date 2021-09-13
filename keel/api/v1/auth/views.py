@@ -605,7 +605,7 @@ class ProfileView(GenericViewSet):
                 "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
                 "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
                 "current_country": {"value": "", "type": "drop-down", "labels": "Current Country"},
-                "desired_country": {"value": "", "type": "drip-down", "labels": "Desired Country"},
+                "desired_country": {"value": "", "type": "drop-down", "labels": "Desired Country"},
                 "address": {"value": "", "type": "char", "labels": "Address"},
             }
             return data
