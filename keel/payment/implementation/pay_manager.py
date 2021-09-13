@@ -24,23 +24,6 @@ class StructNewPaymentDetailArgs(NamedTuple):
     case_id: str
 
 
-class IPaymentManager(object):
-    def generate_new_payment_details(self, customer_id, initiator_id, ):
-        raise NotImplementedError
-
-    def generate_new_payment_url(self):
-        raise NotImplementedError
-
-    def complete_payment(self):
-        raise NotImplementedError
-
-    def refund_payment(self):
-        raise NotImplementedError
-
-    def cancel_payment(self):
-        raise NotImplementedError
-
-
 class PaymentManager(object):
 
     def __init__(self):
