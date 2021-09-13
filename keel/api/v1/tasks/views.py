@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
@@ -31,6 +31,13 @@ class ListTask(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
+
+    def count_tasks(self, validated_data):
+        count = {
+            v['status']: v['status__count'] 
+            for v in Task.objects.filter(**validated_data).values('status').annotate(Count('status'))
+        }
+        return count
 
     def list(self, request, format = 'json'):
 
@@ -74,7 +81,10 @@ class ListTask(GenericViewSet):
             response["message"] = GENERIC_ERROR
             response["status"] = 1
             resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
-
+        
+        result = self.count_tasks(validated_data)
+        response['task_count_per_status'] = result
+        
         return Response(response, status = resp_status)
 
     def updateTask(self, request, format = 'json', **kwargs):
