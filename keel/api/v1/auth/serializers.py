@@ -225,6 +225,11 @@ class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
         state = validated_data.get('state')
         country = validated_data.get('country')
         user = validated_data.get('user')
+
+        # validate date
+        if end_date is not None and start_date is not None:
+            if end_date < start_date:
+                raise serializers.ValidationError("Start Date cannot be greater then end date")
         
         try:
             qualification, created = CustomerQualifications.objects.update_or_create(id=id, 
@@ -359,6 +364,11 @@ class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
         start_date = validated_data.get('start_date')
         end_date = validated_data.get('end_date')
         user = validated_data.get('user')
+
+        # validate date
+        if end_date is not None and start_date is not None:
+            if end_date < start_date:
+                raise serializers.ValidationError("Start Date cannot be greater then end date")
         
         try:
             work, created = CustomerWorkExperience.objects.update_or_create(id=id, 
