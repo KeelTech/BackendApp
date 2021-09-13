@@ -174,13 +174,15 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
 
     def get_current_country(self, obj):
         var = obj.current_country.id
+        name = obj.current_country.name
         if "labels" in self.context:
-            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["current_country_label"]}
+            return {"value": var, "name":name, "type":"drop-down", "labels":self.context["labels"]["current_country_label"]}
 
     def get_desired_country(self, obj):
         var = obj.desired_country.id
+        name = obj.desired_country.name
         if "labels" in self.context:
-            return {"value": var, "type":"drop-down", "labels":self.context["labels"]["desired_country_label"]}
+            return {"value": var, "name":name, "type":"drop-down", "labels":self.context["labels"]["desired_country_label"]}
 
     class Meta:
         model = CustomerProfileLabel
@@ -285,21 +287,24 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             if obj.country:
                 var = obj.country.id
-                return {"value": var, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
+                name = obj.country.name
+                return {"value": var,  "name":name, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
             return {"value": "", "type":"drop-down", "labels":self.context["labels"]["country_label"]}
 
     def get_state(self, obj):
         if "labels" in self.context:
             if obj.state:
                 var = obj.state.id
-                return {"value": var, "type":"drop-down", "labels":self.context["labels"]["state_label"]}
+                name = obj.state.state
+                return {"value": var,  "name":name,"type":"drop-down", "labels":self.context["labels"]["state_label"]}
             return {"value": "", "type":"drop-down", "labels":self.context["labels"]["state_label"]}
     
     def get_city(self, obj):
         if "labels" in self.context:
             if obj.city:
                 var = obj.city.id
-                return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
+                name = obj.city.city_name
+                return {"value": var,  "name":name, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
             return {"value": "", "type":"drop-down", "labels":self.context["labels"]["city_label"]}
 
     def get_start_date(self, obj):
@@ -427,21 +432,24 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             if obj.country:
                 var = obj.country.id
-                return {"value": var, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
+                name = obj.country.name
+                return {"value": var,  "name":name, "type":"drop-down", "labels":self.context["labels"]["country_label"]}
             return {"value": "", "type":"drop-down", "labels":self.context["labels"]["country_label"]}
 
     def get_state(self, obj):
         if "labels" in self.context:
             if obj.state:
                 var = obj.state.id
-                return {"value": var, "type":"drop-down", "labels":self.context["labels"]["state_label"]}
+                name = obj.state.state
+                return {"value": var,  "name":name,"type":"drop-down", "labels":self.context["labels"]["state_label"]}
             return {"value": "", "type":"drop-down", "labels":self.context["labels"]["state_label"]}
-
+    
     def get_city(self, obj):
         if "labels" in self.context:
             if obj.city:
                 var = obj.city.id
-                return {"value": var, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
+                name = obj.city.city_name
+                return {"value": var,  "name":name, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
             return {"value": "", "type":"drop-down", "labels":self.context["labels"]["city_label"]}
 
     def get_weekly_working_hours(self, obj):

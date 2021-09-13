@@ -5,13 +5,13 @@ from .utils import extract_user_details
 
 
 class BaseChatListSerializer(serializers.ModelSerializer):
-    sender = serializers.SerializerMethodField("get_sender")
+    sender_name = serializers.SerializerMethodField("get_sender_name")
 
     class Meta:
         model = Chat
-        fields = ('id','sender','chatroom','message','created_at')
+        fields = ('id','sender', 'sender_name', 'chatroom','message','created_at')
     
-    def get_sender(self, obj):
+    def get_sender_name(self, obj):
         user = extract_user_details(obj.sender)
         return user
 
