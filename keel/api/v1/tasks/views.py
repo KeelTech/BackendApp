@@ -33,6 +33,11 @@ class ListTask(GenericViewSet):
     permission_classes = (IsAuthenticated,)
 
     def count_tasks(self, validated_data):
+        try:
+            validated_data.pop("status")
+        except KeyError:
+            pass
+        
         count = {
             v['status']: v['status__count'] 
             for v in Task.objects.filter(**validated_data).values('status').annotate(Count('status'))
