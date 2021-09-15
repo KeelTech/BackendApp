@@ -33,11 +33,31 @@ class ListTask(GenericViewSet):
     permission_classes = (IsAuthenticated,)
 
     def count_tasks(self, validated_data):
-        count = {
-            v['status']: v['status__count'] 
-            for v in Task.objects.filter(**validated_data).values('status').annotate(Count('status'))
+        
+        count_data = {
+            "pending" : 0,
+            "in_progress" : 0,
+            "completed" : 0
         }
-        return count
+
+        try:
+            validated_data.pop("status")
+        except KeyError:
+            pass
+        
+        count_list = Task.objects.filter(**validated_data).values('status').annotate(Count('status'))
+
+        for each in count_list:
+            if each['status'] == Task.PENDING:
+                count_data['pending'] = each['status__count']
+
+            if each['status'] == Task.IN_PROGESS:
+                count_data['in_progress'] = each['status__count']
+
+            if each['status'] == Task.COMPLETED:
+                count_data['completed'] = each['status__count']
+        
+        return count_data
 
     def list(self, request, format = 'json'):
 
