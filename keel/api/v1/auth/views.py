@@ -492,8 +492,20 @@ class ProfileView(GenericViewSet):
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "state": {"value": "", "type": "char", "labels": "State"},
                 "city": {"value": "", "type": "char", "labels": "City"},
+                "full_address" : { 
+                    "type": 'address', 
+                    "countryLabel":"Country", 
+                    "country": "",
+                    "countryId": "", 
+                    "stateLabel":"State", 
+                    "state": "",
+                    "stateId": "",
+                    "cityLabel":"City",
+                    "city": "",
+                    "cityId": ""
+                },
                 "start_date": {"value": None, "type": "char", "labels": "Start Date"},
-                "end_date": {"value": None, "type": "char", "labels": "End Date"}
+                "end_date": {"value": None, "type": "char", "labels": "End Date"},
             }]
             return data
     
@@ -573,6 +585,18 @@ class ProfileView(GenericViewSet):
                 "country": {"value": "", "type": "char", "labels": "Country"},
                 "state": {"value": "", "type": "char", "labels": "State"},
                 "city": {"value": "", "type": "char", "labels": "City"},
+                "full_address" : { 
+                    "type": 'address', 
+                    "countryLabel":"Country", 
+                    "country": "",
+                    "countryId": "", 
+                    "stateLabel":"State", 
+                    "state": "",
+                    "stateId": "",
+                    "cityLabel":"City",
+                    "city": "",
+                    "cityId": ""
+                },
             }]
             return data
 
@@ -818,9 +842,9 @@ class QualificationView(GenericViewSet):
                 "institute" : info["institute"].get("value"),
                 "degree" : info["degree"].get("value"),
                 "year_of_passing" : info["year_of_passing"].get("value"),
-                "city" : info["city"].get("value"),
-                "state" : info["state"].get("value"),
-                "country" : info["country"].get("value"),
+                "city" : info["full_address"].get("cityId"),
+                "state" : info["full_address"].get("stateId"),
+                "country" : info["full_address"].get("countryId"),
                 "grade" : info["grade"].get("value"),
                 "start_date" : info["start_date"].get("value"),
                 "end_date" : info["end_date"].get("value"),
@@ -923,9 +947,9 @@ class WorkExperienceView(GenericViewSet):
                 "job_type" : info["job_type"].get("value"),
                 "designation" : info["designation"].get("value"),
                 "job_description" : info["job_description"].get("value"),
-                "city" : info["city"].get("value"),
-                "state" : info["state"].get("value"),
-                "country" : info["country"].get("value"),
+                "city" : info["full_address"].get("cityId"),
+                "state" : info["full_address"].get("stateId"),
+                "country" : info["full_address"].get("countryId"),
                 "weekly_working_hours" : info["weekly_working_hours"].get("value"),
                 "start_date" : info["start_date"].get("value"),
                 "end_date" : info["end_date"].get("value")
