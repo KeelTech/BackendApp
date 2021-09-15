@@ -18,12 +18,13 @@ class OrderViewSet(GenericViewSet):
     permission_classes = (IsAuthenticated,)
 
     def create(self, request, **kwargs):
-        user = request.user
+        customer = request.user
         data = request.data
         payment_manager = PaymentManager()
         response = payment_manager.generate_payment_details(
-            StructNewPaymentDetailArgs(customer_id=user.pk, customer_currency="usd", initiator_id=user.pk,
-                                       payment_client_type=PAYMENT_CLIENT_TYPE, case_id=data.get("case_id")),
+            StructNewPaymentDetailArgs(customer_id=customer.pk, customer_currency="usd",
+                                       initiator_id=customer.pk, payment_client_type=PAYMENT_CLIENT_TYPE,
+                                       case_id=data.get("case_id")),
             data["order_items"]
         )
         return Response(response)

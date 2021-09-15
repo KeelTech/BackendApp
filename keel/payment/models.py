@@ -34,14 +34,14 @@ class Order(TimeStampedModel, SoftDeleteModel):
     STATUS_COMPLETED = 2
     STATUS_CANCELLED = 3
     STATUS_CHOICES = (
-        ("Pending", STATUS_PENDING),
-        ("Completed", STATUS_COMPLETED),
-        ("Cancelled", STATUS_CANCELLED)
+        (STATUS_PENDING, "Pending"),
+        (STATUS_COMPLETED, "Completed"),
+        (STATUS_CANCELLED, "Cancelled")
     )
 
     PAYMENT_CLIENT_STRIPE = 1
     PAYMENT_CLIENT_CHOICE = {
-        ("Stripe", PAYMENT_CLIENT_STRIPE)
+        (PAYMENT_CLIENT_STRIPE, "Stripe")
     }
 
     customer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="customer_order")
