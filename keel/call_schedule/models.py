@@ -19,6 +19,10 @@ class CallSchedule(TimeStampedModel, SoftDeleteModel):
         RESCHEDULED: "rescheduled",
         CANCELED: "canceled"
     }
+    CALENDLY_CALL_SCHEDULE_CLIENT = 1
+    CALL_SCHEDULE_CLIENT_CHOICES = (
+        (CALENDLY_CALL_SCHEDULE_CLIENT, "Calendly"),
+    )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     visitor_user = models.ForeignKey(User, verbose_name="Customer",
                                      on_delete=models.DO_NOTHING, related_name="customer_call_schedules")
@@ -27,6 +31,8 @@ class CallSchedule(TimeStampedModel, SoftDeleteModel):
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=ACTIVE)
     start_time = models.DateTimeField(verbose_name="Starting time of call schedule in UTC from calendly")
     end_time = models.DateTimeField(verbose_name="Ending time of call schedule in UTC from calendly")
+    call_schedule_client_type = models.PositiveSmallIntegerField(choices=CALL_SCHEDULE_CLIENT_CHOICES,
+                                                                 default=CALENDLY_CALL_SCHEDULE_CLIENT)
     is_active = models.BooleanField(default=True)
 
     @property
