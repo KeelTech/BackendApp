@@ -36,7 +36,7 @@ class TaskSerializer(ListTaskSerializer):
     tasks_docs = serializers.SerializerMethodField("get_task_docs")
 
     def get_task_comments(self, task):
-        qs = task.tasks_comment.filter(deleted_at__isnull = True)
+        qs = task.tasks_comment.filter(deleted_at__isnull = True).order_by('-id')
         serializer = TaskCommentSerializer(instance=qs, many=True)
         return serializer.data        
 
