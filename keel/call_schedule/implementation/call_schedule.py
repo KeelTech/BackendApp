@@ -24,5 +24,5 @@ class CallScheduleValidator(ICallScheduleValidator):
         if not plan_id:
             return True if active_completed_call_count == 0 else False
 
-        self._plan_util_helper.plan_id = self._plan_id
+        self._plan_util_helper.plan_id = plan_id
         return self._plan_util_helper.can_schedule_more_calls(active_completed_call_count)

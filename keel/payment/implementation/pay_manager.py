@@ -8,8 +8,8 @@ from .transaction import PaymentTransaction
 from .payment_profile import PaymentProfile
 from keel.payment.models import Order
 from keel.stripe.utils import STRIPE_PAYMENT_OBJECT, STRIPE_EVENT_MANAGER
-from keel.Core.err_log import log_error
-from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.err_log import logging_format
+from keel.Core.constants import LOGGER_LOW_SEVERITY, LOGGER_CRITICAL_SEVERITY
 from keel.cases.models import Case
 
 import logging
@@ -78,7 +78,14 @@ class PaymentManager(object):
             self._transaction.complete()
             case_id = self._order.case_id
             if not case_id:
-                case_id = Case.objects.create_from_payment(self._order.customer_id, self._order.related_plan_id).pk
+                related_plan_id = self._order.related_plan_id
+                if not related_plan_id:
+                    err_msg = "Cannot create order without Plan and Case for " \
+                              "identifier - {}".format(unique_identifier)
+                    logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentManager:complete_payment_transaction",
+                                                "", description=err_msg))
+                    raise ValueError("Cannot Complete payment and create order without Plan and Case")
+                case_id = Case.objects.create_from_payment(self._order.customer_id, related_plan_id).pk
             self._payment_profile.case_id = case_id
             self._payment_profile.update_payment_profile(self._order.order_items)
 

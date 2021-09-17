@@ -34,7 +34,7 @@ class ScheduleCallViewSet(GenericViewSet):
         return HttpResponse(template.render())
 
 
-class RCICScheduleUrl(GenericViewSet):
+class ScheduleUrl(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
@@ -44,30 +44,8 @@ class RCICScheduleUrl(GenericViewSet):
             'status': 1,
             "message": ''
         }
-        # schedule_manager = CallScheduleManager(request.user.pk, CallSchedule.CALENDLY_CALL_SCHEDULE_CLIENT)
-        # schedule_url = schedule_manager.generate_schedule_url()
-        # if not schedule_url:
-        #     response["status"] = 0
-        #     response["message"] = "Error getting schedule url of assigned RCIC"
-        #     return Response(response, status.HTTP_400_BAD_REQUEST)
-        #
-        # response["message"] = {"schedule_url": schedule_url}
-        # return Response(response, status=status.HTTP_200_OK)
-
-
-        try:
-            user = request.user
-            rcic_obj = user.users_cases.get(is_active=True).agent
-        except ObjectDoesNotExist as err:
-            response["status"] = 0
-            response["message"] = "Case does not exist for the user"
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-        except MultipleObjectsReturned as err:
-            response["status"] = 0
-            response["message"] = "Multiple RCIC assigned to the user"
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-        schedule_url = calendly_schedule_manager.get_agent_schedule_url(user, rcic_obj)
-
+        schedule_manager = CallScheduleManager(request.user.pk, CallSchedule.CALENDLY_CALL_SCHEDULE_CLIENT)
+        schedule_url = schedule_manager.generate_schedule_url()
         if not schedule_url:
             response["status"] = 0
             response["message"] = "Error getting schedule url of assigned RCIC"

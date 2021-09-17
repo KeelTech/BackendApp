@@ -88,7 +88,7 @@ class CalendlyScheduleManager(object):
         return response
 
     def get_schedule_url(self, invitee_obj, host_user_obj):
-        scheduling_url = ""
+        scheduling_url = None
         if not host_user_obj:
             return scheduling_url
         try:
