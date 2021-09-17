@@ -262,6 +262,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     country = serializers.SerializerMethodField()
     start_date = serializers.SerializerMethodField()
     end_date = serializers.SerializerMethodField()
+    full_address = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -311,6 +312,35 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
                 name = obj.city.city_name
                 return {"value": var,  "name":name, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
             return {"value": "", "type":"drop-down", "labels":self.context["labels"]["city_label"]}
+    
+    def get_full_address(self, obj):
+        if "labels" in self.context:
+            if obj.country != None and obj.city != None and obj.state != None:
+                country, state, city = obj.country, obj.state, obj.city
+                return { 
+                        "type": 'address', 
+                        "countryLabel":self.context["labels"]["country_label"],
+                        "country": country.name, 
+                        "countryId": country.id,
+                        "stateLabel": self.context["labels"]["state_label"],
+                        "state": state.state, 
+                        "stateId": state.id,
+                        "cityLabel": self.context["labels"]["city_label"],
+                        "city": city.city_name, 
+                        "cityId": city.id
+                    }
+            return { 
+                    "type": 'address', 
+                    "countryLabel":self.context["labels"]["country_label"], 
+                    "country": "",
+                    "countryId": "", 
+                    "stateLabel": self.context["labels"]["state_label"], 
+                    "state": "",
+                    "stateId": "",
+                    "cityLabel": self.context["labels"]["city_label"],
+                    "city": "",
+                    "cityId": ""
+                }
 
     def get_start_date(self, obj):
         var = obj.start_date
@@ -325,7 +355,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = QualificationLabel
         fields = ('id', 'institute', 'year_of_passing', 'degree', 'grade', 'country', 'state', 'city',
-                    'start_date', 'end_date', 'labels')
+                    'start_date', 'end_date', 'labels', 'full_address')
 
 
 class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
@@ -402,6 +432,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
     country = serializers.SerializerMethodField()
     weekly_working_hours = serializers.SerializerMethodField()
+    full_address = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -461,6 +492,35 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
                 name = obj.city.city_name
                 return {"value": var,  "name":name, "type":"drop-down", "labels":self.context["labels"]["city_label"]}
             return {"value": "", "type":"drop-down", "labels":self.context["labels"]["city_label"]}
+    
+    def get_full_address(self, obj):
+        if "labels" in self.context:
+            if obj.country != None and obj.city != None and obj.state != None:
+                country, state, city = obj.country, obj.state, obj.city
+                return { 
+                        "type": 'address', 
+                        "countryLabel":self.context["labels"]["country_label"],
+                        "country": country.name, 
+                        "countryId": country.id,
+                        "stateLabel": self.context["labels"]["state_label"],
+                        "state": state.state, 
+                        "stateId": state.id,
+                        "cityLabel": self.context["labels"]["city_label"],
+                        "city": city.city_name, 
+                        "cityId": city.id
+                    }
+            return { 
+                    "type": 'address', 
+                    "countryLabel":self.context["labels"]["country_label"], 
+                    "country": "",
+                    "countryId": "", 
+                    "stateLabel": self.context["labels"]["state_label"], 
+                    "state": "",
+                    "stateId": "",
+                    "cityLabel": self.context["labels"]["city_label"],
+                    "city": "",
+                    "cityId": ""
+                }
 
     def get_weekly_working_hours(self, obj):
         var = obj.weekly_working_hours
@@ -470,7 +530,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkExperienceLabel
         fields = ('id', 'company_name', 'designation', 'job_type', 'job_description', 'weekly_working_hours', 
-                    'start_date', 'end_date', 'country', 'state', 'city', 'labels', )
+                    'start_date', 'end_date', 'country', 'state', 'city', 'full_address', 'labels', )
 
 class CustomerLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
