@@ -39,7 +39,7 @@ class CallScheduleManager(ICallScheduleManager):
         self._call_schedule_validator = CallScheduleValidator(user_id)
 
     def _get_host_user_obj(self):
-        return self._user_case_model_obj.agent if self._user_case_model_obj else None # return default user
+        return self._user_case_model_obj.agent if self._user_case_model_obj else None  # TODO: return default user
 
     def _get_host_plan(self):
         self._user_model_obj = User.objects.get(pk=self._user_id)
