@@ -27,7 +27,7 @@ class PaymentProfile:
             raise ValueError("Case/order items not present")
         self._order_items = order_items
         with transaction.atomic():
-            self._case_model_obj = Case.objects.get(pk=self._case_id)
+            self._case_model_obj = Case.objects.select_for_update().get(pk=self._case_id)
             for order_item in order_items:
                 item_obj = order_item.item
                 if isinstance(item_obj, Service):
@@ -52,10 +52,9 @@ class PaymentProfile:
         payment_profiles = CasePaymentProfile.objects.select_for_update().filter(
             is_active=True, case__pk=self._case_id, entity_type=entity_type, entity_id=entity_obj.pk, fully_paid=False)
         if not payment_profiles:
-            case = Case.objects.get(pk=self._case_id)
             CasePaymentProfile.objects.create(
-                case=case, entity=entity_obj, total_initial_amount=total_amount, total_paid_amount=payable_amount,
-                fully_paid=(total_amount == payable_amount)
+                case=self._case_model_obj, entity=entity_obj, total_initial_amount=total_amount,
+                total_paid_amount=payable_amount, fully_paid=(total_amount == payable_amount)
             )
         else:
             payment_profile = payment_profiles[0]

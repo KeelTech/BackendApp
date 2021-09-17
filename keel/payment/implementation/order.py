@@ -49,6 +49,10 @@ class PaymentOrder(IPaymentOrder):
         return self._customer_id
 
     @property
+    def order_id(self):
+        return self._order_id
+
+    @property
     def order_items(self):
         return self._order_model_obj.order_items.all()
 
@@ -72,11 +76,13 @@ class PaymentOrder(IPaymentOrder):
         return self._order_model_obj
 
     def _is_valid_item_structure(self, item_list):
+        any_item_available = False
         for key, ids in item_list.items():
             validator = VALIDATOR_FACTORY.get_validator(key)
-            if not validator.validate_item(ids):
+            any_item_available = True if any_item_available or ids else False
+            if ids and (not validator or not validator.validate_item(ids)):
                 return False
-        return True
+        return any_item_available
 
     def _get_users_obj(self):
         user_objs = User.objects.filter(id__in=(self._customer_id, self._initiator_id))
@@ -118,28 +124,30 @@ class PaymentOrder(IPaymentOrder):
         self._initiator_id = initiator_id
         self._payment_client_type = payment_client_type
         self._case_id = case_id
-        total_payable_amount = Decimal(0.00)
+        total_payable_amount = 0
         order_items = []
+        currency = "USD"
         if not self._is_valid_item_structure(item_list):
             raise ValueError("Invalid item details")
         for key, ids in item_list.items():
             item_objs = ORDER_ITEM_MODEL_MAPPING[key].objects.filter(pk__in=ids)
             for item_obj in item_objs:
-                item_payable_amount = Decimal(item_obj.get_payment_amount())
+                item_payable_amount = int(item_obj.get_payment_amount())
                 total_payable_amount += item_payable_amount
                 order_items.append(OrderItem.objects.create(item=item_obj, amount=item_payable_amount))
+                currency = item_obj.get_currency() or currency
         customer_obj, initiator_obj = self._get_users_obj()
         case_obj = Case.objects.get(pk=self._case_id) if self._case_id else None
         order = Order.objects.create(
             customer=customer_obj, initiator=initiator_obj, case=case_obj, total_amount=total_payable_amount,
-            payment_client_type=payment_client_type)
+            payment_client_type=payment_client_type, currency=currency)
         order.order_items.add(*order_items)
         self._order_id = order.id
-        return self._order_id, total_payable_amount
+        return self._order_id, total_payable_amount, currency
 
     def complete(self, order_id):
         self._order_id = order_id
-        order_model_obj = Order.objects.select_for_update().get(pk=order_id)
+        order_model_obj = Order.objects.select_for_update().get(pk=order_id, status=Order.STATUS_PENDING)
         order_model_obj.status = Order.STATUS_COMPLETED
         order_model_obj.save()
         self._case_id = order_model_obj.case.pk if order_model_obj.case else None

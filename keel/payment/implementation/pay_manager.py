@@ -37,15 +37,17 @@ class PaymentManager(object):
 
     def _trigger_create_payment(self, items_list, **kwargs):
         with transaction.atomic():
-            order_id, amount = self._order.create(
+            order_id, amount, currency = self._order.create(
                 self._new_payment_args.customer_id, self._new_payment_args.initiator_id, items_list,
                 self._new_payment_args.payment_client_type, self._new_payment_args.case_id)
             self._transaction.order_id = order_id
             client_payment_response = self._payment_client.create_new_payment(
-                amount, self._new_payment_args.customer_currency)
+                amount, currency or self._new_payment_args.customer_currency)
             if not client_payment_response["status"]:
                 error_msg = "Error creating new payment for client {} with error {}".format(self._payment_client, client_payment_response["error"])
-                raise ValueError(error_msg)
+                logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentManager:_trigger_create_payment",
+                                            self._new_payment_args.customer_id, description=error_msg))
+                raise ValueError("Error in Payment client api")
             transaction_id = self._transaction.create_transaction(client_payment_response["data"]["unique_identifier"])
         return {
             "order_id": order_id,
@@ -67,7 +69,7 @@ class PaymentManager(object):
         payment_details = self._trigger_create_payment(items_list, **kwargs)
         return create_payment_url(payment_details["unique_identifier"])
 
-    def payment_webhook_event_handler(self, payment_client_type, webhook_payload, signature=None):
+    def payment_webhook_event_handler(self, payment_client_type, webhook_payload, signature):
         self._payment_client_event_handler = PAYMENT_CLIENT_FACTORY.get_payment_event_client_handler(payment_client_type)
         self._payment_client_event_handler.process(self, webhook_payload, signature)
 
@@ -80,10 +82,11 @@ class PaymentManager(object):
             if not case_id:
                 related_plan_id = self._order.related_plan_id
                 if not related_plan_id:
-                    err_msg = "Cannot create order without Plan and Case for " \
-                              "identifier - {}".format(unique_identifier)
+                    err_msg = "Cannot complete order without Plan and Case for " \
+                              "identifier - {}, order id - {} and customer " \
+                              "id - {}".format(unique_identifier, self._order.order_id, self._order.customer_id)
                     logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentManager:complete_payment_transaction",
-                                                "", description=err_msg))
+                                                self._order.customer_id, description=err_msg))
                     raise ValueError("Cannot Complete payment and create order without Plan and Case")
                 case_id = Case.objects.create_from_payment(self._order.customer_id, related_plan_id).pk
             self._payment_profile.case_id = case_id

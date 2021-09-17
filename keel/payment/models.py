@@ -50,6 +50,7 @@ class Order(TimeStampedModel, SoftDeleteModel):
     order_items = models.ManyToManyField(OrderItem)
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    currency = models.CharField(max_length=10, null=True, blank=True, default=None)
     payment_client_type = models.PositiveSmallIntegerField(choices=PAYMENT_CLIENT_CHOICE, default=PAYMENT_CLIENT_STRIPE)
 
     class Meta:
@@ -61,9 +62,9 @@ class Transaction(TimeStampedModel, SoftDeleteModel):
     STATUS_COMPLETED = 2
     STATUS_CANCELLED = 3
     STATUS_CHOICES = (
-        ("Pending", STATUS_PENDING),
-        ("Completed", STATUS_COMPLETED),
-        ("Cancelled", STATUS_CANCELLED)
+        (STATUS_PENDING, "Pending"),
+        (STATUS_COMPLETED, "Completed"),
+        (STATUS_CANCELLED, "Cancelled")
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     payment_clients_unique_id = models.CharField(max_length=1024, unique=True)
