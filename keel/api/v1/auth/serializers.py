@@ -173,16 +173,18 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             return {"value": var, "type":"int", "labels":self.context["labels"]["phone_number_label"]}
 
     def get_current_country(self, obj):
-        var = obj.current_country.id
-        name = obj.current_country.name
-        if "labels" in self.context:
-            return {"value": var, "name":name, "type":"drop-down", "labels":self.context["labels"]["current_country_label"]}
+        if obj.current_country is not None:
+            var = obj.current_country.id
+            name = obj.current_country.name
+            if "labels" in self.context:
+                return {"value": var, "name":name, "type":"drop-down", "labels":self.context["labels"]["current_country_label"]}
 
     def get_desired_country(self, obj):
-        var = obj.desired_country.id
-        name = obj.desired_country.name
-        if "labels" in self.context:
-            return {"value": var, "name":name, "type":"drop-down", "labels":self.context["labels"]["desired_country_label"]}
+        if obj.desired_country is not None:
+            var = obj.desired_country.id
+            name = obj.desired_country.name
+            if "labels" in self.context:
+                return {"value": var, "name":name, "type":"drop-down", "labels":self.context["labels"]["desired_country_label"]}
 
     class Meta:
         model = CustomerProfileLabel
@@ -191,19 +193,10 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
 
 
 class CustomerQualificationsSerializer(serializers.ModelSerializer):
-    # institute = serializers.CharField(required=True)
-    # degree = serializers.CharField(required=True)
-    # grade = serializers.CharField(required=True)
-    # year_of_passing = serializers.CharField(required=True)
-    # city = serializers.CharField(required=True)
-    # state = serializers.CharField(required=True)
-    # country = serializers.CharField(required=True)
-    # start_date = serializers.DateField(required=True)
-    # end_date = serializers.DateField(required=True)
 
     class Meta:
         model = CustomerQualifications
-        fields = ('id', 'institute', 'degree', 'grade', 'year_of_passing', 'start_date', 
+        fields = ('id', 'institute', 'degree', 'grade', 'year_of_passing', 'start_date',    
                     'end_date', 'city', 'country', 'state')
 
 class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
@@ -212,43 +205,6 @@ class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
         model = CustomerQualifications
         fields = ('id', 'institute', 'degree', 'grade', 'year_of_passing', 'start_date', 
                     'end_date', 'city', 'country', 'state')
-    
-    def create(self, validated_data):
-        id = validated_data.get('id')
-        institute = validated_data.get('institute')
-        degree = validated_data.get('degree')
-        grade = validated_data.get('grade')
-        year_of_passing = validated_data.get('year_of_passing')
-        start_date = validated_data.get('start_date')
-        end_date = validated_data.get('end_date')
-        city = validated_data.get('city')
-        state = validated_data.get('state')
-        country = validated_data.get('country')
-        user = validated_data.get('user')
-
-        # validate date
-        if end_date is not None and start_date is not None:
-            if end_date < start_date:
-                raise serializers.ValidationError("Start Date cannot be greater then end date")
-        
-        try:
-            qualification, created = CustomerQualifications.objects.update_or_create(id=id, 
-                                                defaults={
-                                                    "institute":institute, 
-                                                    "degree":degree,
-                                                    "grade":grade, 
-                                                    "year_of_passing":year_of_passing, 
-                                                    "start_date":start_date, 
-                                                    "end_date":end_date, 
-                                                    "city":city, 
-                                                    "state":state, 
-                                                    "country":country, 
-                                                    "user":user
-                                                })
-        except CustomerQualifications.DoesNotExist:
-            raise serializers.ValidationError("Qualification ID does not exist")
-        
-        return qualification
 
 
 class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
@@ -359,16 +315,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
 
 
 class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
-    start_date = serializers.DateField(required=False)
-    end_date = serializers.DateField(required=False)
-    # job_type = serializers.CharField(required=True)
-    # designation = serializers.CharField(required=True)
-    # job_description = serializers.CharField(required=True)
-    # company_name = serializers.CharField(required=True)
-    # city = serializers.CharField(required=True)
-    # state = serializers.CharField(required=True)
-    # country = serializers.CharField(required=True)
-    # weekly_working_hours = serializers.CharField(required=True)
+
     class Meta:
         model = CustomerWorkExperience
         fields = ('id', 'job_type', 'designation', 'job_description', 'company_name',
@@ -381,44 +328,6 @@ class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
         fields = ('id', 'job_type', 'designation', 'job_description', 'company_name', 'country',
                     'state', 'city', 'weekly_working_hours', 'start_date', 'end_date')
     
-    def create(self, validated_data):
-        id = validated_data.get('id')
-        job_type = validated_data.get('job_type')
-        designation = validated_data.get('designation')
-        company_name = validated_data.get('company_name')
-        job_description = validated_data.get('job_description')
-        city = validated_data.get('city')
-        state = validated_data.get('state')
-        country = validated_data.get('country')
-        weekly_working_hours = validated_data.get('weekly_working_hours')
-        start_date = validated_data.get('start_date')
-        end_date = validated_data.get('end_date')
-        user = validated_data.get('user')
-
-        # validate date
-        if end_date is not None and start_date is not None:
-            if end_date < start_date:
-                raise serializers.ValidationError("Start Date cannot be greater then end date")
-        
-        try:
-            work, created = CustomerWorkExperience.objects.update_or_create(id=id, 
-                                        defaults={
-                                            "job_type":job_type, 
-                                            "designation":designation,
-                                            "company_name":company_name, 
-                                            "job_description":job_description, 
-                                            "city":city, 
-                                            "state":state,
-                                            "country":country, 
-                                            "weekly_working_hours":weekly_working_hours, 
-                                            "start_date":start_date,
-                                            "end_date":end_date, 
-                                            "user":user
-                                        })
-        except CustomerWorkExperience.DoesNotExist:
-            raise serializers.ValidationError('Customer Work experience with ID does not exist')
-        
-        return work
 
 class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     labels = serializers.SerializerMethodField()
@@ -826,28 +735,6 @@ class EducationalCreationalAssessmentUpdateSerializer(serializers.ModelSerialize
         model = EducationalCreationalAssessment
         fields = ('id', 'eca_authority_name', 'eca_authority_number', 'canadian_equivalency_summary')
     
-    def create(self, validated_data):
-        id = validated_data.get('id')
-        eca_authority_name = validated_data.get('eca_authority_name')
-        eca_authority_number = validated_data.get('eca_authority_number')
-        canadian_equivalency_summary = validated_data.get('canadian_equivalency_summary')
-        user = validated_data.get('user')
-        try:
-            education_assessment, created = EducationalCreationalAssessment.objects.update_or_create(id=id, 
-                                defaults={
-                                        "eca_authority_name":eca_authority_name, 
-                                        "eca_authority_number":eca_authority_number, 
-                                        "canadian_equivalency_summary":canadian_equivalency_summary,
-                                        "user":user
-                                    })
-        except EducationalCreationalAssessment.DoesNotExist:
-            raise serializers.ValidationError("Education Assessment with ID does not exist")
-        education_assessment.eca_authority_name = eca_authority_name
-        education_assessment.eca_authority_number = eca_authority_number
-        education_assessment.canadian_equivalency_summary = canadian_equivalency_summary
-        education_assessment.user = user
-        education_assessment.save()
-        return education_assessment
 
 class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer):
     eca_authority_name = serializers.SerializerMethodField()
