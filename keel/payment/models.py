@@ -67,7 +67,8 @@ class Transaction(TimeStampedModel, SoftDeleteModel):
         (STATUS_CANCELLED, "Cancelled")
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    payment_clients_unique_id = models.CharField(max_length=1024, unique=True)
+    frontend_payment_clients_unique_id = models.CharField(max_length=1024, unique=True)
+    webhook_payment_clients_unique_id = models.CharField(max_length=1024, unique=True)
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
 

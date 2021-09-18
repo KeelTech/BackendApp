@@ -4,13 +4,15 @@ from typing import NamedTuple
 from django.core.exceptions import ObjectDoesNotExist
 
 from keel.authentication.models import User
+from keel.Core.err_log import logging_format
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
+from keel.cases.implementation.case_util_helper import CaseUtilHelper
+from keel.cases.models import Case
 from keel.payment.models import Order, OrderItem, ORDER_ITEM_MODEL_MAPPING
 from keel.payment.constants import ORDER_ITEM_QUOTATION_TYPE, ORDER_ITEM_SERVICE_TYPE, ORDER_ITEM_PLAN_TYPE
 from keel.plans.models import Plan, Service
+from keel.plans.implementation.plan_util_helper import PlanUtilHelper
 from keel.quotations.models import QuotationMilestone
-from keel.Core.err_log import logging_format
-from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
-from keel.cases.models import Case
 
 import logging
 logger = logging.getLogger('app-logger')
@@ -43,6 +45,7 @@ class PaymentOrder(IPaymentOrder):
         self._order_model_obj = None
         self._related_plan_id = None
         self._payment_client_type = None
+        self._plan_util_helper = PlanUtilHelper()
 
     @property
     def customer_id(self):
@@ -156,6 +159,38 @@ class PaymentOrder(IPaymentOrder):
 
     def cancel(self, order_id):
         pass
+
+    def get_pending_customer_orders(self, customer_id):
+        return Order.objects.filter(customer=customer_id, status=Order.STATUS_PENDING)
+
+    def get_order_items_details(self, order_items):
+        item_details = []
+        for order_item in order_items:
+            item_detail = {
+                "payable_amount": order_item.item.get_payment_amount(),
+                "total_amount": order_item.item.get_total_amount()
+            }
+            plan_model_obj = order_item.item.get_plan()
+            if plan_model_obj:
+                item_detail.update({
+                    "plan_details": self._plan_util_helper.get_plan_details(plan_model_obj)
+                })
+            item_details.append(item_detail)
+        return item_details
+
+    def update_order_case(self, case_model_obj):
+        self._order_model_obj.case = case_model_obj
+        self._order_model_obj.save()
+
+    def get_order_details(self, order_model_obj):
+        return {
+            "customer_id": order_model_obj.customer.pk,
+            "initiator_id": order_model_obj.initiator.pk,
+            "order_items": self.get_order_items_details(order_model_obj.order_items.all()),
+            "status": order_model_obj.status,
+            "payable_amount": order_model_obj.total_amount,
+            "currency": order_model_obj.currency,
+        }
 
 
 class OrderItemValidators:
