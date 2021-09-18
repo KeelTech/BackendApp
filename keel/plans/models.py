@@ -22,6 +22,9 @@ class Plan(TimeStampedModel, SoftDeleteModel):
     def get_payment_amount(self):
         return self.price
 
+    def get_currency(self):
+        return self.currency
+
     class Meta:
         ordering = ['-id']
 
@@ -50,6 +53,9 @@ class Service(TimeStampedModel, SoftDeleteModel):
 
     def get_payment_amount(self):
         return self.price
+
+    def get_currency(self):
+        return self.currency
 
 
 class ServicesPlans(TimeStampedModel, SoftDeleteModel):

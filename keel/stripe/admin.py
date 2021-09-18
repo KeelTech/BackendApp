@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import CurrencyMapping
 
-# Register your models here.
+
+admin.site.register(CurrencyMapping)
+

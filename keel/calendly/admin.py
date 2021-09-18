@@ -4,7 +4,7 @@ from .models import CalendlyUsers, CalendlyCallSchedule, CalendlyInviteeSchedule
 
 
 class CalendlyUsersAdmin(CustomBaseModelAdmin):
-    list_display = ('user', 'user_resource_url', 'event_type_resource_url')
+    list_display = ('user', 'user_url', 'event_type_url')
 
 
 class CalendlyCallScheduleAdmin(CustomBaseModelAdmin):
@@ -12,9 +12,9 @@ class CalendlyCallScheduleAdmin(CustomBaseModelAdmin):
 
 
 class CalendlyInviteeScheduledUrlAdmin(CustomBaseModelAdmin):
-    list_display = ('invitee_user', 'host_user', 'schedule_url')
+    list_display = ('invitee_user', 'host_user', 'scheduled_call_url')
 
 
-admin.site.register(CalendlyUsers)
-admin.site.register(CalendlyCallSchedule)
-admin.site.register(CalendlyInviteeScheduledUrl)
+admin.site.register(CalendlyUsers, CalendlyUsersAdmin)
+admin.site.register(CalendlyCallSchedule, CalendlyCallScheduleAdmin)
+admin.site.register(CalendlyInviteeScheduledUrl, CalendlyInviteeScheduledUrlAdmin)

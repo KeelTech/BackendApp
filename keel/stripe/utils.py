@@ -1,11 +1,11 @@
-import json
-
 from django.conf import settings
 from decimal import Decimal
 
 import stripe
+
 from keel.Core.err_log import logging_format
 from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
+from .models import CurrencyMapping
 
 import logging
 logger = logging.getLogger('app-logger')
@@ -19,19 +19,21 @@ class StripePaymentUtility(object):
     def validate_amount(self, amount):
         try:
             amount = Decimal(amount)
+            if amount <= 0:
+                raise ValueError("Amount should not be less than equal to zero")
         except ValueError as err:
-            err_msg = "Invalid Amount"
-            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "StripePaymentUtility.validate_amount", "", description=err_msg))
-            raise ValueError(err_msg)
+            err_msg = "Invalid Amount with error - {}".format(err)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "StripePaymentUtility.validate_amount",
+                                        "", description=err_msg))
+            raise ValueError("Invalid Amount")
 
-    def create_new_payment(self, amount, currency="usd"):
+    def create_new_payment(self, amount, currency):
         self.validate_amount(amount)
-        # stripe_currency = CurrencyMapping.objects.get(user_currency=currency)
-        stripe_currency = currency
+        currency_mapping = CurrencyMapping.objects.get(user_currency__iexact=currency)
         try:
             intent = stripe.PaymentIntent.create(
-                amount=int(amount),
-                currency=stripe_currency
+                amount=amount if currency_mapping.zero_decimal_currency else (amount * 100),
+                currency=currency_mapping.stripe_currency
             )
             return {
                 "status": 1,
@@ -58,7 +60,7 @@ class IPaymentEventHandler(object):
         raise NotImplementedError
 
 
-class PaymentIntentEventHandler(IPaymentEventHandler):
+class PaymentIntentCompleteEventHandler(IPaymentEventHandler):
 
     def __init__(self, payment_manager, event_data):
         super().__init__(payment_manager)
@@ -70,7 +72,7 @@ class PaymentIntentEventHandler(IPaymentEventHandler):
 
 class PaymentEventManager:
     eventHandlers = {
-        "payment_intent.succeeded": PaymentIntentEventHandler,
+        "payment_intent.succeeded": PaymentIntentCompleteEventHandler,
         # "charge.succeeded":
     }
 

@@ -18,11 +18,12 @@ class PaymentTransaction(object):
     def order_id(self, order_id):
         self._order_id = order_id
 
-    def create_transaction(self, payment_identifier, **kwargs):
+    def create_transaction(self, webhook_payment_identifier, frontend_payment_identifier, **kwargs):
         if not self._order_id:
             raise ValueError("None order id while in create transaction")
         transaction_obj = Transaction.objects.create(
-            payment_clients_unique_id=payment_identifier, order=Order.objects.get(pk=self._order_id))
+            frontend_payment_clients_unique_id=frontend_payment_identifier, webhook_payment_clients_unique_id=webhook_payment_identifier,
+            order=Order.objects.get(pk=self._order_id))
         return transaction_obj.id
 
     def complete(self):
@@ -30,7 +31,10 @@ class PaymentTransaction(object):
         self._transaction_model_obj.save()
 
     def validate_transaction_id(self, identifier):
-        self._transaction_model_obj = Transaction.objects.get(payment_clients_unique_id=identifier,
+        self._transaction_model_obj = Transaction.objects.get(webhook_payment_clients_unique_id=identifier,
                                                               status=Transaction.STATUS_PENDING)
         self._pk = identifier
         self._order_id = self._transaction_model_obj.order.id
+
+    def get_order_transaction_details(self, order_objs):
+        return Transaction.objects.filter(order__in=order_objs)

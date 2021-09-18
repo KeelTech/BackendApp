@@ -17,3 +17,11 @@ class PlanUtilHelper:
             raise ValueError("Plan Id not populated")
         # TODO: Implement Logic related to scheduled call and Plan
         return True
+
+    def get_plan_details(self, plan_model_obj):
+        return {
+            "title": plan_model_obj.title,
+            "description": plan_model_obj.description,
+            "total_plan_price": plan_model_obj.price,
+            "currency": plan_model_obj.currency
+        }
