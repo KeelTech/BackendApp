@@ -186,7 +186,9 @@ class CalendlyScheduleManager(object):
                 "error": "",
                 "schedule_id": calendly_schedule.call_schedule.id
             }
-            customer_obj = calendly_schedule.call_schedule.visitor_user
+            customer_model_obj = calendly_schedule.call_schedule.visitor_user
+            case_model_objs = customer_model_obj.users_cases.filter(is_active=True)
+            case_id = case_model_objs[0].pk if case_model_objs else None
             event_details = self._get_event_details(calendly_schedule.invitee_url)
             if not event_details["status"]:
                 response["error"] = event_details["error"]
@@ -198,8 +200,8 @@ class CalendlyScheduleManager(object):
                     "end_time": details["end_time_utc"],
                     "cancel_url": details["cancel_url"],
                     "reschedule_url": details["reschedule_url"],
-                    "case_id": customer_obj.users_cases.get().pk,
-                    "profile_id": customer_obj.user_profile.get().pk
+                    "case_id": case_id,
+                    "profile_id": customer_model_obj.user_profile.get().pk
                 })
             response_data.append(schedule_detail)
 
