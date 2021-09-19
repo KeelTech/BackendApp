@@ -77,7 +77,6 @@ class PaymentManager(object):
         self._payment_client_event_handler.process(self, webhook_payload, signature)
 
     def complete_payment_transaction(self, unique_identifier):
-        unique_identifier = "pi_3Jb6SiI2bVytQPLa0ETqKadW"
         with transaction.atomic():
             self._transaction.validate_transaction_id(unique_identifier)
             self._order.complete(self._transaction.order_id)

@@ -13,7 +13,7 @@ from .parser.webhook_data import CalendlyWebHookDataParser
 
 from keel.calendly.constants import CALENDLY_SIGNATURE_VKEY, CALENDLY_SIGNATURE_TKEY, CALENDLY_EVENT_TOLERANCE_TIME
 from keel.call_schedule.models import CallSchedule
-from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
 from keel.Core.err_log import logging_format
 
 import logging
@@ -90,6 +90,9 @@ class CalendlyScheduleManager(object):
     def get_schedule_url(self, invitee_obj, host_user_obj):
         scheduling_url = None
         if not host_user_obj:
+            err_msg = "No Host selected for the schedule of invitee - {}".format(invitee_obj.pk)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyScheduleManager:get_schedule_url",
+                                        invitee_obj.pk, description=err_msg))
             return scheduling_url
         try:
             calendly_user_obj = CalendlyUsers.objects.get(user=host_user_obj)
@@ -187,8 +190,25 @@ class CalendlyScheduleManager(object):
                 "schedule_id": calendly_schedule.call_schedule.id
             }
             customer_model_obj = calendly_schedule.call_schedule.visitor_user
-            case_model_objs = customer_model_obj.users_cases.filter(is_active=True)
-            case_id = case_model_objs[0].pk if case_model_objs else None
+
+            case_id = None
+            try:
+                case_id = customer_model_obj.users_cases.get(is_active=True).pk
+            except ObjectDoesNotExist as err:
+                err_msg = "No case for user - {} while getting schedule details " \
+                          "with err _ {}".format(customer_model_obj.pk, err)
+                logger.info(logging_format(LOGGER_LOW_SEVERITY, "CalendlyScheduleManager:get_scheduled_event_details",
+                                           customer_model_obj.pk, description=err_msg))
+
+            profile_id = None
+            try:
+                profile_id = customer_model_obj.user_profile.get().pk
+            except ObjectDoesNotExist as err:
+                err_msg = "No Profile for user - {} while getting schedule details " \
+                          "with err _ {}".format(customer_model_obj.pk, err)
+                logger.info(logging_format(LOGGER_LOW_SEVERITY, "CalendlyScheduleManager:get_scheduled_event_details",
+                                           customer_model_obj.pk, description=err_msg))
+
             event_details = self._get_event_details(calendly_schedule.invitee_url)
             if not event_details["status"]:
                 response["error"] = event_details["error"]
@@ -201,7 +221,7 @@ class CalendlyScheduleManager(object):
                     "cancel_url": details["cancel_url"],
                     "reschedule_url": details["reschedule_url"],
                     "case_id": case_id,
-                    "profile_id": customer_model_obj.user_profile.get().pk
+                    "profile_id": profile_id
                 })
             response_data.append(schedule_detail)
 
