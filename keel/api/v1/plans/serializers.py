@@ -6,4 +6,5 @@ class PlanSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Plan
-        fields = "__all__"
+        fields = ('id', 'title', 'description', 'price', 'discount', 'currency', 'country_iso',
+                    'sgst', 'cgst', 'is_active')
