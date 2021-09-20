@@ -202,7 +202,7 @@ class CalendlyScheduleManager(object):
 
             profile_id = None
             try:
-                profile_id = customer_model_obj.user_profile.get().pk
+                profile_id = customer_model_obj.user_profile.pk
             except ObjectDoesNotExist as err:
                 err_msg = "No Profile for user - {} while getting schedule details " \
                           "with err _ {}".format(customer_model_obj.pk, err)
