@@ -68,16 +68,8 @@ class CallScheduleViewSet(GenericViewSet):
         serializer = ScheduleCallSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
-        try:
-            host_user = request.user.users_cases.get(is_active=True).agent
-        except Exception as err:
-            response["status"] = 0
-            response["message"] = "User not connected to any agent"
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-
-        event_details = calendly_schedule_manager.create_event_schedule(
-            request.user, host_user, validated_data["calendly_invitee_url"])
-
+        call_schedule_manager = CallScheduleManager(request.user.pk, CallSchedule.CALENDLY_CALL_SCHEDULE_CLIENT)
+        event_details = call_schedule_manager.create_schedule(validated_data["calendly_invitee_url"])
         if not event_details["status"]:
             response["status"] = 0
             response["message"] = "Error while creating schedule Id"

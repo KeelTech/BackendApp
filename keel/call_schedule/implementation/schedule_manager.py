@@ -12,24 +12,7 @@ import logging
 logger = logging.getLogger('app-logger')
 
 
-class ICallScheduleManager:
-    def generate_schedule_url(self):
-        raise NotImplementedError
-
-    def create_schedule(self, client_invitee_identifier):
-        raise NotImplementedError
-
-    def get_schedules(self):
-        raise NotImplementedError
-
-    def webhook_process_event(self):
-        raise NotImplementedError
-
-    def webhook_subscribe(self):
-        raise NotImplementedError
-
-
-class CallScheduleManager(ICallScheduleManager):
+class CallScheduleManager(object):
 
     def __init__(self, user_id, call_schedule_client_type):
         self._user_id = user_id
@@ -39,18 +22,27 @@ class CallScheduleManager(ICallScheduleManager):
         self._call_schedule_validator = CallScheduleValidator(user_id)
 
     def _get_host_user_obj(self):
-        return self._user_case_model_obj.agent if self._user_case_model_obj else User.objects.filter(
-            user_type=User.ACCOUNT_MANAGER, call_default_contact=True).first()
+        return self._user_case_model_obj.agent if self._user_case_model_obj else User.objects.get(
+            user_type=User.ACCOUNT_MANAGER, call_default_contact=True)
 
     def _get_host_plan(self):
-        self._user_model_obj = User.objects.get(pk=self._user_id)
+        if not self._user_case_model_obj:
+            return None
+        return self._user_case_model_obj.plan.pk
+
+    def _get_case_model_obj(self):
         try:
-            self._user_case_model_obj = self._user_model_obj.users_cases.get(is_active=True)
-            return self._user_case_model_obj.plan.pk
+            case_model_obj = self._user_model_obj.users_cases.get(is_active=True)
         except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
             return None
+        return case_model_obj
+
+    def _get_user_model_obj(self):
+        return User.objects.get(pk=self._user_id, is_active=True)
 
     def generate_schedule_url(self):
+        self._user_model_obj = self._get_user_model_obj()
+        self._user_case_model_obj = self._get_case_model_obj()
         plan_id = self._get_host_plan()
         if not self._call_schedule_validator.call_schedule_allowed(plan_id):
             err_msg = "User - {} cannot schedule further calls".format(self._user_id)
@@ -61,7 +53,10 @@ class CallScheduleManager(ICallScheduleManager):
         return self._client_scheduler.get_schedule_url(self._user_model_obj, host_user_obj)
 
     def create_schedule(self, client_invitee_identifier):
-        pass
+        self._user_model_obj = User.objects.get(pk=self._user_id, is_active=True)
+        self._user_case_model_obj = self._get_case_model_obj()
+        host_user_obj = self._get_host_user_obj()
+        return self._client_scheduler.create_event_schedule(self._user_model_obj, host_user_obj, client_invitee_identifier)
 
     def get_schedules(self):
         response = {
@@ -69,7 +64,7 @@ class CallScheduleManager(ICallScheduleManager):
             "data": [],
             "error": ""
         }
-        user = User.objects.get(pk=self._user_id)
+        user = User.objects.get(pk=self._user_id, is_active=True)
         query = {
             "is_active": True,
             "status__in": (CallSchedule.ACTIVE, CallSchedule.RESCHEDULED)

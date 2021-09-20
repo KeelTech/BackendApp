@@ -156,5 +156,9 @@ class CalendlyApis(object):
             logger.error(
                 logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyApis.get_event_details", "", description=err))
             response["error"] = "Connection error in get api for event url - {}".format(event_url)
+        except Exception as err:
+            logger.error(
+                logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyApis.get_event_details", "", description=err))
+            response["error"] = "Exception raised in get api for event url - {}".format(event_url)
         return response
 
