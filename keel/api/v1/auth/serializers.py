@@ -482,7 +482,8 @@ class AgentLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("User is not active. Contact Administrator")
 
         # check user type
-        if user.user_type != user.RCIC:
+        types = [user.RCIC, user.ACCOUNT_MANAGER]
+        if user.user_type not in types:
             raise serializers.ValidationError("Not an agent account")
 
         return user
