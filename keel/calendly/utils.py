@@ -211,7 +211,7 @@ class CalendlyScheduleManager(object):
 
             event_details = self._get_event_details(calendly_schedule.invitee_url)
             if not event_details["status"]:
-                response["error"] = event_details["error"]
+                schedule_detail["error"] = event_details["error"]
             else:
                 details = event_details["data"]
                 schedule_detail.update({
