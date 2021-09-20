@@ -8,13 +8,21 @@ from keel.Core.models import TimeStampedModel, SoftDeleteModel
 class Plan(TimeStampedModel, SoftDeleteModel):
     title = models.CharField(max_length=512, null=True, default=None, blank=True)
     description = models.TextField(null=True, blank=True, default=None)
+    discount = models.PositiveSmallIntegerField(default=0, blank=True, null=True) # in percentage
     price = models.FloatField(null=True, blank=True, default=True)
     currency = models.CharField(max_length=10, null=True, blank=True, default=None)
     country_iso = models.CharField(max_length=512, null=True, blank=True, default=None)
+    sgst = models.PositiveSmallIntegerField(default=0, null=True, blank=True) # in percentage
+    cgst = models.PositiveSmallIntegerField(default=0, null=True, blank=True) # in percentage
     is_active = models.BooleanField(default=True)
 
     def get_plan(self):
         return self
+    
+    def get_discount_price(self):
+        discount = self.discount/100
+        discount_price = self.price - (self.price*discount)
+        return discount_price
 
     def get_total_amount(self):
         return self.price
