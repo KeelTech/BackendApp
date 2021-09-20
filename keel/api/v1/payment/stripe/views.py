@@ -18,14 +18,29 @@ class OrderViewSet(GenericViewSet):
     permission_classes = (IsAuthenticated,)
 
     def create(self, request, **kwargs):
-        user = request.user
+        response = {
+            "status": 0,
+            "error": "",
+            "data": {}
+        }
+        customer = request.user
         data = request.data
         payment_manager = PaymentManager()
-        response = payment_manager.generate_payment_details(
-            StructNewPaymentDetailArgs(customer_id=user.pk, customer_currency="usd", initiator_id=user.pk,
-                                       payment_client_type=PAYMENT_CLIENT_TYPE, case_id=data.get("case_id")),
-            data["order_items"]
-        )
+        try:
+            payment_details = payment_manager.generate_payment_details(
+                StructNewPaymentDetailArgs(customer_id=customer.pk, customer_currency="usd",
+                                           initiator_id=customer.pk, payment_client_type=PAYMENT_CLIENT_TYPE,
+                                           case_id=data.get("case_id")),
+                data["order_items"]
+            )
+            response["status"] = 1
+            response["data"] = payment_details
+        except ValueError as err:
+            response["error"] = str(err)
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as err:
+            response["error"] = str(err)
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(response)
 
 

@@ -4,13 +4,15 @@ from typing import NamedTuple
 from django.core.exceptions import ObjectDoesNotExist
 
 from keel.authentication.models import User
+from keel.Core.err_log import logging_format
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
+from keel.cases.implementation.case_util_helper import CaseUtilHelper
+from keel.cases.models import Case
 from keel.payment.models import Order, OrderItem, ORDER_ITEM_MODEL_MAPPING
 from keel.payment.constants import ORDER_ITEM_QUOTATION_TYPE, ORDER_ITEM_SERVICE_TYPE, ORDER_ITEM_PLAN_TYPE
 from keel.plans.models import Plan, Service
+from keel.plans.implementation.plan_util_helper import PlanUtilHelper
 from keel.quotations.models import QuotationMilestone
-from keel.Core.err_log import logging_format
-from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
-from keel.cases.models import Case
 
 import logging
 logger = logging.getLogger('app-logger')
@@ -43,10 +45,15 @@ class PaymentOrder(IPaymentOrder):
         self._order_model_obj = None
         self._related_plan_id = None
         self._payment_client_type = None
+        self._plan_util_helper = PlanUtilHelper()
 
     @property
     def customer_id(self):
         return self._customer_id
+
+    @property
+    def order_id(self):
+        return self._order_id
 
     @property
     def order_items(self):
@@ -72,11 +79,13 @@ class PaymentOrder(IPaymentOrder):
         return self._order_model_obj
 
     def _is_valid_item_structure(self, item_list):
+        any_item_available = False
         for key, ids in item_list.items():
             validator = VALIDATOR_FACTORY.get_validator(key)
-            if not validator.validate_item(ids):
+            any_item_available = True if any_item_available or ids else False
+            if ids and (not validator or not validator.validate_item(ids)):
                 return False
-        return True
+        return any_item_available
 
     def _get_users_obj(self):
         user_objs = User.objects.filter(id__in=(self._customer_id, self._initiator_id))
@@ -118,28 +127,30 @@ class PaymentOrder(IPaymentOrder):
         self._initiator_id = initiator_id
         self._payment_client_type = payment_client_type
         self._case_id = case_id
-        total_payable_amount = Decimal(0.00)
+        total_payable_amount = 0
         order_items = []
+        currency = "USD"
         if not self._is_valid_item_structure(item_list):
             raise ValueError("Invalid item details")
         for key, ids in item_list.items():
             item_objs = ORDER_ITEM_MODEL_MAPPING[key].objects.filter(pk__in=ids)
             for item_obj in item_objs:
-                item_payable_amount = Decimal(item_obj.get_payment_amount())
+                item_payable_amount = int(item_obj.get_payment_amount())
                 total_payable_amount += item_payable_amount
                 order_items.append(OrderItem.objects.create(item=item_obj, amount=item_payable_amount))
+                currency = item_obj.get_currency() or currency
         customer_obj, initiator_obj = self._get_users_obj()
         case_obj = Case.objects.get(pk=self._case_id) if self._case_id else None
         order = Order.objects.create(
             customer=customer_obj, initiator=initiator_obj, case=case_obj, total_amount=total_payable_amount,
-            payment_client_type=payment_client_type)
+            payment_client_type=payment_client_type, currency=currency)
         order.order_items.add(*order_items)
         self._order_id = order.id
-        return self._order_id, total_payable_amount
+        return self._order_id, total_payable_amount, currency
 
     def complete(self, order_id):
         self._order_id = order_id
-        order_model_obj = Order.objects.select_for_update().get(pk=order_id)
+        order_model_obj = Order.objects.select_for_update().get(pk=order_id, status=Order.STATUS_PENDING)
         order_model_obj.status = Order.STATUS_COMPLETED
         order_model_obj.save()
         self._case_id = order_model_obj.case.pk if order_model_obj.case else None
@@ -148,6 +159,38 @@ class PaymentOrder(IPaymentOrder):
 
     def cancel(self, order_id):
         pass
+
+    def get_pending_customer_orders(self, customer_id):
+        return Order.objects.filter(customer=customer_id, status=Order.STATUS_PENDING)
+
+    def get_order_items_details(self, order_items):
+        item_details = []
+        for order_item in order_items:
+            item_detail = {
+                "payable_amount": order_item.item.get_payment_amount(),
+                "total_amount": order_item.item.get_total_amount()
+            }
+            plan_model_obj = order_item.item.get_plan()
+            if plan_model_obj:
+                item_detail.update({
+                    "plan_details": self._plan_util_helper.get_plan_details(plan_model_obj)
+                })
+            item_details.append(item_detail)
+        return item_details
+
+    def update_order_case(self, case_model_obj):
+        self._order_model_obj.case = case_model_obj
+        self._order_model_obj.save()
+
+    def get_order_details(self, order_model_obj):
+        return {
+            "customer_id": order_model_obj.customer.pk,
+            "initiator_id": order_model_obj.initiator.pk,
+            "order_items": self.get_order_items_details(order_model_obj.order_items.all()),
+            "status": order_model_obj.status,
+            "payable_amount": order_model_obj.total_amount,
+            "currency": order_model_obj.currency,
+        }
 
 
 class OrderItemValidators:

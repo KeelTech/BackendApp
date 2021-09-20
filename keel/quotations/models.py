@@ -35,6 +35,9 @@ class Quotation(TimeStampedModel, SoftDeleteModel):
             self.q_id = uuid.uuid4()
         super().save(*args, **kwargs)
 
+    def get_currency(self):
+        return self.plan.get_currency()
+
 
 class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
 
@@ -62,4 +65,7 @@ class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
 
     def get_payment_amount(self):
         return self.amount
+
+    def get_currency(self):
+        return self.quotation.get_currency()
 

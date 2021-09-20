@@ -15,8 +15,9 @@ from rest_framework import status
 from .serializers import ScheduleCallSerializer
 from keel.authentication.backends import JWTAuthentication
 from keel.authentication.models import User
-from keel.calendly.utils import calendly_business_logic, is_valid_webhook_signature
+from keel.calendly.utils import calendly_schedule_manager, is_valid_webhook_signature
 from keel.calendly.constants import CALENDLY_WEBHOOK_PATH, CALENDLY_WEBHOOK_SIGNATURE_KEY, CALENDLY_WEBHOOK_EVENTS
+from keel.call_schedule.implementation.schedule_manager import CallScheduleManager
 from keel.call_schedule.models import CallSchedule
 from keel.calendly.models import CalendlyCallSchedule
 from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
@@ -33,7 +34,7 @@ class ScheduleCallViewSet(GenericViewSet):
         return HttpResponse(template.render())
 
 
-class RCICScheduleUrl(GenericViewSet):
+class ScheduleUrl(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
@@ -43,19 +44,8 @@ class RCICScheduleUrl(GenericViewSet):
             'status': 1,
             "message": ''
         }
-        try:
-            user = request.user
-            rcic_obj = user.users_cases.get(is_active=True).agent
-        except ObjectDoesNotExist as err:
-            response["status"] = 0
-            response["message"] = "Case does not exist for the user"
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-        except MultipleObjectsReturned as err:
-            response["status"] = 0
-            response["message"] = "Multiple RCIC assigned to the user"
-            return Response(response, status.HTTP_400_BAD_REQUEST)
-        schedule_url = calendly_business_logic.get_agent_schedule_url(user, rcic_obj)
-
+        schedule_manager = CallScheduleManager(request.user.pk, CallSchedule.CALENDLY_CALL_SCHEDULE_CLIENT)
+        schedule_url = schedule_manager.generate_schedule_url()
         if not schedule_url:
             response["status"] = 0
             response["message"] = "Error getting schedule url of assigned RCIC"
@@ -85,7 +75,7 @@ class CallScheduleViewSet(GenericViewSet):
             response["message"] = "User not connected to any agent"
             return Response(response, status.HTTP_400_BAD_REQUEST)
 
-        event_details = calendly_business_logic.create_event_schedule(
+        event_details = calendly_schedule_manager.create_event_schedule(
             request.user, host_user, validated_data["calendly_invitee_url"])
 
         if not event_details["status"]:
@@ -113,7 +103,7 @@ class CallScheduleViewSet(GenericViewSet):
                                   "active or rescheduled status"
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        reschedule_details = calendly_business_logic.cancel_reschedule_scheduled_event(schedule_obj)
+        reschedule_details = calendly_schedule_manager.cancel_reschedule_scheduled_event(schedule_obj)
         if not reschedule_details["status"]:
             response["message"] = reschedule_details["error"]
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -137,7 +127,7 @@ class CallScheduleViewSet(GenericViewSet):
             response["message"] = "Error getting schedule with this id and associated user which is in" \
                                       "active or rescheduled status"
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
-        calendly_business_logic.cancel_reschedule_scheduled_event(schedule_obj)
+        calendly_schedule_manager.cancel_reschedule_scheduled_event(schedule_obj)
 
         return Response(response, status.HTTP_200_OK)
 
@@ -146,26 +136,15 @@ class CallScheduleViewSet(GenericViewSet):
             "status": 0,
             "message": ""
         }
-        try:
-            call_schedule_objs = CallSchedule.objects.filter(
-                visitor_user=request.user, is_active=True,
-                status__in=(CallSchedule.ACTIVE, CallSchedule.RESCHEDULED))
-        except ObjectDoesNotExist:
-            response["message"] = "No Active schedule for user exists"
-            return Response(response, status.HTTP_400_BAD_REQUEST)
 
-        if not call_schedule_objs:
-            response["message"] = "No Active schedule for user exists"
-            return Response(response, status.HTTP_200_OK)
-
-        scheduled_event_details = calendly_business_logic.get_scheduled_event_details(call_schedule_objs)
-
-        if not scheduled_event_details["status"]:
-            response["message"] = scheduled_event_details["error"]
+        call_schedule_manager = CallScheduleManager(request.user.pk, CallSchedule.CALENDLY_CALL_SCHEDULE_CLIENT)
+        schedules = call_schedule_manager.get_schedules()
+        if not schedules["status"]:
+            response["message"] = schedules["error"]
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         response["status"] = 1
-        response["message"] = scheduled_event_details["data"]
+        response["message"] = schedules["data"]
         return Response(response, status.HTTP_200_OK)
 
 
@@ -216,5 +195,5 @@ class WebHookProcessEvent(GenericViewSet):
             response["status"] = 0
             return Response(response, status.HTTP_200_OK)
 
-        calendly_business_logic.process_event_data(request.data)
+        calendly_schedule_manager.process_event_data(request.data)
         return Response(response, status.HTTP_200_OK)

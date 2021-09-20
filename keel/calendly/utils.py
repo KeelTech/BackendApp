@@ -13,17 +13,16 @@ from .parser.webhook_data import CalendlyWebHookDataParser
 
 from keel.calendly.constants import CALENDLY_SIGNATURE_VKEY, CALENDLY_SIGNATURE_TKEY, CALENDLY_EVENT_TOLERANCE_TIME
 from keel.call_schedule.models import CallSchedule
-from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
 from keel.Core.err_log import logging_format
 
 import logging
 logger = logging.getLogger('app-logger')
 
 
-class BusinessLogic(object):
+class CalendlyScheduleManager(object):
 
-    @staticmethod
-    def update_call_schedule(call_schedule_id, event_invitee_details):
+    def _update_call_schedule(self, call_schedule_id, event_invitee_details):
         call_schedule_status = event_invitee_details["status"] if not event_invitee_details[
             "rescheduled"] else CallSchedule.RESCHEDULED
         call_schedule_details = {
@@ -39,13 +38,12 @@ class BusinessLogic(object):
             "status": call_schedule_status
         }
         with transaction.atomic():
-            call_schedule_obj = CallSchedule.objects.get(id=call_schedule_id).update(**call_schedule_details)
+            call_schedule_obj = CallSchedule.objects.select_for_update().get(id=call_schedule_id).update(**call_schedule_details)
             calendly_call_schedule_obj = CalendlyCallSchedule.objects.get(call_schedule__id=call_schedule_id). \
                 update(**calendly_call_schedule_details)
             return call_schedule_obj, calendly_call_schedule_obj
 
-    @staticmethod
-    def create_call_schedule(visitor_user_obj, host_user_obj, event_details):
+    def _create_call_schedule(self, visitor_user_obj, host_user_obj, event_details):
         call_schedule_status = event_details["status"] if not event_details[
             "rescheduled"] else CallSchedule.RESCHEDULED
         call_schedule_details = {
@@ -68,8 +66,7 @@ class BusinessLogic(object):
             calendly_call_schedule_obj = CalendlyCallSchedule.objects.create(**calendly_call_schedule_details)
             return call_schedule_obj, calendly_call_schedule_obj
 
-    @staticmethod
-    def get_event_details(invitee_url):
+    def _get_event_details(self, invitee_url):
         response = {
             "status": 0,
             "data": {},
@@ -90,22 +87,24 @@ class BusinessLogic(object):
         response["status"] = 1
         return response
 
-    def get_agent_schedule_url(self, invitee_obj, rcic_user_obj):
-
-        scheduling_url = ""
-        if not rcic_user_obj:
+    def get_schedule_url(self, invitee_obj, host_user_obj):
+        scheduling_url = None
+        if not host_user_obj:
+            err_msg = "No Host selected for the schedule of invitee - {}".format(invitee_obj.pk)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyScheduleManager:get_schedule_url",
+                                        invitee_obj.pk, description=err_msg))
             return scheduling_url
         try:
-            calendly_user_obj = CalendlyUsers.objects.get(user=rcic_user_obj)
+            calendly_user_obj = CalendlyUsers.objects.get(user=host_user_obj)
         except ObjectDoesNotExist as err:
             message = "Error getting calendly user details for user {} " \
-                      "with error {}".format(rcic_user_obj.email, err)
+                      "with error {}".format(host_user_obj.email, err)
             logger.error(logging_format("", "CALENDLY-GET_AGENT_SCHEDULE_URL", "", description=message))
             return scheduling_url
         # event_resource_url = CalendlyApis.get_user_event_type(calendly_user_details.user_resource_url)
         if not calendly_user_obj.event_type_url:
             message = "Event resource url not present for the "\
-                      "calendly user: {}".format(rcic_user_obj.email)
+                      "calendly user: {}".format(host_user_obj.email)
             logger.error(logging_format("", "CALENDLY-GET_AGENT_SCHEDULE_URL", "", description=message))
             return scheduling_url
 
@@ -135,14 +134,14 @@ class BusinessLogic(object):
             }
             return response
 
-        event_details = BusinessLogic.get_event_details(invitee_url)
+        event_details = self._get_event_details(invitee_url)
 
         if not event_details["status"]:
             response["status"] = 0
             response["error"] = event_details["error"]
             return response
 
-        call_schedule_obj, calendly_call_schedule_obj = BusinessLogic.create_call_schedule(
+        call_schedule_obj, calendly_call_schedule_obj = self._create_call_schedule(
             visitor_user_obj, host_user_obj, event_details["data"])
         response["data"] = {
             "schedule_id": call_schedule_obj.pk,
@@ -159,13 +158,13 @@ class BusinessLogic(object):
             "error": ""
         }
         calendly_schedule_obj = CalendlyCallSchedule.objects.get(call_schedule=schedule_obj, is_active=True)
-        event_details = BusinessLogic.get_event_details(calendly_schedule_obj.invitee_url)
+        event_details = self._get_event_details(calendly_schedule_obj.invitee_url)
 
         if not event_details["status"]:
             response["error"] = event_details["error"]
             return response
 
-        call_schedule_obj, calendly_call_schedule_obj = BusinessLogic.update_call_schedule(
+        call_schedule_obj, calendly_call_schedule_obj = self._update_call_schedule(
             schedule_obj.id, event_details["data"])
         response["status"] = 1
         response["message"] = "Cancel/Reschedule event successful"
@@ -175,7 +174,7 @@ class BusinessLogic(object):
     def get_scheduled_event_details(self, call_schedule_objs):
         response = {
             "status": 0,
-            "data": {},
+            "data": [],
             "error": ""
         }
         calendly_call_schedules = CalendlyCallSchedule.objects.filter(call_schedule__in=call_schedule_objs)
@@ -190,7 +189,27 @@ class BusinessLogic(object):
                 "error": "",
                 "schedule_id": calendly_schedule.call_schedule.id
             }
-            event_details = BusinessLogic.get_event_details(calendly_schedule.invitee_url)
+            customer_model_obj = calendly_schedule.call_schedule.visitor_user
+
+            case_id = None
+            try:
+                case_id = customer_model_obj.users_cases.get(is_active=True).pk
+            except ObjectDoesNotExist as err:
+                err_msg = "No case for user - {} while getting schedule details " \
+                          "with err _ {}".format(customer_model_obj.pk, err)
+                logger.info(logging_format(LOGGER_LOW_SEVERITY, "CalendlyScheduleManager:get_scheduled_event_details",
+                                           customer_model_obj.pk, description=err_msg))
+
+            profile_id = None
+            try:
+                profile_id = customer_model_obj.user_profile.get().pk
+            except ObjectDoesNotExist as err:
+                err_msg = "No Profile for user - {} while getting schedule details " \
+                          "with err _ {}".format(customer_model_obj.pk, err)
+                logger.info(logging_format(LOGGER_LOW_SEVERITY, "CalendlyScheduleManager:get_scheduled_event_details",
+                                           customer_model_obj.pk, description=err_msg))
+
+            event_details = self._get_event_details(calendly_schedule.invitee_url)
             if not event_details["status"]:
                 response["error"] = event_details["error"]
             else:
@@ -200,7 +219,9 @@ class BusinessLogic(object):
                     "start_time": details["start_time_utc"],
                     "end_time": details["end_time_utc"],
                     "cancel_url": details["cancel_url"],
-                    "reschedule_url": details["reschedule_url"]
+                    "reschedule_url": details["reschedule_url"],
+                    "case_id": case_id,
+                    "profile_id": profile_id
                 })
             response_data.append(schedule_detail)
 
@@ -230,13 +251,13 @@ class BusinessLogic(object):
             logger.error(logging_format("", "CALENDLY-PROCESS_EVENT_DATA", "", description=message))
             response["error"] = message
             return response
-        event_details = BusinessLogic.get_event_details(calendly_call_schedule_obj.invitee_url)
+        event_details = self._get_event_details(calendly_call_schedule_obj.invitee_url)
 
         if not event_details["status"]:
             response["error"] = event_details["error"]
             return response
 
-        call_schedule_obj, calendly_call_schedule_obj = BusinessLogic.update_call_schedule(
+        call_schedule_obj, calendly_call_schedule_obj = self._update_call_schedule(
             calendly_call_schedule_obj.call_schedule.id, event_details["data"])
         response["status"] = 1
         response["message"] = "Web Hook data extraction successful"
@@ -281,4 +302,4 @@ def is_valid_webhook_signature(signature, body):
     return True
 
 
-calendly_business_logic = BusinessLogic()
+calendly_schedule_manager = CalendlyScheduleManager()

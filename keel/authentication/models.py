@@ -77,6 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_verified = models.BooleanField(verbose_name="Verified", default=False)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
+    call_default_contact = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'email'
     # REQUIRED_FIELDS = ['']
