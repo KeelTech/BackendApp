@@ -51,11 +51,14 @@ class Case(TimeStampedModel, SoftDeleteModel):
     display_id = models.CharField(max_length=5, default=None, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='users_cases')
     agent = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='agents_cases')
-    account_manager_id = models.IntegerField(null=True, blank=True, default=None)
+    account_manager = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='account_manager_cases', 
+                        null=True, blank=True, default=None)
     status = models.PositiveSmallIntegerField(choices=CASES_TYPE_CHOICES, verbose_name="case_status", default=BOOKED)
     is_active = models.BooleanField(verbose_name= 'Active', default=True)
     ref_id = models.ForeignKey('self', null=True, blank=True, on_delete=models.deletion.DO_NOTHING)
     plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_cases')
+    # new program field
+    program = models.CharField(max_length=512, default=None, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.case_id:
@@ -69,3 +72,7 @@ class Case(TimeStampedModel, SoftDeleteModel):
         return str(self.case_id)
 
     objects = CaseManager()
+
+
+class Program(TimeStampedModel, SoftDeleteModel):
+    choice = models.CharField(max_length=512, default=None, blank=True, null=True)

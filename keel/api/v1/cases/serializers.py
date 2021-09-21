@@ -1,7 +1,10 @@
+import logging
 from rest_framework import serializers
-from keel.cases.models import Case
+from keel.cases.models import Case, Program
 from keel.Core.err_log import log_error
 from keel.api.v1.auth.serializers import UserDetailsSerializer
+
+logger = logging.getLogger('app-logger')
 
 class CasesSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source="user.email")
@@ -12,7 +15,7 @@ class CasesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Case
         fields = ('case_id', 'display_id', 'user', 'agent', 'account_manager_id', 'ref_id', 
-                    'plan', 'status', 'is_active', 'created_at', 'updated_at','user_details')
+                    'plan', 'status', 'is_active', 'program', 'created_at', 'updated_at','user_details')
 
 class CaseIDSerializer(serializers.Serializer):
 
@@ -42,6 +45,26 @@ class CaseIDSerializer(serializers.Serializer):
 
         return case_obj
 
+class BaseCaseProgramSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = Program
+        fields = ('id', 'choice')
 
+class CaseProgramSerializer(serializers.Serializer):
+    program = serializers.CharField()
 
+    def validate(self, attrs):
+        program = attrs.get('program')
+
+        if program is None:
+            raise serializers.ValidationError("Please input a valid program option")
+        
+        # validate program in Program model
+        try:
+            check_program = Program.objects.get(choices=program)
+        except Program.DoesNotExist as e:
+            logger.error('ERROR: CASE:FilterUserCasesDetails ' + str(e))
+            raise serializers.ValidationError("Program matching query does not exist")
+        
+        return program

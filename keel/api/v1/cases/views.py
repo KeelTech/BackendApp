@@ -4,14 +4,14 @@ from keel.api.permissions import IsRCICUser
 from keel.api.v1.auth.serializers import (BaseProfileSerializer,
                                           CustomerQualificationsSerializer)
 from keel.authentication.backends import JWTAuthentication
-from keel.cases.models import Case
+from keel.cases.models import Case, Program
 from keel.tasks.models import Task
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import CasesSerializer
+from .serializers import CaseProgramSerializer, CasesSerializer, BaseCaseProgramSerializer
 
 logger = logging.getLogger('app-logger')
 
@@ -80,4 +80,43 @@ class FilterUserCasesDetails(GenericViewSet):
             return Response(response, status=status.HTTP_404_NOT_FOUND)
         
         response["message"] = data
+        return Response(response)
+
+class UpdateCaseProgramView(GenericViewSet):
+    serializer_class = CaseProgramSerializer
+    permission_classes = (permissions.IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+
+    def get_all_programs(self, request):
+        response = {'status':1, 'message':'All programs retreived', 'data':''}
+        queryset = Program.objects.all()
+        serializer = BaseCaseProgramSerializer(queryset, many=True)
+        response['data'] = serializer.data
+        return Response(response)
+
+    def update_program(self, request, **kwargs):
+        response = {'status':1, 'message':'Program Updated successfully', 'data':''}
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        program = serializer.validated_data
+        case_id = kwargs.get('case_id')
+
+        try:
+            case = Case.objects.get(case_id=case_id)
+            case.program = program
+            case.save()
+        except Case.DoesNotExist as e:
+            logger.error('ERROR: CASE:UpdateCaseProgramView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error('ERROR: CASE:UpdateCaseProgramView ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        case_serializer = CasesSerializer(case)
+        response['data'] = case_serializer.data
         return Response(response)
