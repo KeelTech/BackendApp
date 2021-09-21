@@ -115,7 +115,7 @@ class UpdateCaseProgramView(GenericViewSet):
             logger.error('ERROR: CASE:UpdateCaseProgramView ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         case_serializer = CasesSerializer(case)
         response['data'] = case_serializer.data
