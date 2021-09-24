@@ -56,5 +56,12 @@ class PlanDetailView(GenericViewSet):
         serializer = self.serializer_class(queryset).data
         discount_price = queryset.get_discount_price()
         serializer['discount_price'] = discount_price
+        
+        #cehck if price is more than zero and return free or paid plna type
+        # if queryset.price > 0:
+        #     serializer['plan_type'] = "Paid"
+        # else:
+        #     serializer['plan_type'] = "Free"
+
         response['data'] = serializer
         return Response(response)

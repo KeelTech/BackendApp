@@ -4,10 +4,11 @@ from keel.plans.models import Plan
 
 class PlanSerializers(serializers.ModelSerializer):
     check_list = serializers.SerializerMethodField()
+    plan_type = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Plan
-        fields = ('id', 'title', 'description', 'price', 'discount', 'currency', 'country_iso',
+        fields = ('id', 'title', 'description', 'price', 'discount', 'plan_type', 'currency', 'country_iso',
                     'sgst', 'cgst', 'check_list', 'is_active')
     
     def get_check_list(self, obj):
@@ -17,3 +18,9 @@ class PlanSerializers(serializers.ModelSerializer):
         for item in check_list:
             enum_list.append(dict(zip(keys, item.split('|'))))
         return enum_list
+    
+    def get_plan_type(self, obj):
+        if obj.price > 0:
+            return "Paid"
+        else:
+            return "Free"
