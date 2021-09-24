@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import CaseProgramSerializer, CasesSerializer, BaseCaseProgramSerializer
+from .serializers import CaseProgramSerializer, CasesSerializer, BaseCaseProgramSerializer, CaseIDSerializer
 
 logger = logging.getLogger('app-logger')
 
@@ -101,9 +101,16 @@ class UpdateCaseProgramView(GenericViewSet):
 
         program = serializer.validated_data
         case_id = kwargs.get('case_id')
+        user_id = request.user.id
 
+        # check case id belongs to request.user and return case obj
+        case_serializer = CaseIDSerializer(data = {"case_id": case_id,"user_id": user_id})
+        case_serializer.is_valid(raise_exception=True)
+        case_obj = case_serializer.validated_data
+        
         try:
-            case = Case.objects.get(case_id=case_id)
+            #get case obj
+            case = Case.objects.get(case_id=case_obj)
             case.program = program
             case.save()
         except Case.DoesNotExist as e:

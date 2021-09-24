@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 from django.db.models.deletion import DO_NOTHING
-from django.db.models.fields import PositiveIntegerRelDbTypeMixin
+from django.contrib.postgres.fields import ArrayField
 from keel.Core.models import TimeStampedModel, SoftDeleteModel
 
 
@@ -12,6 +12,7 @@ class Plan(TimeStampedModel, SoftDeleteModel):
     price = models.FloatField(null=True, blank=True, default=True)
     currency = models.CharField(max_length=10, null=True, blank=True, default=None)
     country_iso = models.CharField(max_length=512, null=True, blank=True, default=None)
+    check_list = ArrayField(models.TextField(), blank=True, default=list)
     sgst = models.PositiveSmallIntegerField(default=0, null=True, blank=True) # in percentage
     cgst = models.PositiveSmallIntegerField(default=0, null=True, blank=True) # in percentage
     is_active = models.BooleanField(default=True)
@@ -70,3 +71,4 @@ class ServicesPlans(TimeStampedModel, SoftDeleteModel):
 
     plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_services')
     service = models.ForeignKey(Service, on_delete=models.deletion.DO_NOTHING, related_name='services_plans')
+

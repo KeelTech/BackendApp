@@ -62,7 +62,7 @@ class CaseProgramSerializer(serializers.Serializer):
         
         # validate program in Program model
         try:
-            check_program = Program.objects.get(choices=program)
+            check_program = Program.objects.get(choice=program)
         except Program.DoesNotExist as e:
             logger.error('ERROR: CASE:FilterUserCasesDetails ' + str(e))
             raise serializers.ValidationError("Program matching query does not exist")
