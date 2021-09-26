@@ -1,4 +1,5 @@
 import datetime
+from dateutil import parser
 import hashlib
 import hmac
 import json
@@ -6,6 +7,7 @@ import json
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
+from django.utils import timezone
 
 from .models import CalendlyUsers, CalendlyCallSchedule, CalendlyInviteeScheduledUrl
 from .apis import CalendlyApis
@@ -86,6 +88,13 @@ class CalendlyScheduleManager(object):
         response["data"] = event_details["data"]
         response["status"] = 1
         return response
+
+    def _is_active_event(self, event_details):
+        if parser.parse(event_details["end_time_utc"]) <= timezone.now():
+            return False
+        if event_details["status"] == CallSchedule.CANCELED:
+            return False
+        return True
 
     def get_schedule_url(self, invitee_obj, host_user_obj):
         scheduling_url = None
@@ -196,7 +205,7 @@ class CalendlyScheduleManager(object):
                 case_id = customer_model_obj.users_cases.get(is_active=True).pk
             except ObjectDoesNotExist as err:
                 err_msg = "No case for user - {} while getting schedule details " \
-                          "with err _ {}".format(customer_model_obj.pk, err)
+                          "with err - {}".format(customer_model_obj.pk, err)
                 logger.info(logging_format(LOGGER_LOW_SEVERITY, "CalendlyScheduleManager:get_scheduled_event_details",
                                            customer_model_obj.pk, description=err_msg))
 
@@ -205,6 +214,8 @@ class CalendlyScheduleManager(object):
                 schedule_detail["error"] = event_details["error"]
             else:
                 details = event_details["data"]
+                if not self._is_active_event(details):
+                    continue
                 schedule_detail.update({
                     "status": CallSchedule.STATUS_MAP.get(details["status"]),
                     "start_time": details["start_time_utc"],
