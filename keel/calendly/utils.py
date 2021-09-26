@@ -200,15 +200,6 @@ class CalendlyScheduleManager(object):
                 logger.info(logging_format(LOGGER_LOW_SEVERITY, "CalendlyScheduleManager:get_scheduled_event_details",
                                            customer_model_obj.pk, description=err_msg))
 
-            profile_id = None
-            try:
-                profile_id = customer_model_obj.user_profile.pk
-            except ObjectDoesNotExist as err:
-                err_msg = "No Profile for user - {} while getting schedule details " \
-                          "with err _ {}".format(customer_model_obj.pk, err)
-                logger.info(logging_format(LOGGER_LOW_SEVERITY, "CalendlyScheduleManager:get_scheduled_event_details",
-                                           customer_model_obj.pk, description=err_msg))
-
             event_details = self._get_event_details(calendly_schedule.invitee_url)
             if not event_details["status"]:
                 schedule_detail["error"] = event_details["error"]
@@ -221,7 +212,8 @@ class CalendlyScheduleManager(object):
                     "cancel_url": details["cancel_url"],
                     "reschedule_url": details["reschedule_url"],
                     "case_id": case_id,
-                    "profile_id": profile_id
+                    "customer_profile_id": customer_model_obj.get_profile_id(),
+                    "customer_name": customer_model_obj.get_profile_name()
                 })
             response_data.append(schedule_detail)
 

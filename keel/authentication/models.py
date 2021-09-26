@@ -1,27 +1,21 @@
-import json
 import logging
-import uuid
-from datetime import timedelta
 
-import requests
-from django.conf import settings
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
-from django.db import models, transaction
-from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+from django.utils.functional import cached_property
 
 from keel.Core.models import SoftDeleteModel, TimeStampedModel
 from keel.document.models import Documents
 from keel.plans.models import Service
-from rest_framework import status
-from django.utils.functional import cached_property
+from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.err_log import logging_format
 from keel.Core.models import Country, City, State
 
 
 # from safedelete import SOFT_DELETE
 # from safedelete.models import SafeDeleteModel
-
-
 
 logger = logging.getLogger(__name__)
 
@@ -96,11 +90,33 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return str(self.email)
 
+    def get_profile_name(self):
+        name = None
+        try:
+            name = self.user_profile.get_user_name
+        except ObjectDoesNotExist as err:
+            err_msg = "No Profile for user - {} and type - {} while getting profile name " \
+                      "with err _ {}".format(self.pk, self.user_type, err)
+            logger.info(logging_format(LOGGER_LOW_SEVERITY, "User:get_profile_name",
+                                       self.pk, description=err_msg))
+        return name
+
+    def get_profile_id(self):
+        profile_id = None
+        try:
+            profile_id = self.user_profile.pk
+        except ObjectDoesNotExist as err:
+            err_msg = "No Profile for user - {} and type - {} while getting profile id " \
+                      "with err _ {}".format(self.pk, self.user_type, err)
+            logger.info(logging_format(LOGGER_LOW_SEVERITY, "User:get_profile_id",
+                                       self.pk, description=err_msg))
+        return profile_id
 
     class Meta:
         unique_together = (("email", "phone_number"))
         db_table = "auth_user"
         ordering = ['-id']
+
 
 class UserDocument(TimeStampedModel, SoftDeleteModel):
 
@@ -109,6 +125,7 @@ class UserDocument(TimeStampedModel, SoftDeleteModel):
     doc = models.ForeignKey(Documents,on_delete=models.deletion.DO_NOTHING, related_name='to_document')
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')
     task = models.ForeignKey(Task, on_delete=models.deletion.DO_NOTHING, related_name='tasks_docs', null=True, blank=True)
+
 
 class CustomToken(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_id", null=True)
@@ -120,6 +137,7 @@ class CustomToken(TimeStampedModel):
     def __str__(self):
         return str(self.user)
 
+
 class PasswordResetToken(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="password_reset_user_id", null=True)
     reset_token = models.CharField(max_length=512, blank=True, null=True, default=None, unique=True)
@@ -130,6 +148,7 @@ class PasswordResetToken(TimeStampedModel):
 
     class Meta:
         db_table = "password_reset_token"
+
 
 class UserService(TimeStampedModel, SoftDeleteModel):
 
@@ -168,6 +187,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
 
         return full_name
 
+
 class AgentProfile(TimeStampedModel, SoftDeleteModel):
     agent = models.OneToOneField(User, related_name="agent_user_profile", on_delete=models.DO_NOTHING)
     full_name = models.CharField(max_length=512, default=None, null=True, blank=True)
@@ -185,6 +205,7 @@ class AccountManagerProfile(AgentProfile):
 
     class Meta:
         db_table = "account_manager_profile"
+
 
 class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(default="user", max_length=512)
