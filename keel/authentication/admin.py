@@ -4,7 +4,8 @@ from django.db.models import query, Q
 from .models import (User, CustomToken, PasswordResetToken, UserService, 
                     CustomerProfile, CustomerQualifications, QualificationLabel, WorkExperienceLabel,
                     CustomerWorkExperience, CustomerProfileLabel, RelativeInCanada, RelativeInCanadaLabel,
-                    EducationalCreationalAssessment, EducationalCreationalAssessmentLabel, AgentProfile, AccountManagerProfile)
+                    EducationalCreationalAssessment, EducationalCreationalAssessmentLabel, AgentProfile, 
+                    AccountManagerProfile, UserDocument)
 from keel.Core.models import Country, State, City
 
 class UserAdmin(admin.ModelAdmin):
@@ -112,3 +113,4 @@ admin.site.register(RelativeInCanada, RelativeInCanadaAdmin)
 admin.site.register(RelativeInCanadaLabel, RelativeInCanadaLabelAdmin)
 admin.site.register(EducationalCreationalAssessment, EducationalCreationalAssessmentAdmin)
 admin.site.register(EducationalCreationalAssessmentLabel, EducationalCreationalAssessmentLabelAdmin)
+admin.site.register(UserDocument)

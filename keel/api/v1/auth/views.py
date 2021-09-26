@@ -1325,8 +1325,25 @@ class UploadDocument(GenericViewSet):
         user_id = user.id
         files = request.FILES
 
-        doc_type = req_data.get("doc_type")
+        case_id = req_data.get("case","")
 
+        # Catching the case Id exception unless FE start passing it, TODO: Remove it once done
+        try:
+            from keel.api.v1.cases.serializers import CaseIDSerializer
+
+            # validate Case ID against User/Agent
+            case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
+            case_serializer.is_valid(raise_exception=True)
+            case_obj = case_serializer.validated_data
+            
+            # actual user containing the document
+            doc_user_id = case_obj.user_id
+
+        except:
+            doc_user_id = user_id
+            pass
+        
+        doc_type = req_data.get("doc_type")
         doc_serializer = DocumentCreateSerializer(data = request.FILES.dict())
         doc_serializer.is_valid(raise_exception=True)
 
@@ -1348,7 +1365,6 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
-        doc_user_id = user_id
 
         # Validate for Task Id, and replace the doc_user_id with task.user_id
         try:
@@ -1383,7 +1399,8 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
         return Response(response, status = resp_status)
 
-    def fetch(self, request, format = 'json'):
+    # works for both User and agent based on case id
+    def listDoc(self, request, format = 'json'):
 
         response = {
                 "status": 0,
@@ -1392,10 +1409,29 @@ class UploadDocument(GenericViewSet):
         }
         resp_status = status.HTTP_200_OK
         user = request.user
+        user_id = user.id
+
+        req_data = request.GET.dict()
+        case_id = req_data.get("case","")
+
+        # Catching the case Id exception unless FE start passing it, TODO: Remove it once done
+        try:
+            from keel.api.v1.cases.serializers import CaseIDSerializer
+
+            # validate Case ID against User/Agent
+            case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
+            case_serializer.is_valid(raise_exception=True)
+            case_obj = case_serializer.validated_data
+            
+            # actual user containing the document
+            actual_user_id = case_obj.user_id
+        except:
+            actual_user_id = user_id
+            pass
 
         try:
             user_docs = UserDocument.objects.select_related('doc','doc__doc_type'). \
-                            filter(user_id = user.id, deleted_at__isnull = True)
+                            filter(user_id = actual_user_id, deleted_at__isnull = True)
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data
@@ -1452,50 +1488,6 @@ class UploadDocument(GenericViewSet):
 
         return Response(response, status = resp_status)
 
-
-class AgentDocView(GenericViewSet):
-
-    authentication_classes = [JWTAuthentication]
-    permission_classes = (IsAuthenticated, IsRCICUser)
-
-
-    def listDoc(self, request, format = 'json'):
-
-        response = {
-                "status": 0,
-                "message":"User Document Fetched successfully",
-                "data": ""
-        }
-        resp_status = status.HTTP_200_OK
-        user = request.user
-        agent_id = user.id
-
-        req_data = request.GET.dict()
-        case_id = req_data.get("case","")
-
-        from keel.api.v1.cases.serializers import CaseIDSerializer
-
-        # validate Case ID against User/Agent
-        case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": agent_id})
-        case_serializer.is_valid(raise_exception=True)
-        case_obj = case_serializer.validated_data
-        
-        # actual user containing the document
-        actual_user_id = case_obj.user_id
-
-        try:
-            user_docs = UserDocument.objects.select_related('doc','doc__doc_type'). \
-                            filter(user_id = actual_user_id, deleted_at__isnull = True)
-            user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
-            response_data = user_doc_serializer.data
-            response["data"] = response_data
-        except Exception as e:
-            log_error("ERROR", "UploadDocument:fetch exception", str(user.id), err = str(e))
-            response["status"] = 1
-            response["message"] = GENERIC_ERROR
-            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
-
-        return Response(response, status = resp_status)
 
 class ItemCount(GenericViewSet):
 
