@@ -1400,7 +1400,7 @@ class UploadDocument(GenericViewSet):
         return Response(response, status = resp_status)
 
     # works for both User and agent based on case id
-    def listDoc(self, request, format = 'json'):
+    def fetch(self, request, format = 'json'):
 
         response = {
                 "status": 0,
