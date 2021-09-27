@@ -108,8 +108,21 @@ class CallScheduleManager(object):
             return response
         return self._client_scheduler.get_scheduled_event_details(call_schedule_objs=call_schedule_objs)
 
-    def webhook_process_event(self):
-        pass
+    def update_call_schedule(self, schedule_id, schedule_details):
+        return CallSchedule.objects.select_for_update().get(id=schedule_id).update(**schedule_details)
+
+    def webhook_process_event(self, schedule_data):
+        response = {
+            "status": 0,
+            "data": "",
+            "error": ""
+        }
+        validated_details = self._client_scheduler.validate_parse_schedule_event_data(schedule_data)
+        if not validated_details["status"]:
+            response["error"] = validated_details["error"]
+            return response
+        process_response = self._client_scheduler.process_event_data(self, validated_details)
+        return process_response
 
     def webhook_subscribe(self):
         pass

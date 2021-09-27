@@ -25,10 +25,12 @@ logger = logging.getLogger('app-logger')
 class CalendlyScheduleManager(object):
     def __init__(self):
         self._scheduled_event_details = None
+        self._call_schedule_manager = None
+        self._calendly_schedule_model_obj = None
 
-    def _update_call_schedule(self, call_schedule_id, event_invitee_details):
-        call_schedule_status = event_invitee_details["status"] if not event_invitee_details[
-            "rescheduled"] else CallSchedule.RESCHEDULED
+    def _update_call_schedule(self, event_invitee_details):
+        call_schedule_id = self._calendly_schedule_model_obj.call_schedule.id
+        call_schedule_status = event_invitee_details["status"]
         call_schedule_details = {
             "start_time": event_invitee_details["start_time"],
             "end_time": event_invitee_details["end_time"],
@@ -42,10 +44,9 @@ class CalendlyScheduleManager(object):
             "status": call_schedule_status
         }
         with transaction.atomic():
-            call_schedule_obj = CallSchedule.objects.select_for_update().get(id=call_schedule_id).update(**call_schedule_details)
-            calendly_call_schedule_obj = CalendlyCallSchedule.objects.get(call_schedule__id=call_schedule_id). \
-                update(**calendly_call_schedule_details)
-            return call_schedule_obj, calendly_call_schedule_obj
+            call_schedule_model_obj = self._call_schedule_manager.update_call_schedule(call_schedule_id, call_schedule_details)
+            calendly_call_schedule_model_obj = self._calendly_schedule_model_obj.update(**calendly_call_schedule_details)
+            return call_schedule_model_obj, calendly_call_schedule_model_obj
 
     def _create_call_schedule(self, call_schedule_model_obj, event_details):
         calendly_call_schedule_details = dict({
@@ -215,7 +216,7 @@ class CalendlyScheduleManager(object):
         response["data"] = response_data
         return response
 
-    def process_event_data(self, event_data):
+    def validate_parse_schedule_event_data(self, event_data):
         response = {
             "status": 0,
             "data": "",
@@ -227,24 +228,48 @@ class CalendlyScheduleManager(object):
             response["error"] = parser.error
             return response
         extracted_details = parser.parse_extract_data()
-
-        invitee_url_to_update = extracted_details["invitee_url_to_update"]
         try:
-            calendly_call_schedule_obj = CalendlyCallSchedule.objects.get(invitee_url=invitee_url_to_update).call_schedule
-        except ObjectDoesNotExist:
+            self._calendly_schedule_model_obj = CalendlyCallSchedule.objects.get(invitee_url=extracted_details["invitee_url_to_update"])
+        except ObjectDoesNotExist as err:
             message = "CalendlyCallSchedule does not have any call schedule " \
-                      "for invitee url - {}".format(invitee_url_to_update)
-            logger.error(logging_format("", "CALENDLY-PROCESS_EVENT_DATA", "", description=message))
-            response["error"] = message
+                      "for invitee url - {} with error - {}".format(extracted_details["invitee_url_to_update"], err)
+            logger.error(logging_format(
+                LOGGER_CRITICAL_SEVERITY, "CalendlyScheduleManager-validate_parse_schedule_event_data", "", description=message))
+            response["error"] = "No calendly call scheduled for specified invitee url"
             return response
-        event_details = self.get_schedule_identifier_details(calendly_call_schedule_obj.invitee_url)
+        response["status"] = 1
+        response["data"] = extracted_details
+        return response
+
+    def process_event_data(self, call_schedule_manager, event_data):
+        self._call_schedule_manager = call_schedule_manager
+        response = {
+            "status": 0,
+            "data": "",
+            "error": ""
+        }
+        invitee_url_to_update = event_data["invitee_url_to_update"]
+        if not self._calendly_schedule_model_obj:
+            response["error"] = "No calendly call scheduled for specified invitee url"
+            return response
+
+        event_details = self.get_schedule_identifier_details(self._calendly_schedule_model_obj.invitee_url)
 
         if not event_details["status"]:
+            message = "Error getting event details while processing webhook event " \
+                      "for invitee url - {}".format(invitee_url_to_update)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyScheduleManager-process_event_data", "", description=message))
             response["error"] = event_details["error"]
             return response
 
-        call_schedule_obj, calendly_call_schedule_obj = self._update_call_schedule(
-            calendly_call_schedule_obj.call_schedule.id, event_details["data"])
+        try:
+            self._update_call_schedule(event_details["data"])
+        except Exception as err:
+            message = "Error while updating CallSchedule and CalendlyCallSchedule for invitee url" \
+                      " - {} with error - {}".format(invitee_url_to_update, err)
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "CalendlyScheduleManager-process_event_data", "", description=message))
+            response["error"] = "Error in updating extracted call schedule details"
+            return response
         response["status"] = 1
         response["message"] = "Web Hook data extraction successful"
 
