@@ -36,7 +36,7 @@ class ListTask(GenericViewSet):
         
         count_data = {
             "pending" : 0,
-            "in_progress" : 0,
+            "in_review" : 0,
             "completed" : 0
         }
 
@@ -51,8 +51,8 @@ class ListTask(GenericViewSet):
             if each['status'] == Task.PENDING:
                 count_data['pending'] = each['status__count']
 
-            if each['status'] == Task.IN_PROGESS:
-                count_data['in_progress'] = each['status__count']
+            if each['status'] == Task.IN_REVIEW:
+                count_data['in_review'] = each['status__count']
 
             if each['status'] == Task.COMPLETED:
                 count_data['completed'] = each['status__count']
