@@ -24,6 +24,7 @@ from keel.api.v1.auth import serializers
 from keel.api.v1.cases.serializers import CasesSerializer
 from keel.api.v1.document.serializers import (DocumentCreateSerializer,
                                               DocumentTypeSerializer)
+from keel.api.v1.plans.serializers import PlanSerializers
 from keel.authentication import constants
 from keel.authentication.backends import JWTAuthentication
 from keel.authentication.interface import get_rcic_item_counts
@@ -46,6 +47,7 @@ from keel.Core.notifications import EmailNotification, SMSNotification
 from keel.Core.redis import create_token, get_token
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.document.models import Documents
+from keel.plans.models import Plan
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
@@ -712,9 +714,14 @@ class ProfileView(GenericViewSet):
         if not queryset:
             return Response(response)
 
+        plan_id = case["case_details"]["plan"]
+        plan_queryset = Plan.objects.get(id=plan_id)
+        plan_serializer = PlanSerializers(plan_queryset).data
         serializer = self.serializer_class_pro_base(queryset)
+
         response["message"]["profile_exists"]= True
         response["message"]["profile"]=serializer.data
+        response["message"]["plan_type"] = plan_serializer.get('plan_type')
          
         return Response(response)
 
