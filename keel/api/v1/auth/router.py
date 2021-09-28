@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, GeneratePasswordReset,
                     FacebookLogin, GoogleLogin, LinkedinLogin, UserDeleteTokenView, ConfirmPasswordReset, 
                     ChangePasswordView, ProfileView, WorkExperienceView, QualificationView, ItemCount,
-                    RelativeInCanadaView, EducationalCreationalAssessmentView, AgentView, AgentDocView)
+                    RelativeInCanadaView, EducationalCreationalAssessmentView, AgentView)
 
 urlpatterns = [
     # authentication
@@ -42,5 +42,4 @@ urlpatterns = [
     path('get-user-doc',UploadDocument.as_view({'get':'fetch'}), name='get-docs'),
     path('delete-doc/<int:id>',UploadDocument.as_view({'delete':'deleteUserDoc'}), name='delete-docs'),
     path('item-count', ItemCount.as_view({'get':'getItemCount'}), name='get-item-count'),
-    path('get-agent-doc', AgentDocView.as_view({'get': 'listDoc'}), name='get-docs-agent')
 ]
