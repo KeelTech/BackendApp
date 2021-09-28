@@ -1,3 +1,4 @@
+import re
 from rest_framework import serializers
 from keel.plans.models import Plan
 
@@ -20,7 +21,9 @@ class PlanSerializers(serializers.ModelSerializer):
         return enum_list
     
     def get_plan_type(self, obj):
-        if obj.title == "Premium Plan":
+        word = obj.title
+        m = re.match(r"premium", word.lower())
+        if m:
             return "Paid"
         else:
             return "Free"
