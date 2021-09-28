@@ -20,7 +20,7 @@ class PlanSerializers(serializers.ModelSerializer):
         return enum_list
     
     def get_plan_type(self, obj):
-        if obj.price > 0:
+        if obj.title == "Premium Plan":
             return "Paid"
         else:
             return "Free"
