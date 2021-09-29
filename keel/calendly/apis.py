@@ -37,7 +37,7 @@ class CalendlyApis(object):
         params = urllib.parse.urlencode({
             "name": invitee_name if invitee_name else "",
             "email": invitee_email
-        })
+        }, quote_via=urllib.parse.quote)
 
         try:
             request_resp = requests.post(url=url, headers=header, data=payload, timeout=5)

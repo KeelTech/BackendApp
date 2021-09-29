@@ -187,5 +187,6 @@ class WebHookProcessEvent(GenericViewSet):
             response["status"] = 0
             return Response(response, status.HTTP_200_OK)
 
-        calendly_schedule_manager.process_event_data(request.data)
+        schedule_manager = CallScheduleManager(request.user.pk, CallSchedule.CALENDLY_CALL_SCHEDULE_CLIENT)
+        schedule_manager.webhook_process_event(request.data)
         return Response(response, status.HTTP_200_OK)
