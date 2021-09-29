@@ -9,13 +9,16 @@ logger = logging.getLogger('app-logger')
 class CasesSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source="user.email")
     # agent = serializers.ReadOnlyField(source="agent.email")
-    plan = serializers.ReadOnlyField(source="plan.id")
+    plan = serializers.SerializerMethodField()
     user_details = UserDetailsSerializer(source = 'user',many = False)
 
     class Meta:
         model = Case
         fields = ('case_id', 'display_id', 'user', 'agent', 'account_manager_id', 'ref_id', 
                     'plan', 'status', 'is_active', 'program', 'created_at', 'updated_at','user_details')
+    
+    def get_plan(self, obj):
+        return {'id':obj.plan.id, 'name':obj.plan.title}
 
 class CaseIDSerializer(serializers.Serializer):
 
