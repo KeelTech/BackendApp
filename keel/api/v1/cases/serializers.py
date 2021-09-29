@@ -9,7 +9,7 @@ logger = logging.getLogger('app-logger')
 class CasesSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source="user.email")
     # agent = serializers.ReadOnlyField(source="agent.email")
-    plan = serializers.ReadOnlyField(source="plan.title")
+    plan = serializers.ReadOnlyField(source="plan.id")
     user_details = UserDetailsSerializer(source = 'user',many = False)
 
     class Meta:

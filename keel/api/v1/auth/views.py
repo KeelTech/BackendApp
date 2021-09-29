@@ -24,6 +24,7 @@ from keel.api.v1.auth import serializers
 from keel.api.v1.cases.serializers import CasesSerializer
 from keel.api.v1.document.serializers import (DocumentCreateSerializer,
                                               DocumentTypeSerializer)
+from keel.api.v1.plans.serializers import PlanSerializers
 from keel.authentication import constants
 from keel.authentication.backends import JWTAuthentication
 from keel.authentication.interface import get_rcic_item_counts
@@ -46,6 +47,7 @@ from keel.Core.notifications import EmailNotification, SMSNotification
 from keel.Core.redis import create_token, get_token
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.document.models import Documents
+from keel.plans.models import Plan
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
@@ -554,11 +556,12 @@ class ProfileView(GenericViewSet):
     
     def get_queryset_cases(self, request):
         get_case = Case.objects.filter(user=request.user).first()
+        plan = PlanSerializers(get_case.plan).data['plan_type']
         serializer = self.serializer_class_cases(get_case).data
         agent = serializer['agent']
         get_agent = AgentProfile.objects.filter(agent=agent).first()
         agent = serializers.AgentProfileSerializer(get_agent).data
-        return {"case_details":serializer, "agent":agent}
+        return {"case_details":serializer, "agent":agent, "plan_type":plan}
 
     def create_profile(self, request):
         response = {
@@ -715,7 +718,8 @@ class ProfileView(GenericViewSet):
         serializer = self.serializer_class_pro_base(queryset)
         response["message"]["profile_exists"]= True
         response["message"]["profile"]=serializer.data
-         
+        response["message"]["plan_type"] = case.get('plan_type')
+
         return Response(response)
 
     def get_full_profile(self, request):
