@@ -556,11 +556,12 @@ class ProfileView(GenericViewSet):
     
     def get_queryset_cases(self, request):
         get_case = Case.objects.filter(user=request.user).first()
+        plan = PlanSerializers(get_case.plan).data['plan_type']
         serializer = self.serializer_class_cases(get_case).data
         agent = serializer['agent']
         get_agent = AgentProfile.objects.filter(agent=agent).first()
         agent = serializers.AgentProfileSerializer(get_agent).data
-        return {"case_details":serializer, "agent":agent}
+        return {"case_details":serializer, "agent":agent, "plan_type":plan}
 
     def create_profile(self, request):
         response = {
@@ -714,15 +715,11 @@ class ProfileView(GenericViewSet):
         if not queryset:
             return Response(response)
 
-        plan_id = case["case_details"]["plan"]
-        plan_queryset = Plan.objects.get(id=plan_id)
-        plan_serializer = PlanSerializers(plan_queryset).data
         serializer = self.serializer_class_pro_base(queryset)
-
         response["message"]["profile_exists"]= True
         response["message"]["profile"]=serializer.data
-        response["message"]["plan_type"] = plan_serializer.get('plan_type')
-         
+        response["message"]["plan_type"] = case.get('plan_type')
+
         return Response(response)
 
     def get_full_profile(self, request):
