@@ -556,7 +556,9 @@ class ProfileView(GenericViewSet):
     
     def get_queryset_cases(self, request):
         get_case = Case.objects.filter(user=request.user).first()
-        plan = PlanSerializers(get_case.plan).data['plan_type']
+        plan = ""
+        if get_case is not None:
+            plan = PlanSerializers(get_case.plan).data['plan_type']
         serializer = self.serializer_class_cases(get_case).data
         agent = serializer['agent']
         get_agent = AgentProfile.objects.filter(agent=agent).first()
