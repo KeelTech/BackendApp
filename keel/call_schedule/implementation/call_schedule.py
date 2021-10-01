@@ -3,13 +3,7 @@ from keel.call_schedule.models import CallSchedule as CallScheduleModel
 from keel.plans.implementation.plan_util_helper import PlanUtilHelper
 
 
-class ICallScheduleValidator(object):
-
-    def call_schedule_allowed(self, plan_id):
-        raise NotImplementedError
-
-
-class CallScheduleValidator(ICallScheduleValidator):
+class CallScheduleValidator(object):
     def __init__(self, customer_id):
         self._customer_id = customer_id
         self._customer_model_obj = None
@@ -26,3 +20,14 @@ class CallScheduleValidator(ICallScheduleValidator):
 
         self._plan_util_helper.plan_id = plan_id
         return self._plan_util_helper.can_schedule_more_calls(active_completed_call_count)
+
+
+class CallScheduleHelper(object):
+    def __init__(self, customer_id, call_schedule_client_type):
+        self._customer_id = customer_id
+        self._call_schedule_client_type = call_schedule_client_type
+
+    def create_call_schedule(self, customer_model_obj, host_model_obj, start_time, end_time, status):
+        return CallScheduleModel.objects.create(visitor_user=customer_model_obj, host_user=host_model_obj,
+                                                call_schedule_client_type=self._call_schedule_client_type,
+                                                start_time=start_time, end_time=end_time, status=status)
