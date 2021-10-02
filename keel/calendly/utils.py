@@ -98,8 +98,6 @@ class CalendlyScheduleManager(object):
         return CalendlyCallSchedule.objects.filter(invitee_url=invitee_url).exists()
 
     def get_schedule_identifier_details(self, invitee_url):
-        if self._scheduled_event_details:
-            return self._scheduled_event_details
         response = {
             "status": 0,
             "data": {},
@@ -178,12 +176,7 @@ class CalendlyScheduleManager(object):
 
         response_data = []
         for calendly_schedule in calendly_call_schedules:
-            schedule_detail = {
-                "error": "",
-                "schedule_id": calendly_schedule.call_schedule.id
-            }
             customer_model_obj = calendly_schedule.call_schedule.visitor_user
-
             case_id = None
             try:
                 case_id = customer_model_obj.users_cases.get(is_active=True).pk
@@ -194,13 +187,10 @@ class CalendlyScheduleManager(object):
                                            customer_model_obj.pk, description=err_msg))
 
             event_details = self.get_schedule_identifier_details(calendly_schedule.invitee_url)
-            if not event_details["status"]:
-                schedule_detail["error"] = event_details["error"]
-            else:
+            if event_details["status"] and self._is_active_event(event_details["data"]):
                 details = event_details["data"]
-                if not self._is_active_event(details):
-                    continue
-                schedule_detail.update({
+                response_data.append({
+                    "schedule_id": calendly_schedule.call_schedule.id,
                     "status": CallSchedule.STATUS_MAP.get(details["status"]),
                     "start_time": details["start_time"],
                     "end_time": details["end_time"],
@@ -210,7 +200,6 @@ class CalendlyScheduleManager(object):
                     "customer_profile_id": customer_model_obj.get_profile_id(),
                     "customer_name": customer_model_obj.get_profile_name()
                 })
-            response_data.append(schedule_detail)
 
         response["status"] = 1
         response["data"] = response_data
