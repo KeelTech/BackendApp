@@ -1,6 +1,6 @@
 from django.contrib import admin
 from keel.Core.admin import CustomBaseModelAdmin
-from .models import Plan, Vendor, Service, ServicesPlans, PlanPlatformComponents
+from .models import Plan, PlatformComponents, Vendor, Service, ServicesPlans, PlanPlatformComponents
 # Register your models here.
 
 class PlanPlatformInline(admin.TabularInline):
@@ -12,6 +12,10 @@ class PlanAdmin(admin.ModelAdmin):
     readonly_fields=('deleted_at',)
     inlines = [PlanPlatformInline]
 
+
+class PlatformComponentsAdmin(admin.ModelAdmin):
+    readonly_fields = ('deleted_at', )
+
 class VendorAdmin(admin.ModelAdmin):
     search_fields = ['name']
     readonly_fields=('deleted_at',)
@@ -22,6 +26,8 @@ class ServiceAdmin(admin.ModelAdmin):
     readonly_fields=('deleted_at',)
 
 admin.site.register(Plan, PlanAdmin)
+admin.site.register(PlatformComponents,PlatformComponentsAdmin)
+admin.site.register(PlanPlatformComponents)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServicesPlans, CustomBaseModelAdmin)
