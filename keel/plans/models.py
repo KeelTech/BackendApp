@@ -5,6 +5,11 @@ from django.contrib.postgres.fields import ArrayField
 from keel.Core.models import TimeStampedModel, SoftDeleteModel
 
 
+class PlatformComponents(TimeStampedModel, SoftDeleteModel):
+    name = models.CharField(max_length=512, default=None, null=True, blank=True)
+    description = models.CharField(max_length=512, default=None, null=True, blank=True)
+
+
 class Plan(TimeStampedModel, SoftDeleteModel):
     title = models.CharField(max_length=512, null=True, default=None, blank=True)
     description = models.TextField(null=True, blank=True, default=None)
@@ -15,6 +20,7 @@ class Plan(TimeStampedModel, SoftDeleteModel):
     check_list = ArrayField(models.TextField(), blank=True, default=list)
     sgst = models.PositiveSmallIntegerField(default=0, null=True, blank=True) # in percentage
     cgst = models.PositiveSmallIntegerField(default=0, null=True, blank=True) # in percentage
+    platform_components = models.ManyToManyField(PlatformComponents, through='PlanPlatformComponents')
     is_active = models.BooleanField(default=True)
 
     def get_plan(self):
@@ -39,6 +45,16 @@ class Plan(TimeStampedModel, SoftDeleteModel):
 
     def __str__(self):
         return str(self.title)
+
+
+class PlanPlatformComponents(TimeStampedModel):
+    plan = models.ForeignKey(Plan, models.DO_NOTHING)
+    platform_components = models.ForeignKey(PlatformComponents, models.DO_NOTHING)
+
+    class Meta:
+        unique_together = [
+            ('plan', 'platform_components'),
+        ]
 
 
 class Vendor(TimeStampedModel, SoftDeleteModel):
