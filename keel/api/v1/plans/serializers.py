@@ -1,6 +1,6 @@
 import re
 from rest_framework import serializers
-from keel.plans.models import Plan
+from keel.plans.models import Plan, PlatformComponents
 
 
 class PlanSerializers(serializers.ModelSerializer):
@@ -27,3 +27,10 @@ class PlanSerializers(serializers.ModelSerializer):
             return "Paid"
         else:
             return "Free"
+
+
+class PlatformComponentsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PlatformComponents
+        exclude = ("created_at", "updated_at", "deleted_at", )
