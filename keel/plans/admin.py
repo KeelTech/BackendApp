@@ -5,7 +5,7 @@ from .models import Plan, PlatformComponents, Vendor, Service, ServicesPlans, Pl
 
 class PlanPlatformInline(admin.TabularInline):
     model = PlanPlatformComponents    
-    max_num = 0
+    extra = 0
 
 class PlanAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'currency')
