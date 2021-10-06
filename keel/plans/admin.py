@@ -4,7 +4,8 @@ from .models import Plan, PlatformComponents, Vendor, Service, ServicesPlans, Pl
 # Register your models here.
 
 class PlanPlatformInline(admin.TabularInline):
-    model = PlanPlatformComponents
+    model = PlanPlatformComponents    
+    max_num = 0
 
 class PlanAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'currency')

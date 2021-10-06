@@ -38,6 +38,9 @@ class CallSchedule(TimeStampedModel, SoftDeleteModel):
     @property
     def readable_status(self):
         return self.STATUS_MAP.get(self.status)
+    
+    def __str__(self):
+        return self.id
 
     class Meta:
         db_table = "call_schedule"

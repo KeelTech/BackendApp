@@ -126,6 +126,9 @@ class UserDocument(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')
     task = models.ForeignKey(Task, on_delete=models.deletion.DO_NOTHING, related_name='tasks_docs', null=True, blank=True)
 
+    def __str__(self):
+        return "Document belongs to {}".format(self.user.email)
+
 
 class CustomToken(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_id", null=True)
@@ -158,6 +161,8 @@ class UserService(TimeStampedModel, SoftDeleteModel):
     limit_exists = models.BooleanField(verbose_name= 'Active', default=True)
     expiry_time = models.DateTimeField(null=True, blank= True)
 
+    def __str__(self):
+        return self.user.email
 
 class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     user = models.OneToOneField(User, related_name="user_profile", on_delete=models.DO_NOTHING)
@@ -245,6 +250,9 @@ class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
     start_date = models.DateField(max_length=512, blank=True, null=True, default=None)
     end_date = models.DateField(max_length=512, blank=True, null=True, default=None)
 
+    def __str__(self):
+        return self.user
+
 
 class QualificationLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(default="user", max_length=512)
@@ -283,6 +291,9 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
                                         max_length=512, blank=True, null=True, default=None)
     weekly_working_hours = models.CharField(max_length=512, default=None, blank=True, null=True)
 
+    def __str__(self):
+        return self.user
+
 
 class WorkExperienceLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=255, default="user")
@@ -307,6 +318,8 @@ class RelativeInCanada(TimeStampedModel, SoftDeleteModel):
     contact_number = models.CharField(max_length=512, default=None, null=True, blank=True)
     email_address = models.CharField(max_length=512, default=None, null=True, blank=True)
 
+    def __str__(self):
+        return self.user
 
 class RelativeInCanadaLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=215, default="user")
@@ -324,7 +337,9 @@ class EducationalCreationalAssessment(TimeStampedModel, SoftDeleteModel):
     eca_authority_number = models.CharField(max_length=512, default=None, blank=True, null=True)
     canadian_equivalency_summary = models.CharField(max_length=512, default=None, blank=True, null=True)
 
-
+    def __str__(self):
+        return self.user
+        
 class EducationalCreationalAssessmentLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=215, default="user")
     eca_authority_name_label = models.CharField(max_length=215)

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from keel.Core.admin import CustomBaseModelAdmin
-from .models import Transaction, Order, CasePaymentProfile
+from .models import Transaction, Order, CasePaymentProfile, OrderItem
 
 
 class OrderAdmin(CustomBaseModelAdmin):
@@ -16,5 +16,6 @@ class CasePaymentProfileAdmin(CustomBaseModelAdmin):
 
 
 admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderItem)
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(CasePaymentProfile, CasePaymentProfileAdmin)

@@ -1437,7 +1437,7 @@ class UploadDocument(GenericViewSet):
 
         try:
             user_docs = UserDocument.objects.select_related('doc','doc__doc_type'). \
-                            filter(user_id = actual_user_id, deleted_at__isnull = True)
+                            filter(user_id = actual_user_id, deleted_at__isnull = True).order_by("-updated_at")
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data
