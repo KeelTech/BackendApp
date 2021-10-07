@@ -499,6 +499,7 @@ class ProfileView(GenericViewSet):
             labels['address_label'] = label.address_label
             labels['contact_number_label'] = label.contact_number_label
             labels['email_address_label'] = label.email_address_label
+            labels['is_blood_relationship_label'] = label.is_blood_relationship_label
         queryset = RelativeInCanada.objects.filter(user=request.user).first()
         if queryset:
             serializer = self.serializer_class_relative_in_canada(queryset, context={"labels":labels})
@@ -1044,6 +1045,7 @@ class RelativeInCanadaView(GenericViewSet):
             "address" : datas["address"].get("value"),
             "contact_number" : datas["contact_number"].get("value"),
             "email_address" : datas["email_address"].get("value"),
+            "is_blood_relationship" : datas["is_blood_relationship"].get("value")
         }
         return customer_work_info
 

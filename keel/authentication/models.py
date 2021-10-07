@@ -251,7 +251,7 @@ class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
     end_date = models.DateField(max_length=512, blank=True, null=True, default=None)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class QualificationLabel(TimeStampedModel, SoftDeleteModel):
@@ -292,7 +292,7 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     weekly_working_hours = models.CharField(max_length=512, default=None, blank=True, null=True)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class WorkExperienceLabel(TimeStampedModel, SoftDeleteModel):
@@ -317,9 +317,10 @@ class RelativeInCanada(TimeStampedModel, SoftDeleteModel):
     address = models.CharField(max_length=512, default=None, null=True, blank=True)
     contact_number = models.CharField(max_length=512, default=None, null=True, blank=True)
     email_address = models.CharField(max_length=512, default=None, null=True, blank=True)
+    is_blood_relationship = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 class RelativeInCanadaLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=215, default="user")
@@ -329,6 +330,7 @@ class RelativeInCanadaLabel(TimeStampedModel, SoftDeleteModel):
     address_label = models.CharField(max_length=215)
     contact_number_label = models.CharField(max_length=215)
     email_address_label = models.CharField(max_length=215)
+    is_blood_relationship_label = models.CharField(max_length=215, default=None, null=True)
 
 
 class EducationalCreationalAssessment(TimeStampedModel, SoftDeleteModel):
@@ -338,7 +340,7 @@ class EducationalCreationalAssessment(TimeStampedModel, SoftDeleteModel):
     canadian_equivalency_summary = models.CharField(max_length=512, default=None, blank=True, null=True)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
         
 class EducationalCreationalAssessmentLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=215, default="user")
