@@ -555,7 +555,11 @@ class ProfileView(GenericViewSet):
             return data
     
     def get_queryset_cases(self, request):
-        get_case = Case.objects.filter(user=request.user).first()
+        get_case = None
+        try:
+            get_case = Case.objects.get(user=request.user)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:GetCases ' + str(e))
         plan = ""
         if get_case is not None:
             plan = PlanSerializers(get_case.plan).data['plan_type']
