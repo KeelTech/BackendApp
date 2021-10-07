@@ -77,7 +77,7 @@ class PlanComponentsView(GenericViewSet):
         response = {'status':1, "message":""}
         
         try:
-            case = Case.objects.get(user=request.user)
+            case = Case.objects.get(user=request.user, is_active=True)
             plan = Plan.objects.get(title=case.plan).platform_components.all()
         except Exception as e:
             logger.error('ERROR: PLAN:PlanComponentsView ' + str(e))

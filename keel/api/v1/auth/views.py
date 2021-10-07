@@ -557,7 +557,7 @@ class ProfileView(GenericViewSet):
     def get_queryset_cases(self, request):
         get_case = None
         try:
-            get_case = Case.objects.get(user=request.user)
+            get_case = Case.objects.get(user=request.user, is_active=True)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GetCases ' + str(e))
         plan = ""
