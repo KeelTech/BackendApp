@@ -75,7 +75,21 @@ class Case(TimeStampedModel, SoftDeleteModel):
 
 
 class Program(TimeStampedModel, SoftDeleteModel):
-    choice = models.CharField(max_length=512, default=None, blank=True, null=True)
+    
+    EXPRESS_ENTRY = "Express Entry"
+    PROVINCIAL_NOMINATION  = "Provincial Nomination"
+    INVESTORS = "Investors"
+    FAMILY_SPONSORSHIP = "Family Sponsorship"
 
+    CHOICES_CATEGORY = (
+        (EXPRESS_ENTRY, 'EXPRESS_ENTRY'),
+        (PROVINCIAL_NOMINATION, 'PROVINCIAL_NOMINATION'),
+        (INVESTORS, 'INVESTORS'),
+        (FAMILY_SPONSORSHIP, 'FAMILY_SPONSORSHIP')
+    )
+
+    choice = models.CharField(max_length=512, default=None, blank=True, null=True)
+    category = models.CharField(max_length=512, choices=CHOICES_CATEGORY, default=EXPRESS_ENTRY)
+    
     def __str__(self) -> str:
         return self.choice
