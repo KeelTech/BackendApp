@@ -91,7 +91,7 @@ class PaymentManager(object):
                 raise ValueError("Cannot Complete payment and create order without Plan and Case")
             related_plan_id = self._order.related_plan_id
             if related_plan_id:
-                Case.objects.update_plan(case_id, related_plan_id)
+                Case.objects.update_plan_agent(case_id, related_plan_id)
             self._payment_profile.case_id = case_id
             self._payment_profile.update_payment_profile(self._order.order_items)
 
