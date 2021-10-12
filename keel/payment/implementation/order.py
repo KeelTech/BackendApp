@@ -9,7 +9,7 @@ from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
 from keel.cases.implementation.case_util_helper import CaseUtilHelper
 from keel.cases.models import Case
 from keel.payment.models import Order, OrderItem, ORDER_ITEM_MODEL_MAPPING
-from keel.payment.constants import ORDER_ITEM_QUOTATION_TYPE, ORDER_ITEM_SERVICE_TYPE, ORDER_ITEM_PLAN_TYPE
+from keel.payment.constants import ORDER_ITEM_QUOTATION_TYPE, ORDER_ITEM_SERVICE_TYPE, ORDER_ITEM_PLAN_TYPE, DEFAULT_CURRENCY
 from keel.plans.models import Plan, Service
 from keel.plans.implementation.plan_util_helper import PlanUtilHelper
 from keel.quotations.models import QuotationMilestone
@@ -46,6 +46,7 @@ class PaymentOrder(IPaymentOrder):
         self._related_plan_id = None
         self._payment_client_type = None
         self._plan_util_helper = PlanUtilHelper()
+        self._case_util_helper = CaseUtilHelper()
 
     @property
     def customer_id(self):
@@ -83,7 +84,7 @@ class PaymentOrder(IPaymentOrder):
         for key, ids in item_list.items():
             validator = VALIDATOR_FACTORY.get_validator(key)
             any_item_available = True if any_item_available or ids else False
-            if ids and (not validator or not validator.validate_item(ids)):
+            if ids and (not validator or not validator.validate_item(ids, self._customer_id, self.case_id)):
                 return False
         return any_item_available
 
@@ -122,30 +123,54 @@ class PaymentOrder(IPaymentOrder):
             return order_model_obj.case.plan.id
         return self._try_get_plan_from_order_items(order_model_obj.order_items.all())
 
+    def _get_or_create_case(self, order_model_items, currency):
+        if not self._case_id:
+            for model_item in order_model_items:
+                self._case_id = model_item.item.get_case()
+                if self._case_id:
+                    break
+        if self._case_id:
+            case_model_obj = Case.objects.get(pk=self._case_id, is_active=True)
+        else:
+            customer_model_obj = User.objects.select_for_update().get(pk=self._customer_id)
+            case_model_obj = self._case_util_helper.create_with_free_plan(customer_model_obj, currency)
+        self._case_id = case_model_obj.pk
+        return case_model_obj
+
+    def _update_case_order_items(self, order_items, case_obj):
+        for order in order_items:
+            order.item.update_case(case_obj)
+
+    def _create_order_items(self, item_list):
+        currency = DEFAULT_CURRENCY
+        order_item_model_objs = []
+        total_payable_amount = Decimal(0.0)
+        for key, ids in item_list.items():
+            item_objs = ORDER_ITEM_MODEL_MAPPING[key].objects.filter(pk__in=ids)
+            for item_obj in item_objs:
+                item_payable_amount = item_obj.get_payment_amount()
+                total_payable_amount += item_payable_amount
+                order_item_model_objs.append(OrderItem.objects.create(item=item_obj, amount=item_payable_amount))
+                currency = item_obj.get_currency() or currency
+        return order_item_model_objs, total_payable_amount, currency
+
     def create(self, customer_id, initiator_id, item_list, payment_client_type, case_id=None):
         self._customer_id = customer_id
         self._initiator_id = initiator_id
         self._payment_client_type = payment_client_type
         self._case_id = case_id
-        total_payable_amount = 0
-        order_items = []
-        currency = "USD"
+
         if not self._is_valid_item_structure(item_list):
             raise ValueError("Invalid item details")
-        for key, ids in item_list.items():
-            item_objs = ORDER_ITEM_MODEL_MAPPING[key].objects.filter(pk__in=ids)
-            for item_obj in item_objs:
-                item_payable_amount = int(item_obj.get_payment_amount())
-                total_payable_amount += item_payable_amount
-                order_items.append(OrderItem.objects.create(item=item_obj, amount=item_payable_amount))
-                currency = item_obj.get_currency() or currency
-        customer_obj, initiator_obj = self._get_users_obj()
-        case_obj = Case.objects.get(pk=self._case_id) if self._case_id else None
-        order = Order.objects.create(
-            customer=customer_obj, initiator=initiator_obj, case=case_obj, total_amount=total_payable_amount,
+        order_item_model_objs, total_payable_amount, currency = self._create_order_items(item_list)
+        customer_model_obj, initiator_model_obj = self._get_users_obj()
+        case_model_obj = self._get_or_create_case(order_item_model_objs, currency)
+        self._update_case_order_items(order_item_model_objs, case_model_obj)
+        order_model_obj = Order.objects.create(
+            customer=customer_model_obj, initiator=initiator_model_obj, case=case_model_obj, total_amount=total_payable_amount,
             payment_client_type=payment_client_type, currency=currency)
-        order.order_items.add(*order_items)
-        self._order_id = order.id
+        order_model_obj.order_items.add(*order_item_model_objs)
+        self._order_id = order_model_obj.pk
         return self._order_id, total_payable_amount, currency
 
     def complete(self, order_id):
@@ -194,22 +219,31 @@ class PaymentOrder(IPaymentOrder):
 
 
 class OrderItemValidators:
-    def validate_item(self, items):
+    def validate_item(self, items, user_id, case_id=None):
         raise NotImplementedError("OrderItemValidator.validate_item is not implemented")
 
 
 class QuotationItemValidator(OrderItemValidators):
-    def validate_item(self, items):
-        quotations = QuotationMilestone.objects.filter(pk__in=items).values("pk")
-        if len(items) != len(quotations):
-            err_msg = "Invalid quotationMilestone id among - {}".format(set(items) - set(quotations))
+    def validate_item(self, items, user_id, case_id=None):
+        milestones = QuotationMilestone.objects.filter(pk__in=items, quotation__user__pk=user_id).values("pk", "quotation")
+        if len(items) != len(milestones):
+            quotation_ids = set([milestone['pk'] for milestone in milestones])
+            err_msg = "Invalid quotationMilestone id among - {}".format(set(items) - quotation_ids)
             logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationItemValidator.validate_time", "", description=err_msg))
             return False
+
+        if case_id:
+            for milestone in milestones:
+                milestone_case = milestone.get_case()
+                if milestone_case and milestone_case.pk != case_id:
+                    err_msg = "QuotationMilestone case id - {} mismatch with given case id - {}".format(milestone_case.pk, case_id)
+                    logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationItemValidator.validate_time", user_id, description=err_msg))
+                    return False
         return True
 
 
 class PlanItemValidator(OrderItemValidators):
-    def validate_item(self, items):
+    def validate_item(self, items, user_id=None, case_id=None):
         plans = Plan.objects.filter(pk__in=items).values("pk")
         if len(items) != len(plans):
             err_msg = "Invalid Plan id among - {}".format(set(items) - set(plans))
@@ -219,7 +253,7 @@ class PlanItemValidator(OrderItemValidators):
 
 
 class ServiceItemValidator(OrderItemValidators):
-    def validate_item(self, items):
+    def validate_item(self, items, user_id=None, case_id=None):
         services = Service.objects.filter(pk__in=items).values("pk")
         if len(items) != len(services):
             err_msg = "Invalid quotationMilestone id among - {}".format(set(items) - set(services))

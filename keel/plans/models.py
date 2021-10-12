@@ -11,7 +11,17 @@ class PlatformComponents(TimeStampedModel, SoftDeleteModel):
 
 
 class Plan(TimeStampedModel, SoftDeleteModel):
+    FREE_PLAN_TYPE = 1
+    CALLING_PLAN_TYPE = 2
+    PREMIUM_PLAN_TYPE = 3
+
+    PLAN_TYPE_CHOICES = (
+        (FREE_PLAN_TYPE, "Free Plan"),
+        (CALLING_PLAN_TYPE, "Calling Plan"),
+        (PREMIUM_PLAN_TYPE, "Premium Plan")
+    )
     title = models.CharField(max_length=512, null=True, default=None, blank=True)
+    type = models.PositiveSmallIntegerField(choices=PLAN_TYPE_CHOICES, default=FREE_PLAN_TYPE)
     description = models.TextField(null=True, blank=True, default=None)
     discount = models.PositiveSmallIntegerField(default=0, blank=True, null=True) # in percentage
     price = models.FloatField(null=True, blank=True, default=True)
@@ -39,6 +49,12 @@ class Plan(TimeStampedModel, SoftDeleteModel):
 
     def get_currency(self):
         return self.currency
+
+    def get_case(self):
+        return None
+
+    def update_case(self, case_model_obj):
+        return None
 
     class Meta:
         ordering = ['-id']
@@ -81,6 +97,12 @@ class Service(TimeStampedModel, SoftDeleteModel):
 
     def get_currency(self):
         return self.currency
+
+    def get_case(self):
+        return None
+
+    def update_case(self, case_model_obj):
+        return None
 
 
 class ServicesPlans(TimeStampedModel, SoftDeleteModel):
