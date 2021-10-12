@@ -119,8 +119,6 @@ class PaymentOrder(IPaymentOrder):
         if not self._order_id:
             return None
         order_model_obj = self.order_model_obj
-        if order_model_obj.case:
-            return order_model_obj.case.plan.id
         return self._try_get_plan_from_order_items(order_model_obj.order_items.all())
 
     def _get_or_create_case(self, order_model_items, currency):
@@ -146,13 +144,19 @@ class PaymentOrder(IPaymentOrder):
         order_item_model_objs = []
         total_payable_amount = Decimal(0.0)
         for key, ids in item_list.items():
+            if not ids:
+                continue
             item_objs = ORDER_ITEM_MODEL_MAPPING[key].objects.filter(pk__in=ids)
             for item_obj in item_objs:
-                item_payable_amount = item_obj.get_payment_amount()
-                total_payable_amount += item_payable_amount
+                item_payable_amount = Decimal(item_obj.get_payment_amount())
+                total_payable_amount = total_payable_amount + item_payable_amount
                 order_item_model_objs.append(OrderItem.objects.create(item=item_obj, amount=item_payable_amount))
                 currency = item_obj.get_currency() or currency
         return order_item_model_objs, total_payable_amount, currency
+
+    def _complete_order_items(self):
+        for order in self._order_model_obj.order_items.all():
+            order.item.complete_payment()
 
     def create(self, customer_id, initiator_id, item_list, payment_client_type, case_id=None):
         self._customer_id = customer_id
@@ -178,6 +182,8 @@ class PaymentOrder(IPaymentOrder):
         order_model_obj = Order.objects.select_for_update().get(pk=order_id, status=Order.STATUS_PENDING)
         order_model_obj.status = Order.STATUS_COMPLETED
         order_model_obj.save()
+        self._order_model_obj = order_model_obj
+        self._complete_order_items()
         self._case_id = order_model_obj.case.pk if order_model_obj.case else None
         self._customer_id = order_model_obj.customer.id
         self._order_model_obj = order_model_obj

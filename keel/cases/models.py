@@ -32,6 +32,14 @@ class CaseManager(models.Manager):
         plan = Plan.objects.get(pk=plan_id)
         return self.create(user=user, plan=plan, agent=agent)
 
+    def update_plan(self, case_id, plan_id):
+        case_modle_obj = self.select_for_update().get(pk=case_id)
+        if case_modle_obj.plan.pk != plan_id:
+            plan_model_obj = Plan.objects.get(pk=plan_id)
+            case_modle_obj.plan = plan_model_obj
+            case_modle_obj.save()
+        return case_modle_obj
+
 
 class Case(TimeStampedModel, SoftDeleteModel):
 

@@ -79,7 +79,11 @@ class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
         return self.quotation.get_case()
 
     def update_case(self, case_model_obj):
-        quotation = Quotation.object.select_for_update().get(pk=self.quotation.pk)
+        quotation = Quotation.objects.select_for_update().get(pk=self.quotation.pk)
         if not quotation.case:
             quotation.case = case_model_obj
             quotation.save()
+
+    def complete_payment(self):
+        self.status = self.PAID
+        self.save()

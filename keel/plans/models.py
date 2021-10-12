@@ -56,6 +56,9 @@ class Plan(TimeStampedModel, SoftDeleteModel):
     def update_case(self, case_model_obj):
         return None
 
+    def complete_payment(self):
+        pass
+
     class Meta:
         ordering = ['-id']
 
@@ -103,6 +106,9 @@ class Service(TimeStampedModel, SoftDeleteModel):
 
     def update_case(self, case_model_obj):
         return None
+
+    def complete_payment(self):
+        pass
 
 
 class ServicesPlans(TimeStampedModel, SoftDeleteModel):
