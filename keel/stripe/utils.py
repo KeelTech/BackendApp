@@ -32,7 +32,7 @@ class StripePaymentUtility(object):
         currency_mapping = CurrencyMapping.objects.get(user_currency__iexact=currency)
         try:
             intent = stripe.PaymentIntent.create(
-                amount=amount if currency_mapping.zero_decimal_currency else (amount * 100),
+                amount=amount if currency_mapping.zero_decimal_currency else int(amount * 100),
                 currency=currency_mapping.stripe_currency
             )
             return {

@@ -32,6 +32,14 @@ class CaseManager(models.Manager):
         plan = Plan.objects.get(pk=plan_id)
         return self.create(user=user, plan=plan, agent=agent)
 
+    def update_plan_agent(self, case_id, plan_id):
+        case_modle_obj = self.select_for_update().get(pk=case_id)
+        case_modle_obj.agent = User.objects.filter(is_active=True, user_type=User.RCIC).first()
+        if case_modle_obj.plan.pk != plan_id:
+            case_modle_obj.plan = Plan.objects.get(pk=plan_id)
+        case_modle_obj.save()
+        return case_modle_obj
+
 
 class Case(TimeStampedModel, SoftDeleteModel):
 
@@ -50,9 +58,10 @@ class Case(TimeStampedModel, SoftDeleteModel):
     case_id = models.CharField(max_length=255, primary_key=True)
     display_id = models.CharField(max_length=5, default=None, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='users_cases')
-    agent = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='agents_cases')
-    account_manager = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='account_manager_cases', 
-                        null=True, blank=True, default=None)
+    agent = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='agents_cases',
+                              null=True, blank=True)
+    account_manager = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='account_manager_cases',
+                                        null=True, blank=True, default=None)
     status = models.PositiveSmallIntegerField(choices=CASES_TYPE_CHOICES, verbose_name="case_status", default=BOOKED)
     is_active = models.BooleanField(verbose_name= 'Active', default=True)
     ref_id = models.ForeignKey('self', null=True, blank=True, on_delete=models.deletion.DO_NOTHING)
