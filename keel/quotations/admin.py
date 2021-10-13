@@ -1,6 +1,8 @@
 import logging
 
 from django.contrib import admin
+from keel.Core.err_log import logging_format
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
 from keel.cases.models import Case
 from keel.Core.admin import CustomBaseModelAdmin
 from keel.payment.implementation.pay_manager import (
@@ -30,35 +32,26 @@ class QuotationAdmin(admin.ModelAdmin):
 class QuotationMilestioneAdmin(CustomBaseModelAdmin):
     
     def save_model(self, request, obj, form, change):
-        id = str(obj.pk)
         customer = obj.quotation.user
-        
-        try:
-            case = Case.objects.get(user=customer)
-        except Exception as e:
-            logger.error('ERROR: QUOTATIONS:QuotationMilestioneAdmin ' + str(e)) 
-            return super().save_model(request, obj, form, change)
-        
         payment_manager = PaymentManager()
-        data = {
-                "order_items": {
-                    "quotation_milestone":[id],
-                    "plan": [],
-                    "service": []
-                }
-            }
+        order_items = {
+            "quotation_milestone":[str(obj.pk)],
+            "plan": [],
+            "service": []
+        }
         try:
             payment_details = payment_manager.generate_payment_details(
                 StructNewPaymentDetailArgs(customer_id=customer.pk, customer_currency="usd",
-                                           initiator_id=customer.pk, payment_client_type=PAYMENT_CLIENT_TYPE,
-                                           case_id=case),
-                data["order_items"]
+                                           initiator_id=request.user.pk, payment_client_type=PAYMENT_CLIENT_TYPE,
+                                           case_id=None),
+                order_items
             )
-            print(payment_details)
         except ValueError as err:
-            logger.error('ERROR: QUOTATIONS:QuotationMilestioneAdmin ' + str(e))
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationMilestioneAdmin.save_model",
+                            "", description=str(err)))
         except Exception as err:
-            logger.error('ERROR: QUOTATIONS:QuotationMilestioneAdmin ' + str(e))
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationMilestioneAdmin.save_model",
+                            "", description=str(err)))
         return super().save_model(request, obj, form, change)
 
 admin.site.register(Quotation, QuotationAdmin)
