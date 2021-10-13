@@ -32,6 +32,8 @@ class QuotationAdmin(admin.ModelAdmin):
 class QuotationMilestioneAdmin(CustomBaseModelAdmin):
     
     def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        
         customer = obj.quotation.user
         payment_manager = PaymentManager()
         order_items = {
@@ -53,6 +55,5 @@ class QuotationMilestioneAdmin(CustomBaseModelAdmin):
             logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationMilestioneAdmin.save_model",
                             "", description=str(err)))
         return super().save_model(request, obj, form, change)
-
 admin.site.register(Quotation, QuotationAdmin)
 admin.site.register(QuotationMilestone, QuotationMilestioneAdmin)
