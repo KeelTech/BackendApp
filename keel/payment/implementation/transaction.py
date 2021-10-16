@@ -26,7 +26,7 @@ class PaymentTransaction(object):
             raise ValueError("None order id while in create transaction")
         transaction_obj = Transaction.objects.create(
             frontend_payment_clients_unique_id=frontend_payment_identifier, webhook_payment_clients_unique_id=webhook_payment_identifier,
-            order=Order.objects.get(pk=self._order_id), payment_amount=amount, currency=currency)
+            order=Order.objects.get(pk=self._order_id), refund_amount_left=amount, currency=currency)
         return transaction_obj.id
 
     def complete(self):

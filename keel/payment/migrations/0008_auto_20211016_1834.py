@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='transaction',
             name='refund_amount_left',
-            field=models.DecimalField(decimal_places=2, default=None, max_digits=12),
+            field=models.DecimalField(blank=True, decimal_places=2, default=None, max_digits=12, null=True),
         ),
         migrations.CreateModel(
             name='RefundTransaction',

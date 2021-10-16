@@ -51,7 +51,9 @@ class PaymentManager(object):
                                             self._new_payment_args.customer_id, description=error_msg))
                 raise ValueError("Error in Payment client api")
             transaction_id = self._transaction.create_transaction(
-                client_payment_response["data"]["unique_identifier"], client_payment_response["data"]["client_secret"])
+                client_payment_response["data"]["unique_identifier"], client_payment_response["data"]["client_secret"],
+                amount, currency
+            )
         return {
             "order_id": order_id,
             "transaction_id": transaction_id,
