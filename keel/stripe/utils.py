@@ -50,6 +50,26 @@ class StripePaymentUtility(object):
                 "data": {}
             }
 
+    def refund_payment_intent(self, payment_intent_id, amount=None):
+        response = {
+            "status": 0,
+            "error": "",
+            "data": {}
+        }
+        refund_query = {
+            "payment_intent": payment_intent_id
+        }
+        if amount and self.validate_amount(amount):
+            refund_query["amount"] = amount
+        try:
+            refund = stripe.Refund.create(*refund_query)
+            response["status"] = 1
+            response["data"] = refund
+        except Exception as err:
+            response["error"] = str(err)
+
+        return response
+
 
 class IPaymentEventHandler(object):
 

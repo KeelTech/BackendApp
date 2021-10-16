@@ -61,19 +61,19 @@ class PaymentManager(object):
 
     def generate_payment_details(self, pay_args: StructNewPaymentDetailArgs, items_list, **kwargs):
         self._new_payment_args = pay_args
-        self._payment_client = PAYMENT_CLIENT_FACTORY.get_payment_client(self._new_payment_args.payment_client_type)
+        self._payment_client = PAYMENT_CLIENT_FACTORY.try_get_payment_client(self._new_payment_args.payment_client_type)
         payment_details = self._trigger_create_payment(items_list, **kwargs)
         # Construct payment details
         return payment_details
 
     def generate_payment_url(self, pay_args: StructNewPaymentDetailArgs, items_list, **kwargs):
         self._new_payment_args = pay_args
-        self._payment_client = PAYMENT_CLIENT_FACTORY.get_payment_client(self._new_payment_args.payment_client_type)
+        self._payment_client = PAYMENT_CLIENT_FACTORY.try_get_payment_client(self._new_payment_args.payment_client_type)
         payment_details = self._trigger_create_payment(items_list, **kwargs)
         return create_payment_url(payment_details["unique_identifier"])
 
     def payment_webhook_event_handler(self, payment_client_type, webhook_payload, signature):
-        self._payment_client_event_handler = PAYMENT_CLIENT_FACTORY.get_payment_event_client_handler(payment_client_type)
+        self._payment_client_event_handler = PAYMENT_CLIENT_FACTORY.try_get_payment_event_client_handler(payment_client_type)
         self._payment_client_event_handler.process(self, webhook_payload, signature)
 
     def complete_payment_transaction(self, unique_identifier):
@@ -132,11 +132,14 @@ class PaymentClientFactory(object):
     }
     default_client_event_handler = STRIPE_EVENT_MANAGER
 
-    def get_payment_client(self, payment_client_type):
+    def try_get_payment_client(self, payment_client_type):
         return self.payment_client_map.get(payment_client_type) or self.default_payment_client
 
-    def get_payment_event_client_handler(self, payment_client_type):
+    def try_get_payment_event_client_handler(self, payment_client_type):
         return self.payment_client_event_handler_map.get(payment_client_type) or self.default_client_event_handler
+
+    def try_get_refund_client(self, payment_client_type):
+        return self.payment_client_map[payment_client_type]
 
 
 def create_payment_url(unique_identifier):

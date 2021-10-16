@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
 
 from keel.payment.models import Transaction, Order
 
@@ -18,12 +21,12 @@ class PaymentTransaction(object):
     def order_id(self, order_id):
         self._order_id = order_id
 
-    def create_transaction(self, webhook_payment_identifier, frontend_payment_identifier, **kwargs):
+    def create_transaction(self, webhook_payment_identifier, frontend_payment_identifier, amount, currency, **kwargs):
         if not self._order_id:
             raise ValueError("None order id while in create transaction")
         transaction_obj = Transaction.objects.create(
             frontend_payment_clients_unique_id=frontend_payment_identifier, webhook_payment_clients_unique_id=webhook_payment_identifier,
-            order=Order.objects.get(pk=self._order_id))
+            order=Order.objects.get(pk=self._order_id), payment_amount=amount, currency=currency)
         return transaction_obj.id
 
     def complete(self):
@@ -38,3 +41,10 @@ class PaymentTransaction(object):
 
     def get_order_transaction_details(self, order_objs):
         return Transaction.objects.filter(order__in=order_objs)
+
+    def get_case_refund_transaction(self, case_model_obj):
+        return Transaction.objects.select_for_update().filter(refund_amount_left__gt=Decimal(0), order__case=case_model_obj)
+
+    def update_left_over_refund_amount(self, payment_transaction_model_obj, refunded_amount):
+        payment_transaction_model_obj.refund_amount_left = F("refund_amount_left") - refunded_amount
+        payment_transaction_model_obj.save(update_fields=["refund_amount_left"])
