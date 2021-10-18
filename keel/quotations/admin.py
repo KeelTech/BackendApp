@@ -16,7 +16,8 @@ class QuotationAdmin(admin.ModelAdmin):
 
 
 class QuotationMilestioneAdmin(CustomBaseModelAdmin):
-    pass
+    list_display = ('qm_id', 'amount', 'status', 'due_date')
+    readonly_fields = ('qm_id', 'deleted_at')
 
 admin.site.register(Quotation, QuotationAdmin)
 admin.site.register(QuotationMilestone, QuotationMilestioneAdmin)

@@ -56,6 +56,11 @@ class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
     description = models.TextField(null=True,blank=True)
     quotation = models.ForeignKey(Quotation, on_delete = models.deletion.DO_NOTHING, 
                                     related_name = "milestones_quote")
+    
+    def save(self, *args, **kwargs):
+        if not self.qm_id:
+            self.qm_id = uuid.uuid4()
+        super().save(*args, **kwargs)
 
     def get_plan(self):
         return self.quotation.plan
