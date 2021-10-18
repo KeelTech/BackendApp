@@ -30,6 +30,7 @@ class QuotationAdmin(admin.ModelAdmin):
 
 
 class QuotationMilestioneAdmin(CustomBaseModelAdmin):
+
     
     def save_model(self, request, obj, form, change):
         instance = super().save_model(request, obj, form, change)
@@ -55,6 +56,10 @@ class QuotationMilestioneAdmin(CustomBaseModelAdmin):
             logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationMilestioneAdmin.save_model",
                             "", description=str(err)))
         return instance
+
+    list_display = ('qm_id', 'amount', 'status', 'due_date')
+    readonly_fields = ('qm_id', 'deleted_at')
+
 
 admin.site.register(Quotation, QuotationAdmin)
 admin.site.register(QuotationMilestone, QuotationMilestioneAdmin)
