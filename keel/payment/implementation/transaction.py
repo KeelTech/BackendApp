@@ -43,7 +43,9 @@ class PaymentTransaction(object):
         return Transaction.objects.filter(order__in=order_objs)
 
     def get_case_refund_transaction(self, case_model_obj):
-        return Transaction.objects.select_for_update().filter(refund_amount_left__gt=Decimal(0), order__case=case_model_obj)
+        return Transaction.objects.select_for_update().filter(
+            status=Transaction.STATUS_COMPLETED, refund_amount_left__gt=Decimal(0), order__case=case_model_obj).\
+            order_by("-refund_amount_left")
 
     def update_left_over_refund_amount(self, payment_transaction_model_obj, refunded_amount):
         payment_transaction_model_obj.refund_amount_left = F("refund_amount_left") - refunded_amount

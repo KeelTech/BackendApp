@@ -62,9 +62,9 @@ class StripePaymentUtility(object):
         if amount and self.validate_amount(amount):
             refund_query["amount"] = amount
         try:
-            refund = stripe.Refund.create(*refund_query)
+            refund = stripe.Refund.create(**refund_query)
             response["status"] = 1
-            response["data"] = refund
+            response["data"]["client_identifier"] = refund["id"]
         except Exception as err:
             response["error"] = str(err)
 
