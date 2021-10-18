@@ -27,6 +27,9 @@ class OrderItem(TimeStampedModel, SoftDeleteModel):
 
     class Meta:
         db_table = "order_items"
+    
+    def __str__(self):
+        return str(self.item_id)
 
 
 class Order(TimeStampedModel, SoftDeleteModel):
@@ -56,6 +59,9 @@ class Order(TimeStampedModel, SoftDeleteModel):
     class Meta:
         db_table = "order"
 
+    def __str__(self):
+        return str(self.customer)
+
 
 class Transaction(TimeStampedModel, SoftDeleteModel):
     STATUS_PENDING = 1
@@ -74,6 +80,9 @@ class Transaction(TimeStampedModel, SoftDeleteModel):
 
     class Meta:
         db_table = "transaction"
+    
+    def __str__(self):
+        return str(self.id)
 
 
 class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
@@ -94,3 +103,7 @@ class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
 
     class Meta:
         db_table = "user_case_payment_profile"
+    
+
+    def __str__(self) -> str:
+        return str(self.case)

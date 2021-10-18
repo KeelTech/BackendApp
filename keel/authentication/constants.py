@@ -52,7 +52,8 @@ RELATIVE = {
     "immigration_status": {"value": "", "type": "char", "labels": "Immigration Status"},
     "address": {"value": "", "type": "char", "labels": "Address"},
     "contact_number": {"value": "", "type": "char", "labels": "Contact Number"},
-    "email_address": {"value": "", "type": "char", "labels": "Email Address"}
+    "email_address": {"value": "", "type": "char", "labels": "Email Address"},
+    "is_blood_relationship" : {"value": False, "type":"checkbox", "labels":"Is Blood Relationship"}
 }
 
 WORK_EXPERIENCE = [{

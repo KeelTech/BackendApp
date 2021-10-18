@@ -9,6 +9,9 @@ class PlatformComponents(TimeStampedModel, SoftDeleteModel):
     name = models.CharField(max_length=512, default=None, null=True, blank=True)
     description = models.CharField(max_length=512, default=None, null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Plan(TimeStampedModel, SoftDeleteModel):
     title = models.CharField(max_length=512, null=True, default=None, blank=True)
@@ -60,6 +63,8 @@ class PlanPlatformComponents(TimeStampedModel):
 class Vendor(TimeStampedModel, SoftDeleteModel):
     name = models.CharField(max_length=512, null=True, blank=True, default=None)
 
+    def __str__(self):
+        return self.name
 
 class Service(TimeStampedModel, SoftDeleteModel):
     title = models.CharField(max_length=512, null=True, blank=True, default=None)
@@ -81,10 +86,16 @@ class Service(TimeStampedModel, SoftDeleteModel):
 
     def get_currency(self):
         return self.currency
+    
+    def __str__(self):
+        return self.title
 
 
 class ServicesPlans(TimeStampedModel, SoftDeleteModel):
 
     plan = models.ForeignKey(Plan, on_delete=models.deletion.DO_NOTHING, related_name='plans_services')
     service = models.ForeignKey(Service, on_delete=models.deletion.DO_NOTHING, related_name='services_plans')
+
+    def __str__(self):
+        return self.plan
 

@@ -3,7 +3,7 @@ from keel.Core.admin import CustomBaseModelAdmin
 from .models import Quotation, QuotationMilestone
 class QuotationMilestoneLine(admin.TabularInline):
     model = QuotationMilestone
-    max_num = 0
+    extra = 0
     readonly_fields = ('qm_id', )
 
 class QuotationAdmin(admin.ModelAdmin):

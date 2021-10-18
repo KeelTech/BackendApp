@@ -76,3 +76,6 @@ class Case(TimeStampedModel, SoftDeleteModel):
 
 class Program(TimeStampedModel, SoftDeleteModel):
     choice = models.CharField(max_length=512, default=None, blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.choice
