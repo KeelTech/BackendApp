@@ -48,7 +48,7 @@ class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
         (PAID, 'Paid'),
         (UNPAID, 'Unpaid'),
     )
-    qm_id = models.CharField(max_length=255, primary_key=True)
+    qm_id = models.CharField(max_length=255, primary_key=True, default=uuid.uuid4)
     due_date = models.DateTimeField(null=True, blank=True)
     amount = models.DecimalField(max_digits = 12, decimal_places=2)
     status = models.PositiveSmallIntegerField(choices=QUO_MILESTONES_STATUS_TYPE_CHOICES, 
@@ -57,10 +57,11 @@ class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
     quotation = models.ForeignKey(Quotation, on_delete = models.deletion.DO_NOTHING, 
                                     related_name = "milestones_quote")
     
-    def save(self, *args, **kwargs):
-        if not self.qm_id:
-            self.qm_id = uuid.uuid4()
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.qm_id:
+    #         self.qm_id = uuid.uuid4()
+    #         print(self.qm_id)
+    #     super().save(*args, **kwargs)
 
     def get_plan(self):
         return self.quotation.plan

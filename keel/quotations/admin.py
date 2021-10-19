@@ -18,7 +18,7 @@ PAYMENT_CLIENT_TYPE = Order.PAYMENT_CLIENT_STRIPE
 class QuotationMilestoneLine(admin.TabularInline):
     model = QuotationMilestone
     extra = 0
-    readonly_fields = ('qm_id', )
+    readonly_fields = ('deleted_at', )
 
 class QuotationAdmin(admin.ModelAdmin):
 
@@ -30,11 +30,9 @@ class QuotationAdmin(admin.ModelAdmin):
 
 
 class QuotationMilestioneAdmin(CustomBaseModelAdmin):
-
     
     def save_model(self, request, obj, form, change):
         instance = super().save_model(request, obj, form, change)
-        
         customer = obj.quotation.user
         payment_manager = PaymentManager()
         order_items = {
