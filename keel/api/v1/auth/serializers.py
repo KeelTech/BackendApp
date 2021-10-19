@@ -1,21 +1,27 @@
-from django.utils import timezone
-from rest_framework import serializers
-from keel.authentication.models import (User, UserDocument, CustomerWorkExperience, WorkExperienceLabel,
-                                        CustomerProfile,  CustomerProfileLabel, QualificationLabel, CustomerQualifications,
-                                        RelativeInCanada, RelativeInCanadaLabel, EducationalCreationalAssessment, 
-                                        EducationalCreationalAssessmentLabel, AgentProfile)
-from keel.Core.err_log import log_error
+import logging
+
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
+from django.conf import settings
+from django.contrib.auth import authenticate, get_user_model
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from django.contrib.auth import get_user_model, authenticate
-from django.conf import settings
-from django.db.models import Q
-
 from keel.api.v1 import utils as v1_utils
+from keel.authentication.models import (AgentProfile, CustomerProfile,
+                                        CustomerProfileLabel,
+                                        CustomerQualifications,
+                                        CustomerWorkExperience,
+                                        EducationalCreationalAssessment,
+                                        EducationalCreationalAssessmentLabel,
+                                        QualificationLabel, RelativeInCanada,
+                                        RelativeInCanadaLabel, User,
+                                        UserDocument, WorkExperienceLabel)
+from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.err_log import logging_format
+from rest_framework import serializers
+
 # from keel.common import models as common_models
 
-import logging
 logger = logging.getLogger('app-logger')
 
 
@@ -99,7 +105,9 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         user = validated_data.get('user')
         try:
             profile = CustomerProfile.objects.get(user=user)
-        except CustomerProfile.DoesNotExist:
+        except CustomerProfile.DoesNotExist as err:
+            logger.error(logging_format(LOGGER_LOW_SEVERITY, "CustomerUpdateProfileSerializer:create"),
+                            "", description=str(err))
             raise serializers.ValidationError("No profile for this user")
         profile.first_name = first_name
         profile.last_name = last_name

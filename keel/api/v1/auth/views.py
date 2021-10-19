@@ -123,7 +123,7 @@ class UserViewset(GenericViewSet):
             "token" : obj.token,
         }
         response["message"] = data
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(response, status=status.HTTP_201_CREATED)
     
     def verify_account(self, request):
         pass
