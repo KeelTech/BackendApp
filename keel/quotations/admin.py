@@ -28,32 +28,32 @@ class QuotationAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', 'q_id')
     inlines = [QuotationMilestoneLine]
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            customer = instance.quotation.user
+            payment_manager = PaymentManager()
+            order_items = {
+                "quotation_milestone":[str(instance.pk)],
+                "plan": [],
+                "service": []
+            }
+            try:
+                payment_details = payment_manager.generate_payment_details(
+                    StructNewPaymentDetailArgs(customer_id=customer.pk, customer_currency="usd",
+                                            initiator_id=request.user.pk, payment_client_type=PAYMENT_CLIENT_TYPE,
+                                            case_id=None),
+                    order_items
+                )
+            except ValueError as err:
+                logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationAdmin.save_formset",
+                                "", description=str(err)))
+            except Exception as err:
+                logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationAdmin.save_formset",
+                                "", description=str(err)))
+        return super().save_formset(request, form, formset, change)
 
 class QuotationMilestioneAdmin(CustomBaseModelAdmin):
-    
-    def save_model(self, request, obj, form, change):
-        instance = super().save_model(request, obj, form, change)
-        customer = obj.quotation.user
-        payment_manager = PaymentManager()
-        order_items = {
-            "quotation_milestone":[str(obj.pk)],
-            "plan": [],
-            "service": []
-        }
-        try:
-            payment_details = payment_manager.generate_payment_details(
-                StructNewPaymentDetailArgs(customer_id=customer.pk, customer_currency="usd",
-                                           initiator_id=request.user.pk, payment_client_type=PAYMENT_CLIENT_TYPE,
-                                           case_id=None),
-                order_items
-            )
-        except ValueError as err:
-            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationMilestioneAdmin.save_model",
-                            "", description=str(err)))
-        except Exception as err:
-            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "QuotationMilestioneAdmin.save_model",
-                            "", description=str(err)))
-        return instance
 
     list_display = ('qm_id', 'amount', 'status', 'due_date')
     readonly_fields = ('qm_id', 'deleted_at')
