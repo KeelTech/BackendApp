@@ -1,6 +1,8 @@
 import uuid
 
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from keel.authentication.models import User
 from keel.cases.models import Case
 from keel.Core.models import SoftDeleteModel, TimeStampedModel
@@ -36,7 +38,19 @@ class Quotation(TimeStampedModel, SoftDeleteModel):
     def save(self, *args, **kwargs):
         if not self.q_id:
             self.q_id = uuid.uuid4()
+        self.check_amount()
         super().save(*args, **kwargs)
+
+    def check_amount(self):
+        instances = self.milestones_quote.all()
+        amount = []
+        for instance in instances:
+            amount.append(int(instance.amount))
+        total_amount = sum(amount)
+        print(total_amount, self.total_amount)
+        if total_amount > self.total_amount:
+            raise ValidationError(_("Amount hihger than total amounts"))
+
 
     def get_currency(self):
         return self.plan.get_currency()
@@ -54,7 +68,7 @@ class QuotationMilestone(TimeStampedModel, SoftDeleteModel):
         (PAID, 'Paid'),
         (UNPAID, 'Unpaid'),
     )
-    qm_id = models.CharField(max_length=255, primary_key=True)
+    qm_id = models.CharField(max_length=255, primary_key=True, default=uuid.uuid4)
     due_date = models.DateTimeField(null=True, blank=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     status = models.PositiveSmallIntegerField(choices=QUO_MILESTONES_STATUS_TYPE_CHOICES,
