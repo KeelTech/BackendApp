@@ -1,10 +1,10 @@
 import logging
 
 from django.contrib import admin
-from keel.Core.err_log import logging_format
-from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
 from keel.cases.models import Case
 from keel.Core.admin import CustomBaseModelAdmin
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
+from keel.Core.err_log import logging_format
 from keel.payment.implementation.pay_manager import (
     PaymentManager, StructNewPaymentDetailArgs)
 from keel.payment.models import Order
