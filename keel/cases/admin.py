@@ -22,6 +22,7 @@ class CaseAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 class ProgramAdmin(admin.ModelAdmin):
+    list_display = ('choice', 'category')
     readonly_fields = ['deleted_at']
 
 admin.site.register(Case, CaseAdmin)

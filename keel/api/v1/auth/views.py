@@ -499,6 +499,7 @@ class ProfileView(GenericViewSet):
             labels['address_label'] = label.address_label
             labels['contact_number_label'] = label.contact_number_label
             labels['email_address_label'] = label.email_address_label
+            labels['is_blood_relationship_label'] = label.is_blood_relationship_label
         queryset = RelativeInCanada.objects.filter(user=request.user).first()
         if queryset:
             serializer = self.serializer_class_relative_in_canada(queryset, context={"labels":labels})
@@ -555,7 +556,11 @@ class ProfileView(GenericViewSet):
             return data
     
     def get_queryset_cases(self, request):
-        get_case = Case.objects.filter(user=request.user).first()
+        get_case = None
+        try:
+            get_case = Case.objects.get(user=request.user, is_active=True)
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:GetCases ' + str(e))
         plan = ""
         if get_case is not None:
             plan = PlanSerializers(get_case.plan).data['plan_type']
@@ -1040,6 +1045,7 @@ class RelativeInCanadaView(GenericViewSet):
             "address" : datas["address"].get("value"),
             "contact_number" : datas["contact_number"].get("value"),
             "email_address" : datas["email_address"].get("value"),
+            "is_blood_relationship" : datas["is_blood_relationship"].get("value")
         }
         return customer_work_info
 
@@ -1437,7 +1443,7 @@ class UploadDocument(GenericViewSet):
 
         try:
             user_docs = UserDocument.objects.select_related('doc','doc__doc_type'). \
-                            filter(user_id = actual_user_id, deleted_at__isnull = True)
+                            filter(user_id = actual_user_id, deleted_at__isnull = True).order_by("-updated_at")
             user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
             response_data = user_doc_serializer.data
             response["data"] = response_data

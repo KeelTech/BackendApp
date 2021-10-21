@@ -640,13 +640,13 @@ class RelativeInCanadaSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelativeInCanada
         fields = ('id', 'full_name', 'relationship', 'immigration_status', 
-                    'address', 'contact_number', 'email_address')
+                    'address', 'contact_number', 'email_address', 'is_blood_relationship')
 
 class RelativeInCanadaUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelativeInCanada
         fields = ('id', 'full_name', 'relationship', 'immigration_status', 
-                    'address', 'contact_number', 'email_address')
+                    'address', 'contact_number', 'email_address', 'is_blood_relationship')
 
     def create(self, validated_data):
         id = validated_data.get('id')
@@ -656,6 +656,7 @@ class RelativeInCanadaUpdateSerializer(serializers.ModelSerializer):
         address = validated_data.get('address')
         contact_number = validated_data.get('contact_number')
         email_address = validated_data.get('email_address')
+        is_blood_relationship = validated_data.get('is_blood_relationship')
         user = validated_data.get('user')
         try:
             relative, created = RelativeInCanada.objects.update_or_create(id=id, 
@@ -664,7 +665,8 @@ class RelativeInCanadaUpdateSerializer(serializers.ModelSerializer):
                                             "relationship":relationship,
                                             "immigration_status":immigration_status, "address":address,
                                             "contact_number":contact_number, 
-                                            "email_address":email_address, 
+                                            "email_address":email_address,
+                                            "is_blood_relationship":is_blood_relationship, 
                                             "user":user
                                         })
         except RelativeInCanada.DoesNotExist:
@@ -679,6 +681,7 @@ class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
     address = serializers.SerializerMethodField()
     contact_number = serializers.SerializerMethodField()
     email_address = serializers.SerializerMethodField()
+    is_blood_relationship = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -709,6 +712,11 @@ class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
         var = obj.contact_number
         if "labels" in self.context:
             return {"value": var, "type":"char", "labels":self.context["labels"]["contact_number_label"]}
+    
+    def get_is_blood_relationship(self, obj):
+        var = obj.is_blood_relationship
+        if "labels" in self.context:
+            return {"value":var, "type":"checkbox", "lables":self.context["labels"]["is_blood_relationship_label"]}
 
     def get_email_address(self, obj):
         var = obj.email_address
@@ -718,7 +726,7 @@ class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = RelativeInCanadaLabel
         fields = ('id', 'full_name', 'relationship', 'immigration_status', 'address', 
-                    'contact_number', 'email_address')
+                    'contact_number', 'email_address', 'is_blood_relationship')
 
 
 class EducationalCreationalAssessmentSerializer(serializers.ModelSerializer):
