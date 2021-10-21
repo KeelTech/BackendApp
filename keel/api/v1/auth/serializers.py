@@ -675,7 +675,9 @@ class RelativeInCanadaUpdateSerializer(serializers.ModelSerializer):
                                             "email_address":email_address, 
                                             "user":user
                                         })
-        except RelativeInCanada.DoesNotExist:
+        except RelativeInCanada.DoesNotExist as err:
+            logger.error(logging_format(LOGGER_LOW_SEVERITY, "RelativeInCanadaUpdateSerializer:create"),
+                "", description=str(err))
             raise serializers.ValidationError("Relative with ID does not exist")
         
         return relative

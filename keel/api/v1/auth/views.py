@@ -40,8 +40,9 @@ from keel.authentication.models import (AgentProfile, CustomerProfile,
 from keel.authentication.models import User as user_model
 from keel.authentication.models import UserDocument, WorkExperienceLabel
 from keel.cases.models import Case
-from keel.Core.constants import GENERIC_ERROR
-from keel.Core.err_log import log_error
+from keel.Core.constants import (GENERIC_ERROR, LOGGER_CRITICAL_SEVERITY,
+                                 LOGGER_LOW_SEVERITY, LOGGER_MODERATE_SEVERITY)
+from keel.Core.err_log import log_error, logging_format
 from keel.Core.helpers import generate_random_int, generate_unique_id
 from keel.Core.notifications import EmailNotification, SMSNotification
 from keel.Core.redis import create_token, get_token
@@ -113,10 +114,10 @@ class UserViewset(GenericViewSet):
             email_helper.send_welcome_email(user)
 
         except Exception as e:
-                logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
-                response['message'] = str(e)
-                response['status'] = 0
-                return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
+            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
 
         data = {
             "email" : obj.user.email,
@@ -785,8 +786,8 @@ class QualificationView(GenericViewSet):
                 country = instances.country_instance(customer_work_info.get('country'))
                 customer_work_info['country'] = country.id
             except Exception as e:
+                logger.error('ERROR: AUTHENTICATION:QualificationView:extract ' + str(e))
                 pass
-                # logger.error('ERROR: AUTHENTICATION:QualificationView:extract ' + str(e))
             data.append(customer_work_info)
         return data
 
@@ -852,7 +853,9 @@ class QualificationView(GenericViewSet):
                                                     "country":country, 
                                                     "user":user
                                                 })
-        except CustomerQualifications.DoesNotExist:
+        except CustomerQualifications.DoesNotExist as err:
+            logger.error(logging_format(LOGGER_LOW_SEVERITY, "QualificationView:create"),
+                "", description=str(err))
             raise serializers.ValidationError("Qualification ID does not exist")
         return qualification
 
@@ -981,7 +984,9 @@ class WorkExperienceView(GenericViewSet):
                                             "end_date":end_date, 
                                             "user":user
                                         })
-        except CustomerWorkExperience.DoesNotExist:
+        except CustomerWorkExperience.DoesNotExist as err:
+            logger.error(logging_format(LOGGER_LOW_SEVERITY, "WorkExperienceView:create"),
+                "", description=str(err))
             raise serializers.ValidationError('Customer Work experience with ID does not exist')
         return work
 
@@ -1175,7 +1180,9 @@ class EducationalCreationalAssessmentView(GenericViewSet):
                                         "canadian_equivalency_summary":canadian_equivalency_summary,
                                         "user":user
                                     })
-        except EducationalCreationalAssessment.DoesNotExist:
+        except EducationalCreationalAssessment.DoesNotExist as err:
+            logger.error(logging_format(LOGGER_LOW_SEVERITY, "EducationalCreationalAssessmentView:create"),
+                "", description=str(err))
             raise serializers.ValidationError("Education Assessment with ID does not exist")
         return education_assessment
 

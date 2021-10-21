@@ -7,9 +7,12 @@ from rest_framework import status
 from keel.authentication.backends import JWTAuthentication
 from keel.payment.implementation.pay_manager import PaymentManager, StructNewPaymentDetailArgs
 from keel.payment.models import Order
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_MODERATE_SEVERITY, LOGGER_LOW_SEVERITY
+from keel.Core.err_log import logging_format
 
 PAYMENT_CLIENT_TYPE = Order.PAYMENT_CLIENT_STRIPE
-
+import logging
+logger = logging.getLogger('app-logger')
 
 class PaymentTransactionViewSet(GenericViewSet):
 
@@ -52,9 +55,13 @@ class OrderViewSet(GenericViewSet):
             response["status"] = 1
             response["data"] = payment_details
         except ValueError as err:
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "OrderViewSet:create"),
+                "", description=str(err))
             response["error"] = str(err)
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as err:
+            logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "OrderViewSet:create"),
+                "", description=str(err))
             response["error"] = str(err)
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(response)
