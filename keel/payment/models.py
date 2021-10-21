@@ -21,12 +21,15 @@ ORDER_ITEM_MODEL_MAPPING = {
 
 class OrderItem(TimeStampedModel, SoftDeleteModel):
     item_type = models.ForeignKey(ContentType, on_delete=models.DO_NOTHING)
-    item_id = models.PositiveIntegerField()
+    item_id = models.CharField(max_length=512)
     item = GenericForeignKey('item_type', 'item_id')
     amount = models.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
         db_table = "order_items"
+    
+    def __str__(self):
+        return str(self.item_id)
 
 
 class Order(TimeStampedModel, SoftDeleteModel):
@@ -56,6 +59,9 @@ class Order(TimeStampedModel, SoftDeleteModel):
     class Meta:
         db_table = "order"
 
+    def __str__(self):
+        return str(self.customer)
+
 
 class Transaction(TimeStampedModel, SoftDeleteModel):
     STATUS_PENDING = 1
@@ -74,6 +80,9 @@ class Transaction(TimeStampedModel, SoftDeleteModel):
 
     class Meta:
         db_table = "transaction"
+    
+    def __str__(self):
+        return str(self.id)
 
 
 class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
@@ -81,7 +90,7 @@ class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
     case = models.ForeignKey(Case, on_delete=models.DO_NOTHING)
 
     entity_type = models.ForeignKey(ContentType, on_delete=models.DO_NOTHING)
-    entity_id = models.PositiveIntegerField()
+    entity_id = models.CharField(max_length=512)
     entity = GenericForeignKey('entity_type', 'entity_id')
 
     # payment_client = models.PositiveSmallIntegerField(choices=PAYMENT_CLIENT_CHOICE, default=PAYMENT_CLIENT_STRIPE)
@@ -94,3 +103,7 @@ class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
 
     class Meta:
         db_table = "user_case_payment_profile"
+    
+
+    def __str__(self) -> str:
+        return str(self.case)
