@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from keel.chats.models import Chat, ChatRoom 
+from keel.chats.models import Chat, ChatRoom, ChatReceipts
 from keel.cases.models import Case
 from .utils import extract_user_details
 
@@ -36,4 +36,8 @@ class ChatRoomSerializer(serializers.ModelSerializer):
         chat_room_obj = ChatRoom.objects.create(**validated_data)
         return chat_room_obj
 
+class ChatReceiptsSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = ChatReceipts
+        fields = ('chat_id', 'case_id', 'user_id', 'read')

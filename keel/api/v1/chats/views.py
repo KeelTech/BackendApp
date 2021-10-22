@@ -8,13 +8,13 @@ from rest_framework.exceptions import ValidationError
 # from rest_framework.pagination import LimitOffsetPagination
 
 from keel.authentication.backends import JWTAuthentication
-from keel.Core.err_log import log_error
+from keel.Core.err_log import log_error, logging_format
 from keel.Core.constants import GENERIC_ERROR
-from keel.chats.models import Chat, ChatRoom
+from keel.chats.models import Chat, ChatReceipts, ChatRoom
 
 from keel.api.v1.cases.serializers import CaseIDSerializer
 
-from .serializers import ChatCreateSerializer, ChatRoomSerializer, BaseChatListSerializer
+from .serializers import ChatCreateSerializer, ChatRoomSerializer, BaseChatListSerializer, ChatReceiptsSerializer
 from .pagination import ChatsPagination, CHAT_PAGINATION_LIMIT
 
 
@@ -22,6 +22,15 @@ class ChatList(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
+
+    def chat_receipt(self, user, case, chat):
+        serializer = ChatReceiptsSerializer(data={"case_id":case, "user_id":user, "chat_id":chat, "read":True})
+        serializer.is_valid(raise_exception=True)
+        try:
+            ChatReceipts.objects.filter(user_id=user, case_id=case).delete()
+            serializer.save()
+        except Exception as e:
+            log_error("INFO", "ChatList: chat_receipt", str(user), err = str(e), msg = "An error occured", case_id = case)
 
     def listChats(self, request, format = 'json', **kwargs):
 
@@ -57,6 +66,9 @@ class ChatList(GenericViewSet):
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
         serializer_class = BaseChatListSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
+
+        # read receipt for chat
+        receipt = self.chat_receipt(user_id, case_id, queryset[0].pk)
 
         response["data"] = resp_data
         response["requested_by"] = user_id
