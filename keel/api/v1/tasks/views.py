@@ -130,7 +130,14 @@ class ListTask(GenericViewSet):
         req_data['task_id'] = task_id
         task_serializer = TaskUpdateSerializer(task_obj, data = req_data)
         task_serializer.is_valid(raise_exception = True)
-        task_obj = task_serializer.save()
+        try:
+            task_obj = task_serializer.save()
+        except Exception as e:
+            response["message"] = GENERIC_ERROR
+            response["status"] = 1
+            resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, resp_status)
+       
         response['data'] = TaskSerializer(task_obj).data
 
         # send email to user after updating task
@@ -173,8 +180,14 @@ class TaskAdminOperations(GenericViewSet):
 
         task_serializer = TaskCreateSerializer(data = req_data)
         task_serializer.is_valid(raise_exception = True)
-        task_obj = task_serializer.save()
-        
+        try:
+            task_obj = task_serializer.save()
+        except Exception as e:
+            response["message"] = GENERIC_ERROR
+            response["status"] = 1
+            resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, resp_status)
+
         response['data'] = TaskSerializer(task_obj).data
 
         # send email to user after creating task
