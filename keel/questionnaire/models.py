@@ -11,6 +11,14 @@ class Question(TimeStampedModel, SoftDeleteModel):
         return str(self.pk)
 
 class Answer(TimeStampedModel, SoftDeleteModel):
+
+    BOOLEAN = "BOOLEAN"
+    TEXT = "TEXT"
+    
+
+    ANSWER_TYPE_CHOICES = (
+
+    )
     question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
     answer = models.CharField(max_length=512, default=None, blank=True, null=True)
 
