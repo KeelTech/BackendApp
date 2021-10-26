@@ -1,14 +1,18 @@
+import logging
+
 import requests
-from allauth.socialaccount.providers.oauth2.views import (
-    OAuth2Adapter,
-    OAuth2CallbackView,
-    OAuth2LoginView,
-)
-from allauth.socialaccount.providers.google.provider import GoogleProvider
-from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.utils import perform_login
-from django.dispatch import receiver
+from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from allauth.socialaccount.providers.google.provider import GoogleProvider
+from allauth.socialaccount.providers.oauth2.views import (OAuth2Adapter,
+                                                          OAuth2CallbackView,
+                                                          OAuth2LoginView)
 from django.contrib.auth import get_user_model
+from django.dispatch import receiver
+from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.err_log import logging_format
+
+logger = logging.getLogger('app-logger')
 
 User = get_user_model()
 
@@ -21,7 +25,13 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             customer = User.objects.get(email=user.email)  # if user exists, connect the account to the existing account and login
             sociallogin.state['process'] = 'connect'                
             perform_login(request, customer, 'none')
-        except User.DoesNotExist:
+        except User.DoesNotExist as err:
+            logger.error(logging_format(LOGGER_LOW_SEVERITY, "MySocialAccountAdapter:pre_social_login"),
+                            "", description=str(err))
+            pass
+        except Exception as err:
+            logger.error(logging_format(LOGGER_LOW_SEVERITY, "MySocialAccountAdapter:pre_social_login"),
+                            "", description=str(err))
             pass
     
     def get_connect_redirect_url(self, request, socialaccount):
@@ -47,3 +57,4 @@ class GoogleOAuth2AdapterIdToken(OAuth2Adapter):
 
 oauth2_login = OAuth2LoginView.adapter_view(GoogleOAuth2AdapterIdToken)
 oauth2_callback = OAuth2CallbackView.adapter_view(GoogleOAuth2AdapterIdToken)
+
