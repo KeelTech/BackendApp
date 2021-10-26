@@ -60,6 +60,6 @@ class PaymentProfile:
             payment_profile = payment_profiles[0]
             paid_amount = payment_profile.total_paid_amount
             total_amount = payment_profile.total_initial_amount
-            payment_profile.total_paid_amount = F("total_paid_amount") + total_amount
+            payment_profile.total_paid_amount = F("total_paid_amount") + payable_amount
             payment_profile.fully_paid = (total_amount == paid_amount+payable_amount)
             payment_profile.save()

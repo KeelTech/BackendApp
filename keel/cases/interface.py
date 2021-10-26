@@ -1,5 +1,8 @@
+import logging
 from django.db.models import Count
 from .models import Case
+
+logger = logging.getLogger('app-logger')
 
 def get_rcic_cases_counts(agent):
 

@@ -52,7 +52,7 @@ class BaseCaseProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        fields = ('id', 'choice')
+        fields = ('id', 'choice', 'category')
 
 class CaseProgramSerializer(serializers.Serializer):
     program = serializers.CharField()
