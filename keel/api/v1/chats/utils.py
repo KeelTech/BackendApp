@@ -2,7 +2,7 @@ import logging
 from django.contrib.auth import get_user_model
 from keel.authentication.models import CustomerProfile, AgentProfile
 from keel.Core.constants import (LOGGER_LOW_SEVERITY)
-from keel.Core.err_log import logging_format
+from keel.Core.err_log import logging_format, log_error
 
 logger = logging.getLogger('app-logger')
 
@@ -15,8 +15,8 @@ def extract_user_details(user):
         try:
             customer = CustomerProfile.objects.get(user=user)
         except CustomerProfile.DoesNotExist as err:
-            logger.error(logging_format(LOGGER_LOW_SEVERITY, "extract_user_details"),
-                "", description=str(err))
+            log_error(LOGGER_LOW_SEVERITY, "extract_user_details", user.id, description=str(err))
+            return user.email
         full_name = "{} {}".format(customer.first_name, customer.last_name)
         return full_name
     
@@ -24,7 +24,7 @@ def extract_user_details(user):
         try:
             agent = AgentProfile.objects.get(agent=user)
         except AgentProfile.DoesNotExist as err:
-            logger.error(logging_format(LOGGER_LOW_SEVERITY, "extract_user_details"),
-                "", description=str(err))
+            log_error(LOGGER_LOW_SEVERITY, "extract_user_details", user.id, description=str(err))
+            return user.email
         return agent.full_name
 

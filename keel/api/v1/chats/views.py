@@ -1,3 +1,4 @@
+from django.core.checks import messages
 from django.db.models import Q
 
 from rest_framework.viewsets import GenericViewSet
@@ -8,13 +9,13 @@ from rest_framework.exceptions import ValidationError
 # from rest_framework.pagination import LimitOffsetPagination
 
 from keel.authentication.backends import JWTAuthentication
-from keel.Core.err_log import log_error
-from keel.Core.constants import GENERIC_ERROR
-from keel.chats.models import Chat, ChatRoom
+from keel.Core.err_log import log_error, logging_format
+from keel.Core.constants import GENERIC_ERROR, LOGGER_MODERATE_SEVERITY
+from keel.chats.models import Chat, ChatReceipts, ChatRoom
 
 from keel.api.v1.cases.serializers import CaseIDSerializer
 
-from .serializers import ChatCreateSerializer, ChatRoomSerializer, BaseChatListSerializer
+from .serializers import ChatCreateSerializer, ChatRoomSerializer, BaseChatListSerializer, ChatReceiptsSerializer
 from .pagination import ChatsPagination, CHAT_PAGINATION_LIMIT
 
 
@@ -22,6 +23,15 @@ class ChatList(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
+
+    def chat_receipt(self, user, case, chat):
+        serializer = ChatReceiptsSerializer(data={"case_id":case, "user_id":user, "chat_id":chat, "read":True})
+        serializer.is_valid(raise_exception=True)
+        try:
+            ChatReceipts.objects.filter(user_id=user, case_id=case).delete()
+            serializer.save()
+        except Exception as e:
+            log_error("INFO", "ChatList: chat_receipt", str(user), err = str(e), msg = "An error occured", case_id = case)
 
     def listChats(self, request, format = 'json', **kwargs):
 
@@ -57,6 +67,10 @@ class ChatList(GenericViewSet):
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
         serializer_class = BaseChatListSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
+
+        # read receipt for chat
+        if len(queryset) > 0:
+            receipt = self.chat_receipt(user_id, case_id, queryset[0].pk)
 
         response["data"] = resp_data
         response["requested_by"] = user_id
@@ -104,3 +118,38 @@ class ChatList(GenericViewSet):
 
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
+    def get_unread_messages(self, request):
+        response = {'status':1, 'message':'Number of unread messages for user', 'data':''}
+        
+        try:
+            user_messages = ChatReceipts.objects.filter(user_id=request.user.id).last()
+        except ChatReceipts.DoesNotExist as err:
+            log_error(LOGGER_MODERATE_SEVERITY, "ChatList:get_unread_messages", request.user.id, 
+                            description=str(err))
+            response["message"] = str(err)
+            return Response(response, status=HTTP_STATUS.HTTP_404_NOT_FOUND)
+        
+        if user_messages is None:
+            chat_id = 0
+        else:
+            chat_id = user_messages.chat_id.id
+        
+        # user case
+        try:
+            user_case = request.user.users_cases.get(user=request.user)
+            case_chat = ChatRoom.objects.get(case=user_case)
+            chats = Chat.objects.filter(chatroom=case_chat).exclude(sender=request.user).last()
+            if chats is None:
+                messages_for_case = chat_id
+            else:
+                messages_for_case = chats.id
+        except Exception as err:
+            log_error(LOGGER_MODERATE_SEVERITY, "ChatList:get_unread_messages", request.user.id, 
+                            description=str(err))
+            response["message"] = str(err)
+            return Response(response, status=HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        # number of unread messages
+        unread_message = messages_for_case - chat_id
+        response["data"] = unread_message
+        return Response(response)
