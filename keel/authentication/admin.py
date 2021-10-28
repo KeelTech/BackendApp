@@ -97,6 +97,10 @@ class EducationalCreationalAssessmentAdmin(CustomBaseModelAdmin):
 class EducationalCreationalAssessmentLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
 
+
+class UserDocumentAdmin(CustomBaseModelAdmin):
+    list_display = ('user', 'doc', 'task')
+
 admin.site.register(User, UserAdmin)
 admin.site.register(UserService, UserServiceAdmin)
 admin.site.register(PasswordResetToken)
@@ -113,4 +117,4 @@ admin.site.register(RelativeInCanada, RelativeInCanadaAdmin)
 admin.site.register(RelativeInCanadaLabel, RelativeInCanadaLabelAdmin)
 admin.site.register(EducationalCreationalAssessment, EducationalCreationalAssessmentAdmin)
 admin.site.register(EducationalCreationalAssessmentLabel, EducationalCreationalAssessmentLabelAdmin)
-admin.site.register(UserDocument)
+admin.site.register(UserDocument, UserDocumentAdmin)

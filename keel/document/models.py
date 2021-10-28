@@ -39,6 +39,9 @@ class DocumentType(TimeStampedModel, SoftDeleteModel):
     doc_type_name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
+    def __str__(self) -> str:
+        return self.doc_type_name
+
 class Documents(TimeStampedModel,SoftDeleteModel):
 
     DOCUMENT_PREFIX = "doc_"
@@ -54,6 +57,9 @@ class Documents(TimeStampedModel,SoftDeleteModel):
 
     objects = DocumentsManager()
 
+    def __str__(self) -> str:
+        return self.doc_pk
+
 
 class PublicDocuments(TimeStampedModel, SoftDeleteModel):
 
@@ -63,3 +69,5 @@ class PublicDocuments(TimeStampedModel, SoftDeleteModel):
     description = models.TextField(null=True, blank=True, default=None)
 
 
+    def __str__(self) -> str:
+        return self.original_name

@@ -1,7 +1,7 @@
 import logging
 
 from keel.cases.models import Case
-from keel.chats.models import Chat, ChatRoom
+from keel.chats.models import Chat, ChatReceipts, ChatRoom
 from keel.Core.constants import (GENERIC_ERROR, LOGGER_CRITICAL_SEVERITY,
                                  LOGGER_LOW_SEVERITY, LOGGER_MODERATE_SEVERITY)
 from keel.Core.err_log import logging_format
@@ -52,4 +52,8 @@ class ChatRoomSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Failed to create chat room object")
         return chat_room_obj
 
+class ChatReceiptsSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = ChatReceipts
+        fields = ('chat_id', 'case_id', 'user_id', 'read')
