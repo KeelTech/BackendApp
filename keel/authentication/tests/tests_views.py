@@ -1,4 +1,5 @@
 from django.http import response
+from django.test.testcases import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -8,7 +9,11 @@ from keel.authentication.models import User
 class UserTests(APITestCase):
 
     def setUp(self):
-        User.objects.create(email="usersetup@getkeel.com", password="testpass")
+        self.credentials = {
+            "email" : "usersetup@getkeel.com", 
+            "password" : "testpass"
+        }
+        User.objects.create(**self.credentials)
 
     def test_create_account(self):
         """
@@ -39,3 +44,18 @@ class UserTests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
+
+
+class UserLoginTest(APITestCase):
+    def setUp(self):
+        self.credentials = {
+            "email" : "usersetup@getkeel.com", 
+            "password" : "testpass"
+        }
+        User.objects.create(**self.credentials)
+    
+    def test_login_user(self):
+        url = reverse('customer-login')
+        response = self.client.post(url, self.credentials, format='json')
+        resp = response.json()
+        print(resp)

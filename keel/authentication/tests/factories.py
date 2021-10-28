@@ -1,15 +1,15 @@
-from factory import Faker
+from faker import Factory
 from factory.django import DjangoModelFactory
 
 from ..models import User
 
+faker = Factory.create()
 
 class UserFactory(DjangoModelFactory):
-    username = Faker('text')
-    phone_number = Faker('phone_number')
-    email =Faker('internet')
-
+    
     class Meta:
         model = User
-
+    
+    email = faker.email()
+    phone_number = faker.phone_number()
 
