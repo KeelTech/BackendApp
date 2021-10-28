@@ -133,7 +133,7 @@ class ChatList(GenericViewSet):
             chat_id = 0
         else:
             chat_id = user_messages.chat_id.id
-        
+         
         # user case
         try:
             user_case = request.user.users_cases.get(user=request.user)
