@@ -1,7 +1,11 @@
-# from django.test import TestCase
+from django.test import TestCase
 
-# from authentication.models import User
+from ..models import User
+from .factories import UserFactory
 
-# class UserModelTest(TestCase):
-
-#     def 
+class UserTestCase(TestCase):
+    # def test_str(self):
+    #     """ Test for string representation. """
+    #     user = UserFactory()
+    #     self.assertEqual(str(user), user.email)
+    pass
