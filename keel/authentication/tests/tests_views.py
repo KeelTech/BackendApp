@@ -13,7 +13,7 @@ class UserTests(APITestCase):
             "email" : "usersetup@getkeel.com", 
             "password" : "testpass"
         }
-        User.objects.create(**self.credentials)
+        User.objects.create_user(**self.credentials)
 
     def test_create_account(self):
         """
@@ -52,10 +52,11 @@ class UserLoginTest(APITestCase):
             "email" : "usersetup@getkeel.com", 
             "password" : "testpass"
         }
-        User.objects.create(**self.credentials)
+        User.objects.create_user(**self.credentials)
     
     def test_login_user(self):
         url = reverse('customer-login')
-        response = self.client.post(url, self.credentials, format='json')
+        response = self.client.post(url, self.credentials, format='json', follow=True)
         resp = response.json()
-        print(resp)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp['status'], 1)
