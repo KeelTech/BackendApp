@@ -1,8 +1,10 @@
 import logging
-from rest_framework import serializers
-from keel.cases.models import Case, Program
-from keel.Core.err_log import log_error
+
 from keel.api.v1.auth.serializers import UserDetailsSerializer
+from keel.cases.models import Case, Program
+from keel.chats.implementation.unread_chats import UnreadChats
+from keel.Core.err_log import log_error
+from rest_framework import serializers
 
 logger = logging.getLogger('app-logger')
 
@@ -11,15 +13,20 @@ class CasesSerializer(serializers.ModelSerializer):
     # agent = serializers.ReadOnlyField(source="agent.email")
     plan = serializers.SerializerMethodField()
     user_details = UserDetailsSerializer(source = 'user',many = False)
-
+    number_of_unread_messages = serializers.SerializerMethodField()
     class Meta:
         model = Case
         fields = ('case_id', 'display_id', 'user', 'agent', 'account_manager_id', 'ref_id', 
-                    'plan', 'status', 'is_active', 'program', 'created_at', 'updated_at','user_details')
+                    'plan', 'status', 'is_active', 'program', 'created_at', 'updated_at','user_details', 'number_of_unread_messages')
     
     def get_plan(self, obj):
         return {'id':obj.plan.id, 'name':obj.plan.title}
+    
+    def get_number_of_unread_messages(self, obj):
+        user_instance = obj.user
+        return UnreadChats.get_unread_messages(user_instance)
 
+        
 class CaseIDSerializer(serializers.Serializer):
 
     case_id = serializers.CharField(max_length = 255)
