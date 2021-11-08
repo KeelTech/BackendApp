@@ -10,7 +10,7 @@ from allauth.socialaccount.providers.oauth2.views import (OAuth2Adapter,
 from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from keel.Core.constants import LOGGER_LOW_SEVERITY
-from keel.Core.err_log import logging_format
+from keel.Core.err_log import logging_format, log_error
 
 logger = logging.getLogger('app-logger')
 
@@ -26,12 +26,12 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             sociallogin.state['process'] = 'connect'                
             perform_login(request, customer, 'none')
         except User.DoesNotExist as err:
-            logger.error(logging_format(LOGGER_LOW_SEVERITY, "MySocialAccountAdapter:pre_social_login"),
-                            "", description=str(err))
+            log_error(LOGGER_LOW_SEVERITY, "MySocialAccountAdapter:pre_social_login", request.user.id,
+                                description=str(err))
             pass
         except Exception as err:
-            logger.error(logging_format(LOGGER_LOW_SEVERITY, "MySocialAccountAdapter:pre_social_login"),
-                            "", description=str(err))
+            log_error(LOGGER_LOW_SEVERITY, "MySocialAccountAdapter:pre_social_login", request.user.id,
+                                description=str(err))
             pass
     
     def get_connect_redirect_url(self, request, socialaccount):
