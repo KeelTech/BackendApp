@@ -12,4 +12,3 @@ class UserFactory(DjangoModelFactory):
     
     email = faker.email()
     phone_number = faker.phone_number()
-
