@@ -1,29 +1,31 @@
-from django.db.models import Q, Count
+from datetime import datetime
+
+import pytz
 from django.conf import settings
 from django.contrib.auth import get_user_model
-
-from datetime import datetime
-import pytz
-
-from rest_framework.viewsets import GenericViewSet
-from rest_framework import mixins, viewsets, status as HTTP_STATUS
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.exceptions import ValidationError
-
-from keel.authentication.backends import JWTAuthentication
-from keel.Core.err_log import log_error
-from keel.Core.constants import GENERIC_ERROR
-from keel.Core.helpers import generate_unique_id
-from keel.tasks.models import Task, TaskComments
+from django.db.models import Count, Q
 from keel.api.permissions import IsRCICUser
-from keel.cases.models import Case
-from keel.api.v1.cases.serializers import CaseIDSerializer
 from keel.api.v1.auth.helpers import email_helper
+from keel.api.v1.cases.serializers import CaseIDSerializer
+from keel.authentication.backends import JWTAuthentication
+from keel.cases.models import Case
+from keel.Core.constants import GENERIC_ERROR
+from keel.Core.err_log import log_error
+from keel.Core.helpers import generate_unique_id
+from keel.notifications.models import InAppNotification
+from keel.tasks.models import Task, TaskComments
+from rest_framework import mixins
+from rest_framework import status as HTTP_STATUS
+from rest_framework import viewsets
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
-from .serializers import (ListTaskSerializer, TaskSerializer, TaskCreateSerializer, 
-                            TaskUpdateSerializer, CreateTaskCommentSerializer, TaskStatusChangeSerializer,
-                            TaskIDCheckSerializer)
+from .serializers import (CreateTaskCommentSerializer, ListTaskSerializer,
+                          TaskCreateSerializer, TaskIDCheckSerializer,
+                          TaskSerializer, TaskStatusChangeSerializer,
+                          TaskUpdateSerializer)
 
 User = get_user_model()
 
@@ -140,6 +142,10 @@ class ListTask(GenericViewSet):
        
         response['data'] = TaskSerializer(task_obj).data
 
+        # create a notification instance
+        notification = InAppNotification.objects.create(
+            user_id = user, case_id = task_obj.case
+        )
         # send email to user after updating task
         context = {
             'name' : task_obj.user.user_profile.first_name,
@@ -189,6 +195,11 @@ class TaskAdminOperations(GenericViewSet):
             return Response(response, resp_status)
 
         response['data'] = TaskSerializer(task_obj).data
+
+        # create a notification instance
+        notification = InAppNotification.objects.create(
+            user_id = request.user, case_id = case_obj
+        )
 
         # send email to user after creating task
         user = case_obj.user

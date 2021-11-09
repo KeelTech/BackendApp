@@ -1,22 +1,27 @@
 from django.core.checks import messages
 from django.db.models import Q
-
-from rest_framework.viewsets import GenericViewSet
-from rest_framework import mixins, viewsets, status as HTTP_STATUS
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from keel.api.v1.cases.serializers import CaseIDSerializer
+from keel.authentication.backends import JWTAuthentication
+from keel.chats.implementation.unread_chats import UnreadChats
+from keel.chats.models import Chat, ChatReceipts, ChatRoom
+from keel.Core.constants import GENERIC_ERROR, LOGGER_MODERATE_SEVERITY
+from keel.Core.err_log import log_error, logging_format
+from rest_framework import mixins
+from rest_framework import status as HTTP_STATUS
+from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
+from .pagination import CHAT_PAGINATION_LIMIT, ChatsPagination
+from .serializers import (BaseChatListSerializer, ChatCreateSerializer,
+                          ChatReceiptsSerializer, ChatRoomSerializer)
+
 # from rest_framework.pagination import LimitOffsetPagination
 
-from keel.authentication.backends import JWTAuthentication
-from keel.Core.err_log import log_error, logging_format
-from keel.Core.constants import GENERIC_ERROR, LOGGER_MODERATE_SEVERITY
-from keel.chats.models import Chat, ChatReceipts, ChatRoom
 
-from keel.api.v1.cases.serializers import CaseIDSerializer
 
-from .serializers import ChatCreateSerializer, ChatRoomSerializer, BaseChatListSerializer, ChatReceiptsSerializer
-from .pagination import ChatsPagination, CHAT_PAGINATION_LIMIT
 
 
 class ChatList(GenericViewSet):
@@ -120,36 +125,7 @@ class ChatList(GenericViewSet):
 
     def get_unread_messages(self, request):
         response = {'status':1, 'message':'Number of unread messages for user', 'data':''}
-        
-        try:
-            user_messages = ChatReceipts.objects.filter(user_id=request.user.id).last()
-        except ChatReceipts.DoesNotExist as err:
-            log_error(LOGGER_MODERATE_SEVERITY, "ChatList:get_unread_messages", request.user.id, 
-                            description=str(err))
-            response["message"] = str(err)
-            return Response(response, status=HTTP_STATUS.HTTP_404_NOT_FOUND)
-        
-        if user_messages is None:
-            chat_id = 0
-        else:
-            chat_id = user_messages.chat_id.id
-         
-        # user case
-        try:
-            user_case = request.user.users_cases.get(user=request.user)
-            case_chat = ChatRoom.objects.get(case=user_case)
-            chats = Chat.objects.filter(chatroom=case_chat).exclude(sender=request.user).last()
-            if chats is None:
-                messages_for_case = chat_id
-            else:
-                messages_for_case = chats.id
-        except Exception as err:
-            log_error(LOGGER_MODERATE_SEVERITY, "ChatList:get_unread_messages", request.user.id, 
-                            description=str(err))
-            response["message"] = str(err)
-            return Response(response, status=HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        # number of unread messages
-        unread_message = messages_for_case - chat_id
+        user_instance = request.user
+        unread_message = UnreadChats.get_unread_messages(user_instance)
         response["data"] = unread_message
         return Response(response)

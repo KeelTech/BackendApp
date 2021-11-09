@@ -2,7 +2,9 @@ import logging
 
 from keel.api.permissions import IsRCICUser
 from keel.api.v1.auth.serializers import (BaseProfileSerializer,
-                                          CustomerQualificationsSerializer, CustomerWorkExperienceSerializer)
+                                          CustomerQualificationsSerializer,
+                                          CustomerWorkExperienceSerializer)
+from keel.api.v1.chats.views import ChatList
 from keel.authentication.backends import JWTAuthentication
 from keel.cases.models import Case, Program
 from keel.tasks.models import Task
@@ -11,7 +13,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import CaseProgramSerializer, CasesSerializer, BaseCaseProgramSerializer, CaseIDSerializer
+from .serializers import (BaseCaseProgramSerializer, CaseIDSerializer,
+                          CaseProgramSerializer, CasesSerializer)
 
 logger = logging.getLogger('app-logger')
 
