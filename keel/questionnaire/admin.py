@@ -9,6 +9,7 @@ class OptionAdminInline(admin.TabularInline):
     readonly_fields = ()
 
 class QuestionAdmin(CustomBaseModelAdmin):
+    list_display = ('question', )
     readonly_fields = ('deleted_at',)
     inlines = (OptionAdminInline, )
 

@@ -12,7 +12,7 @@ class Question(TimeStampedModel, SoftDeleteModel):
 
 class Option(TimeStampedModel, SoftDeleteModel):
 
-    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
+    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, default=None, blank=True, null=True, related_name='options')
     option = models.CharField(max_length=512, default=None, blank=True, null=True)
 
     def __str__(self):
