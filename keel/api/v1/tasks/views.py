@@ -29,6 +29,8 @@ from .serializers import (CreateTaskCommentSerializer, ListTaskSerializer,
 
 User = get_user_model()
 
+CATEGORY_TYPE = "TASKS"
+
 class ListTask(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
@@ -144,7 +146,7 @@ class ListTask(GenericViewSet):
 
         # create a notification instance
         notification = InAppNotification.objects.create(
-            user_id = user, case_id = task_obj.case
+            user_id = user, case_id = task_obj.case, category = CATEGORY_TYPE
         )
         # send email to user after updating task
         context = {
@@ -198,7 +200,7 @@ class TaskAdminOperations(GenericViewSet):
 
         # create a notification instance
         notification = InAppNotification.objects.create(
-            user_id = request.user, case_id = case_obj
+            user_id = request.user, case_id = case_obj, category = CATEGORY_TYPE
         )
 
         # send email to user after creating task
@@ -238,6 +240,11 @@ class TaskAdminOperations(GenericViewSet):
 
         task.mark_delete()
         task.tasks_comment.update(deleted_at = datetime.now(pytz.timezone(settings.TIME_ZONE)))
+
+        # create a notification instance
+        notification = InAppNotification.objects.create(
+            user_id = user, case_id = case_obj, category = CATEGORY_TYPE
+        )
         
         # send email to user after creating task
         user = task.user
