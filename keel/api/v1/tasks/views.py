@@ -21,6 +21,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from keel.notifications.constants import (DOCUMENT, HOME, CHAT, TASKS)
 
 from .serializers import (CreateTaskCommentSerializer, ListTaskSerializer,
                           TaskCreateSerializer, TaskIDCheckSerializer,
@@ -28,8 +29,6 @@ from .serializers import (CreateTaskCommentSerializer, ListTaskSerializer,
                           TaskUpdateSerializer)
 
 User = get_user_model()
-
-CATEGORY_TYPE = "TASKS"
 
 class ListTask(GenericViewSet):
 
@@ -146,7 +145,7 @@ class ListTask(GenericViewSet):
 
         # create a notification instance
         notification = InAppNotification.objects.create(
-            user_id = user, case_id = task_obj.case, category = CATEGORY_TYPE
+            user_id = user, case_id = task_obj.case, category = TASKS,
         )
         # send email to user after updating task
         context = {
@@ -200,7 +199,7 @@ class TaskAdminOperations(GenericViewSet):
 
         # create a notification instance
         notification = InAppNotification.objects.create(
-            user_id = request.user, case_id = case_obj, category = CATEGORY_TYPE
+            user_id = request.user, case_id = case_obj, category = TASKS
         )
 
         # send email to user after creating task
@@ -243,7 +242,7 @@ class TaskAdminOperations(GenericViewSet):
 
         # create a notification instance
         notification = InAppNotification.objects.create(
-            user_id = user, case_id = case_obj, category = CATEGORY_TYPE
+            user_id = user, case_id = case_obj, category = TASKS
         )
         
         # send email to user after creating task
