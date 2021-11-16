@@ -5,7 +5,7 @@ from keel.questionnaire.models import Question, Option
 class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
-        fields = ('id', 'option')
+        fields = ('option')
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -16,4 +16,4 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ('id', 'question', 'options')
     
     def get_options(self, obj):
-        return OptionSerializer(obj.options, many=True).data
+        return OptionSerializer(obj.options.all(), many=True).data

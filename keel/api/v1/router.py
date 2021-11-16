@@ -13,6 +13,7 @@ from .tasks.router import urlpatterns as tasks_url
 from .core.router import urlpatterns as core_url
 from .payment.router import urlpatterns as payment_url
 from .stripe.router import urlpatterns as stripe_url
+from .questionnaire.router import urlpatterns as questionnaire_url
 
 urlpatterns = [
 
@@ -28,4 +29,5 @@ urlpatterns = [
     path('core/', include(core_url)),
     path('payment/stripe/', include(stripe_url)),
     path('payment/', include(payment_url)),
+    path('questionnaire/', include(questionnaire_url)),
 ]
