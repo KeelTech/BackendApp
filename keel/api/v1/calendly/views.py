@@ -20,7 +20,7 @@ from keel.calendly.constants import CALENDLY_WEBHOOK_PATH, CALENDLY_WEBHOOK_SIGN
 from keel.call_schedule.implementation.schedule_manager import CallScheduleManager
 from keel.call_schedule.models import CallSchedule
 from keel.calendly.models import CalendlyCallSchedule
-from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_MODERATE_SEVERITY
 from keel.Core.err_log import logging_format
 
 import logging
@@ -79,7 +79,7 @@ class CallScheduleViewSet(GenericViewSet):
 
         return Response(response, status.HTTP_200_OK)
 
-    def reschedule_call(self, request, **kwargs):
+    def CallScheduleViewSet(self, request, **kwargs):
         response = {
             "status": 0,
             "message": ""
@@ -91,6 +91,8 @@ class CallScheduleViewSet(GenericViewSet):
                 visitor_user=request.user, pk=schedule_id, is_active=True,
                 status__in=(CallSchedule.ACTIVE, CallSchedule.RESCHEDULED))
         except ObjectDoesNotExist as err:
+            logger.error(logging_format(LOGGER_MODERATE_SEVERITY, "CallScheduleViewSet:CallScheduleViewSet"),
+                "", description=str(err))
             response["message"] = "Error getting schedule with this id and associated user which is in" \
                                   "active or rescheduled status"
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -116,6 +118,8 @@ class CallScheduleViewSet(GenericViewSet):
                 visitor_user=request.user, pk=schedule_id, is_active=True,
                 status__in=(CallSchedule.ACTIVE, CallSchedule.RESCHEDULED))
         except ObjectDoesNotExist as err:
+            logger.error(logging_format(LOGGER_MODERATE_SEVERITY, "CallScheduleViewSet:cancel_scheduled_call"),
+                "", description=str(err))
             response["message"] = "Error getting schedule with this id and associated user which is in" \
                                       "active or rescheduled status"
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)

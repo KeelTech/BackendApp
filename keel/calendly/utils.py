@@ -9,13 +9,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.utils import timezone
 
-from .models import CalendlyUsers, CalendlyCallSchedule, CalendlyInviteeScheduledUrl
+from .models import CalendlyUsers, CalendlyCallSchedule
 from .apis import CalendlyApis
 from .parser.webhook_data import CalendlyWebHookDataParser
 
 from keel.calendly.constants import CALENDLY_SIGNATURE_VKEY, CALENDLY_SIGNATURE_TKEY, CALENDLY_EVENT_TOLERANCE_TIME
 from keel.call_schedule.models import CallSchedule
-from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
+from keel.cases.implementation.case_util_helper import CaseUtilHelper
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
 from keel.Core.err_log import logging_format
 
 import logging
@@ -27,6 +28,7 @@ class CalendlyScheduleManager(object):
         self._scheduled_event_details = None
         self._call_schedule_manager = None
         self._calendly_schedule_model_obj = None
+        self._case_util_helper = CaseUtilHelper()
 
     def _update_call_schedule(self, event_invitee_details):
         call_schedule_id = self._calendly_schedule_model_obj.call_schedule.id
@@ -175,17 +177,11 @@ class CalendlyScheduleManager(object):
             return response
 
         response_data = []
+        customer_model_objs = set(calendly_schedule.call_schedule.visitor_user for calendly_schedule in calendly_call_schedules)
+        customer_case_id_map = self._case_util_helper.get_case_id_from_user_model_obj(customer_model_objs)
         for calendly_schedule in calendly_call_schedules:
             customer_model_obj = calendly_schedule.call_schedule.visitor_user
-            case_id = None
-            try:
-                case_id = customer_model_obj.users_cases.get(is_active=True).pk
-            except ObjectDoesNotExist as err:
-                err_msg = "No case for user - {} while getting schedule details " \
-                          "with err - {}".format(customer_model_obj.pk, err)
-                logger.info(logging_format(LOGGER_LOW_SEVERITY, "CalendlyScheduleManager:get_scheduled_event_details",
-                                           customer_model_obj.pk, description=err_msg))
-
+            case_id = customer_case_id_map.get(customer_model_obj.pk)
             event_details = self.get_schedule_identifier_details(calendly_schedule.invitee_url)
             if event_details["status"] and self._is_active_event(event_details["data"]):
                 details = event_details["data"]
