@@ -105,6 +105,7 @@ LOCAL_APPS = (
     'keel.cases',
     'keel.chats',
     'keel.quotations',
+    'keel.notifications',
     'keel.calendly',
     'keel.call_schedule',
     'keel.payment',

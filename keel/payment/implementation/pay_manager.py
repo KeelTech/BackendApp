@@ -83,17 +83,15 @@ class PaymentManager(object):
             self._transaction.complete()
             case_id = self._order.case_id
             if not case_id:
-                related_plan_id = self._order.related_plan_id
-                if not related_plan_id:
-                    err_msg = "Cannot complete order without Plan and Case for " \
-                              "identifier - {}, order id - {} and customer " \
-                              "id - {}".format(unique_identifier, self._order.order_id, self._order.customer_id)
-                    logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentManager:complete_payment_transaction",
-                                                self._order.customer_id, description=err_msg))
-                    raise ValueError("Cannot Complete payment and create order without Plan and Case")
-                case_model_obj = Case.objects.create_from_payment(self._order.customer_id, related_plan_id)
-                self._order.update_order_case(case_model_obj)
-                case_id = case_model_obj.pk
+                err_msg = "Cannot complete order without Plan and Case for " \
+                          "identifier - {}, order id - {} and customer " \
+                          "id - {}".format(unique_identifier, self._order.order_id, self._order.customer_id)
+                logger.error(logging_format(LOGGER_CRITICAL_SEVERITY, "PaymentManager:complete_payment_transaction",
+                                            self._order.customer_id, description=err_msg))
+                raise ValueError("Cannot Complete payment and create order without Plan and Case")
+            related_plan_id = self._order.related_plan_id
+            if related_plan_id:
+                Case.objects.update_plan_agent(case_id, related_plan_id)
             self._payment_profile.case_id = case_id
             self._payment_profile.update_payment_profile(self._order.order_items)
 

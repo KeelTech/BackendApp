@@ -1,27 +1,42 @@
+from django.core.checks import messages
 from django.db.models import Q
-
-from rest_framework.viewsets import GenericViewSet
-from rest_framework import mixins, viewsets, status as HTTP_STATUS
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from keel.api.v1.cases.serializers import CaseIDSerializer
+from keel.authentication.backends import JWTAuthentication
+from keel.chats.implementation.unread_chats import UnreadChats
+from keel.chats.models import Chat, ChatReceipts, ChatRoom
+from keel.Core.constants import GENERIC_ERROR, LOGGER_MODERATE_SEVERITY
+from keel.Core.err_log import log_error, logging_format
+from rest_framework import mixins
+from rest_framework import status as HTTP_STATUS
+from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
+
+from .pagination import CHAT_PAGINATION_LIMIT, ChatsPagination
+from .serializers import (BaseChatListSerializer, ChatCreateSerializer,
+                          ChatReceiptsSerializer, ChatRoomSerializer)
+
 # from rest_framework.pagination import LimitOffsetPagination
 
-from keel.authentication.backends import JWTAuthentication
-from keel.Core.err_log import log_error
-from keel.Core.constants import GENERIC_ERROR
-from keel.chats.models import Chat, ChatRoom
 
-from keel.api.v1.cases.serializers import CaseIDSerializer
 
-from .serializers import ChatCreateSerializer, ChatRoomSerializer, BaseChatListSerializer
-from .pagination import ChatsPagination, CHAT_PAGINATION_LIMIT
 
 
 class ChatList(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
+
+    def chat_receipt(self, user, case, chat):
+        serializer = ChatReceiptsSerializer(data={"case_id":case, "user_id":user, "chat_id":chat, "read":True})
+        serializer.is_valid(raise_exception=True)
+        try:
+            ChatReceipts.objects.filter(user_id=user, case_id=case).delete()
+            serializer.save()
+        except Exception as e:
+            log_error("INFO", "ChatList: chat_receipt", str(user), err = str(e), msg = "An error occured", case_id = case)
 
     def listChats(self, request, format = 'json', **kwargs):
 
@@ -57,6 +72,10 @@ class ChatList(GenericViewSet):
         paginate_queryset = pagination_class.paginate_queryset(queryset, request)
         serializer_class = BaseChatListSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
+
+        # read receipt for chat
+        if len(queryset) > 0:
+            receipt = self.chat_receipt(user_id, case_id, queryset[0].pk)
 
         response["data"] = resp_data
         response["requested_by"] = user_id
@@ -104,3 +123,9 @@ class ChatList(GenericViewSet):
 
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
+    def get_unread_messages(self, request):
+        response = {'status':1, 'message':'Number of unread messages for user', 'data':''}
+        user_instance = request.user
+        unread_message = UnreadChats.get_unread_messages(user_instance)
+        response["data"] = unread_message
+        return Response(response)

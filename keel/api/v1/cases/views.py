@@ -2,7 +2,9 @@ import logging
 
 from keel.api.permissions import IsRCICUser
 from keel.api.v1.auth.serializers import (BaseProfileSerializer,
-                                          CustomerQualificationsSerializer)
+                                          CustomerQualificationsSerializer,
+                                          CustomerWorkExperienceSerializer)
+from keel.api.v1.chats.views import ChatList
 from keel.authentication.backends import JWTAuthentication
 from keel.cases.models import Case, Program
 from keel.tasks.models import Task
@@ -11,7 +13,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import CaseProgramSerializer, CasesSerializer, BaseCaseProgramSerializer, CaseIDSerializer
+from .serializers import (BaseCaseProgramSerializer, CaseIDSerializer,
+                          CaseProgramSerializer, CasesSerializer)
 
 logger = logging.getLogger('app-logger')
 
@@ -60,6 +63,10 @@ class FilterUserCasesDetails(GenericViewSet):
             # get all user qualifications
             qualifications = queryset.user.user_qualification.all()
             serializer_qua = CustomerQualificationsSerializer(qualifications, many=True)
+
+            # get all user work experiences
+            work_experinece = queryset.user.user_workexp.all()
+            serializer_work = CustomerWorkExperienceSerializer(work_experinece, many=True)
             
             # get user profile
             serializer_profile = BaseProfileSerializer(queryset.user.user_profile)
@@ -70,6 +77,7 @@ class FilterUserCasesDetails(GenericViewSet):
             data = {
                 "case_details" : serializer_cases.data,
                 "user_qualifications" : serializer_qua.data,
+                "user_work_experience" : serializer_work.data,
                 "user_details" : serializer_profile.data,
                 "task_count" : tasks
             }
