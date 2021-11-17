@@ -38,7 +38,6 @@ class QuestionnarieViewSet(GenericViewSet):
     authentication_classes = (JWTAuthentication,)
 
     def submit_questionnaire(self, request):
-        print(request.user)
         response = {'status' : 1, 'message' : 'questionnaire submitted successfully', 'data' : ''}
         answered_questionnaires = request.data.get('answered_questionnaires')
         serializer = AnsweredQuestionnairesSerializer(data=answered_questionnaires, many=True)
