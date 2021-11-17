@@ -8,7 +8,7 @@ class InAppNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InAppNotification
-        fields = ('id', 'text', 'seen', 'user_id', 'case_id')
+        fields = ('id', 'text', 'seen', 'user_id', 'case_id', 'category')
     
     def get_user_id(self, obj):
         return obj.user_id.email
