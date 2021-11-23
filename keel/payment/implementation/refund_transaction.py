@@ -1,8 +1,10 @@
 from keel.payment.models import RefundAmountTransaction, RefundTransaction
+from .transaction import PaymentTransaction
 
 
 class RefundTransactionHelper:
     def __init__(self):
+        self._transaction_helper_obj = PaymentTransaction()
         self._payment_transaction_id = None
         self._order_id = None
         self._refund_transaction_model_obj = None
@@ -39,3 +41,18 @@ class RefundTransactionHelper:
             return RefundTransaction.STATUS_INITIATED
         elif triggered_transaction_count < total_transaction_count:
             return RefundTransaction.STATUS_PARTIAL_INITIATED
+
+    def create_refund_amount_transaction_objs(self, transaction_model_objs, refund_amount):
+        refund_amount_transaction_list = []
+        for transaction_model_obj in transaction_model_objs:
+            if refund_amount <= 0:
+                break
+            refund_amount_from_transaction = min(refund_amount, transaction_model_obj.refund_amount_left)
+            self._transaction_helper_obj.update_left_over_refund_amount(
+                transaction_model_obj, refund_amount_from_transaction)
+            refund_amount_transaction_list.append(self.create_refund_amount_transaction(
+                transaction_model_obj, transaction_model_obj.order.payment_client_type,
+                refund_amount_from_transaction, transaction_model_obj.currency
+            ))
+            refund_amount = refund_amount - refund_amount_from_transaction
+        return refund_amount_transaction_list

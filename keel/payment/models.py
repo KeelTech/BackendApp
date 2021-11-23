@@ -110,6 +110,28 @@ class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
         return str(self.case)
 
 
+class RefundOrder(TimeStampedModel, SoftDeleteModel):
+    STATUS_CREATED = 1
+    STATUS_COMPLETED = 2
+    STATUS_PARTIAL_COMPLETED = 3
+    STATUS_CANCELLED = 4
+    STATUS_PARTIAL_CANCELLED = 5
+    STATUS_CHOICES = (
+        (STATUS_CREATED, "Created"),
+        (STATUS_COMPLETED, "Completed"),
+        (STATUS_PARTIAL_COMPLETED, "Partial Completed"),
+        (STATUS_CANCELLED, "Cancelled"),
+        (STATUS_PARTIAL_CANCELLED, "Partial Cancelled"),
+    )
+
+    customer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="customer_refund_order")
+    initiator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="initiator_refund_order")
+    case = models.ForeignKey(Case, on_delete=models.DO_NOTHING, related_name="case_refund_orders")
+    refund_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    currency = models.CharField(max_length=10, null=True, blank=True, default=None)
+    status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_CREATED)
+
+
 class RefundAmountTransaction(TimeStampedModel, SoftDeleteModel):
     STATUS_PENDING = 1
     STATUS_COMPLETED = 2
@@ -148,6 +170,7 @@ class RefundTransaction(TimeStampedModel, SoftDeleteModel):
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.ForeignKey(RefundOrder, on_delete=models.DO_NOTHING, related_name="order_refund_transaction")
     customer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="customer_refund_transaction")
     initiator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="initiator_refund_transaction")
     case = models.ForeignKey(Case, on_delete=models.DO_NOTHING)

@@ -16,9 +16,10 @@ logger = logging.getLogger('app-logger')
 
 class RefundPaymentManager:
     def __init__(self, case_id=None, refund_amount=None, currency=None):
-        self._transaction_helper = PaymentTransaction()
-        self._order_helper = PaymentOrder()
-        self._refund_transaction_helper = RefundTransactionHelper()
+        self._transaction_helper_obj = PaymentTransaction()
+        self._order_helper_obj = PaymentOrder()
+        self._refund_transaction_helper_obj = RefundTransactionHelper()
+        self._refund_validation_obj = RefundValidation()
         self._case_id = case_id
         self._case_model_obj = None
         self._refund_amount = refund_amount
@@ -27,32 +28,6 @@ class RefundPaymentManager:
         self._initiator_id = None
         self._initiator_model_obj = None
         self._currency = currency
-
-    def _validate_refund_request(self):
-        self._validate_customer_case()
-        self._validate_case_amount()
-
-    def _validate_customer_case(self):
-        pass
-
-    def _validate_case_amount(self):
-        pass
-
-    def _create_refund_amount_transaction_objs(self, transaction_model_objs):
-        refund_amount_transaction_list = []
-        amount_to_be_refunded = self._refund_amount
-        for transaction_model_obj in transaction_model_objs:
-            if amount_to_be_refunded <= 0:
-                break
-            refund_amount_from_transaction = min(amount_to_be_refunded, transaction_model_obj.refund_amount_left)
-            self._transaction_helper.update_left_over_refund_amount(
-                transaction_model_obj, refund_amount_from_transaction)
-            refund_amount_transaction_list.append(self._refund_transaction_helper.create_refund_amount_transaction(
-                transaction_model_obj, transaction_model_obj.order.payment_client_type,
-                refund_amount_from_transaction, transaction_model_obj.currency
-            ))
-            amount_to_be_refunded = amount_to_be_refunded - refund_amount_from_transaction
-        return refund_amount_transaction_list
 
     def _initiate_client_side_refund(self, refund_amount_transaction_model_objs):
         refund_transaction_count = len(refund_amount_transaction_model_objs)
@@ -71,7 +46,7 @@ class RefundPaymentManager:
                         LOGGER_CRITICAL_SEVERITY, "RefundPaymentManager:_initiate_client_side_refund", self._initiator_id,
                         description=error_msg))
                     continue
-                self._refund_transaction_helper.update_client_refund_identifier(
+                self._refund_transaction_helper_obj.update_client_refund_identifier(
                     obj, refund_intent_response["data"]["client_identifier"])
                 refund_triggered_count += 1
             except KeyError as err:
@@ -103,31 +78,36 @@ class RefundPaymentManager:
                     LOGGER_CRITICAL_SEVERITY, "RefundPaymentManager:_initiate_client_side_refund", self._initiator_id,
                     description=error_msg))
 
-        return self._refund_transaction_helper.get_refund_triggered_status(refund_transaction_count, refund_triggered_count)
+        return self._refund_transaction_helper_obj.get_refund_triggered_status(refund_transaction_count, refund_triggered_count)
 
     def _trigger_case_refund(self):
         with transaction.atomic():
             self._case_model_obj = Case.objects.select_for_update().get(pk=self._case_id)
-            transaction_model_objs = self._transaction_helper.get_case_refund_transaction(self._case_model_obj)
-            refund_amount_transaction_list = self._create_refund_amount_transaction_objs(transaction_model_objs)
-            refund_transaction_model_obj = self._refund_transaction_helper.create_refund_transaction(
+            transaction_model_objs = self._transaction_helper_obj.get_case_refund_transaction(self._case_model_obj)
+            refund_amount_transaction_list = self._refund_transaction_helper_obj.create_refund_amount_transaction_objs(transaction_model_objs)
+            refund_transaction_model_obj = self._refund_transaction_helper_obj.create_refund_transaction(
                 self._customer_model_obj, self._initiator_model_obj, self._case_model_obj, self._refund_amount,
                 self._currency, refund_amount_transaction_list)
             refund_transaction_status = self._initiate_client_side_refund(refund_amount_transaction_list)
-            self._refund_transaction_helper.update_refund_transaction_state(refund_transaction_status)
+            self._refund_transaction_helper_obj.update_refund_transaction_state(refund_transaction_status)
         return refund_transaction_model_obj.pk
 
     def initiate_refund(self, initiator_id, case_id, refund_amount):
         self._initiator_id = initiator_id
         self._initiator_model_obj = User.objects.get(pk=initiator_id)
         self._case_id = case_id
-        self._case_model_obj = Case.objects.get(pk=case_id, is_active=True)
+        self._case_model_obj = Case.objects.get(pk=case_id, user=self._initiator_model_obj, is_active=True)
         self._customer_model_obj = self._case_model_obj.user
         self._refund_amount = refund_amount
-        self._validate_refund_request()
+        self._refund_validation_obj.validate_refund_amount(self._case_model_obj, self._refund_amount)
         refund_transaction_id = self._trigger_case_refund()
         return refund_transaction_id
 
     def refund_webhook_event_handler(self, payment_client_type, webhook_payload, signature):
         pass
 
+
+class RefundValidation:
+
+    def validate_refund_amount(self, case_model_obj, refund_amount):
+        pass

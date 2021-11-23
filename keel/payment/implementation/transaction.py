@@ -42,7 +42,8 @@ class PaymentTransaction(object):
     def get_order_transaction_details(self, order_objs):
         return Transaction.objects.filter(order__in=order_objs)
 
-    def get_case_refund_transaction(self, case_model_obj):
+    @staticmethod
+    def get_case_refund_transaction(case_model_obj):
         return Transaction.objects.select_for_update().filter(
             status=Transaction.STATUS_COMPLETED, refund_amount_left__gt=Decimal(0), order__case=case_model_obj).\
             order_by("-refund_amount_left")
