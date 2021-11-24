@@ -9,6 +9,7 @@ class Notification(models.Model):
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, 
                                     default=None, blank=True, null=True)
     case_id = models.ForeignKey(Case, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
+    category = models.CharField(max_length=32, default=None, blank=True, null=True)
     seen = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
