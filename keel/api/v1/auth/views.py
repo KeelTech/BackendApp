@@ -48,6 +48,8 @@ from keel.Core.notifications import EmailNotification, SMSNotification
 from keel.Core.redis import create_token, get_token
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.document.models import Documents
+from keel.notifications.constants import DOCUMENT
+from keel.notifications.models import InAppNotification
 from keel.plans.models import Plan
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.authtoken.models import Token
@@ -67,8 +69,6 @@ from .helpers import email_helper, instances
 logger = logging.getLogger('app-logger')
 
 User = get_user_model()
-
-
 class UserViewset(GenericViewSet):
 
     permission_classes = (AllowAny, )
@@ -1416,6 +1416,12 @@ class UploadDocument(GenericViewSet):
             response["status"] = 1
             response["message"] = GENERIC_ERROR
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+        
+        # create a notification instance
+        notification = InAppNotification.objects.create(
+            user_id = user, case_id = case_obj, category = DOCUMENT
+        )
+
         return Response(response, status = resp_status)
 
     # works for both User and agent based on case id

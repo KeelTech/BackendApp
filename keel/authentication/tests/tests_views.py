@@ -60,3 +60,10 @@ class UserLoginTest(APITestCase):
         resp = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(resp['status'], 1)
+
+    def test_login_user_invalid_credentials(self):
+        url = reverse('customer-login')
+        data = {'email':'wrong-user@getkeel.com', 'password':'wrong-password'}
+        response = self.client.post(url, data, format='json', follow=True)
+        resp = response.json()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
