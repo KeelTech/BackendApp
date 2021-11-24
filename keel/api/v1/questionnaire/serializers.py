@@ -1,26 +1,42 @@
+from django.db.models import fields
+from keel.questionnaire.models import (AnsweredQuestionsModel, CheckBoxModel,
+                                       DropDownModel, Question)
 from rest_framework import serializers
-from keel.questionnaire.models import Question, Option, AnsweredQuestionnaires
 
 
-class OptionSerializer(serializers.ModelSerializer):
+class CheckBoxSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = Option
-        fields = ('option', 'id')
+        model = CheckBoxModel
+        fields = ('id', 'checkbox_text')
+
+
+class DropDownSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DropDownModel
+        fields = ('id', 'dropdown_text')
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    options = serializers.SerializerMethodField()
+    text_choice = serializers.SerializerMethodField()
+    dropdown_choice = serializers.SerializerMethodField()
+    checkbox_choice = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        fields = ('id', 'question', 'options')
+        fields = ('id', 'question_text', 'answer_type', 
+                    'text_choice', 'dropdown_choice', 'checkbox_choice')
     
-    def get_options(self, obj):
-        return OptionSerializer(obj.options.all(), many=True).data
-
-
-class AnsweredQuestionnairesSerializer(serializers.ModelSerializer):
+    def get_text_choice(self, obj):
+        return ""
     
-    class Meta:
-        model = AnsweredQuestionnaires
-        fields = ('id', 'question', 'answer', 'user')
+    def get_dropdown_choice(self, obj):
+        queryset = obj.question_dropdown.all()
+        serializer = DropDownSerializer(queryset, many=True).data
+        return serializer
+
+    def get_checkbox_choice(self, obj):
+        queryset = obj.question_checkbox.all()
+        serializer = CheckBoxSerializer(queryset, many=True).data
+        return serializer
