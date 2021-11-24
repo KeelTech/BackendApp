@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import QuestionViewSet
+from .views import QuestionViewSet, QuestionnarieViewSet
 
 urlpatterns = [
     path('get-questions', QuestionViewSet.as_view({'get':'get_questions'}), name="get_questions"),
-    # path('submit-questionnaires', QuestionnarieViewSet.as_view({'post':'submit_questionnaire'}), name="submit_questionnaire"),
+    path('submit-questionnaires', QuestionnarieViewSet.as_view({'post':'submit_questionnaire'}), name="submit_questionnaire"),
 ]
