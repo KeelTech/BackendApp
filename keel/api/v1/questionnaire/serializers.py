@@ -40,3 +40,10 @@ class QuestionSerializer(serializers.ModelSerializer):
         queryset = obj.question_checkbox.all()
         serializer = CheckBoxSerializer(queryset, many=True).data
         return serializer
+
+
+class AnsweredQuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AnsweredQuestionsModel
+        fields = "__all__"
