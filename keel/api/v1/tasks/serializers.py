@@ -21,7 +21,7 @@ class ListTaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ('task_id','status_name','priority_name','priority','status','created_at','title','case')
+        fields = ('task_id','status_name','priority_name','priority','status','created_at','title','case', 'due_date')
 
 
 class TaskCommentSerializer(serializers.ModelSerializer):
