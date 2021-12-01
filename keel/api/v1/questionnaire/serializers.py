@@ -20,13 +20,14 @@ class DropDownSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     text_choice = serializers.SerializerMethodField()
+    answer_type_value = serializers.CharField(source="get_answer_type_display")
     dropdown_choice = serializers.SerializerMethodField()
     checkbox_choice = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        fields = ('id', 'question_text', 'answer_type', 
-                    'text_choice', 'dropdown_choice', 'checkbox_choice')
+        fields = ('id', 'question_text', 'answer_type', 'answer_type_value',
+                    'text_choice', 'dropdown_choice', 'checkbox_choice', 'is_active')
     
     def get_text_choice(self, obj):
         return ""

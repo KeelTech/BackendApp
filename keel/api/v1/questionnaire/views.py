@@ -15,16 +15,24 @@ class QuestionViewSet(GenericViewSet):
 
     def get_questions(self, request):
         response = {'status' : 1, 'message' : 'questions retrieved successfully', 'data' : ''}
+        query_params = request.query_params.get('is_active', None)
+
         try:
-            questions = Question.objects.all()
+            # filter by is_active if query_params is true
+            if query_params == 'true':
+                questions = Question.objects.filter(is_active=True)
+            
+            #if query_params is false, get all questions
+            else:
+                questions = Question.objects.all()
             serializer = QuestionSerializer(questions, many=True).data
+        
         except Exception as e:
             log_error(LOGGER_LOW_SEVERITY, "QuestionViewSet:get_questions", request.user.id,
                     description="Failed to get questionnaires")
             response['status'] = 0
             response['message'] = str(e)
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        
         response['data'] = serializer
         return Response(response)
     
