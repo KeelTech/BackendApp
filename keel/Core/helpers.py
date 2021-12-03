@@ -1,14 +1,17 @@
-import uuid
 import os
-import boto3
-
+import uuid
 from random import randint
-
-from django.utils.module_loading import import_module
-from django.core.exceptions import ImproperlyConfigured
-from django.conf import settings
-
 from urllib.parse import urlparse
+
+import boto3
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.module_loading import import_module
+from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.err_log import log_error
+
+from .models import TriggeredEmails
+
 # from config.settings.production import (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, 
 #                                     AWS_S3_REGION, AWS_STORAGE_BUCKET_NAME)
 
@@ -77,3 +80,14 @@ def generate_random_int(n):
     end_range = 10**n - 1
     return randint(start_range,end_range)
 
+
+# create trgiggered email instance in database
+
+def save_triggered_email(user, subject):
+    triggered_email = TriggeredEmails(user=user, email=user.email, subject=subject)
+    try:
+        triggered_email.save()
+    except Exception as e:
+        log_error(LOGGER_LOW_SEVERITY, "save_triggered_email", user.id,
+                description="error in saving triggered email",)
+    return triggered_email
