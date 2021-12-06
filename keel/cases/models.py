@@ -21,8 +21,14 @@ class CaseManager(models.Manager):
             if colmn_value and sort_order:
                 sort_order_value = "" if sort_order == "asc" else "-"
                 sort_list = [sort_order_value + colmn_value]
-
-        queryset = self.filter(agent = agent).order_by(*sort_list)
+        
+        user_type = agent.user_type
+        
+        if user_type == User.RCIC:
+            queryset = self.filter(agent = agent).order_by(*sort_list)
+        
+        elif user_type == User.ACCOUNT_MANAGER:
+            queryset = self.filter(account_manager = agent).order_by(*sort_list)
 
         return queryset
 
