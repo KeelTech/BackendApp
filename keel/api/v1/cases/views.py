@@ -73,13 +73,25 @@ class FilterUserCasesDetails(GenericViewSet):
             
             # get number of tasks related to cases from Task Model
             tasks = Task.objects.filter(case=queryset).count()
+
+            # get number of pending tasks related to cases from Task Model
+            pending_tasks = Task.objects.filter(case=queryset, status=0).count()
+
+            # get number of in review tasks related to cases from Task Model
+            in_review_tasks = Task.objects.filter(case=queryset, status=1).count()
+
+            # get number of completed tasks related to cases from Task Model
+            completed_tasks = Task.objects.filter(case=queryset, status=2).count()
             
             data = {
                 "case_details" : serializer_cases.data,
                 "user_qualifications" : serializer_qua.data,
                 "user_work_experience" : serializer_work.data,
                 "user_details" : serializer_profile.data,
-                "task_count" : tasks
+                "task_count" : tasks,
+                "pending_task_count" : pending_tasks,
+                "in_review_task_count" : in_review_tasks,
+                "completed_task_count" : completed_tasks
             }
         except Exception as e:
             logger.error('ERROR: CASE:FilterUserCasesDetails ' + str(e))

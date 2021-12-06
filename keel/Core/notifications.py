@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .err_log import log_error
 from .exceptions import InvalidDataType
-from .helpers import get_connection
+from .helpers import get_connection, save_triggered_email
 
 class SMSNotification:
 
@@ -92,6 +92,7 @@ class EmailNotification:
             # else:
             # send_mail(self.subject, self.content, settings.SENDER_EMAIL, self.to_list)
             path = settings.EMAIL_BACKEND
+            save_triggered_email(self.to_list, self.subject)
             get_connection(path).send_email(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, self.content_type)
         except Exception as e:
             log_error("CRITICAL", "EmailNotification:send_mail", "", err = str(e))

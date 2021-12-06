@@ -81,13 +81,11 @@ def generate_random_int(n):
     return randint(start_range,end_range)
 
 
-# create trgiggered email instance in database
-
-def save_triggered_email(user, subject):
-    triggered_email = TriggeredEmails(user=user, email=user.email, subject=subject)
+def save_triggered_email(email, subject):
+    triggered_email = TriggeredEmails(email=email, subject=subject)
     try:
         triggered_email.save()
     except Exception as e:
-        log_error(LOGGER_LOW_SEVERITY, "save_triggered_email", user.id,
+        log_error(LOGGER_LOW_SEVERITY, "save_triggered_email", "",
                 description="error in saving triggered email",)
     return triggered_email

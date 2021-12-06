@@ -63,7 +63,6 @@ from rest_framework.viewsets import GenericViewSet
 from .adapter import GoogleOAuth2AdapterIdToken
 from .auth_token import generate_auth_login_token
 from .helpers import email_helper, instances
-from keel.Core.helpers import save_triggered_email
 
 # from keel.authentication.models import (OtpVerifications, )
 
@@ -111,11 +110,8 @@ class UserViewset(GenericViewSet):
         try:
             # send welcome email
             emails = EmailNotification(subject, html_content, [user.email])
-            emails.send_email()
+            emails.send_email(user)
             email_helper.send_welcome_email(user)
-            
-            # create instance in triggered email
-            save_triggered_email(user, subject)
         
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
@@ -220,7 +216,7 @@ class GeneratePasswordReset(GenericViewSet):
             html_content = get_template('password_reset_email.html').render(context)
             # send email
             emails = EmailNotification(subject, html_content, [email])
-            emails.send_email()
+            emails.send_email(request.user)
         except User.DoesNotExist as e:
             logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
             response['message'] = str(e)

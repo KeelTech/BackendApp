@@ -18,7 +18,7 @@ class CityAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )
 
 class TriggerEmailAdmin(CustomBaseModelAdmin):
-    list_display = ('id', 'email', 'user', 'subject')
+    list_display = ('id', 'email', 'subject')
 
 
 admin.site.register(Country, CountryAdmin)
