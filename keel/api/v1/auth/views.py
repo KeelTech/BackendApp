@@ -1420,8 +1420,9 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
         
         # create a notification instance
+        case_id_notification = request.user.users_cases.first()
         notification = InAppNotification.objects.create(
-            user_id = user, case_id = case_obj, category = DOCUMENT
+            user_id = user, case_id = case_id_notification, category = DOCUMENT
         )
 
         return Response(response, status = resp_status)
