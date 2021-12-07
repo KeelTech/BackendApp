@@ -43,16 +43,25 @@ class CallScheduleManager(object):
         return User.objects.get(pk=self._customer_id, is_active=True)
 
     def generate_schedule_url(self):
+        response = {
+            "status": 1,
+            "schedule_url": None,
+            "error": None
+        }
         self._customer_model_obj = self._get_customer_model_obj()
         self._customer_case_model_obj = self._get_case_model_obj()
         plan_id = self._get_customer_plan()
-        if not self._call_schedule_validator.call_schedule_allowed(plan_id):
+        can_customer_schedule_call, cannot_schedule_call_reason = self._call_schedule_validator.call_schedule_allowed(plan_id)
+        if not can_customer_schedule_call:
             err_msg = "User - {} cannot schedule further calls".format(self._customer_id)
             logger.error(logging_format(LOGGER_MODERATE_SEVERITY, "CallScheduleManager:generate_schedule_url",
                                         self._customer_id, description=err_msg))
-            return None
+            response["status"] = 0
+            response["error"] = cannot_schedule_call_reason
+            return response
         host_user_obj = self._get_host_user_obj()
-        return self._client_scheduler.get_schedule_url(self._customer_model_obj, host_user_obj)
+        response["schedule_url"] = self._client_scheduler.get_schedule_url(self._customer_model_obj, host_user_obj)
+        return response
 
     def create_schedule(self, client_schedule_identifier):
         response = {
