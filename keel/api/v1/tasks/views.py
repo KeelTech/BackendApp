@@ -12,6 +12,7 @@ from keel.cases.models import Case
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.helpers import generate_unique_id
+from keel.notifications.constants import CHAT, DOCUMENT, HOME, TASKS
 from keel.notifications.models import InAppNotification
 from keel.tasks.models import Task, TaskComments
 from rest_framework import mixins
@@ -21,7 +22,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from keel.notifications.constants import (DOCUMENT, HOME, CHAT, TASKS)
 
 from .serializers import (CreateTaskCommentSerializer, ListTaskSerializer,
                           TaskCreateSerializer, TaskIDCheckSerializer,

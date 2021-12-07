@@ -39,7 +39,7 @@ class NotificationViews(GenericViewSet):
         # if recent is false, then return all notifications
         else:
             try:
-                queryset = InAppNotification.objects.filter(case_id=user_case).exclude(user_id=request.user)
+                queryset = InAppNotification.objects.filter(case_id=user_case).exclude(user_id=request.user).order_by('-created_at')
                 serializer = self.serializer_class(queryset, many=True).data
             except Exception as err:
                 log_error(LOGGER_LOW_SEVERITY, "NotificationViews:get_notifications", request.user.id,

@@ -110,14 +110,12 @@ class UserViewset(GenericViewSet):
         try:
             # send welcome email
             emails = EmailNotification(subject, html_content, [user.email])
-            emails.send_email()
+            emails.send_email(user)
             email_helper.send_welcome_email(user)
-
+        
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
+            pass
 
         data = {
             "email" : obj.user.email,
@@ -218,7 +216,7 @@ class GeneratePasswordReset(GenericViewSet):
             html_content = get_template('password_reset_email.html').render(context)
             # send email
             emails = EmailNotification(subject, html_content, [email])
-            emails.send_email()
+            emails.send_email(request.user)
         except User.DoesNotExist as e:
             logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
             response['message'] = str(e)
@@ -1418,8 +1416,9 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
         
         # create a notification instance
+        case_id_notification = request.user.users_cases.first()
         notification = InAppNotification.objects.create(
-            user_id = user, case_id = case_obj, category = DOCUMENT
+            user_id = user, case_id = case_id_notification, category = DOCUMENT
         )
 
         return Response(response, status = resp_status)

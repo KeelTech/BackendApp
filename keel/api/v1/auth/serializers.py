@@ -17,7 +17,7 @@ from keel.authentication.models import (AgentProfile, CustomerProfile,
                                         RelativeInCanadaLabel, User,
                                         UserDocument, WorkExperienceLabel)
 from keel.Core.constants import LOGGER_LOW_SEVERITY
-from keel.Core.err_log import logging_format
+from keel.Core.err_log import logging_format, log_error
 from rest_framework import serializers
 
 # from keel.common import models as common_models
