@@ -45,13 +45,13 @@ class ScheduleUrl(GenericViewSet):
             "message": ''
         }
         schedule_manager = CallScheduleManager(request.user.pk, CallSchedule.CALENDLY_CALL_SCHEDULE_CLIENT)
-        schedule_url = schedule_manager.generate_schedule_url()
-        if not schedule_url:
+        schedule_url_response = schedule_manager.generate_schedule_url()
+        if not schedule_url_response["status"]:
             response["status"] = 0
-            response["message"] = "Error getting schedule url of assigned RCIC"
+            response["message"] = schedule_url_response["error"]
             return Response(response, status.HTTP_400_BAD_REQUEST)
 
-        response["message"] = {"schedule_url": schedule_url}
+        response["message"] = {"schedule_url": schedule_url_response["schedule_url"]}
         return Response(response, status=status.HTTP_200_OK)
 
 
