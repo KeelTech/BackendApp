@@ -47,4 +47,4 @@ class AnsweredQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnsweredQuestionsModel
-        fields = "__all__"
+        fields = ('id', 'user', 'question', 'answer')
