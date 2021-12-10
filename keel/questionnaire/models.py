@@ -41,8 +41,9 @@ class DropDownModel(TimeStampedModel, SoftDeleteModel):
 
 
 class AnsweredQuestionsModel(TimeStampedModel, SoftDeleteModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='user_answered_questions')
-    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, related_name='question_answered')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='user_answered_questions', 
+                                    default=None, blank=True, null=True)
+    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, related_name='question_answered', default=None, blank=True, null=True)
     answer = models.TextField(default=None, blank=True, null=True)
 
     def __str__(self):
