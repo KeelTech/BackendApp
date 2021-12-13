@@ -25,6 +25,7 @@ class QuestionViewSet(GenericViewSet):
             #if query_params is false, get all questions
             else:
                 questions = Question.objects.all()
+            
             serializer = QuestionSerializer(questions, many=True).data
         
         except Exception as e:
@@ -33,6 +34,7 @@ class QuestionViewSet(GenericViewSet):
             response['status'] = 0
             response['message'] = str(e)
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
         response['data'] = serializer
         return Response(response)
     
