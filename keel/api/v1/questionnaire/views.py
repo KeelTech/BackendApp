@@ -1,13 +1,15 @@
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import LOGGER_LOW_SEVERITY
 from keel.Core.err_log import log_error
-from keel.questionnaire.models import Question
+from keel.questionnaire.models import Question, SpouseQuestion
 from rest_framework import response, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import QuestionSerializer, AnsweredQuestionSerializer
+from keel.api.v1.eligibility_calculator.helpers import crs_calculator
+from .serializers import (AnsweredQuestionSerializer, QuestionSerializer,
+                          SpouseQuestionSerializer)
 
 
 class QuestionViewSet(GenericViewSet):
@@ -27,6 +29,9 @@ class QuestionViewSet(GenericViewSet):
                 questions = Question.objects.all()
             
             serializer = QuestionSerializer(questions, many=True).data
+
+            spouse_question_queryset = SpouseQuestion.objects.all()
+            spouse_question_serializer = SpouseQuestionSerializer(spouse_question_queryset, many=True).data
         
         except Exception as e:
             log_error(LOGGER_LOW_SEVERITY, "QuestionViewSet:get_questions", request.user.id,
@@ -35,30 +40,70 @@ class QuestionViewSet(GenericViewSet):
             response['message'] = str(e)
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
         
-        response['data'] = serializer
+        response['data'] = {
+            'questions' : serializer,
+            'spouse_questions' : spouse_question_serializer
+        }
         return Response(response)
     
 
 class QuestionnarieViewSet(GenericViewSet):
     serializer_class = AnsweredQuestionSerializer
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (JWTAuthentication,)
 
     def submit_questionnaire(self, request):
         response = {'status' : 1, 'message' : 'questionnaire submitted successfully', 'data' : ''}
-        answered_questionnaires = request.data.get('answered_questionnaires')
-        serializer = AnsweredQuestionSerializer(data=answered_questionnaires, many=True)
-        serializer.is_valid(raise_exception=True)
-        for instance in serializer.validated_data:
-            instance['user'] = request.user
-        try:
-            serializer.save()
-        except Exception as e:
-            log_error(LOGGER_LOW_SEVERITY, "QuestionnarieViewSet:submit_questionnaire", request.user.id,
-                    description="Failed to submit questionnaires")
-            response['status'] = 0
-            response['message'] = str(e)
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data
         
-        response['data'] = serializer.data
-        return Response(response)
+        email = data.get('email', None)
+        spouse_exist = data.get('spouse_exist', None)
+        age = data.get('age', None)
+        education = data.get('education', None)
+        language = {
+            'first_language_speaking' : data.get('first_language_speaking', None),
+            'first_language_reading' : data.get('first_language_reading', None),
+            'first_language_writing'  : data.get('first_language_writing', None),
+            'first_language_listening' : data.get('first_language_listening', None),
+            'second_language_speaking' : data.get('second_language_speaking', None),
+            'second_language_reading' : data.get('second_language_reading', None),
+            'second_language_writing' : data.get('second_language_writing', None),
+            'second_language_listening' : data.get('second_language_listening', None),
+        }
+        work_experience = data.get('work_experience', None)
+        spouse_details = {
+            'spouse_education' : data.get('spouse_education', None),
+            'spouse_language_speaking' : data.get('spouse_language_speaking', None),
+            'spouse_language_writing' : data.get('spouse_language_writing', None),
+            'spouse_language_listening' : data.get('spouse_language_listening', None),
+            'spouse_language_reading' : data.get('spouse_language_reading', None),
+            'spouse_work_experience' : data.get('spouse_work_experience', None)
+        }
+        arranged_employement = data.get('arranged_employement', None)
+        relative_in_canada = data.get('relative_in_canada', None)
+        provincial_nomination = data.get('provincial_nomination', None)
+
+        try:
+            if spouse_exist == "true":
+
+                # instantiate crs calculator
+                crs_calc = crs_calculator.CrsCalculator(age, education, language, work_experience, spouse_details, 
+                                    arranged_employement, relative_in_canada, provincial_nomination)
+                crs_score = crs_calc.calculate_crs_with_spouse()
+                
+                response['data'] = "Crs score {}".format(crs_score)
+                
+                return Response(response)
+            
+            elif spouse_exist == "false":
+
+                # instantiate crs calculator
+                crs_calc = crs_calculator.CrsCalculator(age, education, language, work_experience, spouse_details, 
+                                    arranged_employement, relative_in_canada, provincial_nomination)
+                crs_score = crs_calc.calculate_crs_without_spouse()
+                
+                response['data'] = "Crs score {}".format(crs_score)
+                
+                return Response(response)
+        
+        except:
+            pass
