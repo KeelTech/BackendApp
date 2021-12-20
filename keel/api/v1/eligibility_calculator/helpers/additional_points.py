@@ -8,3 +8,7 @@ CRS_ADDITIONAL_POINTS = {
     'Arranged employment – any other NOC 0, A or B' : 50,
     'Provincial or territorial nomination' : 600
 }
+
+BROTHER_IN_CANADA = {
+    "Yes" : 15
+}
