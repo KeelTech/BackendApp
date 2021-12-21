@@ -1,5 +1,6 @@
 from . import score_dict_with_spouse, score_dict_without_spouse, additional_points
 
+
 class CrsCalculator(object):
     """
     Class to calculate the CRS score.
@@ -144,7 +145,10 @@ class CrsCalculator(object):
         # perform calculation with addition operation
         crs_score = get_education + get_language_test + get_age + get_work_experience
 
-        return crs_score
+        # additionl scores
+        additional = self.other_scores()
+
+        return crs_score + additional
 
     def calculate_crs_without_spouse(self):
         """
@@ -222,16 +226,27 @@ class CrsCalculator(object):
         # perform calculation with addition operation
         crs_score = get_education + get_language_test + get_age + get_work_experience
 
-        return crs_score
-    
+        # additionl scores
+        additional = self.other_scores()
+
+        return crs_score + additional
+
     def other_scores(self):
-        
+
         # brother or sister living in canada
         relative = additional_points.BROTHER_IN_CANADA.get(self.relative_in_canada, 0)
-        
+
         # french skills
-        
+
         # canada post education
+
         # arranged employement
+
         # PN nomination
-        # 
+        provincial_nomination = additional_points.PROVINVIAL_NOMINATION.get(
+            self.provincial_nomination, 0
+        )
+
+        # print("here", provincial_nomination)
+
+        return provincial_nomination + relative
