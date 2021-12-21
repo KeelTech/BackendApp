@@ -230,6 +230,7 @@ class CrsCalculator(object):
         relative = additional_points.BROTHER_IN_CANADA.get(self.relative_in_canada, 0)
         
         # french skills
+        
         # canada post education
         # arranged employement
         # PN nomination
