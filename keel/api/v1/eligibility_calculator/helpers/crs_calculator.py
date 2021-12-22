@@ -111,7 +111,7 @@ class CrsCalculator(object):
             )
         )
         work_experience_spouse = score_dict_with_spouse.SPOUSE_WORK_EXPERIENCE.get(
-            self.spouse_details.get("spouse_work_experience")
+            self.spouse_details.get("spouse_work_experience"), 0
         )
 
         # AGE

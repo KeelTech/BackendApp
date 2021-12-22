@@ -83,27 +83,31 @@ class QuestionnarieViewSet(GenericViewSet):
         provincial_nomination = data.get('provincial_nomination', None)
 
         try:
-            if spouse_exist == "true":
+            if spouse_exist is None:
+                response['message'] = "Return 'spouse_exist' key in payload"
+                response['status'] = 0
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+            elif spouse_exist == "true" or spouse_exist == "Yes":
 
                 # instantiate crs calculator
                 crs_calc = crs_calculator.CrsCalculator(age, education, language, work_experience, spouse_details, 
                                     arranged_employement, relative_in_canada, provincial_nomination)
                 crs_score = crs_calc.calculate_crs_with_spouse()
-                
-                response['data'] = "Crs score {}".format(crs_score)
-                
-                return Response(response)
             
-            elif spouse_exist == "false":
+            elif spouse_exist == "false" or spouse_exist == "No":
 
                 # instantiate crs calculator
                 crs_calc = crs_calculator.CrsCalculator(age, education, language, work_experience, spouse_details, 
                                     arranged_employement, relative_in_canada, provincial_nomination)
                 crs_score = crs_calc.calculate_crs_without_spouse()
+            
+        except Exception as e:
+            log_error(LOGGER_LOW_SEVERITY, "QuestionViewSet:get_questions", request.user.id,
+                    description="Failed to get questionnaires")
+            response['status'] = 0
+            response['message'] = str(e)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
                 
-                response['data'] = "Crs score {}".format(crs_score)
-                
-                return Response(response)
-        
-        except:
-            pass
+        response['data'] = "Crs score {}".format(crs_score)
+        return Response(response)
