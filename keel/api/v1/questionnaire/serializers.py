@@ -1,21 +1,35 @@
 from django.db.models import fields
-from keel.questionnaire.models import (AnsweredQuestionsModel, CheckBoxModel,
-                                       DropDownModel, Question, SpouseQuestion)
+from keel.questionnaire.models import (
+    AnsweredQuestionsModel,
+    CheckBoxModel,
+    DropDownModel,
+    Question,
+    QuestionnaireAnalysis,
+    SpouseQuestion,
+)
 from rest_framework import serializers
 
 
 class CheckBoxSerializer(serializers.ModelSerializer):
+    checkbox_id = serializers.SerializerMethodField()
 
     class Meta:
         model = CheckBoxModel
-        fields = ('id', 'checkbox_text')
+        fields = ("checkbox_id", "checkbox_text")
+
+    def get_checkbox_id(self, obj):
+        return obj.id
 
 
 class DropDownSerializer(serializers.ModelSerializer):
+    dropdown_id = serializers.SerializerMethodField()
 
     class Meta:
         model = DropDownModel
-        fields = ('id', 'dropdown_text')
+        fields = ("dropdown_id", "dropdown_text")
+
+    def get_dropdown_id(self, obj):
+        return obj.id
 
 
 class SpouseQuestionSerializer(serializers.ModelSerializer):
@@ -26,12 +40,18 @@ class SpouseQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SpouseQuestion
-        fields = ('id', 'question_text', 'answer_type_value', 'text_choice',
-                    'dropdown_choice', 'checkbox_choice',)
+        fields = (
+            "id",
+            "question_text",
+            "answer_type_value",
+            "text_choice",
+            "dropdown_choice",
+            "checkbox_choice",
+        )
 
     def get_text_choice(self, obj):
         return ""
-    
+
     def get_dropdown_choice(self, obj):
         queryset = obj.spouse_question_dropdown.all()
         serializer = DropDownSerializer(queryset, many=True).data
@@ -51,12 +71,21 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'question_text', 'answer_type', 'answer_type_value', 'key',
-                    'text_choice', 'dropdown_choice', 'checkbox_choice', 'is_active')
-    
+        fields = (
+            "id",
+            "question_text",
+            "answer_type",
+            "answer_type_value",
+            "key",
+            "text_choice",
+            "dropdown_choice",
+            "checkbox_choice",
+            "is_active",
+        )
+
     def get_text_choice(self, obj):
         return ""
-    
+
     def get_dropdown_choice(self, obj):
         queryset = obj.question_dropdown.all()
         serializer = DropDownSerializer(queryset, many=True).data
@@ -69,7 +98,13 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class AnsweredQuestionSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = AnsweredQuestionsModel
-        fields = ('id', 'email', 'question', 'answer')
+        fields = ("id", "email", "question", "answer")
+
+
+class QuestionnaireAnalysisSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionnaireAnalysis
+        fields = ("id", "question", "uuid", "created_at")
