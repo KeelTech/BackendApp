@@ -76,3 +76,12 @@ class AnsweredQuestionsModel(TimeStampedModel, SoftDeleteModel):
         verbose_name = "Answered Question"
         verbose_name_plural = "Answered Questions"
         db_table = 'keel_answered_questions'
+
+
+class QuestionnaireAnalysis(TimeStampedModel, SoftDeleteModel):
+    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING, related_name='question_analysis')
+    uuid = models.CharField(max_length=255, default=None, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.uuid)
