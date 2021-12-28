@@ -6,8 +6,9 @@ from rest_framework import response, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from keel.api.v1.questionnaire.helper.answer_dict import AnswerDict
 
-from keel.api.v1.eligibility_calculator.helpers import crs_calculator
+from keel.api.v1.eligibility_calculator.helpers import crs_calculator, crs_calculator_v2
 from .serializers import (
     AnsweredQuestionSerializer,
     QuestionSerializer,
@@ -73,64 +74,16 @@ class QuestionnarieViewSet(GenericViewSet):
 
         data = request.data
 
-        email = data.get("email", None)
+        # check for spouse in payload
         spouse_exist = data.get("spouse_exist", None)
-        age = data.get("age", None)
-        education = data.get("education", None)
-        language = {
-            "first_language_speaking": data.get("first_language_speaking", None),
-            "first_language_reading": data.get("first_language_reading", None),
-            "first_language_writing": data.get("first_language_writing", None),
-            "first_language_listening": data.get("first_language_listening", None),
-            "second_language_speaking": data.get("second_language_speaking", None),
-            "second_language_reading": data.get("second_language_reading", None),
-            "second_language_writing": data.get("second_language_writing", None),
-            "second_language_listening": data.get("second_language_listening", None),
-        }
-        work_experience = data.get("work_experience", None)
-        spouse_details = {
-            "spouse_education": data.get("spouse_education", None),
-            "spouse_language_speaking": data.get("spouse_language_speaking", None),
-            "spouse_language_writing": data.get("spouse_language_writing", None),
-            "spouse_language_listening": data.get("spouse_language_listening", None),
-            "spouse_language_reading": data.get("spouse_language_reading", None),
-            "spouse_work_experience": data.get("spouse_work_experience", None),
-        }
-        arranged_employement = data.get("arranged_employement", None)
-        relative_in_canada = data.get("relative_in_canada", None)
-        provincial_nomination = data.get("provincial_nomination", None)
 
         try:
-
             if spouse_exist == "true" or spouse_exist == "Yes":
-
-                # instantiate crs calculator
-                crs_calc = crs_calculator.CrsCalculator(
-                    age,
-                    education,
-                    language,
-                    work_experience,
-                    spouse_details,
-                    arranged_employement,
-                    relative_in_canada,
-                    provincial_nomination,
-                )
-                crs_score = crs_calc.calculate_crs_with_spouse()
+                crs_score = 0
 
             elif spouse_exist == "false" or spouse_exist == "No":
-
-                # instantiate crs calculator
-                crs_calc = crs_calculator.CrsCalculator(
-                    age,
-                    education,
-                    language,
-                    work_experience,
-                    spouse_details,
-                    arranged_employement,
-                    relative_in_canada,
-                    provincial_nomination,
-                )
-                crs_score = crs_calc.calculate_crs_without_spouse()
+                crs_v2 = crs_calculator_v2.CrsCalculatorWithoutSpouse(data)
+                crs_score = crs_v2.calculate_crs_without_spouse()
 
             else:
                 response["message"] = "Return 'spouse_exist' key in payload"
@@ -157,9 +110,9 @@ class QuestionnarieViewSet(GenericViewSet):
 class QuestionAnalysisViewSet(GenericViewSet):
 
     serializer_class = QuestionnaireAnalysisSerializer
-    
+
     def create_analysis(self, request):
-        response = {"status":1, "message":"analysis created successfully", "data":""}
+        response = {"status": 1, "message": "analysis created successfully", "data": ""}
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -175,5 +128,5 @@ class QuestionAnalysisViewSet(GenericViewSet):
             response["status"] = 0
             response["message"] = str(e)
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        
+
         return Response(response)
