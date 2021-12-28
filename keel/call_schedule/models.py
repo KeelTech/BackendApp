@@ -9,15 +9,18 @@ class CallSchedule(TimeStampedModel, SoftDeleteModel):
     ACTIVE = 1
     RESCHEDULED = 2
     CANCELED = 3
+    COMPLETED = 4
     STATUS_CHOICES = (
         (ACTIVE, 'Active'),
         (RESCHEDULED, 'Rescheduled'),
-        (CANCELED, 'Canceled')
+        (CANCELED, 'Canceled'),
+        (COMPLETED, 'Completed'),
     )
     STATUS_MAP = {
         ACTIVE: "active",
         RESCHEDULED: "rescheduled",
-        CANCELED: "canceled"
+        CANCELED: "canceled",
+        COMPLETED: "completed"
     }
     CALENDLY_CALL_SCHEDULE_CLIENT = 1
     CALL_SCHEDULE_CLIENT_CHOICES = (
