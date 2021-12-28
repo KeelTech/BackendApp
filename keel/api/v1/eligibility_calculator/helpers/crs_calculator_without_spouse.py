@@ -90,11 +90,60 @@ class CrsCalculatorWithoutSpouse(object):
             first_language_listening_question, first_language_listening_answer
         )
 
+        # second language speaking
+        second_language_speaking_answer = int(
+            data["second_language_speaking"].get("answer_id", None)
+        )
+        second_language_speaking_question = int(
+            data["second_language_speaking"].get("question_id", None)
+        )
+        get_second_language_speaking_score = self.fetch_score_from_database(
+            second_language_speaking_question, second_language_speaking_answer
+        )
+
+        # second language reading
+        second_language_reading_answer = int(
+            data["second_language_reading"].get("answer_id", None)
+        )
+        second_language_reading_question = int(
+            data["second_language_reading"].get("question_id", None)
+        )
+        get_second_language_reading_score = self.fetch_score_from_database(
+            second_language_reading_question, second_language_reading_answer
+        )
+
+        # second language writing
+        second_language_writing_answer = int(
+            data["second_language_writing"].get("answer_id", None)
+        )
+        second_language_writing_question = int(
+            data["second_language_writing"].get("question_id", None)
+        )
+        get_second_language_writing_score = self.fetch_score_from_database(
+            second_language_writing_question, second_language_writing_answer
+        )
+
+        # second language listening
+        second_language_listening_answer = int(
+            data["second_language_listening"].get("answer_id", None)
+        )
+        second_language_listening_question = int(
+            data["second_language_listening"].get("question_id", None)
+        )
+        get_second_language_listening_score = self.fetch_score_from_database(
+            second_language_listening_question, second_language_listening_answer
+        )
+
         get_language_score = (
             get_first_language_listening_score
             + get_first_language_reading_score
             + get_first_language_speaking_score
             + get_first_language_writing_score
+        ) + (
+            get_second_language_listening_score
+            + get_second_language_reading_score
+            + get_second_language_speaking_score
+            + get_second_language_writing_score
         )
 
         return (

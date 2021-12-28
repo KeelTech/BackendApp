@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from keel.api.v1.questionnaire.helper.answer_dict import AnswerDict
 
-from keel.api.v1.eligibility_calculator.helpers import crs_calculator, crs_calculator_v2
+from keel.api.v1.eligibility_calculator.helpers import crs_calculator, crs_calculator_without_spouse
 from .serializers import (
     AnsweredQuestionSerializer,
     QuestionSerializer,
@@ -82,7 +82,7 @@ class QuestionnarieViewSet(GenericViewSet):
                 crs_score = 0
 
             elif spouse_exist == "false" or spouse_exist == "No":
-                crs_v2 = crs_calculator_v2.CrsCalculatorWithoutSpouse(data)
+                crs_v2 = crs_calculator_without_spouse.CrsCalculatorWithoutSpouse(data)
                 crs_score = crs_v2.calculate_crs_without_spouse()
 
             else:
