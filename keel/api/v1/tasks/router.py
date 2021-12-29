@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf.urls import url
-from .views import ListTask, GetTaskDetails, CommentService, TaskStatusChange, TaskAdminOperations
+from .views import ListTask, GetTaskDetails, CommentService, TaskStatusChange, TaskAdminOperations, GetTemplateTask
 
 urlpatterns = [
     path('list', ListTask.as_view({'get' : 'list'}), name='list-task'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('comments/create', CommentService.as_view({'post' : 'postComments'}), name='post-comments'),
     path('comments/<int:comment_id>', CommentService.as_view({'delete' : 'deleteComments'}), name='delete-comments'),
     path('taskStatus/<str:task_id>', TaskStatusChange.as_view({'put':'StatusEdit'}), name = 'task-status-change'),
+    path('template-task', GetTemplateTask.as_view({'get':'get_templated_task'}), name="template-task")
 ]

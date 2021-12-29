@@ -15,7 +15,7 @@ from keel.Core.helpers import generate_unique_id
 from keel.notifications.constants import CHAT, DOCUMENT, HOME, TASKS
 from keel.notifications.models import InAppNotification
 from keel.tasks.models import Task, TaskComments
-from rest_framework import mixins
+from rest_framework import mixins, serializers
 from rest_framework import status as HTTP_STATUS
 from rest_framework import viewsets
 from rest_framework.exceptions import ValidationError
@@ -401,3 +401,21 @@ class TaskStatusChange(GenericViewSet):
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
 
+class GetTemplateTask(GenericViewSet):
+    serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication, )
+
+    def get_templated_task(self, request):
+        response = {'status':0, 'message':"Task retreived", 'data':''}
+        try:
+            queryset = Task.objects.filter(user=request.user, is_template=False)
+            serializer = self.serializer_class(queryset, many=True).data
+        except Exception as e:
+            log_error("ERROR","GetTemplateTask : get_templated_task", str(request.user), err = str(e))
+            response["message"] = GENERIC_ERROR
+            response['status'] = 1
+            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        response["data"] = serializer
+        return Response(response)
