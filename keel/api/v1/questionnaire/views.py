@@ -81,21 +81,20 @@ class QuestionnarieViewSet(GenericViewSet):
         # check for spouse in payload
         spouse_exist = data.get("spouse_exist", None)
 
-        if spouse_exist == "true" or spouse_exist == "Yes":
-            crs = crs_calculator_with_spouse.CrsCalculatorWithSpouse(data)
-            crs_score = crs.calculate_crs_with_spouse()
-        
         try:
-            pass
 
-            # elif spouse_exist == "false" or spouse_exist == "No":
-            #     crs = crs_calculator_without_spouse.CrsCalculatorWithoutSpouse(data)
-            #     crs_score = crs.calculate_crs_without_spouse()
+            if spouse_exist == "true" or spouse_exist == "Yes":
+                crs = crs_calculator_with_spouse.CrsCalculatorWithSpouse(data)
+                crs_score = crs.calculate_crs_with_spouse()
 
-            # else:
-            #     response["message"] = "Return 'spouse_exist' key in payload"
-            #     response["status"] = 0
-            #     return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            elif spouse_exist == "false" or spouse_exist == "No":
+                crs = crs_calculator_without_spouse.CrsCalculatorWithoutSpouse(data)
+                crs_score = crs.calculate_crs_without_spouse()
+
+            else:
+                response["message"] = "Return 'spouse_exist' key in payload"
+                response["status"] = 0
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             log_error(
