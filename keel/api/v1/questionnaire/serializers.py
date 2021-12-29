@@ -11,25 +11,35 @@ from rest_framework import serializers
 
 
 class CheckBoxSerializer(serializers.ModelSerializer):
-    checkbox_id = serializers.SerializerMethodField()
+    # checkbox_id = serializers.SerializerMethodField()
 
     class Meta:
         model = CheckBoxModel
-        fields = ("checkbox_id", "checkbox_text")
+        fields = (
+            "id",
+            "checkbox_text",
+            "with_spouse_score",
+            "without_spouse_score",
+        )
 
-    def get_checkbox_id(self, obj):
-        return obj.id
+    # def get_checkbox_id(self, obj):
+    #     return obj.id
 
 
 class DropDownSerializer(serializers.ModelSerializer):
-    dropdown_id = serializers.SerializerMethodField()
+    # dropdown_id = serializers.SerializerMethodField()
 
     class Meta:
         model = DropDownModel
-        fields = ("dropdown_id", "dropdown_text")
+        fields = (
+            "id",
+            "dropdown_text",
+            "with_spouse_score",
+            "without_spouse_score",
+        )
 
-    def get_dropdown_id(self, obj):
-        return obj.id
+    # def get_dropdown_id(self, obj):
+    #     return obj.id
 
 
 class SpouseQuestionSerializer(serializers.ModelSerializer):
@@ -104,7 +114,6 @@ class AnsweredQuestionSerializer(serializers.ModelSerializer):
 
 
 class QuestionnaireAnalysisSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = QuestionnaireAnalysis
         fields = ("id", "question", "uuid", "created_at")
