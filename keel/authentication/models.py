@@ -351,7 +351,7 @@ class EducationalCreationalAssessmentLabel(TimeStampedModel, SoftDeleteModel):
 
 class SMSOtpModel(TimeStampedModel, SoftDeleteModel):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="sms_otp", null=True, blank=True, default=None)
-    phone_number = models.IntegerField(default=None, blank=True, null=True)
+    phone_number = models.BigIntegerField(default=None, blank=True, null=True)
     otp = models.CharField(max_length=512, default=None, blank=True, null=True)
     otp_expiry = models.DateTimeField(default=None, blank=True, null=True)
     otp_status = models.BooleanField(default=False)

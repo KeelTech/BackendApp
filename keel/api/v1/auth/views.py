@@ -64,6 +64,7 @@ from .adapter import GoogleOAuth2AdapterIdToken
 from .auth_token import generate_auth_login_token
 from .helpers import email_helper, instances
 from .helpers.otp_helpers import OTPHelper
+from .helpers.email_helper import base_send_email
 
 # from keel.authentication.models import (OtpVerifications, )
 
@@ -217,7 +218,7 @@ class GeneratePasswordReset(GenericViewSet):
             html_content = get_template('password_reset_email.html').render(context)
             # send email
             emails = EmailNotification(subject, html_content, [email])
-            emails.send_email(request.user)
+            emails.send_email()
         except User.DoesNotExist as e:
             logger.error('ERROR: AUTHENTICATION:GeneratePasswordReset ' + str(e))
             response['message'] = str(e)
@@ -1269,8 +1270,8 @@ class LoginOTP(GenericViewSet):
         # create_token(token, json.dumps(token_data), 10*60*60) # cache for 10 mins
 
         # create otp
-        otp_instance = OTPHelper(user, phone_number)
-        otp = otp_instance.save_otp()
+        otp_instance = OTPHelper(user)
+        otp = otp_instance.save_otp(phone_number)
         text = "{0} is the OTP for mobile verification".format(otp)
         sms = SMSNotification(phone_number, text)
         err = sms.send_sms()
@@ -1300,26 +1301,40 @@ class LoginOTP(GenericViewSet):
         otp_verify = serializers.VerifyOTPSerializer(data = req_data)
         otp_verify.is_valid(raise_exception = True)
         data = otp_verify.validated_data
-
-        # token = data['token']
-        token = "MOBILE_VERIFICATION_" + str(user.id)
         otp = data['otp']
 
-        redis_data = get_token(token)
-        if not redis_data:
-            log_error("CRITICAL", "LoginOTP.verify", "OTP is expired")
-            response["status"] = "1"
-            response["data"] = "OTP has expired. please re-generate"
-            return Response(response, status = status.HTTP_400_BAD_REQUEST)
+        # token = data['token']
+        # token = "MOBILE_VERIFICATION_" + str(user.id)
 
-        token_data = json.loads(redis_data)
-        value = token_data.get("otp")
-        phone_number = token_data.get("phone_number")
+        # redis_data = get_token(token)
+        # if not redis_data:
+        #     log_error("CRITICAL", "LoginOTP.verify", "OTP is expired")
+        #     response["status"] = "1"
+        #     response["data"] = "OTP has expired. please re-generate"
+        #     return Response(response, status = status.HTTP_400_BAD_REQUEST)
+
+        # token_data = json.loads(redis_data)
+        # value = token_data.get("otp")
+        # phone_number = token_data.get("phone_number")
+
+        # otp instance
+        otp_instance = OTPHelper(user)
+        otp_verify = otp_instance.verify_otp(otp)
+
+        if not otp_verify:
+            log_error("CRITICAL", "LoginOTP.verify", "OTP is invalid")
+            response["status"] = "0"
+            response["data"] = "OTP is invalid"
+            return Response(response, status = status.HTTP_400_BAD_REQUEST)
+        
+        value = otp_verify.get("otp")
+        phone_number = otp_verify.get("phone_number")
 
         if int(value) == otp:
-            
             user.phone_number = phone_number
             user.save()
+            # delete otp number
+            otp_instance.delete_otp()
             response["data"] = "OTP validated successfully"
             return Response(response, status = status.HTTP_200_OK)
 
