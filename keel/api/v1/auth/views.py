@@ -63,6 +63,7 @@ from rest_framework.viewsets import GenericViewSet
 from .adapter import GoogleOAuth2AdapterIdToken
 from .auth_token import generate_auth_login_token
 from .helpers import email_helper, instances
+from .helpers.otp_helpers import OTPHelper
 
 # from keel.authentication.models import (OtpVerifications, )
 
@@ -1265,7 +1266,11 @@ class LoginOTP(GenericViewSet):
         token_data = {"otp": otp, "phone_number": phone_number}
         # token = generate_unique_id("mv_") 
         token = "MOBILE_VERIFICATION_" + str(user.id)
-        create_token(token, json.dumps(token_data), 10*60*60) # cache for 10 mins
+        # create_token(token, json.dumps(token_data), 10*60*60) # cache for 10 mins
+
+        # create otp
+        otp_instance = OTPHelper(user, phone_number)
+        otp = otp_instance.save_otp()
         text = "{0} is the OTP for mobile verification".format(otp)
         sms = SMSNotification(phone_number, text)
         err = sms.send_sms()

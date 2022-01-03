@@ -5,7 +5,7 @@ from .models import (User, CustomToken, PasswordResetToken, UserService,
                     CustomerProfile, CustomerQualifications, QualificationLabel, WorkExperienceLabel,
                     CustomerWorkExperience, CustomerProfileLabel, RelativeInCanada, RelativeInCanadaLabel,
                     EducationalCreationalAssessment, EducationalCreationalAssessmentLabel, AgentProfile, 
-                    AccountManagerProfile, UserDocument)
+                    AccountManagerProfile, UserDocument, SMSOtpModel)
 from keel.Core.models import Country, State, City
 
 class UserAdmin(admin.ModelAdmin):
@@ -102,6 +102,7 @@ class UserDocumentAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'doc', 'task')
 
 admin.site.register(User, UserAdmin)
+admin.site.register(SMSOtpModel)
 admin.site.register(UserService, UserServiceAdmin)
 admin.site.register(PasswordResetToken)
 admin.site.register(CustomToken)

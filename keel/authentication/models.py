@@ -347,3 +347,14 @@ class EducationalCreationalAssessmentLabel(TimeStampedModel, SoftDeleteModel):
     eca_authority_name_label = models.CharField(max_length=215)
     eca_authority_number_label = models.CharField(max_length=215)
     canadian_equivalency_summary_label = models.CharField(max_length=215)
+
+
+class SMSOtpModel(TimeStampedModel, SoftDeleteModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="sms_otp", null=True, blank=True, default=None)
+    phone_number = models.IntegerField(default=None, blank=True, null=True)
+    otp = models.CharField(max_length=512, default=None, blank=True, null=True)
+    otp_expiry = models.DateTimeField(default=None, blank=True, null=True)
+    otp_status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user)
