@@ -407,15 +407,34 @@ class GetTemplateTask(GenericViewSet):
     authentication_classes = (JWTAuthentication, )
 
     def get_templated_task(self, request):
-        response = {'status':0, 'message':"Task retreived", 'data':''}
+        response = {
+            "status" : 0,
+            "message" : "Task list is successfully fetched",
+            "data" : [],
+        }
+        resp_status = HTTP_STATUS.HTTP_200_OK
+
+        user = request.user
+        user_id = user.id
+        req_data = request.GET.dict()
+        case_id = req_data.get("case","")
+
+        # validate Case ID against User/Agent
+        case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
+        case_serializer.is_valid(raise_exception=True)
+        case_obj = case_serializer.validated_data
+
+
+        # Filter the data as is_template = False
         try:
-            queryset = Task.objects.filter(user=request.user, is_template=False)
-            serializer = self.serializer_class(queryset, many=True).data
+            tasks = Task.objects.filter(case=case_obj, is_template=False).order_by("-updated_at")
+            task_list_data = ListTaskSerializer(tasks, many = True)
+            resp_data = task_list_data.data    
+            response['data'] = resp_data 
         except Exception as e:
-            log_error("ERROR","GetTemplateTask : get_templated_task", str(request.user), err = str(e))
+            log_error("ERROR","ListTask: list ListTaskSerializer", str(user_id), err = str(e))
             response["message"] = GENERIC_ERROR
-            response['status'] = 1
-            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+            response["status"] = 1
+            resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
         
-        response["data"] = serializer
-        return Response(response)
+        return Response(response, status = resp_status)

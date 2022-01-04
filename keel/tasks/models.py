@@ -1,7 +1,7 @@
 from django.db import models
-from keel.Core.models import TimeStampedModel, SoftDeleteModel
 from keel.authentication.models import User
 from keel.cases.models import Case
+from keel.Core.models import SoftDeleteModel, TimeStampedModel
 
 # Create your models here.
 
@@ -33,7 +33,7 @@ class Task(TimeStampedModel, SoftDeleteModel):
                                           choices=STATUS_CHOICE)
     check_list = models.JSONField(default =dict, null=True) 
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name = "user_tasks")
-    is_template = models.BooleanField(default=None, null=True, blank=True)
+    is_template = models.BooleanField(default=False)
 
 class TaskComments(TimeStampedModel, SoftDeleteModel):
 
