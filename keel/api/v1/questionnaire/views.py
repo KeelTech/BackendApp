@@ -1,7 +1,7 @@
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.constants import LOGGER_LOW_SEVERITY
 from keel.Core.err_log import log_error
-from keel.questionnaire.models import Question, SpouseQuestion
+from keel.questionnaire.models import DropDownModel, Question, SpouseQuestion
 from rest_framework import response, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -78,8 +78,11 @@ class QuestionnarieViewSet(GenericViewSet):
 
         data = request.data
 
-        # check for spouse in payload
+        # check for spouse in payload and get answer with answer id
         spouse_exist = data.get("spouse_exist", None)
+        answer_id = spouse_exist.get('answer_id', None)
+        spouse_answer = DropDownModel.objects.get(id=answer_id)
+        spouse_exist = spouse_answer.dropdown_text
 
         try:
 
