@@ -61,20 +61,7 @@ class TaskSerializer(ListTaskSerializer):
 
     class Meta:
         model = Task
-        fields = (
-            "task_id",
-            "status_name",
-            "priority_name",
-            "created_at",
-            "title",
-            "description",
-            "due_date",
-            "tasks_comment",
-            "tasks_docs",
-            "check_list",
-            "tags",
-            "case_id",
-        )
+        fields = "__all__"
 
 
 class CreateTaskCommentSerializer(serializers.ModelSerializer):
