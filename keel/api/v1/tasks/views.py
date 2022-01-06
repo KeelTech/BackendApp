@@ -83,12 +83,13 @@ class ListTask(GenericViewSet):
 
         # Validate Request Param Data
         try:
+            req_data['user'] = user_id
             task_validation = ListTaskSerializer(data = req_data)
             task_validation.is_valid(raise_exception = True) 
             validated_data = task_validation.validated_data
         except ValidationError as e:
             log_error("ERORR","ListTask: list validate_status", str(user_id), err = str(e))
-            response["message"] = "Invalid Request Data"
+            response["message"] = "Invalid Request Data {}".format(str(e))
             response["status"] = 1
             resp_status = HTTP_STATUS.HTTP_400_BAD_REQUEST
             return Response(response, status = resp_status)
