@@ -108,3 +108,24 @@ class Program(TimeStampedModel, SoftDeleteModel):
     
     def __str__(self) -> str:
         return self.choice
+
+    
+class AgentNotes(TimeStampedModel, SoftDeleteModel):
+
+    agent = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        related_name="agent_notes",
+        default=None,
+        null=True,
+        blank=True,
+    )
+    case = models.ForeignKey(
+        Case,
+        on_delete=models.DO_NOTHING,
+        default=None,
+        null=True,
+        related_name="agent_case_notes",
+    )
+    title = models.CharField(max_length=255, default=None, blank=True, null=True)
+    notes = models.TextField(default=None, blank=True, null=True)
