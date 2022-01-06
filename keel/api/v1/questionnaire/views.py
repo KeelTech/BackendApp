@@ -79,10 +79,21 @@ class QuestionnarieViewSet(GenericViewSet):
         data = request.data
 
         # check for spouse in payload and get answer with answer id
-        spouse_exist = data.get("spouse_exist", None)
-        answer_id = spouse_exist.get('answer_id', None)
-        spouse_answer = DropDownModel.objects.get(id=answer_id)
-        spouse_exist = spouse_answer.dropdown_text
+        try:
+            spouse_exist = data.get("spouse_exist", None)
+            answer_id = spouse_exist.get('answer_id', None)
+            spouse_answer = DropDownModel.objects.get(id=answer_id)
+            spouse_exist = spouse_answer.dropdown_text
+        except Exception as e:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "QuestionnarieViewSet:submit_questionnaire",
+                request.user.id,
+                description="Failed to get spouse answer",
+            )
+            response["status"] = 0
+            response["message"] = str(e)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         try:
 
