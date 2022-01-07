@@ -52,7 +52,7 @@ class QuestionViewSet(GenericViewSet):
             log_error(
                 LOGGER_LOW_SEVERITY,
                 "QuestionViewSet:get_questions",
-                request.user.id,
+                "",
                 description="Failed to get questionnaires",
             )
             response["status"] = 0
@@ -88,7 +88,7 @@ class QuestionnarieViewSet(GenericViewSet):
             log_error(
                 LOGGER_LOW_SEVERITY,
                 "QuestionnarieViewSet:submit_questionnaire",
-                request.user.id,
+                "",
                 description="Failed to get spouse answer",
             )
             response["status"] = 0
@@ -113,9 +113,9 @@ class QuestionnarieViewSet(GenericViewSet):
         except Exception as e:
             log_error(
                 LOGGER_LOW_SEVERITY,
-                "QuestionViewSet:get_questions",
-                request.user.id,
-                description="Failed to get questionnaires",
+                "QuestionnarieViewSet:submit_questionnaire",
+                "",
+                description="Failed to calculate crs",
             )
             response["status"] = 0
             response["message"] = str(e)
