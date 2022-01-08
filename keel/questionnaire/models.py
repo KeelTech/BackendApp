@@ -49,8 +49,8 @@ class CheckBoxModel(TimeStampedModel, SoftDeleteModel):
     spouse_question = models.ForeignKey(SpouseQuestion, on_delete=models.DO_NOTHING, related_name='spouse_question_checkbox',
                             default=None, blank=True, null=True)
     checkbox_text = models.CharField(max_length=255, default=None, blank=True, null=True)
-    with_spouse_score = models.BigIntegerField(default=None, blank=True, null=True)
-    without_spouse_score = models.BigIntegerField(default=None, blank=True, null=True)
+    with_spouse_score = models.BigIntegerField(default=0, blank=True, null=True)
+    without_spouse_score = models.BigIntegerField(default=0, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.question.question_text + ' ' + self.checkbox_text
@@ -61,8 +61,8 @@ class DropDownModel(TimeStampedModel, SoftDeleteModel):
     spouse_question = models.ForeignKey(SpouseQuestion, on_delete=models.DO_NOTHING, related_name='spouse_question_dropdown',
                                     default=None, blank=True, null=True)
     dropdown_text = models.CharField(max_length=255, default=None, blank=True, null=True)
-    with_spouse_score = models.BigIntegerField(default=None, blank=True, null=True)
-    without_spouse_score = models.BigIntegerField(default=None, blank=True, null=True)
+    with_spouse_score = models.BigIntegerField(default=0, blank=True, null=True)
+    without_spouse_score = models.BigIntegerField(default=0, blank=True, null=True)
 
     def __str__(self) -> str:
         return "Question: {} Related Answer: {}".format(self.question.question_text, self.dropdown_text)

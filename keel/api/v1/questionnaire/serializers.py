@@ -53,10 +53,13 @@ class SpouseQuestionSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "question_text",
+            "answer_type",
             "answer_type_value",
+            "key",
             "text_choice",
             "dropdown_choice",
             "checkbox_choice",
+            "is_active",
         )
 
     def get_text_choice(self, obj):
