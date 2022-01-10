@@ -47,6 +47,7 @@ class QuestionViewSet(GenericViewSet):
             spouse_question_serializer = SpouseQuestionSerializer(
                 spouse_question_queryset, many=True
             ).data
+            serializer += spouse_question_serializer
 
         except Exception as e:
             log_error(
@@ -61,7 +62,7 @@ class QuestionViewSet(GenericViewSet):
 
         response["data"] = {
             "questions": serializer,
-            "spouse_questions": spouse_question_serializer,
+            # "spouse_questions": spouse_question_serializer,
         }
         return Response(response)
 
