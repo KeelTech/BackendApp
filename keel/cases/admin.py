@@ -1,7 +1,7 @@
 from django.contrib import admin
 # import autocomplete_all as admin
 from django.contrib.auth import get_user_model
-from .models import Case, Program
+from .models import Case, Program, AgentNotes
 
 User = get_user_model()
 
@@ -26,4 +26,5 @@ class ProgramAdmin(admin.ModelAdmin):
     readonly_fields = ['deleted_at']
 
 admin.site.register(Case, CaseAdmin)
+admin.site.register(AgentNotes)
 admin.site.register(Program, ProgramAdmin)
