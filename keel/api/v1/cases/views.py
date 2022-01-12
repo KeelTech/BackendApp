@@ -176,7 +176,6 @@ class AgentNotesViewSet(GenericViewSet):
         
         # get agent case obj
         case = agent.agents_cases.first()
-        print(case)
 
         data = serializer.validated_data
         data['case'] = case
