@@ -1,5 +1,7 @@
 import logging
 
+from rest_framework import response
+
 from keel.api.permissions import IsRCICUser
 from keel.api.v1.auth.serializers import (
     BaseProfileSerializer,
@@ -158,3 +160,34 @@ class UpdateCaseProgramView(GenericViewSet):
         case_serializer = CasesSerializer(case)
         response["data"] = case_serializer.data
         return Response(response)
+
+
+class AgentNotesViewSet(GenericViewSet):
+    serializer_class = AgentNoteSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, IsRCICUser)
+
+    def create_agent_notes(self, request):
+        response = {"status": 1, "message": "Agent Notes Created Successfully", "data": ""}
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        agent = request.user
+        
+        # get agent case obj
+        case = agent.agents_cases.first()
+
+        data = serializer.validated_data
+        data['case'] = case
+        data['agent'] = agent
+
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error("ERROR: CASE:AgentNotesViewSet " + str(e))
+            response["message"] = str(e)
+            response["status"] = 0
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+        response["data"] = serializer.data
+        return Response(response, status=status.HTTP_201_CREATED)

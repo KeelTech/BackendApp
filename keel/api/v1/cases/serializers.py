@@ -110,4 +110,4 @@ class CaseProgramSerializer(serializers.Serializer):
 class AgentNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = AgentNotes
-        fields = "__all__"
+        exclude = ("deleted_at", "created_at", "updated_at")
