@@ -174,8 +174,8 @@ class AgentNotesViewSet(GenericViewSet):
 
         agent = request.user
         
-        # get agent case obj
-        case = agent.agents_cases.first()
+        # get agent case obj from query param
+        case = Case.objects.get(case_id=request.query_params.get("case_id"))
 
         data = serializer.validated_data
         data['case'] = case
