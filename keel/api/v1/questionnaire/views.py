@@ -43,7 +43,7 @@ class QuestionViewSet(GenericViewSet):
 
             serializer = QuestionSerializer(questions, many=True).data
 
-            spouse_question_queryset = SpouseQuestion.objects.all()
+            spouse_question_queryset = SpouseQuestion.objects.filter(is_active=True)
             spouse_question_serializer = SpouseQuestionSerializer(
                 spouse_question_queryset, many=True
             ).data
