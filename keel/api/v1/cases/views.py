@@ -10,7 +10,7 @@ from keel.api.v1.auth.serializers import (
 )
 from keel.api.v1.chats.views import ChatList
 from keel.authentication.backends import JWTAuthentication
-from keel.cases.models import Case, Program
+from keel.cases.models import Case, Program, AgentNotes
 from keel.tasks.models import Task
 from rest_framework import generics, permissions, serializers, status
 from rest_framework.response import Response
@@ -168,26 +168,42 @@ class AgentNotesViewSet(GenericViewSet):
     permission_classes = (permissions.IsAuthenticated, IsRCICUser)
 
     def create_agent_notes(self, request):
-        response = {"status": 1, "message": "Agent Notes Created Successfully", "data": ""}
+        response = {
+            "status": 1,
+            "message": "Agent Notes Created Successfully",
+            "data": "",
+        }
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         agent = request.user
-        
+
         # get agent case obj from query param
         case = Case.objects.get(case_id=request.query_params.get("case_id"))
-
         data = serializer.validated_data
-        data['case'] = case
-        data['agent'] = agent
+        data["case"] = case
+        data["agent"] = agent
 
-        try:
-            serializer.save()
-        except Exception as e:
-            logger.error("ERROR: CASE:AgentNotesViewSet " + str(e))
-            response["message"] = str(e)
-            response["status"] = 0
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
-        
-        response["data"] = serializer.data
-        return Response(response, status=status.HTTP_201_CREATED)
+        # check if agent already has note for this case and update it
+        agent_note = AgentNotes.objects.filter(case=case, agent=agent).first()
+
+        if agent_note:
+            agent_note.title = serializer.validated_data.get("title")
+            agent_note.notes = serializer.validated_data.get("notes")
+            agent_note.save()
+            serializer = self.serializer_class(agent_note).data
+            response["message"] = "Agent Notes Updated Successfully"
+            response["data"] = serializer
+            return Response(response)
+
+        else:
+            try:
+                serializer.save()
+            except Exception as e:
+                logger.error("ERROR: CASE:AgentNotesViewSet " + str(e))
+                response["message"] = str(e)
+                response["status"] = 0
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+            response["data"] = serializer.data
+            return Response(response, status=status.HTTP_201_CREATED)
