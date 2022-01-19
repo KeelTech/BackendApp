@@ -110,4 +110,9 @@ class CaseProgramSerializer(serializers.Serializer):
 class AgentNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = AgentNotes
-        exclude = ("deleted_at", "created_at", "updated_at")
+        fields = ("id", "title", "notes", "agent", "case")
+        # exclude = ("deleted_at", "created_at", "updated_at")
+    
+    def create(self, validated_data):
+        agent_note = AgentNotes.objects.create(**validated_data)
+        return agent_note
