@@ -405,7 +405,7 @@ class TaskStatusChange(GenericViewSet):
 
 class GetTemplateTask(GenericViewSet):
     serializer_class = TaskSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, IsRCICUser)
     authentication_classes = (JWTAuthentication, )
 
     def get_templated_task(self, request):
@@ -421,15 +421,15 @@ class GetTemplateTask(GenericViewSet):
         req_data = request.GET.dict()
         case_id = req_data.get("case","")
 
-        # validate Case ID against User/Agent
-        case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
-        case_serializer.is_valid(raise_exception=True)
-        case_obj = case_serializer.validated_data
+        # # validate Case ID against User/Agent
+        # case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
+        # case_serializer.is_valid(raise_exception=True)
+        # case_obj = case_serializer.validated_data
 
 
         # Filter the data as is_template = False
         try:
-            tasks = Task.objects.filter(case=case_obj, is_template=True).order_by("-updated_at")
+            tasks = Task.objects.filter(case__agent=user, is_template=True)
             task_list_data = ListTaskSerializer(tasks, many = True)
             resp_data = task_list_data.data    
             response['data'] = resp_data 
