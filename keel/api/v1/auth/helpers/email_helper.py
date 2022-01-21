@@ -56,3 +56,9 @@ def send_delete_task_email(context, to_email):
     subject = 'Task Deleted'
     html_content = get_template('task_deleted.html').render(context)
     base_send_email(subject, html_content, to_email)
+
+
+def send_crs_score(context, to_email):
+    subject = 'CRS Score'
+    html_content = get_template('crs_score.html').render(context)
+    base_send_email(subject, html_content, to_email)
