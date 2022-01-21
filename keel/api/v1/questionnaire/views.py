@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from keel.api.v1.questionnaire.helper.answer_dict import AnswerDict
+from keel.api.v1.auth.helpers.email_helper import send_crs_score
 
 from keel.api.v1.eligibility_calculator.helpers import (
     crs_calculator,
@@ -78,6 +79,7 @@ class QuestionnarieViewSet(GenericViewSet):
         }
 
         data = request.data
+        email = data.get("email", None)
 
         # check for spouse in payload and get answer with answer id
         try:
@@ -123,6 +125,18 @@ class QuestionnarieViewSet(GenericViewSet):
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         # send email for crs score
+        try:
+            context = {
+                "score" : crs_score,
+            }
+            send_crs_score(context, email)
+        except Exception as e:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "QuestionnarieViewSet:submit_questionnaire",
+                "",
+                description="Failed to send crs score email",
+            )
 
         response["data"] = "Crs score {}".format(crs_score)
         return Response(response)
