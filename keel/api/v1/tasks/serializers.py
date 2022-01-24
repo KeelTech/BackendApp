@@ -1,6 +1,6 @@
 from keel.api.v1.auth.serializers import UserDetailsSerializer, UserDocumentSerializer
 from keel.Core.err_log import log_error
-from keel.tasks.models import Task, TaskComments
+from keel.tasks.models import Task, TaskComments, TaskTemplate
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -136,3 +136,9 @@ class TaskIDCheckSerializer(serializers.Serializer):
             raise serializers.ValidationError("Task Id does not exist")
 
         return task_obj
+
+
+class TaskTemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskTemplate
+        fields = "__all__"
