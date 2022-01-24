@@ -1,6 +1,6 @@
 from keel.Core.admin import CustomBaseModelAdmin
 from django.contrib import admin
-from .models import Task, TaskComments
+from .models import Task, TaskComments, TaskTemplate
 
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('task_id', 'case', 'status', 'user')
@@ -12,3 +12,4 @@ class TaskCommentsAdmin(CustomBaseModelAdmin):
 
 admin.site.register(Task, TaskAdmin)
 admin.site.register(TaskComments, TaskCommentsAdmin)
+admin.site.register(TaskTemplate)

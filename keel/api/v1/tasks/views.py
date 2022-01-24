@@ -22,7 +22,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
+from .instances import create_template_task
 from .serializers import (CreateTaskCommentSerializer, ListTaskSerializer,
                           TaskCreateSerializer, TaskIDCheckSerializer,
                           TaskSerializer, TaskStatusChangeSerializer,
@@ -199,6 +199,10 @@ class TaskAdminOperations(GenericViewSet):
 
         response['data'] = TaskSerializer(task_obj).data
 
+        # create an instance of Template task if is_template is True
+        if task_obj.is_template:
+            create_template_task(task_obj)
+            
         # create a notification instance
         notification = InAppNotification.objects.create(
             user_id = request.user, case_id = case_obj, category = TASKS

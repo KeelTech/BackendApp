@@ -42,3 +42,10 @@ class TaskComments(TimeStampedModel, SoftDeleteModel):
     msg = models.TextField(null=True,blank=True)
 
 
+
+class TaskTemplate(TimeStampedModel, SoftDeleteModel):
+    title = models.CharField(max_length=512, default=None, null=True,blank=True)
+    description = models.TextField(default=None, null=True,blank=True)
+    checklist = models.JSONField(default = dict, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
