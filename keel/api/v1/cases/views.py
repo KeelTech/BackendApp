@@ -89,8 +89,8 @@ class FilterUserCasesDetails(GenericViewSet):
             completed_tasks = Task.objects.filter(case=queryset, status=2).count()
 
             # get agent notes
-            agent_notes = queryset.agent_case_notes.all()
-            serializer_agent_notes = AgentNoteSerializer(agent_notes, many=True)
+            agent_notes = queryset.agent_case_notes.last()
+            serializer_agent_notes = AgentNoteSerializer(agent_notes)
 
             data = {
                 "case_details": serializer_cases.data,
