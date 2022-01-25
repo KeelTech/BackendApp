@@ -55,4 +55,9 @@ urlpatterns = [
         TaskTemplateView.as_view({"post": "update"}),
         name="template-task",
     ),
+    path(
+        "list-task-template",
+        TaskTemplateView.as_view({"get": "list_task_template"}),
+        name="list-task-template",
+    ),
 ]

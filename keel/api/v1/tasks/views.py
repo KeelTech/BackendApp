@@ -221,7 +221,7 @@ class TaskAdminOperations(GenericViewSet):
 
         # create an instance of Template task if is_template is True
         if task_obj.is_template:
-            create_template_task(task_obj)
+            create_template_task(task_obj, user)
 
         # create a notification instance
         notification = InAppNotification.objects.create(
@@ -508,5 +508,16 @@ class TaskTemplateView(GenericViewSet):
             response["status"] = 0
             resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
 
+        response["data"] = serializer.data
+        return Response(response)
+
+    def list_task_template(self, request):
+        response = {
+            "status": 0,
+            "message": "Task Template list is successfully fetched",
+            "data": [],
+        }
+        queryset = request.user.agent_task_template.all()
+        serializer = TaskTemplateSerializer(queryset, many=True)
         response["data"] = serializer.data
         return Response(response)
