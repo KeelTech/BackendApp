@@ -60,7 +60,7 @@ class FilterUserCasesDetails(GenericViewSet):
         response = {"status": 1, "message": ""}
         pk = kwargs.get("case_id")
         try:
-            queryset = Case.objects.get(case_id=pk)
+            queryset = Case.objects.prefetch_related("agent_case_notes", "cases_tasks").get(case_id=pk)
             serializer_cases = self.serializer_class(queryset)
 
             # get all user qualifications
@@ -77,16 +77,16 @@ class FilterUserCasesDetails(GenericViewSet):
             serializer_profile = BaseProfileSerializer(queryset.user.user_profile)
 
             # get number of tasks related to cases from Task Model
-            tasks = Task.objects.filter(case=queryset).count()
+            tasks = queryset.cases_tasks.count()
 
             # get number of pending tasks related to cases from Task Model
-            pending_tasks = Task.objects.filter(case=queryset, status=0).count()
+            pending_tasks = queryset.cases_tasks.filter(status=0).count()
 
             # get number of in review tasks related to cases from Task Model
-            in_review_tasks = Task.objects.filter(case=queryset, status=1).count()
+            in_review_tasks = queryset.cases_tasks.filter(status=1).count()
 
             # get number of completed tasks related to cases from Task Model
-            completed_tasks = Task.objects.filter(case=queryset, status=2).count()
+            completed_tasks = queryset.cases_tasks.filter(status=2).count()
 
             # get agent notes
             agent_notes = queryset.agent_case_notes.last()
