@@ -77,16 +77,19 @@ class FilterUserCasesDetails(GenericViewSet):
             serializer_profile = BaseProfileSerializer(queryset.user.user_profile)
 
             # get number of tasks related to cases from Task Model
-            tasks = queryset.cases_tasks.count()
+            tasks = 0
+            pending_tasks = 0
+            in_review_tasks = 0
+            completed_tasks = 0
 
-            # get number of pending tasks related to cases from Task Model
-            pending_tasks = queryset.cases_tasks.filter(status=0).count()
-
-            # get number of in review tasks related to cases from Task Model
-            in_review_tasks = queryset.cases_tasks.filter(status=1).count()
-
-            # get number of completed tasks related to cases from Task Model
-            completed_tasks = queryset.cases_tasks.filter(status=2).count()
+            for task in queryset.cases_tasks.all():
+                tasks += 1
+                if task.status ==0:
+                    pending_tasks += 1
+                elif task.status == 1:
+                    in_review_tasks += 1
+                elif task.status == 2:
+                    completed_tasks += 1
 
             # get agent notes
             agent_notes = queryset.agent_case_notes.last()
