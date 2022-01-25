@@ -92,7 +92,8 @@ class FilterUserCasesDetails(GenericViewSet):
                     completed_tasks += 1
 
             # get agent notes
-            agent_notes = queryset.agent_case_notes.last()
+            last = queryset.agent_case_notes.all()
+            agent_notes = last[len(last) - 1] if last else None
             serializer_agent_notes = AgentNoteSerializer(agent_notes)
 
             data = {
