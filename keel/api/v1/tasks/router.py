@@ -60,4 +60,9 @@ urlpatterns = [
         TaskTemplateView.as_view({"get": "list_task_template"}),
         name="list-task-template",
     ),
+    path(
+        "delete-task-template/<int:pk>",
+        TaskTemplateView.as_view({"delete": "delete"}),
+        name="delete-task-template",
+    ),
 ]
