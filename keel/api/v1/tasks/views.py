@@ -521,3 +521,22 @@ class TaskTemplateView(GenericViewSet):
         serializer = TaskTemplateSerializer(queryset, many=True)
         response["data"] = serializer.data
         return Response(response)
+    
+    def delete(self, request, pk):
+        response = {
+            "status": 0,
+            "message": "Task Template Deleted Successfully",
+            "data": {},
+        }
+        queryset = self.get_object(pk)
+        try:
+            queryset.delete()
+        except Exception as e:
+            log_error(
+                "ERROR", "TaskTemplateView: delete", str(request.user), err=str(e)
+            )
+            response["message"] = GENERIC_ERROR
+            response["status"] = 0
+            resp_status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR
+
+        return Response(response)
