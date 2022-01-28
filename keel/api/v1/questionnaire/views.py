@@ -36,7 +36,9 @@ class QuestionViewSet(GenericViewSet):
         try:
             # filter by is_active if query_params is true
             if query_params == "true":
-                questions = Question.objects.filter(is_active=True)
+                questions = Question.objects.prefetch_related(
+                    "question_checkbox", "question_dropdown"
+                ).filter(is_active=True)
 
             # if query_params is false, get all questions
             else:
@@ -44,7 +46,9 @@ class QuestionViewSet(GenericViewSet):
 
             serializer = QuestionSerializer(questions, many=True).data
 
-            spouse_question_queryset = SpouseQuestion.objects.filter(is_active=True)
+            spouse_question_queryset = SpouseQuestion.objects.prefetch_related(
+                "spouse_question_checkbox", "spouse_question_dropdown"
+            ).filter(is_active=True)
             spouse_question_serializer = SpouseQuestionSerializer(
                 spouse_question_queryset, many=True
             ).data
@@ -84,7 +88,7 @@ class QuestionnarieViewSet(GenericViewSet):
         # check for spouse in payload and get answer with answer id
         try:
             spouse_exist = data.get("spouse_exist", None)
-            answer_id = spouse_exist.get('answer_id', None)
+            answer_id = spouse_exist.get("answer_id", None)
             spouse_answer = DropDownModel.objects.get(id=answer_id)
             spouse_exist = spouse_answer.dropdown_text
         except Exception as e:
@@ -127,7 +131,7 @@ class QuestionnarieViewSet(GenericViewSet):
         # send email for crs score
         try:
             context = {
-                "score" : crs_score,
+                "score": crs_score,
             }
             send_crs_score(context, email)
         except Exception as e:
