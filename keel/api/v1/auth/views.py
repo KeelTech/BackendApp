@@ -556,10 +556,10 @@ class ProfileView(GenericViewSet):
             data = constants.PROFILE
             return data
     
-    def get_queryset_cases(self, request):
+    def get_queryset_cases(self, user):
         get_case = None
         try:
-            get_case = Case.objects.get(user=request.user, is_active=True)
+            get_case = Case.objects.select_related('plan').get(user=user, is_active=True)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GetCases ' + str(e))
         plan = ""
@@ -714,7 +714,8 @@ class ProfileView(GenericViewSet):
         return Response(response)
     
     def get_profile(self, request):
-        case = self.get_queryset_cases(request)
+        user = request.user
+        case = self.get_queryset_cases(user)
         response = {
             "status" : 1,
             "message" : {"profile_exists": False,  "profile":{}, "cases":case["case_details"], "agent":case["agent"]}
