@@ -556,10 +556,10 @@ class ProfileView(GenericViewSet):
             data = constants.PROFILE
             return data
     
-    def get_queryset_cases(self, user):
+    def get_queryset_cases(self, request):
         get_case = None
         try:
-            get_case = Case.objects.select_related('plan').get(user=user, is_active=True)
+            get_case = Case.objects.get(user=request.user, is_active=True)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GetCases ' + str(e))
         plan = ""
@@ -714,8 +714,7 @@ class ProfileView(GenericViewSet):
         return Response(response)
     
     def get_profile(self, request):
-        user = request.user
-        case = self.get_queryset_cases(user)
+        case = self.get_queryset_cases(request)
         response = {
             "status" : 1,
             "message" : {"profile_exists": False,  "profile":{}, "cases":case["case_details"], "agent":case["agent"]}
@@ -1566,13 +1565,13 @@ class AgentView(GenericViewSet):
     permission_classes = (IsAuthenticated, IsRCICUser, )
 
     def agent_profile(self, request):
-        user =  request.user
+        user = request.user
         response = {
             "status" : 1,
             "message" : ""
         }
         try:
-            queryset = AgentProfile.objects.select_related('agent').get(agent=request.user)
+            queryset = AgentProfile.objects.select_related('agent').get(agent=user)
         except AgentProfile.DoesNotExist as e:
             logger.error('ERROR: AUTHENTICATION:AgentView ' + str(e))
             response['message'] = str(e)
