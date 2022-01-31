@@ -1570,7 +1570,7 @@ class AgentView(GenericViewSet):
             "message" : ""
         }
         try:
-            queryset = AgentProfile.objects.get(agent=request.user)
+            queryset = AgentProfile.objects.select_related('agent').get(agent=request.user)
         except AgentProfile.DoesNotExist as e:
             logger.error('ERROR: AUTHENTICATION:AgentView ' + str(e))
             response['message'] = str(e)
