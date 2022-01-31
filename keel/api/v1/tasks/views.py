@@ -97,7 +97,6 @@ class ListTask(GenericViewSet):
             task_validation = ListTaskSerializer(data=req_data)
             task_validation.is_valid(raise_exception=True)
             validated_data = task_validation.validated_data
-            print(validated_data)
         except ValidationError as e:
             log_error(
                 "ERORR", "ListTask: list validate_status", str(user_id), err=str(e)

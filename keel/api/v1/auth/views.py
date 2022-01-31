@@ -1566,13 +1566,13 @@ class AgentView(GenericViewSet):
     permission_classes = (IsAuthenticated, IsRCICUser, )
 
     def agent_profile(self, request):
-        user =  request.user
+        user = request.user
         response = {
             "status" : 1,
             "message" : ""
         }
         try:
-            queryset = AgentProfile.objects.get(agent=user)
+            queryset = AgentProfile.objects.select_related('agent').get(agent=user)
         except AgentProfile.DoesNotExist as e:
             logger.error('ERROR: AUTHENTICATION:AgentView ' + str(e))
             response['message'] = str(e)

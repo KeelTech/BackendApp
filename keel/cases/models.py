@@ -25,10 +25,10 @@ class CaseManager(models.Manager):
         user_type = agent.user_type
         
         if user_type == User.RCIC:
-            queryset = self.filter(agent = agent).order_by(*sort_list)
+            queryset = self.select_related('plan', 'user', 'account_manager').filter(agent = agent).order_by(*sort_list)
         
         elif user_type == User.ACCOUNT_MANAGER:
-            queryset = self.filter(account_manager = agent).order_by(*sort_list)
+            queryset = self.select_related('plan', 'user', 'agent', 'account_manager').filter(account_manager = agent).order_by(*sort_list)
 
         return queryset
 
