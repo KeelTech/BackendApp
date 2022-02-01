@@ -125,7 +125,7 @@ class ChatList(GenericViewSet):
 
     def get_unread_messages(self, request):
         response = {'status':1, 'message':'Number of unread messages for user', 'data':''}
-        user_instance = request.user
+        user_instance = request.user.users_cases.first()
         unread_message = UnreadChats.get_unread_messages(user_instance)
         response["data"] = unread_message
         return Response(response)
