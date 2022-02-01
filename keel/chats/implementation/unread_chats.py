@@ -5,9 +5,12 @@ from keel.Core.err_log import log_error
 
 class UnreadChats(object):
     
-    def get_unread_messages(user):
+    def get_unread_messages(obj):
+        chat_receipts = obj.case_chats_receipts.all()
+        user = obj.user
+        last_chat = obj.cases_chatrooms.all()
         try:
-            user_messages = ChatReceipts.objects.filter(user_id=user.id).last()
+            user_messages = chat_receipts[len(chat_receipts) - 1] if chat_receipts else None
         except ChatReceipts.DoesNotExist as err:
             log_error(LOGGER_MODERATE_SEVERITY, "ChatList:get_unread_messages", user.id, 
                             description=str(err))
@@ -20,9 +23,7 @@ class UnreadChats(object):
 
         # user case
         try:
-            user_case = user.users_cases.get(user=user)
-            case_chat = ChatRoom.objects.get(case=user_case)
-            chats = Chat.objects.filter(chatroom=case_chat).exclude(sender=user).last()
+            chats = last_chat[len(chat_receipts) -1] if last_chat else None
             if chats is None:
                 messages_for_case = chat_id
             else:

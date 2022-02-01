@@ -16,6 +16,7 @@ from rest_framework import generics, permissions, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
+from keel.api.v1.tasks.instances import number_of_tasks_per_status
 
 from .serializers import (
     BaseCaseProgramSerializer,
@@ -77,19 +78,7 @@ class FilterUserCasesDetails(GenericViewSet):
             serializer_profile = BaseProfileSerializer(queryset.user.user_profile)
 
             # get number of tasks related to cases from Task Model
-            tasks = 0
-            pending_tasks = 0
-            in_review_tasks = 0
-            completed_tasks = 0
-
-            for task in queryset.cases_tasks.all():
-                tasks += 1
-                if task.status ==0:
-                    pending_tasks += 1
-                elif task.status == 1:
-                    in_review_tasks += 1
-                elif task.status == 2:
-                    completed_tasks += 1
+            tasks = number_of_tasks_per_status(queryset)
 
             # get agent notes
             last = queryset.agent_case_notes.all()
@@ -101,10 +90,10 @@ class FilterUserCasesDetails(GenericViewSet):
                 "user_qualifications": serializer_qua.data,
                 "user_work_experience": serializer_work.data,
                 "user_details": serializer_profile.data,
-                "task_count": tasks,
-                "pending_task_count": pending_tasks,
-                "in_review_task_count": in_review_tasks,
-                "completed_task_count": completed_tasks,
+                "task_count": tasks["tasks"],
+                "pending_task_count": tasks["pending_tasks"],
+                "in_review_task_count": tasks["in_review_tasks"],
+                "completed_task_count": tasks["completed_tasks"],
                 "agent_notes": serializer_agent_notes.data,
             }
         except Exception as e:
