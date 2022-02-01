@@ -5,6 +5,7 @@ from keel.cases.models import AgentNotes, Case, Program
 from keel.chats.implementation.unread_chats import UnreadChats
 from keel.Core.err_log import log_error
 from rest_framework import serializers
+from keel.api.v1.tasks.instances import number_of_tasks_per_status
 
 logger = logging.getLogger("app-logger")
 
@@ -15,6 +16,7 @@ class CasesSerializer(serializers.ModelSerializer):
     plan = serializers.SerializerMethodField()
     user_details = UserDetailsSerializer(source="user", many=False)
     number_of_unread_messages = serializers.SerializerMethodField()
+    action_items = serializers.SerializerMethodField()
 
     class Meta:
         model = Case
@@ -33,14 +35,19 @@ class CasesSerializer(serializers.ModelSerializer):
             "updated_at",
             "user_details",
             "number_of_unread_messages",
+            "action_items",
         )
 
     def get_plan(self, obj):
         return {"id": obj.plan.id, "name": obj.plan.title}
-
+    
     def get_number_of_unread_messages(self, obj):
-        user_instance = obj.user
-        return UnreadChats.get_unread_messages(user_instance)
+        return UnreadChats.get_unread_messages(obj)
+
+    def get_action_items(self, obj):
+        number_of_unread_messages = UnreadChats.get_unread_messages(obj)
+        in_review_tasks = number_of_tasks_per_status(obj)["in_review_tasks"]
+        return number_of_unread_messages + in_review_tasks
 
 
 class CaseIDSerializer(serializers.Serializer):
