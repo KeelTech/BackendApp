@@ -42,10 +42,10 @@ class CasesSerializer(serializers.ModelSerializer):
         return {"id": obj.plan.id, "name": obj.plan.title}
     
     def get_number_of_unread_messages(self, obj):
-        return UnreadChats.get_unread_messages(obj)
+        return ""
 
     def get_action_items(self, obj):
-        number_of_unread_messages = UnreadChats.get_unread_messages(obj)
+        number_of_unread_messages = UnreadChats.user_unread_messages(obj)
         in_review_tasks = number_of_tasks_per_status(obj)["in_review_tasks"]
         return number_of_unread_messages + in_review_tasks
 
