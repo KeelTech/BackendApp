@@ -53,7 +53,7 @@ class ListTask(GenericViewSet):
             pass
 
         count_list = (
-            Task.objects.filter(**validated_data)
+            Task.objects.filter(**validated_data, deleted_at__isnull=True)
             .values("status")
             .annotate(Count("status"))
         )
