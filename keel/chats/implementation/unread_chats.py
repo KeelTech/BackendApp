@@ -8,7 +8,10 @@ class UnreadChats(object):
         user = obj.user
         try:
             user_messages2 = obj.case_chats_receipts.all()
-            user_messages = user_messages2[len(user_messages2)-1] if user_messages2 else None
+            if len(user_messages2) > 0:
+                user_messages = user_messages2[len(user_messages2)-1] if user_messages2 else None
+            else:
+                user_messages = None
 
             # user_messages = ChatReceipts.objects.filter(user_id=user).last()
         except ChatReceipts.DoesNotExist as err:
@@ -28,7 +31,10 @@ class UnreadChats(object):
         # user case
         try:
             chat_room2 = obj.cases_chatrooms.all()
-            chat_room = chat_room2[len(chat_room2)-1] if chat_room2 else None
+            if len(chat_room2) > 0:
+                chat_room = chat_room2[len(chat_room2)-1] if chat_room2 else None
+            else:
+                chat_room = None
             
             # chat_room = ChatRoom.objects.get(case=obj)
             chats = chat_room.chatroom_chats.all()
