@@ -27,7 +27,7 @@ class CaseManager(models.Manager):
             queryset = (
                 self.select_related("plan", "user", "agent")
                 .prefetch_related(
-                    "case_chats_receipts", "cases_chatrooms", "cases_tasks"
+                    "case_chats_receipts", "cases_chatrooms__chatroom_chats", "cases_tasks"
                 )
                 .filter(agent=agent)
                 .order_by(*sort_list)
@@ -37,7 +37,7 @@ class CaseManager(models.Manager):
             queryset = (
                 self.select_related("plan", "user", "account_manager")
                 .prefetch_related(
-                    "case_chats_receipts", "cases_chatrooms", "cases_tasks"
+                    "case_chats_receipts", "cases_chatrooms__chatroom_chats", "cases_tasks"
                 )
                 .filter(accout_manager=agent)
                 .order_by(*sort_list)
