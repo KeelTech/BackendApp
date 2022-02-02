@@ -4,21 +4,25 @@ from keel.Core.err_log import log_error
 
 
 class UnreadChats(object):
-    
-    def get_unread_messages(obj):
-        chat_receipts = obj.case_chats_receipts.all()
+    def user_unread_messages(obj):
         user = obj.user
-        last_chat = obj.cases_chatrooms.all()
         try:
-            if len(chat_receipts) > 0:
-                user_messages = chat_receipts[len(chat_receipts) - 1] if chat_receipts else None
+            user_messages2 = obj.case_chats_receipts.all()
+            if len(user_messages2) > 0:
+                user_messages = user_messages2[len(user_messages2)-1] if user_messages2 else None
             else:
                 user_messages = None
+
+            # user_messages = ChatReceipts.objects.filter(user_id=user).last()
         except ChatReceipts.DoesNotExist as err:
-            log_error(LOGGER_MODERATE_SEVERITY, "ChatList:get_unread_messages", user.id, 
-                            description=str(err))
+            log_error(
+                LOGGER_MODERATE_SEVERITY,
+                "ChatList:get_unread_messages",
+                user.id,
+                description=str(err),
+            )
             return "An error occured, check logs for details"
-        
+
         if user_messages is None:
             chat_id = 0
         else:
@@ -26,20 +30,31 @@ class UnreadChats(object):
 
         # user case
         try:
-            if len(last_chat) > 0:
-                chats = last_chat[len(last_chat) -1] if last_chat else None
+            chat_room2 = obj.cases_chatrooms.all()
+            if len(chat_room2) > 0:
+                chat_room = chat_room2[len(chat_room2)-1] if chat_room2 else None
             else:
-                chats = None
+                chat_room = None
             
+            # chat_room = ChatRoom.objects.get(case=obj)
+            chats = chat_room.chatroom_chats.all()
+            chats = chats[len(chats)-1] if chats else None
+
             if chats is None:
                 messages_for_case = chat_id
             else:
                 messages_for_case = chats.id
         except Exception as err:
-            log_error(LOGGER_MODERATE_SEVERITY, "ChatList:get_unread_messages", user.id, 
-                            description=str(err))
+            log_error(
+                LOGGER_MODERATE_SEVERITY,
+                "ChatList:get_unread_messages",
+                user.id,
+                description=str(err),
+            )
             return "An error occured, check logs for details"
-        
+
         # number of unread messages
         unread_message = messages_for_case - chat_id
         return unread_message
+
+    # def 

@@ -61,7 +61,16 @@ class FilterUserCasesDetails(GenericViewSet):
         response = {"status": 1, "message": ""}
         pk = kwargs.get("case_id")
         try:
-            queryset = Case.objects.prefetch_related("agent_case_notes", "cases_tasks").get(case_id=pk)
+            queryset = (
+                Case.objects.select_related("user")
+                .prefetch_related(
+                    "agent_case_notes",
+                    "cases_tasks",
+                    "case_chats_receipts",
+                    "cases_chatrooms",
+                )
+                .get(case_id=pk)
+            )
             serializer_cases = self.serializer_class(queryset)
 
             # get all user qualifications

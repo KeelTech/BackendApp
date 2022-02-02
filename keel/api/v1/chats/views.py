@@ -13,6 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from django.contrib.auth import get_user_model
 
 from .pagination import CHAT_PAGINATION_LIMIT, ChatsPagination
 from .serializers import (BaseChatListSerializer, ChatCreateSerializer,
@@ -21,7 +22,7 @@ from .serializers import (BaseChatListSerializer, ChatCreateSerializer,
 # from rest_framework.pagination import LimitOffsetPagination
 
 
-
+User = get_user_model()
 
 
 class ChatList(GenericViewSet):
@@ -125,7 +126,16 @@ class ChatList(GenericViewSet):
 
     def get_unread_messages(self, request):
         response = {'status':1, 'message':'Number of unread messages for user', 'data':''}
-        user_instance = request.user.users_cases.first()
-        unread_message = UnreadChats.get_unread_messages(user_instance)
+        user = request.user
+        user_type= user.user_type
+
+        if user_type == User.CUSTOMER:
+            user_instance = user.users_cases.first()
+        else:
+            response["status"] = 0
+            response["message"] = "Can't retrieve unread messages for agent user type"
+            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        unread_message = UnreadChats.user_unread_messages(user_instance)
         response["data"] = unread_message
         return Response(response)
