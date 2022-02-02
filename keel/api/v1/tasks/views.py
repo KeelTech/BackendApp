@@ -52,21 +52,17 @@ class ListTask(GenericViewSet):
         except KeyError:
             pass
 
-        count_list = (
-            Task.objects.filter(**validated_data, deleted_at__isnull=True)
-            .values("status")
-            .annotate(Count("status"))
-        )
+        count_list = Task.objects.filter(**validated_data, deleted_at__isnull=True)
 
         for each in count_list:
-            if each["status"] == Task.PENDING:
-                count_data["pending"] = each["status__count"]
+            if each.status == Task.PENDING:
+                count_data["pending"] += 1
 
-            if each["status"] == Task.IN_REVIEW:
-                count_data["in_review"] = each["status__count"]
+            if each.status == Task.IN_REVIEW:
+                count_data["in_review"] += 1
 
-            if each["status"] == Task.COMPLETED:
-                count_data["completed"] = each["status__count"]
+            if each.status == Task.COMPLETED:
+                count_data["completed"] += 1
 
         return count_data
 
@@ -99,7 +95,7 @@ class ListTask(GenericViewSet):
             validated_data = task_validation.validated_data
         except ValidationError as e:
             log_error(
-                "ERORR", "ListTask: list validate_status", str(user_id), err=str(e)
+                "ERORR", "ListTask: list validate_status", str(user), err=str(e)
             )
             response["message"] = "Invalid Request Data {}".format(str(e))
             response["status"] = 1
@@ -116,7 +112,7 @@ class ListTask(GenericViewSet):
             response["data"] = resp_data
         except Exception as e:
             log_error(
-                "ERROR", "ListTask: list ListTaskSerializer", str(user_id), err=str(e)
+                "ERROR", "ListTask: list ListTaskSerializer", str(user), err=str(e)
             )
             response["message"] = GENERIC_ERROR
             response["status"] = 1

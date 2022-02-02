@@ -25,7 +25,7 @@ class CaseManager(models.Manager):
 
         if user_type == User.RCIC:
             queryset = (
-                self.select_related("plan", "user", "agent")
+                self.select_related("plan", "user__user_profile", "agent")
                 .prefetch_related(
                     "case_chats_receipts", "cases_chatrooms__chatroom_chats", "cases_tasks"
                 )

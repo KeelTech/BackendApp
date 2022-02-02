@@ -14,7 +14,7 @@ class CasesSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source="user.email")
     # agent = serializers.ReadOnlyField(source="agent.email")
     plan = serializers.SerializerMethodField()
-    user_details = UserDetailsSerializer(source="user", many=False)
+    user_details = serializers.SerializerMethodField()
     number_of_unread_messages = serializers.SerializerMethodField()
     action_items = serializers.SerializerMethodField()
 
@@ -37,6 +37,8 @@ class CasesSerializer(serializers.ModelSerializer):
             "number_of_unread_messages",
             "action_items",
         )
+    def get_user_details(self, obj):
+        return UserDetailsSerializer(obj.user).data
 
     def get_plan(self, obj):
         return {"id": obj.plan.id, "name": obj.plan.title}
