@@ -5,6 +5,7 @@ from .views import (
     CaseView,
     UpdateCaseProgramView,
     AgentNotesViewSet,
+    CaseTrackerView,
 )
 
 urlpatterns = [
@@ -29,5 +30,10 @@ urlpatterns = [
         "create-agent-notes",
         AgentNotesViewSet.as_view({"post": "create_agent_notes"}),
         name="create-agent-notes",
+    ),
+    path(
+        "get-case-tracker",
+        CaseTrackerView.as_view({"get": "get_case_tracker"}),
+        name="get-case-tracker",
     ),
 ]

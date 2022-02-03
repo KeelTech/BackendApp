@@ -1,7 +1,7 @@
 import logging
 
 from keel.api.v1.auth.serializers import UserDetailsSerializer
-from keel.cases.models import AgentNotes, Case, Program
+from keel.cases.models import AgentNotes, Case, Program, CaseCheckPoint, CaseTracker
 from keel.chats.implementation.unread_chats import UnreadChats
 from keel.Core.err_log import log_error
 from rest_framework import serializers
@@ -37,12 +37,13 @@ class CasesSerializer(serializers.ModelSerializer):
             "number_of_unread_messages",
             "action_items",
         )
+
     def get_user_details(self, obj):
         return UserDetailsSerializer(obj.user).data
 
     def get_plan(self, obj):
         return {"id": obj.plan.id, "name": obj.plan.title}
-    
+
     def get_number_of_unread_messages(self, obj):
         return ""
 
@@ -121,7 +122,23 @@ class AgentNoteSerializer(serializers.ModelSerializer):
         model = AgentNotes
         fields = ("id", "title", "notes", "agent", "case")
         # exclude = ("deleted_at", "created_at", "updated_at")
-    
+
     def create(self, validated_data):
         agent_note = AgentNotes.objects.create(**validated_data)
         return agent_note
+
+
+class CaseCheckPointSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CaseCheckPoint
+        fields = ("id", "title", "description")
+
+
+class CaseTrackerSerializer(serializers.ModelSerializer):
+    case_checkpoint = serializers.SerializerMethodField()
+    class Meta:
+        model = CaseTracker
+        fields = ("id", "case_id", "index", "comments", "case_checkpoint")
+    
+    def get_case_checkpoint(self, obj):
+        return CaseCheckPointSerializer(obj.case_checkpoint).data
