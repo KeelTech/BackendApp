@@ -221,7 +221,7 @@ class CaseTrackerView(GenericViewSet):
         response = {"status": 1, "message": "Case Tracker retreived", "data": ""}
         user = request.user
         try:
-            case = Case.objects.prefetch_related("case_tracker__case_checkpoint").get(user=user)
+            case = Case.objects.prefetch_related("case_tracker","case_tracker__case_checkpoint").get(user=user)
             queryset = case.case_tracker.all()
             serializer = CaseTrackerSerializer(queryset, many=True)
         except Case.DoesNotExist as e:
