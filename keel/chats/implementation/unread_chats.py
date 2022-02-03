@@ -17,7 +17,7 @@ class UnreadChats(object):
         except ChatReceipts.DoesNotExist as err:
             log_error(
                 LOGGER_MODERATE_SEVERITY,
-                "ChatList:get_unread_messages",
+                "UnreadChats:user_unread_messages",
                 user.id,
                 description=str(err),
             )
@@ -38,8 +38,11 @@ class UnreadChats(object):
                 chat_room = None
             
             # chat_room = ChatRoom.objects.get(case=obj)
-            chats = chat_room.chatroom_chats.all()
-            chats = chats[len(chats)-1] if chats else None
+            if chat_room is None:
+                chats = None
+            else:
+                chats = chat_room.chatroom_chats.all()
+                chats = chats[len(chats)-1] if chats else None
 
             if chats is None:
                 messages_for_case = chat_id
@@ -48,7 +51,7 @@ class UnreadChats(object):
         except Exception as err:
             log_error(
                 LOGGER_MODERATE_SEVERITY,
-                "ChatList:get_unread_messages",
+                "UnreadChats:user_unread_messages",
                 user.id,
                 description=str(err),
             )
