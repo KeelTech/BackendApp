@@ -24,6 +24,7 @@ from .serializers import (
     CaseProgramSerializer,
     CasesSerializer,
     AgentNoteSerializer,
+    CaseTrackerSerializer
 )
 
 logger = logging.getLogger("app-logger")
@@ -209,3 +210,30 @@ class AgentNotesViewSet(GenericViewSet):
 
             response["data"] = serializer.data
             return Response(response, status=status.HTTP_201_CREATED)
+
+
+class CaseTrackerView(GenericViewSet):
+    serializer_class = CaseTrackerSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get_case_tracker(self, request):
+        response = {"status": 1, "message": "Case Tracker retreived", "data": ""}
+        user = request.user
+        try:
+            case = Case.objects.prefetch_related("case_tracker","case_tracker__case_checkpoint").get(user=user)
+            queryset = case.case_tracker.all()
+            serializer = CaseTrackerSerializer(queryset, many=True)
+        except Case.DoesNotExist as e:
+            logger.error("ERROR: CASE:CaseTrackerView " + str(e))
+            response["message"] = str(e)
+            response["status"] = 0
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error("ERROR: CASE:CaseTrackerView " + str(e))
+            response["message"] = str(e)
+            response["status"] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        response["data"] = serializer.data
+        return Response(response)

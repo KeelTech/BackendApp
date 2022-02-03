@@ -165,3 +165,15 @@ class AgentNotes(TimeStampedModel, SoftDeleteModel):
     )
     title = models.CharField(max_length=255, default=None, blank=True, null=True)
     notes = models.TextField(default=None, blank=True, null=True)
+
+
+class CaseCheckPoint(TimeStampedModel, SoftDeleteModel):
+    title = models.CharField(max_length=255, default=None, blank=True, null=True)
+    description = models.TextField(default=None, blank=True, null=True)
+
+
+class CaseTracker(TimeStampedModel, SoftDeleteModel):
+    case_id = models.ForeignKey(Case, on_delete=models.DO_NOTHING, related_name="case_tracker", default=None, null=True, blank=True)
+    case_checkpoint = models.ForeignKey(CaseCheckPoint, on_delete=models.DO_NOTHING, related_name="case_checkpoint", default=None, null=True, blank=True)
+    comments = models.CharField(max_length=255, default=None, blank=True, null=True)
+    index = models.IntegerField(default=None, null=True, blank=True)
