@@ -70,7 +70,7 @@ class FilterUserCasesDetails(GenericViewSet):
                     "case_chats_receipts",
                     "cases_chatrooms",
                 )
-                .get(case_id=pk)
+                .get(case_id=pk, is_active=True)
             )
             serializer_cases = self.serializer_class(queryset)
 
@@ -146,7 +146,7 @@ class UpdateCaseProgramView(GenericViewSet):
 
         try:
             # get case obj
-            case = Case.objects.get(case_id=case_obj)
+            case = Case.objects.get(case_id=case_obj, is_active=True)
             case.program = program
             case.save()
         except Case.DoesNotExist as e:
@@ -182,7 +182,7 @@ class AgentNotesViewSet(GenericViewSet):
         agent = request.user
 
         # get agent case obj from query param
-        case = Case.objects.get(case_id=request.query_params.get("case_id"))
+        case = Case.objects.get(case_id=request.query_params.get("case_id"), is_active=True)
         data = serializer.validated_data
         data["case"] = case
         data["agent"] = agent
@@ -221,7 +221,7 @@ class CaseTrackerView(GenericViewSet):
         response = {"status": 1, "message": "Case Tracker retreived", "data": ""}
         user = request.user
         try:
-            case = Case.objects.prefetch_related("case_tracker","case_tracker__case_checkpoint").get(user=user)
+            case = Case.objects.prefetch_related("case_tracker","case_tracker__case_checkpoint").get(user=user, is_active=True)
             queryset = case.case_tracker.all()
             serializer = CaseTrackerSerializer(queryset, many=True)
         except Case.DoesNotExist as e:
