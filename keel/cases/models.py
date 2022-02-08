@@ -27,7 +27,9 @@ class CaseManager(models.Manager):
             queryset = (
                 self.select_related("plan", "user__user_profile", "agent")
                 .prefetch_related(
-                    "case_chats_receipts", "cases_chatrooms__chatroom_chats", "cases_tasks"
+                    "case_chats_receipts",
+                    "cases_chatrooms__chatroom_chats",
+                    "cases_tasks",
                 )
                 .filter(agent=agent)
                 .order_by(*sort_list)
@@ -37,7 +39,9 @@ class CaseManager(models.Manager):
             queryset = (
                 self.select_related("plan", "user", "account_manager")
                 .prefetch_related(
-                    "case_chats_receipts", "cases_chatrooms__chatroom_chats", "cases_tasks"
+                    "case_chats_receipts",
+                    "cases_chatrooms__chatroom_chats",
+                    "cases_tasks",
                 )
                 .filter(accout_manager=agent)
                 .order_by(*sort_list)
@@ -173,7 +177,34 @@ class CaseCheckPoint(TimeStampedModel, SoftDeleteModel):
 
 
 class CaseTracker(TimeStampedModel, SoftDeleteModel):
-    case_id = models.ForeignKey(Case, on_delete=models.DO_NOTHING, related_name="case_tracker", default=None, null=True, blank=True)
-    case_checkpoint = models.ForeignKey(CaseCheckPoint, on_delete=models.DO_NOTHING, related_name="case_checkpoint", default=None, null=True, blank=True)
+    PENDING = 1
+    IN_PROGRESS = 2
+    COMPLETED = 3
+
+    CASE_TRACKER_TYPE_CHOICES = (
+        (PENDING, "PENDING"),
+        (IN_PROGRESS, "IN_PROGRESS"),
+        (COMPLETED, "COMPLETED"),
+    )
+
+    case_id = models.ForeignKey(
+        Case,
+        on_delete=models.DO_NOTHING,
+        related_name="case_tracker",
+        default=None,
+        null=True,
+        blank=True,
+    )
+    case_checkpoint = models.ForeignKey(
+        CaseCheckPoint,
+        on_delete=models.DO_NOTHING,
+        related_name="case_checkpoint",
+        default=None,
+        null=True,
+        blank=True,
+    )
+    status = models.PositiveSmallIntegerField(
+        choices=CASE_TRACKER_TYPE_CHOICES, default=PENDING
+    )
     comments = models.CharField(max_length=255, default=None, blank=True, null=True)
     index = models.IntegerField(default=None, null=True, blank=True)

@@ -111,8 +111,6 @@ class UserViewset(GenericViewSet):
 
         try:
             # send welcome email
-            emails = EmailNotification(subject, html_content, [user.email])
-            emails.send_email(user)
             email_helper.send_welcome_email(user)
         
         except Exception as e:

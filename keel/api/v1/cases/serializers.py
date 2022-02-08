@@ -138,7 +138,7 @@ class CaseTrackerSerializer(serializers.ModelSerializer):
     case_checkpoint = serializers.SerializerMethodField()
     class Meta:
         model = CaseTracker
-        fields = ("id", "case_id", "index", "comments", "case_checkpoint")
+        fields = ("id", "case_id", "index", "comments", "status", "case_checkpoint")
     
     def get_case_checkpoint(self, obj):
         return CaseCheckPointSerializer(obj.case_checkpoint).data
