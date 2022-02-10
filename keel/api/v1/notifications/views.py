@@ -53,7 +53,7 @@ class NotificationViews(GenericViewSet):
         else:
             try:
                 queryset = (
-                    InAppNotification.objects.filter(case_id=user_case)
+                    InAppNotification.objects.filter(case_id=user_case, seen=False)
                     .exclude(user_id=request.user)
                     .order_by("-created_at")
                 )
