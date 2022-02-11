@@ -1437,7 +1437,10 @@ class UploadDocument(GenericViewSet):
         # create a notification instance
         case_id_notification = request.user.users_cases.first()
         notification = InAppNotification.objects.create(
-            user_id = user, case_id = case_id_notification, category = DOCUMENT
+            text = "New Document uploaded",
+            user_id = user, 
+            case_id = case_id_notification, 
+            category = DOCUMENT
         )
 
         return Response(response, status = resp_status)

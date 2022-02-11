@@ -158,6 +158,7 @@ class ListTask(GenericViewSet):
 
         # create a notification instance
         notification = InAppNotification.objects.create(
+            text = "Task {} has been updated".format(task_obj.title),
             user_id=user,
             case_id=task_obj.case,
             category=TASKS,
@@ -220,7 +221,10 @@ class TaskAdminOperations(GenericViewSet):
 
         # create a notification instance
         notification = InAppNotification.objects.create(
-            user_id=request.user, case_id=case_obj, category=TASKS
+            text = "Task {} has been created".format(task_obj.title),
+            user_id=request.user, 
+            case_id=case_obj, 
+            category=TASKS
         )
 
         # send email to user after creating task
@@ -267,7 +271,10 @@ class TaskAdminOperations(GenericViewSet):
 
         # create a notification instance
         notification = InAppNotification.objects.create(
-            user_id=user, case_id=case_obj, category=TASKS
+            text = "Task {} has been deleted".format(task.title),
+            user_id=user, 
+            case_id=case_obj, 
+            category=TASKS
         )
 
         # send email to user after creating task
