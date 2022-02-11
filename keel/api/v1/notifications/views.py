@@ -47,6 +47,12 @@ class NotificationViews(GenericViewSet):
                 .exclude(user_id=request.user)
                 .last()
             )
+            if not queryset:
+                response["status"] = 0
+                response["message"] = "No new notifications"
+                response["data"] = []
+                return Response(response, status=status.HTTP_200_OK)
+            
             serializer = self.serializer_class(queryset, many=False).data
 
         # if recent is false, then return all notifications
