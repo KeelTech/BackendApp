@@ -29,8 +29,7 @@ class SalesUserAdmin(CustomBaseModelAdmin):
         check_email = User.objects.filter(email=email)
         
         if len(check_email) == 0:
-            user = User.objects.create_user(email=email)
-            user.set_password("password@123")
+            user = User.objects.create_user(email=email, password="password@123")
 
             # create case instance
             case = Case(user=user, agent=obj.agent, plan=obj.plan)

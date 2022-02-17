@@ -26,8 +26,7 @@ class UnreadChats(object):
         if user_messages is None:
             chat_id = 0
         else:
-            select = user_messages.chat_id
-            chat_id = select.id
+            chat_id = user_messages.chat_id.id
 
         # user case
         try:
