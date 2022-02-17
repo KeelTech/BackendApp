@@ -1,4 +1,5 @@
 from django.contrib import admin, messages
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from keel.cases.models import Case
@@ -7,6 +8,8 @@ from keel.Core.admin import CustomBaseModelAdmin
 User = get_user_model()
 
 from .models import SalesUser
+
+DEFAULT_USER_PASS = settings.DEFAULT_USER_PASS
 
 
 class SalesUserAdmin(CustomBaseModelAdmin):
@@ -27,19 +30,17 @@ class SalesUserAdmin(CustomBaseModelAdmin):
 
         email = obj.email
         check_email = User.objects.filter(email=email)
-        
+
         if len(check_email) == 0:
-            user = User.objects.create_user(email=email, password="password@123")
+            user = User.objects.create_user(email=email, password=DEFAULT_USER_PASS)
 
             # create case instance
             case = Case(user=user, agent=obj.agent, plan=obj.plan)
             case.save()
             return super().save_model(request, obj, form, change)
-        
+
         else:
-            self.message_user(
-                request, "Email already exists.", level=messages.ERROR
-            )
+            self.message_user(request, "Email already exists.", level=messages.ERROR)
             return HttpResponseRedirect(request.path)
 
 
