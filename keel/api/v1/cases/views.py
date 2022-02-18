@@ -67,6 +67,8 @@ class FilterUserCasesDetails(GenericViewSet):
                 .prefetch_related(
                     "agent_case_notes",
                     "cases_tasks",
+                    "case_chats_receipts",
+                    "cases_chatrooms",
                 )
                 .get(case_id=pk, is_active=True)
             )
