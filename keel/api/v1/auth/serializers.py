@@ -733,12 +733,9 @@ class CustomerLoginSerializer(serializers.Serializer):
 
         # get insensitive email match
         user = User.objects.filter(email__iexact=email).first()
-
-        if not user:
-            raise serializers.ValidationError("Invalid Credentials, Try Again")
         
         # check password
-        if user and not user.check_password(password):
+        if not user and not user.check_password(password):
             raise serializers.ValidationError("Invalid Credentials, Try Again")
 
         if not user.is_active:
