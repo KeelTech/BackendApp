@@ -27,3 +27,14 @@ class CaseUtilHelper(object):
         if not plan_model_obj:
             plan_model_obj = Plan.objects.get(type=Plan.FREE_PLAN_TYPE, currency=currency)
         return Case.objects.create(user=customer_model_obj, plan=plan_model_obj)
+
+# def fetch_case_related_obj(self, agent, sort_list):
+#     queryset = self.select_related("plan", "user__user_profile", "agent").prefetch_related(
+#             # Prefetch(
+#             #     "case_chats_receipts", queryset = ChatReceipts.objects.filter(read=False)
+#             # ),
+#             "cases_chatrooms__chatroom_chats",
+#             "cases_tasks",
+#             "cases_chatrooms",
+#         ).filter(agent=agent).order_by(*sort_list)
+

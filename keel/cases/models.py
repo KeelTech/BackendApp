@@ -1,10 +1,8 @@
 import uuid
 from django.db import models
-
 from keel.Core.models import TimeStampedModel, SoftDeleteModel
 from keel.plans.models import Plan
 from keel.authentication.models import User
-
 from .constants import SORT_COLUMN_MAP
 
 
@@ -28,8 +26,10 @@ class CaseManager(models.Manager):
                 self.select_related("plan", "user__user_profile", "agent")
                 .prefetch_related(
                     "case_chats_receipts",
-                    "cases_chatrooms__chatroom_chats",
+                    "cases_chatrooms",
                     "cases_tasks",
+                    "case_chats_receipts__chat_id",
+                    "cases_chatrooms__chatroom_chats",
                 )
                 .filter(agent=agent)
                 .order_by(*sort_list)
@@ -42,6 +42,7 @@ class CaseManager(models.Manager):
                     "case_chats_receipts",
                     "cases_chatrooms__chatroom_chats",
                     "cases_tasks",
+                    "cases_chatrooms",
                 )
                 .filter(accout_manager=agent)
                 .order_by(*sort_list)

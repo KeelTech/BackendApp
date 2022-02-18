@@ -74,7 +74,7 @@ class ChatList(GenericViewSet):
         serializer_class = BaseChatListSerializer(paginate_queryset, many = True)
         resp_data = dict(pagination_class.get_paginated_response(serializer_class.data).data)
 
-        # read receipt for chat
+        # read receipt for chat to get last unread message
         if len(queryset) > 0:
             receipt = self.chat_receipt(user_id, case_id, queryset[0].pk)
 
