@@ -9,11 +9,6 @@ class UnreadChats(object):
         self.obj = obj
 
     def queryset_sort(self, queryset, user):
-        """
-        To get the unread chats for the user
-        We filter the Chat Receipts by case to get the last read message 
-        and the chat to get the last sent message
-        """
         try:
             if len(queryset) > 0:
                 return queryset[len(queryset)-1] if queryset else None
@@ -29,9 +24,33 @@ class UnreadChats(object):
             return "An error occured, check logs for details"
 
     def user_unread_messages(self):
-        user = self.obj
-        # chats = Chats.objects.filter(
-        # print(self.obj.cases_chatrooms__chatroom_chats.all())
-        # chat = [p for p in self.obj.cases_chatrooms__chatroom_chats]
+        user = self.obj.user
 
-        return 0
+        try:
+            queryset = self.obj.case_chats_receipts.all()
+            user_messages = self.queryset_sort(queryset, user)
+            chat_id = user_messages.chat_id.id if user_messages else 0
+            
+            queryset = self.obj.cases_chatrooms.all()
+            chat_room = self.queryset_sort(queryset, user)
+            
+            if chat_room is None:
+                chats = None
+            else:
+                queryset = chat_room.chatroom_chats.all()
+                chats = self.queryset_sort(queryset, user)
+            
+            messages_for_case = chats.id if chats else chat_id
+
+        except Exception as err:
+            log_error(
+                LOGGER_MODERATE_SEVERITY,
+                "UnreadChats:user_unread_messages",
+                user.id,
+                description=str(err),
+            )
+            return "An error occured, check logs for details"
+
+        # number of unread messages
+        unread_message = messages_for_case - chat_id
+        return unread_message
