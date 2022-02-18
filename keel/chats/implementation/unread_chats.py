@@ -4,49 +4,44 @@ from keel.Core.err_log import log_error
 
 
 class UnreadChats(object):
-    def user_unread_messages(obj):
-        user = obj.user
-        try:
-            user_messages2 = obj.case_chats_receipts.all()
-            if len(user_messages2) > 0:
-                user_messages = user_messages2[len(user_messages2)-1] if user_messages2 else None
-            else:
-                user_messages = None
 
-            # user_messages = ChatReceipts.objects.filter(user_id=user).last()
-        except ChatReceipts.DoesNotExist as err:
+    def __init__(self, obj):
+        self.obj = obj
+
+    def queryset_sort(self, queryset, user):
+        try:
+            if len(queryset) > 0:
+                return queryset[len(queryset)-1] if queryset else None
+            else:
+                return None
+        except Exception as e:
             log_error(
                 LOGGER_MODERATE_SEVERITY,
-                "UnreadChats:user_unread_messages",
+                "UnreadChats:queryset_sort",
                 user.id,
-                description=str(err),
+                description=str(e),
             )
             return "An error occured, check logs for details"
 
-        if user_messages is None:
-            chat_id = 0
-        else:
-            chat_id = user_messages.chat_id.id
+    def user_unread_messages(self):
+        user = self.obj.user
 
-        # user case
         try:
-            chat_room2 = obj.cases_chatrooms.all()
-            if len(chat_room2) > 0:
-                chat_room = chat_room2[len(chat_room2)-1] if chat_room2 else None
-            else:
-                chat_room = None
+            queryset = self.obj.case_chats_receipts.all()
+            user_messages = self.queryset_sort(queryset, user)
+            chat_id = user_messages.chat_id.id if user_messages else 0
             
-            # chat_room = ChatRoom.objects.get(case=obj)
+            queryset = self.obj.cases_chatrooms.all()
+            chat_room = self.queryset_sort(queryset, user)
+            
             if chat_room is None:
                 chats = None
             else:
-                chats = chat_room.chatroom_chats.all()
-                chats = chats[len(chats)-1] if chats else None
+                queryset = chat_room.chatroom_chats.all()
+                chats = self.queryset_sort(queryset, user)
+            
+            messages_for_case = chats.id if chats else chat_id
 
-            if chats is None:
-                messages_for_case = chat_id
-            else:
-                messages_for_case = chats.id
         except Exception as err:
             log_error(
                 LOGGER_MODERATE_SEVERITY,
@@ -59,5 +54,3 @@ class UnreadChats(object):
         # number of unread messages
         unread_message = messages_for_case - chat_id
         return unread_message
-
-    # def 
