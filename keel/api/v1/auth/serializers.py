@@ -731,9 +731,16 @@ class CustomerLoginSerializer(serializers.Serializer):
         email = attrs.get("email", None)
         password = attrs.get("password", None)
 
-        user = authenticate(email=email, password=password)
+        # get insensitive email match
+        user = User.objects.filter(email__iexact=email).first()
 
         if not user:
+            raise serializers.ValidationError("Invalid Credentials, Try Again")
+        
+        check_password = user.check_password(password)
+        
+        # check password
+        if not check_password:
             raise serializers.ValidationError("Invalid Credentials, Try Again")
 
         if not user.is_active:
