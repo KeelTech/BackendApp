@@ -1,5 +1,7 @@
 import logging
 
+from attr import fields
+
 from keel.api.v1.auth.serializers import UserDetailsSerializer
 from keel.cases.models import AgentNotes, Case, Program, CaseCheckPoint, CaseTracker
 from keel.chats.implementation.unread_chats import UnreadChats
@@ -8,6 +10,23 @@ from rest_framework import serializers
 from keel.api.v1.tasks.instances import number_of_tasks_per_status
 
 logger = logging.getLogger("app-logger")
+
+
+class BaseCaseSerializer(serializers.ModelSerializer):
+    user_details = serializers.SerializerMethodField()
+    chat_details = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Case
+        fields = ("status", "case_id", "user_details", "chat_details", "user", "agent")
+
+    def get_user_details(self, obj):
+        user_details = UserDetailsSerializer(obj.user).data
+        return user_details
+
+    def get_chat_details(self, obj):
+        ch = Case.objects.check_for_unread_chats(obj)
+        return ch
 
 
 class CasesSerializer(serializers.ModelSerializer):
@@ -50,6 +69,7 @@ class CasesSerializer(serializers.ModelSerializer):
     def get_action_items(self, obj):
         in_review_tasks = number_of_tasks_per_status(obj)["in_review_tasks"]
         return in_review_tasks
+
 
 class CaseIDSerializer(serializers.Serializer):
 
@@ -134,9 +154,10 @@ class CaseCheckPointSerializer(serializers.ModelSerializer):
 
 class CaseTrackerSerializer(serializers.ModelSerializer):
     case_checkpoint = serializers.SerializerMethodField()
+
     class Meta:
         model = CaseTracker
         fields = ("id", "case_id", "index", "comments", "status", "case_checkpoint")
-    
+
     def get_case_checkpoint(self, obj):
         return CaseCheckPointSerializer(obj.case_checkpoint).data

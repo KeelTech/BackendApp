@@ -1,30 +1,32 @@
 import logging
 
-from rest_framework import response
-
 from keel.api.permissions import IsRCICUser
 from keel.api.v1.auth.serializers import (
     BaseProfileSerializer,
     CustomerQualificationsSerializer,
     CustomerWorkExperienceSerializer,
+    UserDetailsSerializer,
 )
+from django.db.models import Prefetch
 from keel.api.v1.chats.views import ChatList
+from keel.api.v1.tasks.instances import number_of_tasks_per_status
 from keel.authentication.backends import JWTAuthentication
-from keel.cases.models import Case, Program, AgentNotes
+from keel.cases.models import AgentNotes, Case, Program
+from keel.Core.err_log import log_error
 from keel.tasks.models import Task
-from rest_framework import generics, permissions, serializers, status
+from rest_framework import generics, permissions, response, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
-from keel.api.v1.tasks.instances import number_of_tasks_per_status
-
+from keel.chats.models import ChatReceipts, ChatRoom, Chat
 from .serializers import (
+    AgentNoteSerializer,
     BaseCaseProgramSerializer,
+    BaseCaseSerializer,
     CaseIDSerializer,
     CaseProgramSerializer,
     CasesSerializer,
-    AgentNoteSerializer,
-    CaseTrackerSerializer
+    CaseTrackerSerializer,
 )
 
 logger = logging.getLogger("app-logger")
@@ -52,6 +54,35 @@ class FilterUserCases(generics.ListAPIView):
         return Response(response)
 
 
+class CaseUnreadChats(generics.ListAPIView):
+
+    serializer_class = BaseCaseSerializer
+    permission_classes = (permissions.IsAuthenticated, IsRCICUser)
+    authentication_classes = (JWTAuthentication,)
+
+    def get(self, request):
+        response = {"status": 1, "message": ""}
+        user = request.user
+        queryset = (
+            Case.objects.select_related("user__user_profile", "agent")
+            .prefetch_related(
+                Prefetch(
+                    "case_chats_receipts",
+                    queryset=ChatReceipts.objects.select_related("user_id", "chat_id"),
+                ),
+                Prefetch(
+                    "cases_chatrooms",
+                    queryset=ChatRoom.objects.select_related("user", "agent"),
+                ),
+                "cases_chatrooms__chatroom_chats",
+            )
+            .filter(agent=user)
+        )
+        serializer = self.serializer_class(queryset, many=True)
+        response["message"] = serializer.data
+        return Response(response)
+
+
 class FilterUserCasesDetails(GenericViewSet):
 
     serializer_class = CasesSerializer
@@ -67,6 +98,8 @@ class FilterUserCasesDetails(GenericViewSet):
                 .prefetch_related(
                     "agent_case_notes",
                     "cases_tasks",
+                    "case_chats_receipts",
+                    "cases_chatrooms",
                 )
                 .get(case_id=pk, is_active=True)
             )
@@ -180,7 +213,9 @@ class AgentNotesViewSet(GenericViewSet):
         agent = request.user
 
         # get agent case obj from query param
-        case = Case.objects.get(case_id=request.query_params.get("case_id"), is_active=True)
+        case = Case.objects.get(
+            case_id=request.query_params.get("case_id"), is_active=True
+        )
         data = serializer.validated_data
         data["case"] = case
         data["agent"] = agent
@@ -213,13 +248,15 @@ class AgentNotesViewSet(GenericViewSet):
 class CaseTrackerView(GenericViewSet):
     serializer_class = CaseTrackerSerializer
     authentication_classes = (JWTAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_case_tracker(self, request):
         response = {"status": 1, "message": "Case Tracker retreived", "data": ""}
         user = request.user
         try:
-            case = Case.objects.prefetch_related("case_tracker","case_tracker__case_checkpoint").get(user=user, is_active=True)
+            case = Case.objects.prefetch_related(
+                "case_tracker", "case_tracker__case_checkpoint"
+            ).get(user=user, is_active=True)
             queryset = case.case_tracker.all()
             serializer = CaseTrackerSerializer(queryset, many=True)
         except Case.DoesNotExist as e:
@@ -232,6 +269,6 @@ class CaseTrackerView(GenericViewSet):
             response["message"] = str(e)
             response["status"] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
         response["data"] = serializer.data
         return Response(response)

@@ -6,6 +6,7 @@ from .views import (
     UpdateCaseProgramView,
     AgentNotesViewSet,
     CaseTrackerView,
+    CaseUnreadChats
 )
 
 urlpatterns = [
@@ -36,4 +37,9 @@ urlpatterns = [
         CaseTrackerView.as_view({"get": "get_case_tracker"}),
         name="get-case-tracker",
     ),
+    path(
+        "get-case-unread-chats",
+        CaseUnreadChats.as_view(),
+        name="get-case-unread-chats"
+    )
 ]

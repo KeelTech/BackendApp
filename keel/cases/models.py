@@ -1,11 +1,14 @@
 import uuid
-from django.db import models
 
-from keel.Core.models import TimeStampedModel, SoftDeleteModel
-from keel.plans.models import Plan
+from django.db import models
 from keel.authentication.models import User
+from keel.Core.constants import LOGGER_MODERATE_SEVERITY
+from keel.Core.err_log import log_error
+from keel.Core.models import SoftDeleteModel, TimeStampedModel
+from keel.plans.models import Plan
 
 from .constants import SORT_COLUMN_MAP
+from .utils import queryset_sort
 
 
 class CaseManager(models.Manager):
@@ -27,8 +30,6 @@ class CaseManager(models.Manager):
             queryset = (
                 self.select_related("plan", "user__user_profile", "agent")
                 .prefetch_related(
-                    "case_chats_receipts",
-                    "cases_chatrooms__chatroom_chats",
                     "cases_tasks",
                 )
                 .filter(agent=agent)
@@ -39,8 +40,6 @@ class CaseManager(models.Manager):
             queryset = (
                 self.select_related("plan", "user", "account_manager")
                 .prefetch_related(
-                    "case_chats_receipts",
-                    "cases_chatrooms__chatroom_chats",
                     "cases_tasks",
                 )
                 .filter(accout_manager=agent)
@@ -48,6 +47,56 @@ class CaseManager(models.Manager):
             )
 
         return queryset
+
+    def check_for_unread_chats(self, obj):
+        agent = obj.agent
+        case_user = obj.user
+
+        data = {}
+
+        try:
+            last_read_chat = obj.case_chats_receipts.all()
+            filter = [x for x in last_read_chat if x.user_id == agent]
+
+            if len(filter) > 0:
+                last_read_chat = filter[-1].chat_id.id
+            else:
+                last_read_chat = 0
+            
+            # lastest chat for case
+            chat_room = obj.cases_chatrooms.all()
+            filter_chat_room = [
+                x for x in chat_room if x.user == case_user and x.agent == agent
+            ]
+
+            if len(filter_chat_room) > 0:
+                chat_room = filter_chat_room[-1]
+                chat = chat_room.chatroom_chats.all()
+                chat = chat[len(chat) - 1] if chat else None
+                if chat:
+                    chat_id = chat.id
+                    message = chat.message
+                else:
+                    chat_id = 0
+                    message = ""
+
+            if chat_id > last_read_chat:
+                data["new_message"] = True
+                data["last_message"] = message
+                return data
+            else:
+                data["new_message"] = False
+                data["last_message"] = message
+                return data
+
+        except Exception as err:
+            log_error(
+                LOGGER_MODERATE_SEVERITY,
+                "UnreadChats:check_for_unread_chats",
+                agent,
+                description=str(err),
+            )
+            return "An error occured, check logs for details"
 
     def create_from_payment(self, customer_id, plan_id):
         agent = User.objects.filter(is_active=True, user_type=User.RCIC).first()
