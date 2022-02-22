@@ -1,5 +1,6 @@
 from django.contrib import admin
 from keel.Core.admin import CustomBaseModelAdmin
+
 # import autocomplete_all as admin
 from django.contrib.auth import get_user_model
 from .models import Case, Program, AgentNotes, CaseCheckPoint, CaseTracker
@@ -13,6 +14,24 @@ class CaseAdmin(admin.ModelAdmin):
     search_fields = ["case_id"]
     autocomplete_fields = ["user", "agent", "account_manager"]
     readonly_fields = ("deleted_at", "case_id", "display_id")
+
+    def get_readonly_fields(self, request, obj):
+        user = request.user
+        if obj:
+            if user.user_type == User.STAFF:
+                return self.readonly_fields + (
+                    "user",
+                    "agent",
+                    "plan",
+                    "status",
+                    "account_manager",
+                    "is_active",
+                    "ref_id",
+                    "program",
+                )
+            else:
+                return self.readonly_fields
+        
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "user":
@@ -28,11 +47,14 @@ class ProgramAdmin(admin.ModelAdmin):
     list_display = ("choice", "category")
     readonly_fields = ["deleted_at"]
 
+
 class CaseTrackerAdmin(CustomBaseModelAdmin):
     pass
 
+
 class CaseCheckPointAdmin(CustomBaseModelAdmin):
     pass
+
 
 admin.site.register(Case, CaseAdmin)
 admin.site.register(AgentNotes)
