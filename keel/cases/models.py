@@ -8,7 +8,6 @@ from keel.Core.models import SoftDeleteModel, TimeStampedModel
 from keel.plans.models import Plan
 
 from .constants import SORT_COLUMN_MAP
-from .utils import queryset_sort
 
 
 class CaseManager(models.Manager):
