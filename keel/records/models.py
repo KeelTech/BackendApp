@@ -28,3 +28,6 @@ class SalesUser(TimeStampedModel, SoftDeleteModel):
     plan = models.ForeignKey(
         Plan, on_delete=models.DO_NOTHING, default=None, blank=True, null=True
     )
+
+    def __str__(self) -> str:
+        return str(self.email)

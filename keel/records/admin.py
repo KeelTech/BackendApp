@@ -13,6 +13,8 @@ DEFAULT_USER_PASS = settings.DEFAULT_USER_PASS
 
 
 class SalesUserAdmin(CustomBaseModelAdmin):
+    list_display = ("email", "plan", "created_by")
+    list_filter = ("plan", "created_by")
     readonly_fields = ("deleted_at", "created_by")
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
