@@ -1,7 +1,5 @@
 import logging
 
-from attr import fields
-
 from keel.api.v1.auth.serializers import UserDetailsSerializer
 from keel.cases.models import AgentNotes, Case, Program, CaseCheckPoint, CaseTracker
 from keel.chats.implementation.unread_chats import UnreadChats
