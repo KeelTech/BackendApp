@@ -46,14 +46,6 @@ class QuestionViewSet(GenericViewSet):
 
             serializer = QuestionSerializer(questions, many=True).data
 
-            spouse_question_queryset = SpouseQuestion.objects.prefetch_related(
-                "spouse_question_checkbox", "spouse_question_dropdown"
-            ).filter(is_active=True)
-            spouse_question_serializer = SpouseQuestionSerializer(
-                spouse_question_queryset, many=True
-            ).data
-            serializer += spouse_question_serializer
-
         except Exception as e:
             log_error(
                 LOGGER_LOW_SEVERITY,
@@ -67,7 +59,6 @@ class QuestionViewSet(GenericViewSet):
 
         response["data"] = {
             "questions": serializer,
-            # "spouse_questions": spouse_question_serializer,
         }
         return Response(response)
 
