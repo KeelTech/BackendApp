@@ -43,7 +43,7 @@ class SalesUserAdmin(CustomBaseModelAdmin):
             user = User.objects.create_user(email=email, password=DEFAULT_USER_PASS)
 
             # create case instance
-            case = Case(user=user, agent=obj.agent, plan=obj.plan)
+            case = Case(user=user, agent=obj.agent, plan=obj.plan, status=Case.IN_PROGRESS)
             case.save()
             return super().save_model(request, obj, form, change)
 
