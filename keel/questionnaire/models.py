@@ -24,6 +24,7 @@ class Question(TimeStampedModel, SoftDeleteModel):
         choices=ANSWER_TYPE_CHOICES, help_text="The answer type."
     )
     is_active = models.BooleanField(default=True, help_text="Is the question active?")
+    index = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.question_text

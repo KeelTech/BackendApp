@@ -38,7 +38,7 @@ class QuestionViewSet(GenericViewSet):
             if query_params == "true":
                 questions = Question.objects.prefetch_related(
                     "question_checkbox", "question_dropdown"
-                ).filter(is_active=True)
+                ).filter(is_active=True).order_by("index")
 
             # if query_params is false, get all questions
             else:

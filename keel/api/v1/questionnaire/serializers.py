@@ -94,6 +94,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             "dropdown_choice",
             "checkbox_choice",
             "is_active",
+            "index"
         )
 
     def get_text_choice(self, obj):
