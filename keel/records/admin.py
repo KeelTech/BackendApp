@@ -14,7 +14,7 @@ DEFAULT_USER_PASS = settings.DEFAULT_USER_PASS
 
 class SalesUserAdmin(CustomBaseModelAdmin):
     list_display = ("email", "plan", "created_by")
-    list_filter = ("plan", "created_by")
+    list_filter = ("plan", )
     readonly_fields = ("deleted_at", "created_by")
 
     def get_readonly_fields(self, request, obj=None):
