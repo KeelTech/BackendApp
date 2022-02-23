@@ -21,7 +21,6 @@ class CaseAdmin(admin.ModelAdmin):
             if user.user_type == User.STAFF:
                 return self.readonly_fields + (
                     "user",
-                    "agent",
                     "plan",
                     "status",
                     "account_manager",
