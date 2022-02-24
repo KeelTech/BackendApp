@@ -5,7 +5,8 @@ from keel.cases.models import Case
 
 
 class Notification(models.Model):
-    text = models.CharField(max_length=512, default=None, blank=True, null=True)
+    # text = models.CharField(max_length=512, default=None, blank=True, null=True)
+    text = models.JSONField(default=dict, blank=True, null=True)
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, 
                                     default=None, blank=True, null=True)
     case_id = models.ForeignKey(Case, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
