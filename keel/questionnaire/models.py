@@ -59,6 +59,13 @@ class CheckBoxModel(TimeStampedModel, SoftDeleteModel):
     question = models.ForeignKey(
         Question, on_delete=models.DO_NOTHING, related_name="question_checkbox"
     )
+    dependent_question = models.ForeignKey(
+        Question,
+        on_delete=models.DO_NOTHING,
+        related_name="dependent_question_checkbox",
+        null=True,
+        blank=True,
+    )
     spouse_question = models.ForeignKey(
         SpouseQuestion,
         on_delete=models.DO_NOTHING,
@@ -80,6 +87,13 @@ class CheckBoxModel(TimeStampedModel, SoftDeleteModel):
 class DropDownModel(TimeStampedModel, SoftDeleteModel):
     question = models.ForeignKey(
         Question, on_delete=models.DO_NOTHING, related_name="question_dropdown"
+    )
+    dependent_question = models.ForeignKey(
+        Question,
+        on_delete=models.DO_NOTHING,
+        related_name="dependent_question_dropdown",
+        null=True,
+        blank=True,
     )
     spouse_question = models.ForeignKey(
         SpouseQuestion,
