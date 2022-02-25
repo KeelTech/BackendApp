@@ -78,10 +78,25 @@ class SpouseQuestionSerializer(serializers.ModelSerializer):
         return serializer
 
 class DependentQuestionSerializer(serializers.ModelSerializer):
+    dependent_answer = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
         fields = "__all__"
+    
+    def get_dependent_answer(self, obj):
+        if obj.answer_type == Question.TEXT:
+            return obj.question_text
+        elif obj.answer_type == Question.DROPDOWN:
+            queryset = obj.question_dropdown.all()
+            serializer = DropDownSerializer(queryset, many=True).data
+            return serializer
+        elif obj.answer_type == Question.CHECKBOX:
+            queryset = obj.question_checkbox.all()
+            serializer = CheckBoxSerializer(queryset, many=True).data
+            return serializer
+        else:
+            return ""
 
 
 class QuestionSerializer(serializers.ModelSerializer):
