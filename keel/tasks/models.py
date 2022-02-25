@@ -2,6 +2,7 @@ from django.db import models
 from keel.authentication.models import User
 from keel.cases.models import Case
 from keel.Core.models import SoftDeleteModel, TimeStampedModel
+from .utils import create_task_notifcation
 
 # Create your models here.
 
@@ -41,6 +42,11 @@ class Task(TimeStampedModel, SoftDeleteModel):
         User, on_delete=models.deletion.DO_NOTHING, related_name="user_tasks"
     )
     is_template = models.BooleanField(default=False)
+
+    def save(self):
+        if self.task_id:
+            create_task_notifcation(self.title, self.task_id, self.user, self.case)
+        super(Task, self).save()
 
 
 class TaskComments(TimeStampedModel, SoftDeleteModel):
