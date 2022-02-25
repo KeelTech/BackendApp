@@ -43,10 +43,10 @@ class Task(TimeStampedModel, SoftDeleteModel):
     )
     is_template = models.BooleanField(default=False)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.task_id:
             create_task_notifcation(self.title, self.task_id, self.user, self.case)
-        super(Task, self).save()
+        super().save(*args, **kwargs)
 
 
 class TaskComments(TimeStampedModel, SoftDeleteModel):
