@@ -36,23 +36,27 @@ class QuestionViewSet(GenericViewSet):
         try:
             # filter by is_active if query_params is true
             if query_params == "true":
-                questions = Question.objects.prefetch_related(
-                    "question_checkbox", "question_dropdown"
-                ).filter(is_active=True).order_by("index")
+                questions = (
+                    Question.objects.prefetch_related(
+                        "question_checkbox",
+                        "question_dropdown",
+                        "dependent_question_checkbox",
+                        "dependent_question_dropdown",
+                    )
+                    .filter(is_active=True)
+                    .order_by("index")
+                )
 
             # if query_params is false, get all questions
             else:
-                questions = Question.objects.all()
+                questions = Question.objects.prefetch_related(
+                    "question_checkbox",
+                    "question_dropdown",
+                    "dependent_question_checkbox",
+                    "dependent_question_dropdown",
+                ).all()
 
             serializer = QuestionSerializer(questions, many=True).data
-
-            spouse_question_queryset = SpouseQuestion.objects.prefetch_related(
-                "spouse_question_checkbox", "spouse_question_dropdown"
-            ).filter(is_active=True)
-            spouse_question_serializer = SpouseQuestionSerializer(
-                spouse_question_queryset, many=True
-            ).data
-            serializer += spouse_question_serializer
 
         except Exception as e:
             log_error(

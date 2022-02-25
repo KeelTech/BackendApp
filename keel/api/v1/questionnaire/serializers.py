@@ -17,6 +17,7 @@ class CheckBoxSerializer(serializers.ModelSerializer):
         model = CheckBoxModel
         fields = (
             "id",
+            "dependent_question",
             "checkbox_text",
             "with_spouse_score",
             "without_spouse_score",
@@ -33,6 +34,7 @@ class DropDownSerializer(serializers.ModelSerializer):
         model = DropDownModel
         fields = (
             "id",
+            "dependent_question",
             "dropdown_text",
             "with_spouse_score",
             "without_spouse_score",
@@ -75,12 +77,19 @@ class SpouseQuestionSerializer(serializers.ModelSerializer):
         serializer = CheckBoxSerializer(queryset, many=True).data
         return serializer
 
+class DependentQuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = "__all__"
+
 
 class QuestionSerializer(serializers.ModelSerializer):
     text_choice = serializers.SerializerMethodField()
     answer_type_value = serializers.CharField(source="get_answer_type_display")
     dropdown_choice = serializers.SerializerMethodField()
     checkbox_choice = serializers.SerializerMethodField()
+    dependent_question = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
@@ -93,12 +102,30 @@ class QuestionSerializer(serializers.ModelSerializer):
             "text_choice",
             "dropdown_choice",
             "checkbox_choice",
+            "dependent_question",
             "is_active",
             "index"
         )
 
     def get_text_choice(self, obj):
         return ""
+    
+    def get_dependent_question(self, obj):
+        answer_type = obj.answer_type
+        if answer_type == 2:
+            queryset = obj.dependent_question_checkbox.all()
+        if answer_type == 3:
+            queryset = obj.dependent_question_dropdown.all()
+        else:
+            return ""
+
+        if len(queryset) > 0:
+            first_item = queryset[0].dependent_question
+        else:
+            return ""
+            
+        serializer =  DependentQuestionSerializer(first_item).data
+        return serializer
 
     def get_dropdown_choice(self, obj):
         queryset = obj.question_dropdown.all()
