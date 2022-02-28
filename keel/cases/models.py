@@ -51,41 +51,40 @@ class CaseManager(models.Manager):
         agent = obj.agent
         case_user = obj.user
 
-        data = {}
+        data = {"new_message": False, "message": "", "sent_date": "", "sent_by": ""}
 
         try:
             last_read_chat = obj.case_chats_receipts.all()
             filter = [x for x in last_read_chat if x.user_id == agent]
 
+            last_read_chat = 0
+
             if len(filter) > 0:
                 last_read_chat = filter[-1].chat_id.id
-            else:
-                last_read_chat = 0
-            
+
             # lastest chat for case
             chat_room = obj.cases_chatrooms.all()
             filter_chat_room = [
                 x for x in chat_room if x.user == case_user and x.agent == agent
             ]
 
+            chat_id = 0
+
             if len(filter_chat_room) > 0:
                 chat_room = filter_chat_room[-1]
                 chat = chat_room.chatroom_chats.all()
                 chat = chat[len(chat) - 1] if chat else None
+
                 if chat:
                     chat_id = chat.id
-                    message = chat.message
-                else:
-                    chat_id = 0
-                    message = ""
+                    data["message"] = chat.message
+                    data["sent_by"] = chat.sender.email
+                    data["sent_date"] = chat.created_at
 
             if chat_id > last_read_chat:
                 data["new_message"] = True
-                data["last_message"] = message
                 return data
             else:
-                data["new_message"] = False
-                data["last_message"] = message
                 return data
 
         except Exception as err:
