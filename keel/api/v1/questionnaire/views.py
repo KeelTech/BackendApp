@@ -71,7 +71,6 @@ class QuestionViewSet(GenericViewSet):
 
         response["data"] = {
             "questions": serializer,
-            # "spouse_questions": spouse_question_serializer,
         }
         return Response(response)
 
