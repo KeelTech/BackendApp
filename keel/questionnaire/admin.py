@@ -9,14 +9,15 @@ from .models import (AnsweredQuestionsModel, CheckBoxModel, DropDownModel,
 class CheckBoxAdminInline(admin.TabularInline):
     model = CheckBoxModel
     extra = 0
-    readonly_fields = ('deleted_at',)
-    fk_name = "question"
+    readonly_fields = ('deleted_at', 'spouse_question')
+    fk_name = 'question'
 
 class DropDownAdminInline(admin.TabularInline):
     model = DropDownModel
     extra = 0
-    readonly_fields = ('deleted_at',)
-    fk_name = "question"
+    readonly_fields = ('deleted_at', 'spouse_question')
+    fk_name = 'question'
+    
 
 class QuestionAdmin(CustomBaseModelAdmin):
     list_display = ('question_text', )
