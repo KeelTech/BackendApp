@@ -104,7 +104,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     answer_type_value = serializers.CharField(source="get_answer_type_display")
     dropdown_choice = serializers.SerializerMethodField()
     checkbox_choice = serializers.SerializerMethodField()
-    dependent_question = serializers.SerializerMethodField()
+    # dependent_question = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
@@ -117,7 +117,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             "text_choice",
             "dropdown_choice",
             "checkbox_choice",
-            "dependent_question",
+            # "dependent_question",
             "is_active",
             "index"
         )
@@ -125,21 +125,22 @@ class QuestionSerializer(serializers.ModelSerializer):
     def get_text_choice(self, obj):
         return ""
     
-    def get_dependent_question(self, obj):
-        answer_type = obj.answer_type
-        if answer_type == 2:
-            queryset = obj.dependent_question_checkbox.all()
-        if answer_type == 3:
-            queryset = obj.dependent_question_dropdown.all()
-        else:
-            return ""
+    # def get_dependent_question(self, obj):
+    #     answer_type = obj.answer_type
+    #     if answer_type == 2:
+    #         queryset = obj.dependent_question_checkbox.all()
+    #     if answer_type == 3:
+    #         queryset = obj.question_dropdown.all()
+    #         print(queryset, "\n----------------------------------------------------------")
+    #     else:
+    #         return ""
 
-        if len(queryset) > 0:
-            first_item = queryset[0].dependent_question
-        else:
-            return ""
+    #     if len(queryset) > 0:
+    #         first_item = queryset[0].dependent_question
+    #     else:
+    #         return ""
             
-        serializer =  DependentQuestionSerializer(first_item).data
+        serializer =  DependentQuestionSerializer(queryset, many=True).data
         return serializer
 
     def get_dropdown_choice(self, obj):
