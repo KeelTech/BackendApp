@@ -17,6 +17,7 @@ class DropDownAdminInline(admin.TabularInline):
     extra = 0
     readonly_fields = ('deleted_at', 'spouse_question')
     fk_name = 'question'
+    
 
 class QuestionAdmin(CustomBaseModelAdmin):
     list_display = ('question_text', )

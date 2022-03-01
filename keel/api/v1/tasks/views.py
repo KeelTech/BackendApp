@@ -1,10 +1,10 @@
 from datetime import datetime
-from django.http import Http404
 
 import pytz
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
+from django.http import Http404
 from keel.api.permissions import IsRCICUser
 from keel.api.v1.auth.helpers import email_helper
 from keel.api.v1.cases.serializers import CaseIDSerializer
@@ -23,17 +23,12 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+
 from .instances import create_template_task
-from .serializers import (
-    CreateTaskCommentSerializer,
-    ListTaskSerializer,
-    TaskCreateSerializer,
-    TaskIDCheckSerializer,
-    TaskSerializer,
-    TaskStatusChangeSerializer,
-    TaskTemplateSerializer,
-    TaskUpdateSerializer,
-)
+from .serializers import (CreateTaskCommentSerializer, ListTaskSerializer,
+                          TaskCreateSerializer, TaskIDCheckSerializer,
+                          TaskSerializer, TaskStatusChangeSerializer,
+                          TaskTemplateSerializer, TaskUpdateSerializer)
 
 User = get_user_model()
 
@@ -94,9 +89,7 @@ class ListTask(GenericViewSet):
             task_validation.is_valid(raise_exception=True)
             validated_data = task_validation.validated_data
         except ValidationError as e:
-            log_error(
-                "ERORR", "ListTask: list validate_status", str(user), err=str(e)
-            )
+            log_error("ERORR", "ListTask: list validate_status", str(user), err=str(e))
             response["message"] = "Invalid Request Data {}".format(str(e))
             response["status"] = 1
             resp_status = HTTP_STATUS.HTTP_400_BAD_REQUEST
@@ -156,13 +149,6 @@ class ListTask(GenericViewSet):
 
         response["data"] = TaskSerializer(task_obj).data
 
-        # create a notification instance
-        notification = InAppNotification.objects.create(
-            text = {"title":task_obj.title, "task_id":task_obj.task_id},
-            user_id=user,
-            case_id=task_obj.case,
-            category=TASKS,
-        )
         # send email to user after updating task
         context = {
             "name": task_obj.user.user_profile.first_name,
@@ -219,14 +205,6 @@ class TaskAdminOperations(GenericViewSet):
         if task_obj.is_template:
             create_template_task(task_obj, user)
 
-        # create a notification instance
-        notification = InAppNotification.objects.create(
-            text = {"title":task_obj.title, "task_id":task_obj.task_id},
-            user_id=request.user, 
-            case_id=case_obj, 
-            category=TASKS
-        )
-
         # send email to user after creating task
         user = case_obj.user
         context = {
@@ -267,14 +245,6 @@ class TaskAdminOperations(GenericViewSet):
         task.mark_delete()
         task.tasks_comment.update(
             deleted_at=datetime.now(pytz.timezone(settings.TIME_ZONE))
-        )
-
-        # create a notification instance
-        notification = InAppNotification.objects.create(
-            text = {"title":task.title, "task_id":task.task_id},
-            user_id=user, 
-            case_id=case_obj, 
-            category=TASKS
         )
 
         # send email to user after creating task
@@ -523,7 +493,7 @@ class TaskTemplateView(GenericViewSet):
         serializer = TaskTemplateSerializer(queryset, many=True)
         response["data"] = serializer.data
         return Response(response)
-    
+
     def delete(self, request, pk):
         response = {
             "status": 0,
