@@ -2,6 +2,8 @@ import datetime
 import json
 import logging
 from datetime import date, timedelta
+from tabnanny import check
+from django.conf import settings
 
 import facebook
 import requests
@@ -1589,3 +1591,35 @@ class AgentView(GenericViewSet):
         response["message"] = {"agent_details" : user_serializer, "agent_profile" : serializer}
         return Response(response)
         
+
+class NewUserFromGetRequest(GenericViewSet):
+
+    def new_user(self, request):
+        response = {"status": 0, "message": "", "data": ""}
+        email = request.query_params.get('email', None)
+
+        # check if email already exists
+        check_email = User.objects.filter(email=email).first()
+
+        if check_email:
+            user = check_email
+        else:
+            DEFAULT_PASSWORD = settings.DEFAULT_USER_PASS
+            user = User.objects.create_user(email=email, password=DEFAULT_PASSWORD)
+        
+        try:
+            token_to_save = JWTAuthentication.generate_token(user)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LoginViewset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        data = {
+            "email" : obj.user.email,
+            "token" : obj.token,
+        }
+        response["message"] = data
+        return Response(response, status=status.HTTP_200_OK)
+            
