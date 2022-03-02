@@ -102,6 +102,7 @@ class DependentQuestionSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     text_choice = serializers.SerializerMethodField()
     answer_type_value = serializers.CharField(source="get_answer_type_display")
+    index = serializers.IntegerField()
     dropdown_choice = serializers.SerializerMethodField()
     checkbox_choice = serializers.SerializerMethodField()
     # dependent_question = serializers.SerializerMethodField()
