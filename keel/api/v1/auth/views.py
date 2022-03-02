@@ -2,7 +2,6 @@ import datetime
 import json
 import logging
 from datetime import date, timedelta
-from tabnanny import check
 from django.conf import settings
 
 import facebook
