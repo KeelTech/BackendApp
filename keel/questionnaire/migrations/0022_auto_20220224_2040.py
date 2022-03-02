@@ -11,14 +11,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='checkboxmodel',
-            name='dependent_question',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='dependent_question_checkbox', to='questionnaire.question'),
-        ),
-        migrations.AddField(
-            model_name='dropdownmodel',
-            name='dependent_question',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='dependent_question_dropdown', to='questionnaire.question'),
-        ),
+        # migrations.AddField(
+        #     model_name='checkboxmodel',
+        #     name='dependent_question',
+        #     field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='dependent_question_checkbox', to='questionnaire.question'),
+        # ),
+        # migrations.AddField(
+        #     model_name='dropdownmodel',
+        #     name='dependent_question',
+        #     field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='dependent_question_dropdown', to='questionnaire.question'),
+        # ),
     ]
