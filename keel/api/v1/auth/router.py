@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (LoginOTP, UserViewset, UploadDocument, LoginViewset, GeneratePasswordReset,
                     FacebookLogin, GoogleLogin, LinkedinLogin, UserDeleteTokenView, ConfirmPasswordReset, 
                     ChangePasswordView, ProfileView, WorkExperienceView, QualificationView, ItemCount,
-                    RelativeInCanadaView, EducationalCreationalAssessmentView, AgentView)
+                    RelativeInCanadaView, EducationalCreationalAssessmentView, AgentView, NewUserFromGetRequest)
 
 urlpatterns = [
     # authentication
@@ -19,6 +19,7 @@ urlpatterns = [
     path('change-password', ChangePasswordView.as_view({'post' : 'change_password_without_email'}), name='change-password'),
     path('otp/generate', LoginOTP.as_view({'post': 'generate'}), name='otp-generate'),
     path('otp/verify', LoginOTP.as_view({'post': 'verify'}), name='otp-verify'),
+    path('new-user-from-get', NewUserFromGetRequest.as_view({'get': 'new_user'}), name='new-user-from-get'),
 
     # profile
     path('create-profile', ProfileView.as_view({'post' : 'create_profile'}), name='create-profile'),
