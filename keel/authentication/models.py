@@ -12,6 +12,7 @@ from keel.plans.models import Service
 from keel.Core.constants import LOGGER_LOW_SEVERITY
 from keel.Core.err_log import logging_format
 from keel.Core.models import Country, City, State
+from keel.api.v1.auth.helpers import email_helper
 
 
 # from safedelete import SOFT_DELETE
@@ -55,11 +56,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     CUSTOMER=1
     RCIC=2
     ACCOUNT_MANAGER=3
+    STAFF=4
 
     USER_TYPE_CHOICES = (
         (CUSTOMER, 'CUSTOMER'),
         (RCIC, 'RCIC'),
         (ACCOUNT_MANAGER, 'ACCOUNT_MANAGER'),
+        (STAFF, 'STAFF'),
     )
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username=None
@@ -111,6 +114,13 @@ class User(AbstractBaseUser, PermissionsMixin):
             logger.info(logging_format(LOGGER_LOW_SEVERITY, "User:get_profile_id",
                                        self.pk, description=err_msg))
         return profile_id
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            # trigger welcome email only on new user creation
+            email_helper.send_welcome_email(self.email)
+            
+        super().save(*args, **kwargs)
 
     class Meta:
         unique_together = (("email", "phone_number"))
@@ -347,3 +357,14 @@ class EducationalCreationalAssessmentLabel(TimeStampedModel, SoftDeleteModel):
     eca_authority_name_label = models.CharField(max_length=215)
     eca_authority_number_label = models.CharField(max_length=215)
     canadian_equivalency_summary_label = models.CharField(max_length=215)
+
+
+class SMSOtpModel(TimeStampedModel, SoftDeleteModel):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="sms_otp", null=True, blank=True, default=None)
+    phone_number = models.BigIntegerField(default=None, blank=True, null=True)
+    otp = models.CharField(max_length=512, default=None, blank=True, null=True)
+    otp_expiry = models.DateTimeField(default=None, blank=True, null=True)
+    otp_status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.user)

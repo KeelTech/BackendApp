@@ -110,6 +110,8 @@ LOCAL_APPS = (
     'keel.call_schedule',
     'keel.payment',
     'keel.stripe',
+    'keel.questionnaire',
+    'keel.records',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -166,7 +168,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'keel.middleware.RequestErrorLogging.RequestErrorLoggingMiddleware'
+    'keel.middleware.RequestErrorLogging.RequestErrorLoggingMiddleware',
+    'keel.middleware.request_utils.RequestMiddleware',
 ]
 
 
@@ -296,7 +299,7 @@ AWS_PUBLIC_MEDIA_LOCATION=''
 AWS_PRIVATE_MEDIA_LOCATION=''
 PRIVATE_FILE_STORAGE='django.core.files.storage.FileSystemStorage'
 
-
+DEFAULT_USER_PASS = env('DEFAULT_USER_PASS')
 
 # Calendly settings
 CALENDLY_PERSONAL_TOKEN = env('CALENDLY_PERSONAL_TOKEN')

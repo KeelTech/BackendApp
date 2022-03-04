@@ -58,3 +58,13 @@ class City(TimeStampedModel, SoftDeleteModel):
 
     def __str__(self):
         return str(self.city_name)
+
+
+class TriggeredEmails(TimeStampedModel, SoftDeleteModel):
+    # user = models.Cha(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
+    email = models.CharField(max_length=255, default=None, blank=True, null=True)
+    subject = models.CharField(max_length=255, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.email)
+    

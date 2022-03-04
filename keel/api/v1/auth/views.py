@@ -2,6 +2,7 @@ import datetime
 import json
 import logging
 from datetime import date, timedelta
+from django.conf import settings
 
 import facebook
 import requests
@@ -63,6 +64,8 @@ from rest_framework.viewsets import GenericViewSet
 from .adapter import GoogleOAuth2AdapterIdToken
 from .auth_token import generate_auth_login_token
 from .helpers import email_helper, instances
+from .helpers.otp_helpers import OTPHelper
+from .helpers.email_helper import base_send_email
 
 # from keel.authentication.models import (OtpVerifications, )
 
@@ -107,17 +110,13 @@ class UserViewset(GenericViewSet):
         subject = 'Account Verification'
         html_content = get_template('account_verification.html').render(context)
 
-        try:
-            # send welcome email
-            emails = EmailNotification(subject, html_content, [user.email])
-            emails.send_email()
-            email_helper.send_welcome_email(user)
-
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_501_NOT_IMPLEMENTED)
+        # try:
+        #     # send welcome email
+        #     email_helper.send_welcome_email(user)
+        
+        # except Exception as e:
+        #     logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+        #     pass
 
         data = {
             "email" : obj.user.email,
@@ -556,10 +555,10 @@ class ProfileView(GenericViewSet):
             data = constants.PROFILE
             return data
     
-    def get_queryset_cases(self, request):
+    def get_queryset_cases(self, user):
         get_case = None
         try:
-            get_case = Case.objects.get(user=request.user, is_active=True)
+            get_case = Case.objects.select_related('plan').get(user=user, is_active=True)
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:GetCases ' + str(e))
         plan = ""
@@ -714,7 +713,8 @@ class ProfileView(GenericViewSet):
         return Response(response)
     
     def get_profile(self, request):
-        case = self.get_queryset_cases(request)
+        user = request.user
+        case = self.get_queryset_cases(user)
         response = {
             "status" : 1,
             "message" : {"profile_exists": False,  "profile":{}, "cases":case["case_details"], "agent":case["agent"]}
@@ -1267,7 +1267,11 @@ class LoginOTP(GenericViewSet):
         token_data = {"otp": otp, "phone_number": phone_number}
         # token = generate_unique_id("mv_") 
         token = "MOBILE_VERIFICATION_" + str(user.id)
-        create_token(token, json.dumps(token_data), 10*60*60) # cache for 10 mins
+        # create_token(token, json.dumps(token_data), 10*60*60) # cache for 10 mins
+
+        # create otp
+        otp_instance = OTPHelper(user)
+        otp = otp_instance.save_otp(phone_number)
         text = "{0} is the OTP for mobile verification".format(otp)
         sms = SMSNotification(phone_number, text)
         err = sms.send_sms()
@@ -1297,26 +1301,40 @@ class LoginOTP(GenericViewSet):
         otp_verify = serializers.VerifyOTPSerializer(data = req_data)
         otp_verify.is_valid(raise_exception = True)
         data = otp_verify.validated_data
-
-        # token = data['token']
-        token = "MOBILE_VERIFICATION_" + str(user.id)
         otp = data['otp']
 
-        redis_data = get_token(token)
-        if not redis_data:
-            log_error("CRITICAL", "LoginOTP.verify", "OTP is expired")
-            response["status"] = "1"
-            response["data"] = "OTP has expired. please re-generate"
-            return Response(response, status = status.HTTP_400_BAD_REQUEST)
+        # token = data['token']
+        # token = "MOBILE_VERIFICATION_" + str(user.id)
 
-        token_data = json.loads(redis_data)
-        value = token_data.get("otp")
-        phone_number = token_data.get("phone_number")
+        # redis_data = get_token(token)
+        # if not redis_data:
+        #     log_error("CRITICAL", "LoginOTP.verify", "OTP is expired")
+        #     response["status"] = "1"
+        #     response["data"] = "OTP has expired. please re-generate"
+        #     return Response(response, status = status.HTTP_400_BAD_REQUEST)
+
+        # token_data = json.loads(redis_data)
+        # value = token_data.get("otp")
+        # phone_number = token_data.get("phone_number")
+
+        # otp instance
+        otp_instance = OTPHelper(user)
+        otp_verify = otp_instance.verify_otp(otp)
+
+        if not otp_verify:
+            log_error("CRITICAL", "LoginOTP.verify", "OTP is invalid")
+            response["status"] = "0"
+            response["data"] = "OTP is invalid"
+            return Response(response, status = status.HTTP_400_BAD_REQUEST)
+        
+        value = otp_verify.get("otp")
+        phone_number = otp_verify.get("phone_number")
 
         if int(value) == otp:
-            
             user.phone_number = phone_number
             user.save()
+            # delete otp number
+            otp_instance.delete_otp()
             response["data"] = "OTP validated successfully"
             return Response(response, status = status.HTTP_200_OK)
 
@@ -1418,8 +1436,12 @@ class UploadDocument(GenericViewSet):
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
         
         # create a notification instance
+        case_id_notification = request.user.users_cases.first()
         notification = InAppNotification.objects.create(
-            user_id = user, case_id = case_obj, category = DOCUMENT
+            text = "New Document uploaded",
+            user_id = user, 
+            case_id = case_id_notification, 
+            category = DOCUMENT
         )
 
         return Response(response, status = resp_status)
@@ -1546,12 +1568,13 @@ class AgentView(GenericViewSet):
     permission_classes = (IsAuthenticated, IsRCICUser, )
 
     def agent_profile(self, request):
+        user = request.user
         response = {
             "status" : 1,
             "message" : ""
         }
         try:
-            queryset = AgentProfile.objects.get(agent=request.user)
+            queryset = AgentProfile.objects.select_related('agent').get(agent=user)
         except AgentProfile.DoesNotExist as e:
             logger.error('ERROR: AUTHENTICATION:AgentView ' + str(e))
             response['message'] = str(e)
@@ -1563,8 +1586,39 @@ class AgentView(GenericViewSet):
             response['status'] = 0
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = serializers.AgentProfileSerializer(queryset).data
-        user = queryset.agent
         user_serializer = serializers.UserSerializer(user).data
         response["message"] = {"agent_details" : user_serializer, "agent_profile" : serializer}
         return Response(response)
         
+
+class NewUserFromGetRequest(GenericViewSet):
+
+    def new_user(self, request):
+        response = {"status": 0, "message": "", "data": ""}
+        email = request.query_params.get('email', None)
+
+        # check if email already exists
+        check_email = User.objects.filter(email=email).first()
+
+        if check_email:
+            user = check_email
+        else:
+            DEFAULT_PASSWORD = settings.DEFAULT_USER_PASS
+            user = User.objects.create_user(email=email, password=DEFAULT_PASSWORD)
+        
+        try:
+            token_to_save = JWTAuthentication.generate_token(user)
+            obj, created = CustomToken.objects.get_or_create(user=user, token=token_to_save["token"])
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LoginViewset ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        data = {
+            "email" : obj.user.email,
+            "token" : obj.token,
+        }
+        response["message"] = data
+        return Response(response, status=status.HTTP_200_OK)
+            

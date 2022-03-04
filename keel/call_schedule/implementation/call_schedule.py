@@ -11,15 +11,22 @@ class CallScheduleValidator(object):
         self._plan_util_helper = PlanUtilHelper()
 
     def call_schedule_allowed(self, plan_id):
-        active_completed_call_count = CallScheduleModel.objects.select_for_update().filter(
+        active_reschedule_call_exists = CallScheduleModel.objects.filter(
             visitor_user__id=self._customer_id, is_active=True,
-            status__in=(CallScheduleModel.ACTIVE, CallScheduleModel.RESCHEDULED)).count()
+            status__in=(CallScheduleModel.ACTIVE, CallScheduleModel.RESCHEDULED)).exists()
+
+        if active_reschedule_call_exists:
+            return False, "A call is already in progress"
+
+        completed_call_count = CallScheduleModel.objects.select_for_update().filter(
+            visitor_user__id=self._customer_id, is_active=True,
+            status=CallScheduleModel.COMPLETED).count()
 
         if not plan_id:
-            return True if active_completed_call_count == 0 else False
+            return (True, None) if completed_call_count == 0 else (False, "Only one call allowed when no plan is associated")
 
         self._plan_util_helper.plan_id = plan_id
-        return self._plan_util_helper.can_schedule_more_calls(active_completed_call_count)
+        return self._plan_util_helper.can_schedule_more_calls(completed_call_count)
 
 
 class CallScheduleHelper(object):
