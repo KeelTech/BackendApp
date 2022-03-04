@@ -37,8 +37,8 @@ class NotificationViews(GenericViewSet):
                 description="Failed to get user case",
             )
             response["status"] = 0
-            response["message"] = "Failed to get user case"
-            return Response(response, status=status.HTTP_404_NOT_FOUND)
+            response["message"] = []
+            return Response(response, status=status.HTTP_200_OK)
 
         # check if recent is true, then return only last notification
         if recent == "true":
