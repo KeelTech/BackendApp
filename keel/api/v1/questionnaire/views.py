@@ -118,7 +118,7 @@ class QuestionnarieViewSet(GenericViewSet):
         # send email for crs score
         try:
             context = {
-                "score": 0,
+                "score": crs_score,
             }
             send_crs_score(context, email)
         except Exception as e:
