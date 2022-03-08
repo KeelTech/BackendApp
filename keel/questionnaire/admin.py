@@ -20,7 +20,7 @@ class DropDownAdminInline(admin.TabularInline):
     
 
 class QuestionAdmin(CustomBaseModelAdmin):
-    list_display = ('question_text', )
+    list_display = ('question_text', 'is_active')
     readonly_fields = ('deleted_at',)
     inlines = (CheckBoxAdminInline, DropDownAdminInline, )
 
