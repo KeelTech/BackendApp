@@ -4,11 +4,11 @@ from keel.api.v1.auth.serializers import UserSerializer
 
 
 class InAppNotificationSerializer(serializers.ModelSerializer):
-    user_id = serializers.SerializerMethodField()
+    # user_id = serializers.SerializerMethodField()
 
     class Meta:
         model = InAppNotification
         fields = ('id', 'text', 'seen', 'user_id', 'case_id', 'category')
     
-    def get_user_id(self, obj):
-        return obj.user_id.email
+    # def get_user_id(self, obj):
+    #     return obj.user_id.email
