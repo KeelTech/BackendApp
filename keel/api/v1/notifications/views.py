@@ -38,7 +38,6 @@ class NotificationViews(GenericViewSet):
                 description="Failed to get user case",
             )
             response["status"] = 0
-            response["message"] = []
             return Response(response, status=status.HTTP_200_OK)
 
         # check if recent is true, then return only last notification
@@ -50,7 +49,6 @@ class NotificationViews(GenericViewSet):
             if not queryset:
                 response["status"] = 0
                 response["message"] = "No new notifications"
-                response["data"] = []
                 return Response(response, status=status.HTTP_200_OK)
 
             serializer = self.serializer_class(queryset, many=False).data
