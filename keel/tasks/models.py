@@ -3,7 +3,6 @@ from keel.authentication.models import User
 from keel.cases.models import Case
 from keel.Core.models import SoftDeleteModel, TimeStampedModel
 from .utils import create_task_notifcation
-from keel.middleware.request_utils import get_current_request
 
 # Create your models here.
 
@@ -45,10 +44,12 @@ class Task(TimeStampedModel, SoftDeleteModel):
     is_template = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        request = get_current_request()
 
-        if self.task_id:
-            create_task_notifcation(self.title, self.task_id, request.user, self.case)
+        if self.task_id and (
+            self.status == self.PENDING or self.status == self.COMPLETED
+        ):
+            create_task_notifcation(self.title, self.task_id, self.case)
+        
         super().save(*args, **kwargs)
 
 
