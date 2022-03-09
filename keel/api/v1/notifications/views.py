@@ -1,12 +1,13 @@
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.response import Response
-from rest_framework import status
-from keel.Core.err_log import log_error
-from keel.Core.constants import LOGGER_LOW_SEVERITY
-from rest_framework.permissions import IsAuthenticated
 from keel.authentication.backends import JWTAuthentication
+from keel.cases.models import Case
+from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.err_log import log_error
 from keel.notifications.models import InAppNotification
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from .serializers import InAppNotificationSerializer
 
@@ -28,7 +29,7 @@ class NotificationViews(GenericViewSet):
 
         # get user case
         try:
-            user_case = request.user.users_cases.get(user=request.user, is_active=True)
+            user_case = Case.objects.filter(user=request.user, is_active=True).first()
         except ObjectDoesNotExist:
             log_error(
                 LOGGER_LOW_SEVERITY,
@@ -37,22 +38,19 @@ class NotificationViews(GenericViewSet):
                 description="Failed to get user case",
             )
             response["status"] = 0
-            response["message"] = "Failed to get user case"
-            return Response(response, status=status.HTTP_404_NOT_FOUND)
+            return Response(response, status=status.HTTP_200_OK)
 
         # check if recent is true, then return only last notification
         if recent == "true":
             queryset = (
                 InAppNotification.objects.filter(case_id=user_case, seen=False)
-                .exclude(user_id=request.user)
                 .last()
             )
             if not queryset:
                 response["status"] = 0
                 response["message"] = "No new notifications"
-                response["data"] = []
                 return Response(response, status=status.HTTP_200_OK)
-            
+
             serializer = self.serializer_class(queryset, many=False).data
 
         # if recent is false, then return all notifications
@@ -60,7 +58,6 @@ class NotificationViews(GenericViewSet):
             try:
                 queryset = (
                     InAppNotification.objects.filter(case_id=user_case, seen=False)
-                    .exclude(user_id=request.user)
                     .order_by("-created_at")
                 )
                 serializer = self.serializer_class(queryset, many=True).data
