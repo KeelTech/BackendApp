@@ -31,13 +31,13 @@ def base_send_email(subject, html_content, to_email):
     emails.send_email()
 
 
-def send_welcome_email(user):
+def send_welcome_email(email):
     context = {
-        'name' : user.email
+        'name' : email
     }
     subject = 'Welcome'
     html_content = get_template('welcome_email.html').render(context)
-    base_send_email(subject, html_content, user.email)
+    base_send_email(subject, html_content, email)
 
 
 def send_create_task_email(context, to_email):

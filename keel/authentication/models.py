@@ -12,6 +12,7 @@ from keel.plans.models import Service
 from keel.Core.constants import LOGGER_LOW_SEVERITY
 from keel.Core.err_log import logging_format
 from keel.Core.models import Country, City, State
+from keel.api.v1.auth.helpers import email_helper
 
 
 # from safedelete import SOFT_DELETE
@@ -113,6 +114,13 @@ class User(AbstractBaseUser, PermissionsMixin):
             logger.info(logging_format(LOGGER_LOW_SEVERITY, "User:get_profile_id",
                                        self.pk, description=err_msg))
         return profile_id
+    
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            # trigger welcome email only on new user creation
+            email_helper.send_welcome_email(self.email)
+            
+        super().save(*args, **kwargs)
 
     class Meta:
         unique_together = (("email", "phone_number"))

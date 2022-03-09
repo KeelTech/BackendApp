@@ -110,13 +110,13 @@ class UserViewset(GenericViewSet):
         subject = 'Account Verification'
         html_content = get_template('account_verification.html').render(context)
 
-        try:
-            # send welcome email
-            email_helper.send_welcome_email(user)
+        # try:
+        #     # send welcome email
+        #     email_helper.send_welcome_email(user)
         
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
-            pass
+        # except Exception as e:
+        #     logger.error('ERROR: AUTHENTICATION:UserViewset ' + str(e))
+        #     pass
 
         data = {
             "email" : obj.user.email,
