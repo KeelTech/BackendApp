@@ -88,37 +88,21 @@ class QuestionnarieViewSet(GenericViewSet):
         data = request.data
         email = data.get("email", None)
 
-        # check for spouse in payload and get answer with answer id
         try:
             spouse_exist = data.get("spouse_exist", None)
-            answer_id = spouse_exist.get("answer_id", None)
-            spouse_answer = DropDownModel.objects.get(id=answer_id)
-            spouse_exist = spouse_answer.dropdown_text
-        except Exception as e:
-            log_error(
-                LOGGER_LOW_SEVERITY,
-                "QuestionnarieViewSet:submit_questionnaire",
-                "",
-                description="Failed to get spouse answer",
-            )
-            response["status"] = 0
-            response["message"] = str(e)
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
+            if spouse_exist:
+                answer_id = spouse_exist.get("answer_id", None)
+                spouse_answer = DropDownModel.objects.get(id=answer_id)
+                spouse_exist = spouse_answer.dropdown_text
 
-            if spouse_exist == "true" or spouse_exist == "Yes":
-                crs = crs_calculator_with_spouse.CrsCalculatorWithSpouse(data)
-                crs_score = crs.calculate_crs_with_spouse()
-
-            elif spouse_exist == "false" or spouse_exist == "No":
-                crs = crs_calculator_without_spouse.CrsCalculatorWithoutSpouse(data)
-                crs_score = crs.calculate_crs_without_spouse()
+                if spouse_exist == "true" or spouse_exist == "Yes":
+                    crs = crs_calculator_with_spouse.CrsCalculatorWithSpouse(data)
+                    crs_score = crs.calc_score()
 
             else:
-                response["message"] = "Return 'spouse_exist' key in payload"
-                response["status"] = 0
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                crs = crs_calculator_without_spouse.CrsCalculatorWithoutSpouse(data)
+                crs_score = crs.calc_score()
 
         except Exception as e:
             log_error(
