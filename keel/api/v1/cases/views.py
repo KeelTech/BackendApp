@@ -83,7 +83,6 @@ class CaseUnreadChats(generics.ListAPIView):
 
         # sort case chat list
         sorted_list = sort_case_chat_list(serializer)
-        print(len(sorted_list))
 
         response["message"] = sorted_list
         return Response(response)
