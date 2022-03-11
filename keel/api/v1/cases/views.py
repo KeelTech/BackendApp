@@ -78,8 +78,18 @@ class CaseUnreadChats(generics.ListAPIView):
             )
             .filter(agent=user)
         )
-        serializer = self.serializer_class(queryset, many=True)
-        response["message"] = serializer.data
+        serializer = self.serializer_class(queryset, many=True).data
+
+        sorted_by_sent_date = sorted(
+            serializer,
+            key=lambda e: (
+                e["chat_details"]["sent_date"] == "",
+                e["chat_details"]["sent_date"],
+            ),
+            reverse=True,
+        )
+
+        response["message"] = sorted_by_sent_date
         return Response(response)
 
 
