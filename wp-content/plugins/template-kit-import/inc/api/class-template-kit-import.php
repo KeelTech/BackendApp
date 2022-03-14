@@ -129,23 +129,7 @@ class Template_Kit_Import extends API {
 
 		// We report any missing default settings that are required for template kits.
 		if ( ! isset( $all_template_data['requirements']['settings'] ) ) {
-			$all_template_data['requirements']['settings'] = array();
-		}
-		// Check Elementor default colors and fonts are set.
-		// Elementor stores the string 'yes' in the WordPress database if these options are active, and an empty string if these options are not active.
-		$is_elementor_color_schemes_disabled_already      = get_option( 'elementor_disable_color_schemes' );
-		$is_elementor_typography_schemes_disabled_already = get_option( 'elementor_disable_typography_schemes' );
-		if ( $is_elementor_color_schemes_disabled_already !== 'yes' ) {
-			$all_template_data['requirements']['settings'][] = array(
-				'name'         => 'Elementor default color schemes',
-				'setting_name' => 'elementor_disable_color_schemes',
-			);
-		}
-		if ( $is_elementor_typography_schemes_disabled_already !== 'yes' ) {
-			$all_template_data['requirements']['settings'][] = array(
-				'name'         => 'Elementor default typography schemes',
-				'setting_name' => 'elementor_disable_typography_schemes',
-			);
+			$all_template_data['requirements']['settings'] = [];
 		}
 
 		return $this->format_success( $all_template_data );

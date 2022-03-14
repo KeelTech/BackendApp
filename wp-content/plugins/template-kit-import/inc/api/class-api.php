@@ -29,7 +29,7 @@ abstract class API extends Base {
 	}
 
 	public function rest_permission_check( $request ) {
-		return current_user_can( 'edit_posts' );
+		return current_user_can( 'edit_posts' ) && current_user_can( 'upload_files' );
 	}
 
 	public function register_endpoint( $endpoint, $callback ) {

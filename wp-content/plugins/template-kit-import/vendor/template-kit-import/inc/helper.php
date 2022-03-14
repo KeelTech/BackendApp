@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @param $template_kit_id
  *
- * @return bool|Builder_Elementor|Builder_Gutenberg
+ * @return bool|Builder_Elementor|Builder_Gutenberg|Builder_Elementor_Kit
  */
 function envato_template_kit_import_get_builder( $template_kit_id ) {
 	// Grab out the uploaded template kit from the CPT.
@@ -24,6 +24,10 @@ function envato_template_kit_import_get_builder( $template_kit_id ) {
 			return $builder_class;
 		} elseif ( 'gutenberg' === $builder ) {
 			$builder_class = new Builder_Gutenberg();
+			$builder_class->load_kit( $post->ID );
+			return $builder_class;
+		}elseif ( ENVATO_TEMPLATE_KIT_IMPORT_TYPE_ELEMENTOR === $builder ) {
+			$builder_class = new Builder_Elementor_Kit();
 			$builder_class->load_kit( $post->ID );
 			return $builder_class;
 		}

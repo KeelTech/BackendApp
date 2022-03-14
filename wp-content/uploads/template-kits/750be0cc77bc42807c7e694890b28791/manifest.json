@@ -1,0 +1,1943 @@
+{
+    "manifest_version": "1.0.14",
+    "title": "Ancorathemes Elementor Blog Template Kit",
+    "page_builder": "elementor",
+    "kit_version": "1.0.0",
+    "templates": [
+        {
+            "name": "Global Kit Styles",
+            "screenshot": "screenshots\/global-kit-styles.jpg",
+            "source": "templates\/global.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "global-styles",
+                "include_in_zip": "1",
+                "elementor_pro_required": null,
+                "additional_template_information": [
+                    "These are the global theme styles configured through the Elementor Theme Styles area."
+                ]
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Footer 2 column PRO",
+            "screenshot": "screenshots\/footer-2-column-pro.jpg",
+            "source": "templates\/footer-2-column-pro.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/footer-2-column-pro\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Member Info Style",
+            "screenshot": "screenshots\/block-member-info-style.jpg",
+            "source": "templates\/block-member-info-style.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-member-info-style\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Header Compact (Pro)",
+            "screenshot": "screenshots\/header-compact-pro-.jpg",
+            "source": "templates\/header-compact-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/header-compact-pro\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Header Standard (Pro)",
+            "screenshot": "screenshots\/header-standard-pro-.jpg",
+            "source": "templates\/header-standard-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/header-standard-pro\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Hero Style 5",
+            "screenshot": "screenshots\/block-hero-style-5.jpg",
+            "source": "templates\/block-hero-style-5.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-hero-style-5\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Hero Style 4",
+            "screenshot": "screenshots\/block-hero-style-4.jpg",
+            "source": "templates\/block-hero-style-4.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-hero-style-4\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Hero Style 3",
+            "screenshot": "screenshots\/block-hero-style-3.jpg",
+            "source": "templates\/block-hero-style-3.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-hero-style-3\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Hero Style 1",
+            "screenshot": "screenshots\/block-hero-style-1.jpg",
+            "source": "templates\/block-hero-style-1.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-hero-style-1\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Team Style 1",
+            "screenshot": "screenshots\/block-team-style-1.jpg",
+            "source": "templates\/block-team-style-1.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-team-style-1\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Info Style 6",
+            "screenshot": "screenshots\/block-info-style-6.jpg",
+            "source": "templates\/block-info-style-6.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-info-style-6\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Info Style 5",
+            "screenshot": "screenshots\/block-info-style-5.jpg",
+            "source": "templates\/block-info-style-5.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-info-style-5\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Info Style 4",
+            "screenshot": "screenshots\/block-info-style-4.jpg",
+            "source": "templates\/block-info-style-4.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-info-style-4\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Footer 3 Column PRO",
+            "screenshot": "screenshots\/footer-3-column-pro.jpg",
+            "source": "templates\/footer-3-column-pro.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/footer-3-column-pro\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Info Style 3",
+            "screenshot": "screenshots\/block-info-style-3.jpg",
+            "source": "templates\/block-info-style-3.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-info-style-3\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Info Style 2",
+            "screenshot": "screenshots\/block-info-style-2.jpg",
+            "source": "templates\/block-info-style-2.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-info-style-2\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Info Style 1",
+            "screenshot": "screenshots\/block-info-style-1.jpg",
+            "source": "templates\/block-info-style-1.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-info-style-1\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Team Style 3",
+            "screenshot": "screenshots\/block-team-style-3.jpg",
+            "source": "templates\/block-team-style-3.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-team-style-3\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Team Style 2",
+            "screenshot": "screenshots\/block-team-style-2.jpg",
+            "source": "templates\/block-team-style-2.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-team-style-2\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Gallery",
+            "screenshot": "screenshots\/gallery.jpg",
+            "source": "templates\/gallery.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/gallery\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Footer",
+            "screenshot": "screenshots\/footer.jpg",
+            "source": "templates\/footer.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/?elementor_library=footer",
+            "type": "footer",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "footer",
+                "elementor_pro_conditions": [
+                    "include\/singular"
+                ],
+                "additional_template_information": [
+                    "This is a \"Footer\" template for Elementor Pro.",
+                    "This template will display on: All Singular."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Header",
+            "screenshot": "screenshots\/header.jpg",
+            "source": "templates\/header.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/?elementor_library=header",
+            "type": "header",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "header",
+                "elementor_pro_conditions": [
+                    "include\/singular"
+                ],
+                "additional_template_information": [
+                    "This is a \"Header\" template for Elementor Pro.",
+                    "This template will display on: All Singular."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Single Post",
+            "screenshot": "screenshots\/single-post.jpg",
+            "source": "templates\/single-post.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/?elementor_library=single-post",
+            "type": "single",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-post",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "single",
+                "elementor_pro_conditions": [
+                    "include\/singular\/post"
+                ],
+                "additional_template_information": [
+                    "This is a \"Single\" template for Elementor Pro.",
+                    "This template will display on: Posts."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Header Default",
+            "screenshot": "screenshots\/header-default.jpg",
+            "source": "templates\/header-default.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/header-default\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Footer 4 column",
+            "screenshot": "screenshots\/footer-4-column.jpg",
+            "source": "templates\/footer-4-column.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/footer-4-column\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Home 3 (Pro)",
+            "screenshot": "screenshots\/home-3-pro-.jpg",
+            "source": "templates\/home-3-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/home-3-pro\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home 5 (Pro)",
+            "screenshot": "screenshots\/home-5-pro-.jpg",
+            "source": "templates\/home-5-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/home-5-pro\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Testimonials Style 1 PRO",
+            "screenshot": "screenshots\/block-testimonials-style-1-pro.jpg",
+            "source": "templates\/block-testimonials-style-1-pro.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-testimonials-style-1-pro\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Contact Info Style 4 Blocks",
+            "screenshot": "screenshots\/block-contact-info-style-4-blocks.jpg",
+            "source": "templates\/block-contact-info-style-4-blocks.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-contact-info-style-4-blocks\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block FAQ Style Centre",
+            "screenshot": "screenshots\/block-faq-style-centre.jpg",
+            "source": "templates\/block-faq-style-centre.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-faq-style-centre\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block FAQ Style with Right Image",
+            "screenshot": "screenshots\/block-faq-style-with-right-image.jpg",
+            "source": "templates\/block-faq-style-with-right-image.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-faq-style-with-right-image\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Block Post Style 4 Column PRO",
+            "screenshot": "screenshots\/block-post-style-4-column-pro.jpg",
+            "source": "templates\/block-post-style-4-column-pro.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-post-style-4-column-pro\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home 2 (Pro)",
+            "screenshot": "screenshots\/home-2-pro-.jpg",
+            "source": "templates\/home-2-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/home-2-pro\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home 1 (Pro)",
+            "screenshot": "screenshots\/home-1-pro-.jpg",
+            "source": "templates\/home-1-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/home-1-pro\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home 4 (Pro)",
+            "screenshot": "screenshots\/home-4-pro-.jpg",
+            "source": "templates\/home-4-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/home-4-pro\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Testimonials Style 3 PRO",
+            "screenshot": "screenshots\/block-testimonials-style-3-pro.jpg",
+            "source": "templates\/block-testimonials-style-3-pro.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-testimonials-style-3-pro\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home 6 (Pro)",
+            "screenshot": "screenshots\/home-6-pro-.jpg",
+            "source": "templates\/home-6-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/home-6-pro\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Hero Style 2",
+            "screenshot": "screenshots\/block-hero-style-2.jpg",
+            "source": "templates\/block-hero-style-2.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-hero-style-2\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Our Shop",
+            "screenshot": "screenshots\/our-shop.jpg",
+            "source": "templates\/our-shop.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/our-shop\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "About 3",
+            "screenshot": "screenshots\/about-3.jpg",
+            "source": "templates\/about-3.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/about-3\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "About 2 (Pro)",
+            "screenshot": "screenshots\/about-2-pro-.jpg",
+            "source": "templates\/about-2-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/about-2\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "About 1",
+            "screenshot": "screenshots\/about-1.jpg",
+            "source": "templates\/about-1.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/about-1\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Our Team",
+            "screenshot": "screenshots\/our-team.jpg",
+            "source": "templates\/our-team.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/our-team\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Contacts",
+            "screenshot": "screenshots\/contacts.jpg",
+            "source": "templates\/contacts.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/contacts\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Location (Pro)",
+            "screenshot": "screenshots\/location-pro-.jpg",
+            "source": "templates\/location-pro-.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/location-pro\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Testimonials Style 2 PRO",
+            "screenshot": "screenshots\/block-testimonials-style-2-pro.jpg",
+            "source": "templates\/block-testimonials-style-2-pro.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-testimonials-style-2-pro\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Block Counter Style",
+            "screenshot": "screenshots\/block-counter-style.jpg",
+            "source": "templates\/block-counter-style.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/block-counter-style\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Footer 2 column",
+            "screenshot": "screenshots\/footer-2-column.jpg",
+            "source": "templates\/footer-2-column.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/template-kit\/footer-2-column\/",
+            "type": "section",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Single Product",
+            "screenshot": "screenshots\/single-product.jpg",
+            "source": "templates\/single-product.json",
+            "preview_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/?elementor_library=single-product",
+            "type": "product",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-product",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "product",
+                "elementor_pro_conditions": [
+                    "include\/product"
+                ],
+                "additional_template_information": [
+                    "This is a \"Product\" template for Elementor Pro.",
+                    "This template will display on: Products."
+                ]
+            },
+            "elementor_pro_required": true
+        }
+    ],
+    "required_plugins": [
+        {
+            "name": "iFeed For Elementor",
+            "version": "1.0.6",
+            "file": "ifeed-for-elementor\/ifeed-for-elementor.php",
+            "author": "wpconcern"
+        },
+        {
+            "name": "WooCommerce",
+            "version": "4.1.1",
+            "file": "woocommerce\/woocommerce.php",
+            "author": "Automattic"
+        },
+        {
+            "name": "Elementor",
+            "version": "2.9.8",
+            "file": "elementor\/elementor.php",
+            "author": "Elementor.com"
+        },
+        {
+            "name": "Elementor Pro",
+            "version": "2.9.4",
+            "file": "elementor-pro\/elementor-pro.php",
+            "author": "Elementor.com"
+        },
+        {
+            "name": "Envato Elements",
+            "version": "2.0.3",
+            "file": "envato-elements\/envato-elements.php",
+            "author": "Envato"
+        }
+    ],
+    "images": [
+        {
+            "filename": "logo.png",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/logo.png",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/header-standard-pro-.json",
+                    "name": "Header Standard (Pro)"
+                },
+                {
+                    "source": "templates\/footer-3-column-pro.json",
+                    "name": "Footer 3 Column PRO"
+                },
+                {
+                    "source": "templates\/footer.json",
+                    "name": "Footer"
+                },
+                {
+                    "source": "templates\/header.json",
+                    "name": "Header"
+                },
+                {
+                    "source": "templates\/header-default.json",
+                    "name": "Header Default"
+                },
+                {
+                    "source": "templates\/footer-4-column.json",
+                    "name": "Footer 4 column"
+                },
+                {
+                    "source": "templates\/footer-2-column.json",
+                    "name": "Footer 2 column"
+                }
+            ],
+            "filesize": 1866,
+            "dimensions": [
+                116,
+                33
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "girl-in-beige-bikini-and-denim-shorts-dreamily-loo-Q29MPBG-scaled.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/girl-in-beige-bikini-and-denim-shorts-dreamily-loo-Q29MPBG-600x900.jpg",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                }
+            ],
+            "filesize": 283874,
+            "dimensions": [
+                1707,
+                2560
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "crop-woman-hands-with-rings-on-the-street-Y3WF8NB.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/crop-woman-hands-with-rings-on-the-street-Y3WF8NB-600x401.jpg",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/block-hero-style-3.json",
+                    "name": "Block Hero Style 3"
+                },
+                {
+                    "source": "templates\/block-info-style-3.json",
+                    "name": "Block Info Style 3"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                },
+                {
+                    "source": "templates\/about-1.json",
+                    "name": "About 1"
+                }
+            ],
+            "filesize": 270613,
+            "dimensions": [
+                1920,
+                1282
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/image-Y3WF8NB"
+        },
+        {
+            "filename": "beautiful-wet-athlete-girl-with-tattoo-in-sportswe-HZ47DV3.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-wet-athlete-girl-with-tattoo-in-sportswe-HZ47DV3-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                }
+            ],
+            "filesize": 308989,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-HZ47DV3"
+        },
+        {
+            "filename": "skateboard-on-city-S3HSY4P.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/skateboard-on-city-S3HSY4P-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                }
+            ],
+            "filesize": 238072,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-S3HSY4P"
+        },
+        {
+            "filename": "girl-in-hockey-jersey-style-with-street-bicycle-PEKUWLK-scaled.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/girl-in-hockey-jersey-style-with-street-bicycle-PEKUWLK-600x900.jpg",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/block-info-style-3.json",
+                    "name": "Block Info Style 3"
+                },
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/home-2-pro-.json",
+                    "name": "Home 2 (Pro)"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                },
+                {
+                    "source": "templates\/home-4-pro-.json",
+                    "name": "Home 4 (Pro)"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                }
+            ],
+            "filesize": 389228,
+            "dimensions": [
+                1707,
+                2560
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "attractive-casual-african-american-girl-in-stylish-EVK6CJ2.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/attractive-casual-african-american-girl-in-stylish-EVK6CJ2-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/block-info-style-3.json",
+                    "name": "Block Info Style 3"
+                },
+                {
+                    "source": "templates\/home-2-pro-.json",
+                    "name": "Home 2 (Pro)"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                },
+                {
+                    "source": "templates\/about-3.json",
+                    "name": "About 3"
+                },
+                {
+                    "source": "templates\/contacts.json",
+                    "name": "Contacts"
+                },
+                {
+                    "source": "templates\/location-pro-.json",
+                    "name": "Location (Pro)"
+                }
+            ],
+            "filesize": 275405,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-EVK6CJ2"
+        },
+        {
+            "filename": "a-man-in-the-city-fashion-shoot-PEXPQKR.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/a-man-in-the-city-fashion-shoot-PEXPQKR-600x395.jpg",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/home-2-pro-.json",
+                    "name": "Home 2 (Pro)"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                }
+            ],
+            "filesize": 305455,
+            "dimensions": [
+                1920,
+                1263
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/image-PEXPQKR"
+        },
+        {
+            "filename": "close-up-photo-of-young-woman-hands-writing-alphab-RNCVPX3.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/close-up-photo-of-young-woman-hands-writing-alphab-RNCVPX3-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/footer-2-column-pro.json",
+                    "name": "Footer 2 column PRO"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                }
+            ],
+            "filesize": 137621,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/image-RNCVPX3"
+        },
+        {
+            "filename": "beautiful-african-american-student-girl-in-denim-j-BRZY9SQ.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-african-american-student-girl-in-denim-j-BRZY9SQ-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-member-info-style.json",
+                    "name": "Block Member Info Style"
+                },
+                {
+                    "source": "templates\/block-info-style-2.json",
+                    "name": "Block Info Style 2"
+                },
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/home-2-pro-.json",
+                    "name": "Home 2 (Pro)"
+                },
+                {
+                    "source": "templates\/about-3.json",
+                    "name": "About 3"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                },
+                {
+                    "source": "templates\/about-1.json",
+                    "name": "About 1"
+                }
+            ],
+            "filesize": 186693,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-BRZY9SQ"
+        },
+        {
+            "filename": "logo-dark.png",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/logo-dark.png",
+            "templates": [
+                {
+                    "source": "templates\/header-compact-pro-.json",
+                    "name": "Header Compact (Pro)"
+                }
+            ],
+            "filesize": 1710,
+            "dimensions": [
+                116,
+                33
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "young-woman-dressed-in-white-shirt-sits-at-the-whe-DTSANH2.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/young-woman-dressed-in-white-shirt-sits-at-the-whe-DTSANH2-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-hero-style-5.json",
+                    "name": "Block Hero Style 5"
+                },
+                {
+                    "source": "templates\/home-6-pro-.json",
+                    "name": "Home 6 (Pro)"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 255787,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-DTSANH2"
+        },
+        {
+            "filename": "beautiful-girls-in-white-shirts-thoughtfully-looki-AGRT9KC-1.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-girls-in-white-shirts-thoughtfully-looki-AGRT9KC-1-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-hero-style-4.json",
+                    "name": "Block Hero Style 4"
+                },
+                {
+                    "source": "templates\/block-info-style-1.json",
+                    "name": "Block Info Style 1"
+                },
+                {
+                    "source": "templates\/about-3.json",
+                    "name": "About 3"
+                }
+            ],
+            "filesize": 231707,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-AGRT9KC"
+        },
+        {
+            "filename": "woman-in-sneakers-riding-skateboard-outdoor-on-asp-KXD8CUS.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/woman-in-sneakers-riding-skateboard-outdoor-on-asp-KXD8CUS-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-hero-style-1.json",
+                    "name": "Block Hero Style 1"
+                },
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/home-2-pro-.json",
+                    "name": "Home 2 (Pro)"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                }
+            ],
+            "filesize": 294212,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/image-KXD8CUS"
+        },
+        {
+            "filename": "gray-line-big-bg.png",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/gray-line-big-bg-600x1.png",
+            "templates": [
+                {
+                    "source": "templates\/block-team-style-1.json",
+                    "name": "Block Team Style 1"
+                },
+                {
+                    "source": "templates\/block-info-style-6.json",
+                    "name": "Block Info Style 6"
+                },
+                {
+                    "source": "templates\/block-info-style-5.json",
+                    "name": "Block Info Style 5"
+                },
+                {
+                    "source": "templates\/block-team-style-3.json",
+                    "name": "Block Team Style 3"
+                },
+                {
+                    "source": "templates\/block-team-style-2.json",
+                    "name": "Block Team Style 2"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                },
+                {
+                    "source": "templates\/home-3-pro-.json",
+                    "name": "Home 3 (Pro)"
+                },
+                {
+                    "source": "templates\/home-5-pro-.json",
+                    "name": "Home 5 (Pro)"
+                },
+                {
+                    "source": "templates\/block-faq-style-with-right-image.json",
+                    "name": "Block FAQ Style with Right Image"
+                },
+                {
+                    "source": "templates\/block-post-style-4-column-pro.json",
+                    "name": "Block Post Style 4 Column PRO"
+                },
+                {
+                    "source": "templates\/home-2-pro-.json",
+                    "name": "Home 2 (Pro)"
+                },
+                {
+                    "source": "templates\/home-1-pro-.json",
+                    "name": "Home 1 (Pro)"
+                },
+                {
+                    "source": "templates\/home-4-pro-.json",
+                    "name": "Home 4 (Pro)"
+                },
+                {
+                    "source": "templates\/home-6-pro-.json",
+                    "name": "Home 6 (Pro)"
+                },
+                {
+                    "source": "templates\/our-shop.json",
+                    "name": "Our Shop"
+                },
+                {
+                    "source": "templates\/about-3.json",
+                    "name": "About 3"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                },
+                {
+                    "source": "templates\/about-1.json",
+                    "name": "About 1"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                },
+                {
+                    "source": "templates\/contacts.json",
+                    "name": "Contacts"
+                },
+                {
+                    "source": "templates\/location-pro-.json",
+                    "name": "Location (Pro)"
+                },
+                {
+                    "source": "templates\/single-product.json",
+                    "name": "Single Product"
+                }
+            ],
+            "filesize": 119,
+            "dimensions": [
+                1048,
+                1
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "portrait-of-gorgeous-asian-girl-in-coat-happily-lo-5ZJ3W9R-scaled.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/portrait-of-gorgeous-asian-girl-in-coat-happily-lo-5ZJ3W9R-600x900.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-team-style-1.json",
+                    "name": "Block Team Style 1"
+                },
+                {
+                    "source": "templates\/block-team-style-3.json",
+                    "name": "Block Team Style 3"
+                },
+                {
+                    "source": "templates\/block-team-style-2.json",
+                    "name": "Block Team Style 2"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                },
+                {
+                    "source": "templates\/about-1.json",
+                    "name": "About 1"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 499898,
+            "dimensions": [
+                1707,
+                2560
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "smiling-young-beautiful-woman-using-mobile-phone-XB8WMJW.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/smiling-young-beautiful-woman-using-mobile-phone-XB8WMJW-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-team-style-1.json",
+                    "name": "Block Team Style 1"
+                },
+                {
+                    "source": "templates\/block-team-style-2.json",
+                    "name": "Block Team Style 2"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 222069,
+            "dimensions": [
+                1920,
+                1281
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-XB8WMJW"
+        },
+        {
+            "filename": "beautiful-girl-in-sunglasses-leaning-on-cabriolet-NT5RKVQ.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-girl-in-sunglasses-leaning-on-cabriolet-NT5RKVQ-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-team-style-1.json",
+                    "name": "Block Team Style 1"
+                },
+                {
+                    "source": "templates\/home-2-pro-.json",
+                    "name": "Home 2 (Pro)"
+                },
+                {
+                    "source": "templates\/our-shop.json",
+                    "name": "Our Shop"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 278394,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-NT5RKVQ"
+        },
+        {
+            "filename": "smiling-young-woman-using-smartphone-in-kitchen-3K5MASW.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/smiling-young-woman-using-smartphone-in-kitchen-3K5MASW-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-info-style-6.json",
+                    "name": "Block Info Style 6"
+                },
+                {
+                    "source": "templates\/block-info-style-2.json",
+                    "name": "Block Info Style 2"
+                },
+                {
+                    "source": "templates\/contacts.json",
+                    "name": "Contacts"
+                }
+            ],
+            "filesize": 317395,
+            "dimensions": [
+                1920,
+                1281
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-3K5MASW"
+        },
+        {
+            "filename": "beautiful-young-woman-drinking-coffee-in-cafe-VMBEPXH.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-young-woman-drinking-coffee-in-cafe-VMBEPXH-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-info-style-6.json",
+                    "name": "Block Info Style 6"
+                },
+                {
+                    "source": "templates\/block-info-style-2.json",
+                    "name": "Block Info Style 2"
+                },
+                {
+                    "source": "templates\/block-faq-style-with-right-image.json",
+                    "name": "Block FAQ Style with Right Image"
+                },
+                {
+                    "source": "templates\/about-3.json",
+                    "name": "About 3"
+                }
+            ],
+            "filesize": 276877,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-VMBEPXH"
+        },
+        {
+            "filename": "young-beautiful-woman-with-dark-curly-hair-sitting-5VHYRQS.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/young-beautiful-woman-with-dark-curly-hair-sitting-5VHYRQS-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-info-style-5.json",
+                    "name": "Block Info Style 5"
+                }
+            ],
+            "filesize": 162380,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-5VHYRQS"
+        },
+        {
+            "filename": "two-attractive-stylish-girls-in-trench-coats-happi-S8SUAFT.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/two-attractive-stylish-girls-in-trench-coats-happi-S8SUAFT-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-info-style-4.json",
+                    "name": "Block Info Style 4"
+                },
+                {
+                    "source": "templates\/block-info-style-1.json",
+                    "name": "Block Info Style 1"
+                },
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/about-3.json",
+                    "name": "About 3"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                }
+            ],
+            "filesize": 264973,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-S8SUAFT"
+        },
+        {
+            "filename": "stylish-young-woman-in-white-sunglasses-dressed-in-RG9B4SW.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/stylish-young-woman-in-white-sunglasses-dressed-in-RG9B4SW-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-info-style-4.json",
+                    "name": "Block Info Style 4"
+                }
+            ],
+            "filesize": 228414,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-RG9B4SW"
+        },
+        {
+            "filename": "message.png",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/message.png",
+            "templates": [
+                {
+                    "source": "templates\/footer-3-column-pro.json",
+                    "name": "Footer 3 Column PRO"
+                }
+            ],
+            "filesize": 479,
+            "dimensions": [
+                20,
+                20
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "tel.png",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/tel.png",
+            "templates": [
+                {
+                    "source": "templates\/footer-3-column-pro.json",
+                    "name": "Footer 3 Column PRO"
+                }
+            ],
+            "filesize": 549,
+            "dimensions": [
+                23,
+                23
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "mail.png",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/mail.png",
+            "templates": [
+                {
+                    "source": "templates\/footer-3-column-pro.json",
+                    "name": "Footer 3 Column PRO"
+                }
+            ],
+            "filesize": 332,
+            "dimensions": [
+                21,
+                14
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "close-up-woman-in-yellow-shirt-and-jeans-holding-c-EM5FDL7.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/close-up-woman-in-yellow-shirt-and-jeans-holding-c-EM5FDL7-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-info-style-3.json",
+                    "name": "Block Info Style 3"
+                },
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/block-contact-info-style-4-blocks.json",
+                    "name": "Block Contact Info Style 4 Blocks"
+                },
+                {
+                    "source": "templates\/home-4-pro-.json",
+                    "name": "Home 4 (Pro)"
+                },
+                {
+                    "source": "templates\/about-3.json",
+                    "name": "About 3"
+                },
+                {
+                    "source": "templates\/about-1.json",
+                    "name": "About 1"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                },
+                {
+                    "source": "templates\/contacts.json",
+                    "name": "Contacts"
+                }
+            ],
+            "filesize": 258718,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/image-EM5FDL7"
+        },
+        {
+            "filename": "biker-girl-sitting-on-vintage-custom-motorcycle-PRER32L.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/biker-girl-sitting-on-vintage-custom-motorcycle-PRER32L-600x464.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-info-style-1.json",
+                    "name": "Block Info Style 1"
+                },
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/block-hero-style-2.json",
+                    "name": "Block Hero Style 2"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                }
+            ],
+            "filesize": 272869,
+            "dimensions": [
+                1920,
+                1485
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-PRER32L"
+        },
+        {
+            "filename": "portrait-of-fit-and-sporty-young-woman-XSS3ZAB.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/portrait-of-fit-and-sporty-young-woman-XSS3ZAB-600x393.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-team-style-3.json",
+                    "name": "Block Team Style 3"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 219737,
+            "dimensions": [
+                1920,
+                1256
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-XSS3ZAB"
+        },
+        {
+            "filename": "excited-pretty-lady-in-city-S4HMR2Y.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/excited-pretty-lady-in-city-S4HMR2Y-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-team-style-2.json",
+                    "name": "Block Team Style 2"
+                },
+                {
+                    "source": "templates\/block-testimonials-style-3-pro.json",
+                    "name": "Block Testimonials Style 3 PRO"
+                },
+                {
+                    "source": "templates\/about-1.json",
+                    "name": "About 1"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 258100,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-S4HMR2Y"
+        },
+        {
+            "filename": "beautiful-african-american-girl-in-glasses-standin-2CB6DJA-scaled.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-african-american-girl-in-glasses-standin-2CB6DJA-600x900.jpg",
+            "templates": [
+                {
+                    "source": "templates\/block-team-style-2.json",
+                    "name": "Block Team Style 2"
+                },
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 453691,
+            "dimensions": [
+                1707,
+                2560
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "funny-young-girl-with-headphones-dressed-in-a-yell-YL2HBV8.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/funny-young-girl-with-headphones-dressed-in-a-yell-YL2HBV8-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/home-3-pro-.json",
+                    "name": "Home 3 (Pro)"
+                },
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                }
+            ],
+            "filesize": 275245,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-YL2HBV8"
+        },
+        {
+            "filename": "beautiful-girls-in-white-shirts-thoughtfully-looki-AGRT9KC.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-girls-in-white-shirts-thoughtfully-looki-AGRT9KC-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/gallery.json",
+                    "name": "Gallery"
+                },
+                {
+                    "source": "templates\/home-2-pro-.json",
+                    "name": "Home 2 (Pro)"
+                }
+            ],
+            "filesize": 231707,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-AGRT9KC"
+        },
+        {
+            "filename": "biker-guy-isits-on-classic-style-motorcycle-N6UXFBA.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/biker-guy-isits-on-classic-style-motorcycle-N6UXFBA-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-5-pro-.json",
+                    "name": "Home 5 (Pro)"
+                }
+            ],
+            "filesize": 194760,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/image-N6UXFBA"
+        },
+        {
+            "filename": "having-the-time-of-my-life-LFSDJRZ.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/having-the-time-of-my-life-LFSDJRZ-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/about-2-pro-.json",
+                    "name": "About 2 (Pro)"
+                }
+            ],
+            "filesize": 170843,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-LFSDJRZ"
+        },
+        {
+            "filename": "gray-line-bg.png",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/gray-line-bg-600x1.png",
+            "templates": [
+                {
+                    "source": "templates\/about-1.json",
+                    "name": "About 1"
+                },
+                {
+                    "source": "templates\/location-pro-.json",
+                    "name": "Location (Pro)"
+                }
+            ],
+            "filesize": 114,
+            "dimensions": [
+                748,
+                1
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "pretty-woman-closeup-portrait-PGFYD9W.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/pretty-woman-closeup-portrait-PGFYD9W-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 363873,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-PGFYD9W"
+        },
+        {
+            "filename": "woman-wearing-casual-clothes-in-the-street-F7CAP5R-scaled.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/woman-wearing-casual-clothes-in-the-street-F7CAP5R-600x899.jpg",
+            "templates": [
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 483321,
+            "dimensions": [
+                1708,
+                2560
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "woman-using-smartphone-in-cafe-P5SBBMQ.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/woman-using-smartphone-in-cafe-P5SBBMQ-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 123755,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-P5SBBMQ"
+        },
+        {
+            "filename": "beautiful-asian-brunette-girl-in-down-jacket-dream-B92M7M6.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-asian-brunette-girl-in-down-jacket-dream-B92M7M6-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 211843,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-B92M7M6"
+        },
+        {
+            "filename": "beautiful-young-woman-standing-and-posing-outdoors-PATLE8U-scaled.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/beautiful-young-woman-standing-and-posing-outdoors-PATLE8U-600x900.jpg",
+            "templates": [
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 669246,
+            "dimensions": [
+                1707,
+                2560
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "pensive-young-businessman-in-cafe-using-phone-96PXMZ8.jpg",
+            "thumbnail_url": "http:\/\/template-kit.ancorathemes.com\/elementor-blog\/wp-content\/uploads\/sites\/5\/2020\/04\/pensive-young-businessman-in-cafe-using-phone-96PXMZ8-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/our-team.json",
+                    "name": "Our Team"
+                }
+            ],
+            "filesize": 184253,
+            "dimensions": [
+                1920,
+                1280
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-96PXMZ8"
+        }
+    ]
+}

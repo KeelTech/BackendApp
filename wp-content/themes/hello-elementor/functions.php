@@ -183,3 +183,181 @@ if ( ! function_exists( 'hello_elementor_body_open' ) ) {
 		}
 	}
 }
+function wpb_hook_javascript() {
+  if (is_page ('63')) { 
+    ?>
+        <script type="text/javascript" src="https://www.getkeel.com/wp-content/themes/hello-elementor/crs.js">
+          // your javscript code goes here
+        </script>
+    <?php
+  }
+}
+
+
+add_action('wp_footer', 'wpb_hook_javascript');
+wp_enqueue_script('jquery');
+
+
+// A send custom WebHook
+add_action( 'elementor_pro/forms/new_record', function( $record, $handler ) {
+    //make sure its our form
+    $form_name = $record->get_form_settings( 'form_name' );
+
+    // Replace MY_FORM_NAME with the name you gave your form
+    if ( 'test_form' !== $form_name ) {
+        return;
+    }
+
+    $raw_fields = $record->get( 'fields' );
+    $fields = [];
+    foreach ( $raw_fields as $id => $field ) {
+        $fields[ $id ] = $field['value'];
+		
+    }
+		
+$myEmail = $fields["email"];
+$myName = $fields["name"];
+$myNumber = $fields["contact_number"];
+$myFormData = '[{"Attribute":"EmailAddress","Value":"'.$myEmail.'"},{"Attribute":"FirstName","Value":"'.$myName.'"},{"Attribute":"Phone","Value":"'.$myNumber.'"},]';
+
+
+$data_string = '[{"Attribute":"EmailAddress","Value":"test3@getkeel.com"},{"Attribute":"FirstName","Value":"Robert"},{"Attribute":"LastName","Value":"Smith"},{"Attribute":"Phone","Value":"9876243210"},]';
+
+$curl = curl_init('https://api-in21.leadsquared.com/v2/LeadManagement.svc/Lead.Create?accessKey=u$r9538ca002d0f679810a27e8f254a2f62&secretKey=e342f6d83be820cc15fb10378cc31e6c33e66843');
+curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($curl, CURLOPT_HEADER, 0);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $myFormData);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        "Content-Type:application/json",
+        "Content-Length:".strlen($myFormData)));
+ curl_exec($curl);
+	
+// $response = curl_exec($curl);
+// print_r(json_decode($response));
+
+
+}, 10, 2 );
+
+
+
+// A send custom WebHook for Homepage form
+add_action( 'elementor_pro/forms/new_record', function( $record, $handler ) {
+    //make sure its our form
+    $form_name = $record->get_form_settings( 'form_name' );
+
+    // Replace MY_FORM_NAME with the name you gave your form
+    if ( 'homepage_form' !== $form_name ) {
+        return;
+    }
+
+    $raw_fields = $record->get( 'fields' );
+    $fields = [];
+    foreach ( $raw_fields as $id => $field ) {
+        $fields[ $id ] = $field['value'];
+		
+    }
+		
+$myEmail = $fields["email"];
+$myNumber = $fields["contact_number"];
+$myFormData = '[{"Attribute":"EmailAddress","Value":"'.$myEmail.'"},{"Attribute":"Phone","Value":"'.$myNumber.'"},]';
+
+$curl = curl_init('https://api-in21.leadsquared.com/v2/LeadManagement.svc/Lead.Create?accessKey=u$r9538ca002d0f679810a27e8f254a2f62&secretKey=e342f6d83be820cc15fb10378cc31e6c33e66843');
+curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($curl, CURLOPT_HEADER, 0);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $myFormData);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        "Content-Type:application/json",
+        "Content-Length:".strlen($myFormData)));
+ curl_exec($curl);
+	
+// $response = curl_exec($curl);
+// print_r(json_decode($response));
+
+
+}, 10, 2 );
+
+
+
+// A send custom WebHook for Contact form
+add_action( 'elementor_pro/forms/new_record', function( $record, $handler ) {
+    //make sure its our form
+    $form_name = $record->get_form_settings( 'form_name' );
+
+    // Replace MY_FORM_NAME with the name you gave your form
+    if ( 'contact_form' !== $form_name ) {
+        return;
+    }
+
+    $raw_fields = $record->get( 'fields' );
+    $fields = [];
+    foreach ( $raw_fields as $id => $field ) {
+        $fields[ $id ] = $field['value'];
+		
+    }
+
+$myName = $fields["myName"];		
+$myEmail = $fields["myEmail"];
+$myNumber = $fields["my_contact_number"];
+$myMessage = $fields["myMessage"];
+$myFormData = '[{"Attribute":"FirstName","Value":"'.$myName.'"},{"Attribute":"EmailAddress","Value":"'.$myEmail.'"},{"Attribute":"Phone","Value":"'.$myNumber.'"},{"Attribute":"Notes","Value":"'.$myMessage.'"},]';
+
+$curl = curl_init('https://api-in21.leadsquared.com/v2/LeadManagement.svc/Lead.Create?accessKey=u$r9538ca002d0f679810a27e8f254a2f62&secretKey=e342f6d83be820cc15fb10378cc31e6c33e66843');
+curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($curl, CURLOPT_HEADER, 0);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $myFormData);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        "Content-Type:application/json",
+        "Content-Length:".strlen($myFormData)));
+ curl_exec($curl);
+	
+// $response = curl_exec($curl);
+// print_r(json_decode($response));
+
+
+}, 10, 2 );
+
+
+// Redirect Directly to Checkout
+
+add_filter('add_to_cart_redirect', 'lw_add_to_cart_redirect');
+function lw_add_to_cart_redirect() {
+ global $woocommerce;
+ $lw_redirect_checkout = $woocommerce->cart->get_checkout_url();
+ return $lw_redirect_checkout;
+} 
+
+// Clear cart and Add product and redirect to checkout
+add_filter( 'woocommerce_add_to_cart_validation', 'one_cart_item_at_the_time', 10, 3 );
+function one_cart_item_at_the_time( $passed, $product_id, $quantity ) {
+    if( ! WC()->cart->is_empty())
+        WC()->cart->empty_cart();
+    return $passed;
+}
+
+// Hide Product has been added to your cart notification from cart page
+add_filter( 'wc_add_to_cart_message_html', '__return_false' );
+
+
+// Redirect user after checkout to Our SSO
+add_action( 'woocommerce_thankyou', 'redirect_after_checkout');
+ 
+function redirect_after_checkout( $order_id ){
+ 
+    $order = wc_get_order( $order_id );
+	$data  = $order->get_data();
+ 	$email = $data['billing']['email'];
+    $url = 'https://staging.getkeel.com/sso?'.$email;
+ 
+    if ( ! $order->has_status( 'failed' ) ) {
+        wp_redirect( $url );
+//   echo "<script> window.open(".$url.", '_blank') </script>";
+        exit;
+    }
+ 
+}

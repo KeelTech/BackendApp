@@ -62,18 +62,21 @@ class Builder_Elementor extends Builder {
 	 *
 	 * @param $template_index
 	 *
-	 * @return bool|array
+	 * @return \WP_Error|array
 	 */
 	public function get_template_data( $template_index ) {
 		$template_data = parent::get_template_data( $template_index );
 		if ( $template_data && ! empty( $template_data['source'] ) ) {
 			$template_kit_folder_name       = $this->get_template_kit_temporary_folder();
 			$template_json_file             = $template_kit_folder_name . $template_data['source'];
-			$template_data['template_json'] = json_decode( file_get_contents( $template_json_file ), true );
-			return $template_data;
+			if(file_exists($template_json_file)) {
+				$template_data['template_json'] = json_decode( file_get_contents( $template_json_file ), true );
+
+				return $template_data;
+			}
 		}
 
-		return false;
+		return new \WP_Error( 'template_error', 'Template Data Error. Please delete the Template Kit and import it again.' );
 	}
 
 	/**
@@ -102,20 +105,24 @@ class Builder_Elementor extends Builder {
 		// This overwrites the 'template type' so our Elementor Free users can at least import some of the Pro templates.
 		// As Elementor only accepts the path to a JSON file for importing we temporarily modify the JSON data and
 		// send in that template file name to Elementor for processing. We delete the temporary JSON file after processing below.
-		$temp_wp_json_file = false;
 		if ( ! empty( $local_json_data['metadata']['elementor_pro_required'] ) && ! class_exists( '\ElementorPro\Plugin' ) ) {
 			$local_json_data['type'] = 'page';
-			require_once ABSPATH . '/wp-admin/includes/file.php';
-			$temp_wp_json_file = wp_tempnam();
-			file_put_contents( $temp_wp_json_file, json_encode( $local_json_data ) );
-			$template_json_file = $temp_wp_json_file;
 		}
-		$result = $source->import_template( basename( $template_json_file ), $template_json_file );
 
-		// Cleanup above free template type file if it was created.
-		if ( $temp_wp_json_file ) {
+		// Elementor deletes JSON files after importing them, so we have to duplicate the JSON file before sending it over.
+		require_once ABSPATH . '/wp-admin/includes/file.php';
+		$temp_wp_json_file = wp_tempnam('elements-tk-import-');
+		file_put_contents( $temp_wp_json_file, json_encode( $local_json_data ) );
+
+		// Pass our temporary JSON file to Elementor for import:
+		// FYI, newer versions of Elementor delete a JSON file after successful import
+		$result = $source->import_template( basename( $temp_wp_json_file ), $temp_wp_json_file );
+
+		// Cleanup above temporary file
+		if ( file_exists( $temp_wp_json_file ) ) {
 			unlink( $temp_wp_json_file );
 		}
+
 		if ( is_wp_error( $result ) ) {
 			return new \WP_Error( 'import_error', 'Failed to import template: ' . esc_html( $result->get_error_message() ) );
 		}
@@ -274,5 +281,48 @@ class Builder_Elementor extends Builder {
 		$required_theme['status'] = $theme_status;
 		$required_theme['url']    = $theme_action_url;
 		return $required_theme;
+	}
+
+	/**
+	 * Gets url for entire kit screenshot
+	 *
+	 * @return string|false
+	 */
+	public function get_screenshot_url() {
+		$template_kit_templates = $this->get_available_templates();
+
+		if ( ! empty( $template_kit_templates[0]['screenshot_url'] ) ) {
+			return $template_kit_templates[0]['screenshot_url'];
+		}
+
+		return false;
+	}
+
+	/**
+	 * Gets list of kit requirements
+	 *
+	 * @return array
+	 */
+	public function get_requirements() {
+		$requirements = parent::get_requirements();
+
+		// Check Elementor default colors and fonts are set.
+		// Elementor stores the string 'yes' in the WordPress database if these options are active, and an empty string if these options are not active.
+		$is_elementor_color_schemes_disabled_already      = get_option( 'elementor_disable_color_schemes' );
+		$is_elementor_typography_schemes_disabled_already = get_option( 'elementor_disable_typography_schemes' );
+		if ( $is_elementor_color_schemes_disabled_already !== 'yes' ) {
+			$requirements['settings'][] = [
+				'name'         => 'Elementor default color schemes',
+				'setting_name' => 'elementor_disable_color_schemes'
+			];
+		}
+		if ( $is_elementor_typography_schemes_disabled_already !== 'yes' ) {
+			$requirements['settings'][] = [
+				'name'         => 'Elementor default typography schemes',
+				'setting_name' => 'elementor_disable_typography_schemes'
+			];
+		}
+
+		return $requirements;
 	}
 }

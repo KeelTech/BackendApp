@@ -79,6 +79,19 @@ abstract class Builder extends Base {
 	 *
 	 * @return array
 	 */
+	public function get_requirements() {
+		return [
+			'theme'        => $this->get_required_theme(),
+			'plugins'      => $this->get_required_plugins(),
+			'css' 			   => $this->get_required_css(),
+		];
+	}
+
+	/**
+	 * Gets the list of required plugins from metadata
+	 *
+	 * @return array
+	 */
 	public function get_required_plugins() {
 		$manifest_data = $this->get_manifest_data();
 		return Required_Plugin::get_instance()->check_for_required_plugins( ! empty( $manifest_data['required_plugins'] ) ? $manifest_data['required_plugins'] : array() );
@@ -150,13 +163,17 @@ abstract class Builder extends Base {
 			$templates           = $manifest['templates'];
 			$screenshot_base_url = $this->get_template_kit_temporary_url();
 			foreach ( $templates as $template_index => $template ) {
-				$templates[ $template_index ]['screenshot_url'] = $screenshot_base_url . $template['screenshot'];
+				if ( ! empty( $template['screenshot'] ) ) {
+					$templates[ $template_index ]['screenshot_url'] = $screenshot_base_url . $template['screenshot'];
+				}
 				// Checking the additional template informatino strings for &amp; and converting to & so they display.
 				if ( ! empty( $template['metadata']['additional_template_information'] ) ) {
 						$templates[ $template_index ]['metadata']['additional_template_information'] = array_map( 'htmlspecialchars_decode', $template['metadata']['additional_template_information'] );
 				}
 				// Check if the name of the template has any characters that need decoding and convert them.
-				$templates[ $template_index ]['name'] = html_entity_decode( $templates[ $template_index ]['name'] );
+				if ( ! empty( $templates[ $template_index ]['name'] ) ) {
+					$templates[ $template_index ]['name'] = html_entity_decode( $templates[ $template_index ]['name'] );
+				}
 				// todo: this will be an array of imports into the page builder library
 				// So we can show if the template has been imported already etc.
 				if ( ! isset( $templates[ $template_index ]['imports'] ) ) {
@@ -341,5 +358,23 @@ abstract class Builder extends Base {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Gets url for entire kit screenshot
+	 *
+	 * @return string|false
+	 */
+	public function get_screenshot_url() {
+		return false;
+	}
+
+	/**
+	 * Gets url for source zip
+	 *
+	 * @return string|false
+	 */
+	public function get_source_zip_url() {
+		return get_post_meta( $this->kit_id, 'envato_tk_source_zip_url', true );
 	}
 }

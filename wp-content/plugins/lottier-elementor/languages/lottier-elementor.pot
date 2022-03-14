@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Lottier for Elementor
+# Copyright (C) 2021 Lottier for Elementor
 # This file is distributed under the same license as the Lottier for Elementor package.
 msgid ""
 msgstr ""
@@ -13,644 +13,1300 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/CheckCompatibility.php:192, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:238
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/CheckCompatibility.php:215, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:271, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:295, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:315, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:532
 msgid "Lottier for Elementor"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/CheckCompatibility.php:214
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/CheckCompatibility.php:240
 msgid "The minimum PHP version required for Lottier for Elementor plugin is 5.6.0."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:51
-msgid "CodeCanyon License"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:262
+msgid "General"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:61
-msgid "Not Activated"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:263
+msgid "General Settings"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:56
-msgid "Activated"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:289, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:290
+msgid "Custom CSS"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:251
-msgid "Subscribe to updates"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:296
+msgid "Add custom CSS here."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:252
-msgid "Sign up for the newsletter to be the first to know about news and discounts."
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:323
+msgid "Assignments"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:258
-msgid "Your Name"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:324
+msgid "Assignments Settings"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:269
-msgid "Your E-Mail"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:280
-msgid "Subscribe"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:308
-msgid "Plugin Activation"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:314
-msgid "Purchase code"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:315
-msgid "Enter your CodeCanyon purchase code. Allowed only one Purchase Code per website."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:337
-msgid "Activation FAQ'S"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:341
-msgid "Where is my Purchase Code?"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:344
-msgid "The purchase code is a unique combination of characters that confirms that you bought the plugin. You can find your purchase code in "
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:345
-msgid "your account"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:346
-msgid " on the CodeCanyon. Learn more about "
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:347
-msgid "How to find your purchase code"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:348, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:382
-msgid " ."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:354
-msgid "Can I use one Purchase Code on multiple sites?"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:358
-msgid "No, this is prohibited by license terms. You can use the purchase code on only one website at a time. Learn more about "
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:359
-msgid "Envato License"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:360
-msgid " terms. "
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:366
-msgid "What are the benefits of plugin activation?"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:370
-msgid "Activation of the plugin allows you to use all the functionality of the plugin on your site. In addition, in some cases, activating the plugin allows you to access additional features and capabilities of the plugin. Also, using an authored version of the plugin, you can be sure that you will not violate the license."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:376
-msgid "What should I do if my Purchase Code does not work?"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:380
-msgid "There are several reasons why the purchase code may not work on your site. Learn more why your "
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginActivation.php:381
-msgid "Purchase Code is Not Working"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginHelper.php:118, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginHelper.php:118
-msgid "Settings"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginHelper.php:119, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginHelper.php:119, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:164
-msgid "Documentation"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginHelper.php:120, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginHelper.php:120
-msgid "Plugins"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginHelper.php:140
-msgid "Rate this plugin:"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginUpdater.php:387
-msgid "Please visit the plugin page on the Envato market to "
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginUpdater.php:389
-msgid "download "
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/PluginUpdater.php:391
-msgid "the latest version."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:65
-msgid "Operating System"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:66
-msgid "Software"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:67
-msgid "MySQL version"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:68
-msgid "PHP Version"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:69
-msgid "Write Permissions"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:70
-msgid "ZIP Installed"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:71
-msgid "cURL Installed"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:72
-msgid "Elementor Installed"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:98, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:193, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:216, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:240, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:264, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:288, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:313
-msgid "YES"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:98, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:193, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:216, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:240, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:264, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:288, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:313
-msgid "NO"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:100
-msgid "You must enable allow_url_fopen option in PHP. Contact the support service of your hosting provider. They know what to do."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:166
-msgid "We recommend to use php 5.6 or higher"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:218
-msgid "You must enable CURL (Client URL Library) in PHP. Contact the support service of your hosting provider. They know what to do."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:242
-msgid "You need install and activate Elementor builder. Go to Elementor site (elementor.com) for details."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:266
-msgid " You must enable DOM extension (Document Object Model) in PHP. It's used for HTML processing. Contact the support service of your hosting provider. They know what to do."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:290
-msgid "You must enable XML extension in PHP. It's used for XML processing. Contact the support service of your hosting provider. They know what to do."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:315
-msgid "You must enable BCMath extension (Arbitrary Precision Mathematics) in PHP. Contact the support service of your hosting provider. They know what to do."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:361
-msgid "WordPress root directory"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:369
-msgid "WordPress root uploads directory"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:375
-msgid ".htaccess file"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:392
-msgid "All right"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/ServerReporter.php:387
-msgid "There are some writing permissions issues with the following directories/files:"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:72
-msgid "Status"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:80
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:373
 msgid "Activation"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:86, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/TabUpdates.php:146
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:374, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:350
+msgid "Plugin Activation"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:400
+msgid "Status"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:401
+msgid "System Status"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:466, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:467
 msgid "Updates"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:91
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:493
 msgid "Uninstall"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:106
-msgid "Plugin settings"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:160
-msgid "Helpful links"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:170
-msgid "Get help"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:174
-msgid "Rate this plugin"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:180
-msgid "More plugins"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:237
-msgid "Lottier Settings"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:292
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:494
 msgid "Uninstall Settings"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:283
-msgid "System Requirements"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:317
-msgid "Settings saved!"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:333
-msgid "Invalid purchase code."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:328
-msgid "Plugin activated successfully."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:354
-msgid "LottierElementor"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:356, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:81
-msgid "Lottier"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:357
-msgid "v."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Settings.php:361
-msgid "Save changes"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/SettingsFields.php:86
-msgid "New Tab"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/SettingsFields.php:109
-msgid "Setting:"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/SettingsFields.php:123
-msgid "Setting "
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/TabStatus.php:124
-msgid ""
-"Some data will be sent to our server to verify purchase and to ensure that a plugin is compatible with your install. \n"
-"                We will never collect any confidential data. All data is stored anonymously."
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/TabUpdates.php:114
-msgid "Check for updates:"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/TabUpdates.php:126
-msgid "Check Updates"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/UninstallTab.php:69
-msgid "Removal settings:"
-msgstr ""
-
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/UninstallTab.php:91
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:501
 msgid "Delete plugin only"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/UninstallTab.php:92
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:502
 msgid "Delete plugin and settings"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/UninstallTab.php:96
-msgid "Choose which data to delete upon using the \"Delete\" action in the \"Plugins\" admin page."
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Plugin.php:503
+msgid "Delete plugin, settings and data"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/UninstallTab.php:102
-msgid "Delete plugin"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginHelper.php:140, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginHelper.php:140
+msgid "Settings"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:65
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginHelper.php:141, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginHelper.php:141, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:161
+msgid "Documentation"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginHelper.php:142, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginHelper.php:142
+msgid "Plugins"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginHelper.php:163
+msgid "Rate this plugin:"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginUpdater.php:439
+msgid "Please visit the plugin page on the Envato market to "
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginUpdater.php:441
+msgid "download "
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/PluginUpdater.php:443
+msgid "the latest version."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterPlugins.php:90, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterPlugins.php:123
+msgid "Active Plugins"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:52
+msgid "Server Environment"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:71
+msgid "Operating System"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:72
+msgid "Software"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:73
+msgid "MySQL version"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:74
+msgid "PHP Version"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:75
+msgid "Write Permissions"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:76
+msgid "ZIP Installed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:77
+msgid "cURL Installed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:78
+msgid "Elementor Installed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:79
+msgid "WPBakery Installed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:80
+msgid "allow_url_fopen"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:81
+msgid "DOM Installed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:82
+msgid "XML Installed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:83
+msgid "BCMath Installed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:84
+msgid "mbstring Installed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:85
+msgid "Server Time Sync"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:132, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:224, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:248, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:272, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:297, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:323, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:349, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:375, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:401, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:444, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:463, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:491
+msgid "YES"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:132, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:224, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:248, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:272, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:297, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:323, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:349, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:375, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:401, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:444, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:463, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:491
+msgid "NO"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:134
+msgid "You must enable allow_url_fopen option in PHP. Contact the support service of your hosting provider. They know what to do."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:198
+msgid "We recommend to use php 5.6 or higher"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:250
+msgid "You must enable CURL (Client URL Library) in PHP. Contact the support service of your hosting provider. They know what to do."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:274
+msgid "You need install and activate Elementor builder. Go to Elementor site (elementor.com) for details."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:299
+msgid "You need install and activate WPBakery builder. Go to WPBakery site (wpbakery.com) for details."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:325
+msgid " You must enable DOM extension (Document Object Model) in PHP. It's used for HTML processing. Contact the support service of your hosting provider. They know what to do."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:351
+msgid "You must enable XML extension in PHP. It's used for XML processing. Contact the support service of your hosting provider. They know what to do."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:377
+msgid "You must enable BCMath extension (Arbitrary Precision Mathematics) in PHP. Contact the support service of your hosting provider. They know what to do."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:403
+msgid "You must enable mbstring extension (Multibyte String) in PHP. Contact the support service of your hosting provider. They know what to do."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:446, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:465
+msgid "Failed to check time synchronization on your server. Your server's clock must be in sync with network time protocol - NTP."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:493
+msgid " Your server's clock is not in sync with network time protocol - NTP. Contact the support service of your hosting provider. They know what to do."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:573
+msgid "WordPress root directory"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:581
+msgid "WordPress root uploads directory"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:587
+msgid ".htaccess file"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:604
+msgid "All right"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterServer.php:599
+msgid "There are some writing permissions issues with the following directories/files:"
+msgstr ""
+
+#. translators: %s: Codex URL
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterTheme.php:211
+msgctxt "System Info"
+msgid "If you want to modify the source code of your theme, we recommend using a <a href=\"%s\">child theme</a>."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:49
+msgid "WordPress Environment"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:64
 msgid "Version"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:66
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:65
 msgid "Site URL"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:67
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:66
 msgid "Home URL"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:68
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:67
 msgid "WP Multisite"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:69
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:68
 msgid "Max Upload Size"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:70
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:69
 msgid "Memory limit"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:71
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:70
 msgid "Permalink Structure"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:72
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:71
 msgid "Language"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:73
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:72
 msgid "Timezone"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:74
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:73
 msgid "Admin Email"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:75
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:74
 msgid "Debug Mode"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:142
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:142
 msgid "We recommend setting memory to at least 64M. For more information, ask your hosting provider."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:185
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:186
 msgid "Yes"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:185
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:186
 msgid "No"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:245
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:250
 msgid "Plain"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:350
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:360
 msgid "Active"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/WordPressReporter.php:350
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/ReporterWordPress.php:360
 msgid "Inactive"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:154
-msgid "Animation"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:99
+msgid "Plugin settings"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:162, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:683, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:802, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:887
-msgid "Margin"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:157
+msgid "Helpful links"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:177, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:698, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:818, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:902
-msgid "Padding"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:167
+msgid "Get help"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:192
-msgid "Width"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:171
+msgid "Rate this plugin"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:209
-msgid "Height"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:177
+msgid "More plugins"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:235
-msgid "Custom height"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:270, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:294, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:314
+msgid "Lottier Settings"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:237, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:365
-msgid "On"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:480
+msgid "Settings saved!"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:238, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:366
-msgid "Off"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:504
+msgid "Plugin activated successfully."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:250, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:753, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:957
-msgid "Background"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:510
+msgid "Invalid purchase code."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:260, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:763, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:967
-msgid "Alignment"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:528
+msgid "LottierElementor"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:264, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:767, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:971
-msgid "Left"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:534, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:88
+msgid "Lottier"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:268, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:771, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:975
-msgid "Center"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:539
+msgid "v."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:272, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:775, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:979
-msgid "Right"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/Settings.php:545
+msgid "Save changes"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:303
-msgid "Properties"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:102
+msgid "CodeCanyon License"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:312
-msgid "Animation speed"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:112
+msgid "Not Activated"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:332
-msgid "Playback"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:107
+msgid "Activated"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:336
-msgid "Auto play"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:288
+msgid "Subscribe to updates"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:337
-msgid "SVG hover"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:289
+msgid "Sign up for the newsletter to be the first to know about news and discounts."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:338
-msgid "Section hover"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:291
+msgid "Hurray! We received your Subscription request. Check your inbox for an email from us."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:339
-msgid "On click"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:292
+msgid "Oh! Sorry, but we cannot send messages to this email."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:348
-msgid "Play mode"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:293
+msgid "Oops! Something went wrong. Please try later."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:352
-msgid "Normal"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:300
+msgid "Your Name"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:353
-msgid "Bounce"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:311
+msgid "Your E-Mail"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:363
-msgid "Loop"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:322
+msgid "Subscribe"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:376
-msgid "Controls"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:356
+msgid "Purchase code"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:378, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:390, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:403, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:416, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:473
-msgid "Show"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:357
+msgid "Enter your CodeCanyon purchase code. Allowed only one Purchase Code per website."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:379, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:391, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:404, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:417, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:474
-msgid "Hide"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:379
+msgid "Activation FAQ'S"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:388, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:429, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:439, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:441, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:442, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:674
-msgid "Header"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:383
+msgid "Where is my Purchase Code?"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:401, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:513, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:552, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:555, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:556, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:878
-msgid "Description"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:386
+msgid "The purchase code is a unique combination of characters that confirms that you bought the plugin. You can find your purchase code in "
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:414
-msgid "Enable link"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:387
+msgid "your account"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:450, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:537
-msgid "HTML Tag"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:388
+msgid " on the CodeCanyon. Learn more about "
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:471
-msgid "Show Subheader"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:389
+msgid "How to find your purchase code"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:483
-msgid "Subheader Position"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:390, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:424
+msgid " ."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:498, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:500, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:501, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:791
-msgid "Subheader"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:396
+msgid "Can I use one Purchase Code on multiple sites?"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:523
-msgid "Description Position"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:400
+msgid "No, this is prohibited by license terms. You can use the purchase code on only one website at a time. Learn more about "
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:526
-msgid "After header"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:401
+msgid "Envato License"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:527
-msgid "Footer"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:402
+msgid " terms. "
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:567
-msgid "Link"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:408
+msgid "What are the benefits of plugin activation?"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:577
-msgid "Link Position"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:412
+msgid "Activation of the plugin allows you to use all the functionality of the plugin on your site. In addition, in some cases, activating the plugin allows you to access additional features and capabilities of the plugin. Also, using an authored version of the plugin, you can be sure that you will not violate the license."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:580
-msgid "SVG"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:418
+msgid "What should I do if my Purchase Code does not work?"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:581
-msgid "Box"
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:422
+msgid "There are several reasons why the purchase code may not work on your site. Learn more why your "
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:591, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:618, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:631
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabActivation.php:423
+msgid "Purchase Code is Not Working"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:256
+msgid "Matching Method"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:257
+msgid "Should all or any assignments be matched?"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:259
+msgid "ALL"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:260
+msgid "ANY"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:262
+msgid "The plugin is enabled on the page if ALL the selected rules matched, or if ANY of the selected rules matched"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:267
+msgid "WordPress Content"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:270, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:294, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:304, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:335, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:361, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:391, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:418, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:442, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:466, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:521, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:618, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:645
+msgid "Ignore"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:271, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:295, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:305, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:336, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:362, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:392, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:419, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:443, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:467, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:522, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:619, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:646
+msgid "Include"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:272, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:296, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:306, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:337, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:363, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:393, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:420, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:444, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:468, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:523, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:620, wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:647
+msgid "Exclude"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:277
+msgid "Select on what page types or categories the assignment should be active."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:291
+msgid "Home Page"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:302
+msgid "Menu Items"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:310
+msgid "Select the menu items to assign to."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:332
+msgid "Date & Time"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:347
+msgid "The date and time assignments use the date/time of your servers, not that of the visitors system."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:349
+msgid "Current date/time:"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:358
+msgid "Languages"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:367
+msgid "Select the languages to assign to."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:388
+msgid "User Roles"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:397
+msgid "Select the user roles to assign to."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:415, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:601, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:628, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:641
 msgid "URL"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:593
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:425
+msgid "Enter (part of) the URLs to match."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:426
+msgid "Use a new line for each different match."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:439
+msgid "Devices"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:448
+msgid "Select the devices to assign to. Keep in mind that device detection is not always 100% accurate. Users can setup their device to mimic other devices."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:452
+msgid "Desktop"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:453
+msgid "Tablet"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:454
+msgid "Mobile"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:463
+msgid "Operating Systems"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:472
+msgid "Select the operating systems to assign to. Keep in mind that operating system detection is not always 100% accurate. Users can setup their browser to mimic other operating systems."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:476
+msgid "Windows (All)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:477
+msgid "Windows 10"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:478
+msgid "Windows 8"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:479
+msgid "Windows 7"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:480
+msgid "Windows Vista"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:481
+msgid "Windows Server 2003"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:482
+msgid "Windows XP"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:483
+msgid "Windows 2000 sp1"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:484
+msgid "Windows 2000"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:485
+msgid "Windows NT 4.0"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:486
+msgid "Windows Me"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:487
+msgid "Windows 98"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:488
+msgid "Windows 95"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:489
+msgid "Windows CE"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:490
+msgid "Mac OS (All)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:491
+msgid "Mac OSX (All)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:492
+msgid "Mac OSX El Capitan"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:493
+msgid "Mac OSX Yosemite"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:494
+msgid "Mac OSX Mavericks"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:495
+msgid "Mac OSX Mountain Lion"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:496
+msgid "Mac OSX Lion"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:497
+msgid "Mac OSX Snow Leopard"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:498
+msgid "Mac OSX Leopard"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:499
+msgid "Mac OSX Tiger"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:500
+msgid "Mac OSX Panther"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:501
+msgid "Mac OSX Jaguar"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:502
+msgid "Mac OSX Puma"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:503
+msgid "Mac OSX Cheetah"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:504
+msgid "Mac OS (classic)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:505
+msgid "Linux"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:506
+msgid "Open BSD"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:507
+msgid "Sun OS"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:508
+msgid "QNX"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:509
+msgid "BeOS"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:510
+msgid "OS/2"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:518
+msgid "Browsers"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:527
+msgid "Select the browsers to assign to. Keep in mind that browser detection is not always 100% accurate. Users can setup their browser to mimic other browsers."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:530
+msgid "Browsers:"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:535
+msgid "Chrome (All)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:536
+msgid "Chrome 61-70"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:537
+msgid "Chrome 51-60"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:538
+msgid "Chrome 41-50"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:539
+msgid "Chrome 31-40"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:540
+msgid "Chrome 21-30"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:541
+msgid "Chrome 11-20"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:542
+msgid "Chrome 1-10"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:543
+msgid "Firefox (All)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:544
+msgid "Firefox 61-70"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:545
+msgid "Firefox 51-60"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:546
+msgid "Firefox 41-50"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:547
+msgid "Firefox 31-40"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:548
+msgid "Firefox 21-30"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:549
+msgid "Firefox 11-20"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:550
+msgid "Firefox 1-10"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:551
+msgid "Internet Explorer (All)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:552
+msgid "Internet Explorer Edge"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:553
+msgid "Edge 15"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:554
+msgid "Edge 14"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:555
+msgid "Edge 13"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:556
+msgid "Edge 12"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:557
+msgid "Internet Explorer 11"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:558
+msgid "Internet Explorer 10.6"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:559
+msgid "Internet Explorer 10.0"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:560
+msgid "Internet Explorer 10"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:561
+msgid "Internet Explorer 9"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:562
+msgid "Internet Explorer 8"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:563
+msgid "Internet Explorer 7"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:564
+msgid "Internet Explorer 1-6"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:565
+msgid "Opera (All)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:566
+msgid "Opera 51-60"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:567
+msgid "Opera 41-50"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:568
+msgid "Opera 31-40"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:569
+msgid "Opera 21-30"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:570
+msgid "Opera 11-20"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:571
+msgid "Opera 1-10"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:572
+msgid "Safari (All)"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:573
+msgid "Safari 11"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:574
+msgid "Safari 10"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:575
+msgid "Safari 9"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:576
+msgid "Safari 8"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:577
+msgid "Safari 7"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:578
+msgid "Safari 6"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:579
+msgid "Safari 5"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:580
+msgid "Safari 4"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:581
+msgid "Safari 1-3"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:587
+msgid "Mobile Browsers:"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:592
+msgid "All"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:593
+msgid "Android"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:594
+msgid "Android Chrome"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:595
+msgid "Blackberry"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:596
+msgid "IE Mobile"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:597
+msgid "iPad"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:598
+msgid "iPhone"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:599
+msgid "iPod Touch"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:600
+msgid "NetFront"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:601
+msgid "Nokia"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:602
+msgid "Opera Mini"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:603
+msgid "Opera Mobile"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:604
+msgid "UC Browser"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:615
+msgid "IP Addresses"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:625
+msgid "IP Addresses / Ranges"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:631
+msgid "List of IP addresses or IP ranges. Example: "
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:632
+msgid "46.33.233.31"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:633
+msgid "46.0-46.1"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:634
+msgid "46"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:642
+msgid "Custom PHP"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:652
+msgid "Enter a piece of PHP code to evaluate. The code must return the value true or false."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabAssignments.php:654
+msgid "For instance:"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabStatus.php:238
+msgid "Some data will be sent to our server to verify purchase and to ensure that a plugin is compatible with your install. We will never collect any confidential data. All data is stored anonymously."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabUninstall.php:84
+msgid "Removal settings:"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabUninstall.php:111
+msgid "Choose which data to delete upon using the \"Delete\" action in the \"Plugins\" admin page."
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabUninstall.php:117
+msgid "Delete plugin"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabUpdates.php:80
+msgid "Check for updates:"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabUpdates.php:83
+msgid "SSL verification:"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabUpdates.php:98
+msgid "Clear cache"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabUpdates.php:119
+msgid "SSL verification"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/TabUpdates.php:120
+msgid "Enable to activate the SSL check when receiving updates"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/UI.php:611
+msgid "Icon Library"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/Unity/UI.php:612
+msgid "Upload SVG"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:164
+msgid "Animation"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:172, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:693, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:812, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:897
+msgid "Margin"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:187, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:708, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:828, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:912
+msgid "Padding"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:202
+msgid "Width"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:219
+msgid "Height"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:245
+msgid "Custom height"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:247, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:375
+msgid "On"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:248, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:376
+msgid "Off"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:260, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:763, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:967
+msgid "Background"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:270, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:773, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:977
+msgid "Alignment"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:274, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:777, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:981
+msgid "Left"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:278, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:781, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:985
+msgid "Center"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:282, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:785, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:989
+msgid "Right"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:313
+msgid "Properties"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:322
+msgid "Animation speed"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:342
+msgid "Playback"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:346
+msgid "Auto play"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:347
+msgid "SVG hover"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:348
+msgid "Section hover"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:349
+msgid "On click"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:358
+msgid "Play mode"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:362
+msgid "Normal"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:363
+msgid "Bounce"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:373
+msgid "Loop"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:386
+msgid "Controls"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:388, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:400, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:413, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:426, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:483
+msgid "Show"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:389, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:401, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:414, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:427, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:484
+msgid "Hide"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:398, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:439, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:449, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:451, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:452, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:684
+msgid "Header"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:411, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:523, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:562, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:565, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:566, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:888
+msgid "Description"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:424
+msgid "Enable link"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:460, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:547
+msgid "HTML Tag"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:481
+msgid "Show Subheader"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:493
+msgid "Subheader Position"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:508, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:510, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:511, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:801
+msgid "Subheader"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:533
+msgid "Description Position"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:536
+msgid "After header"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:537
+msgid "Footer"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:577
+msgid "Link"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:587
+msgid "Link Position"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:590
+msgid "SVG"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:591
+msgid "Box"
+msgstr ""
+
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:603
 msgid "https://codecanyon.net/user/merkulove"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:604
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:614
 msgid "Animation content"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:613
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:623
 msgid "Source"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:617
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:627
 msgid "Media library"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:619, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:647
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:629, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:657
 msgid "JSON"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:621
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:631
 msgid "Choose animation on "
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:623
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:633
 msgid " and import it as JSON or URL."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:633
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:643
 msgid "https://lottiefiles.com/..."
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:659
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:669
 msgid "Choose Image"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:714, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:835, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:918
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:724, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:845, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:928
 msgid "Color"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:732, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:854, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:936
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:742, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:864, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:946
 msgid "Typography"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:743, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:866, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:947
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:753, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:876, wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:957
 msgid "Shadow"
 msgstr ""
 
-#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/01_Lottier/01_lottier.elementor.php:983
+#: wp-content/plugins/lottier-elementor/src/Merkulove/LottierElementor/Elementor/widgets/Lottier/lottier.elementor.php:993
 msgid "Justify"
 msgstr ""

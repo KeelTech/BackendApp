@@ -1,0 +1,1637 @@
+{
+    "manifest_version": "1.0.14",
+    "title": "Creativic",
+    "page_builder": "elementor",
+    "kit_version": "1.0.1",
+    "templates": [
+        {
+            "name": "Global Kit Styles",
+            "screenshot": "screenshots\/global-kit-styles.png",
+            "source": "templates\/global.json",
+            "preview_url": "https:\/\/templatekit.pinisiart.com",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "global-styles",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "additional_template_information": [
+                    "These are the global theme styles configured through the Elementor Theme Styles area."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Theme Builder \u2013 Footer (Elementor Pro)",
+            "screenshot": "screenshots\/theme-builder-footer-elementor-pro-.png",
+            "source": "templates\/theme-builder-footer-elementor-pro-.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/?elementor_library=theme-builder-footer-elementor-pro",
+            "type": "footer",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "footer",
+                "elementor_pro_conditions": [
+                    "include\/general"
+                ],
+                "additional_template_information": [
+                    "This is a \"Footer\" template for Elementor Pro.",
+                    "This template will display on: Entire Site."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Theme Builder \u2013 Header (Elementor Pro)",
+            "screenshot": "screenshots\/theme-builder-header-elementor-pro-.png",
+            "source": "templates\/theme-builder-header-elementor-pro-.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/?elementor_library=theme-builder-header-elementor-pro",
+            "type": "header",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "header",
+                "elementor_pro_conditions": [
+                    "include\/general"
+                ],
+                "additional_template_information": [
+                    "This is a \"Header\" template for Elementor Pro.",
+                    "This template will display on: Entire Site."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home 02",
+            "screenshot": "screenshots\/home-02.png",
+            "source": "templates\/home-02.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/homepage-01\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Project",
+            "screenshot": "screenshots\/project.png",
+            "source": "templates\/project.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/project\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Service Detail",
+            "screenshot": "screenshots\/service-detail.png",
+            "source": "templates\/service-detail.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/service-detail\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Contact",
+            "screenshot": "screenshots\/contact.png",
+            "source": "templates\/contact.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/contact\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Project Detail",
+            "screenshot": "screenshots\/project-detail.png",
+            "source": "templates\/project-detail.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/case-studies\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "FAQs",
+            "screenshot": "screenshots\/faqs.png",
+            "source": "templates\/faqs.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/faqs\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Team",
+            "screenshot": "screenshots\/team.png",
+            "source": "templates\/team.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/team\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Services",
+            "screenshot": "screenshots\/services.png",
+            "source": "templates\/services.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/services\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Pricing",
+            "screenshot": "screenshots\/pricing.png",
+            "source": "templates\/pricing.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/pricing\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "About",
+            "screenshot": "screenshots\/about.png",
+            "source": "templates\/about.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/about\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Home 01",
+            "screenshot": "screenshots\/home-01.png",
+            "source": "templates\/home-01.json",
+            "preview_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/template-kit\/homepage\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        }
+    ],
+    "required_plugins": [
+        {
+            "name": "Elementor",
+            "version": "2.9.14",
+            "file": "elementor\/elementor.php",
+            "author": "Elementor.com"
+        },
+        {
+            "name": "Elementor Pro",
+            "version": "2.10.3",
+            "file": "elementor-pro\/elementor-pro.php",
+            "author": "Elementor.com"
+        }
+    ],
+    "images": [
+        {
+            "filename": "logo-black.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/logo-black.png",
+            "templates": [
+                {
+                    "source": "templates\/theme-builder-footer-elementor-pro-.json",
+                    "name": "Theme Builder \u2013 Footer (Elementor Pro)"
+                },
+                {
+                    "source": "templates\/theme-builder-header-elementor-pro-.json",
+                    "name": "Theme Builder \u2013 Header (Elementor Pro)"
+                }
+            ],
+            "filesize": 1280,
+            "dimensions": [
+                172,
+                42
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "ilus-dua.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/ilus-dua.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 75376,
+            "dimensions": [
+                560,
+                616
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/teamwork-working-puzzle-website-header-HTGYMLG"
+        },
+        {
+            "filename": "icon-satu.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/icon-satu.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 746,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-icon-set-ASTQFFC"
+        },
+        {
+            "filename": "icon-dua.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/icon-dua.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 717,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-icon-set-ASTQFFC"
+        },
+        {
+            "filename": "icon-tiga.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/icon-tiga.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                },
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 586,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-icon-set-ASTQFFC"
+        },
+        {
+            "filename": "feature-satu.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/feature-satu.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                },
+                {
+                    "source": "templates\/faqs.json",
+                    "name": "FAQs"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 517,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-icon-set-ASTQFFC"
+        },
+        {
+            "filename": "ilust-14.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/ilust-14-600x703.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                }
+            ],
+            "filesize": 104277,
+            "dimensions": [
+                737,
+                864
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/business-meeting-line-design-isometric-banner-RHCZ9KX"
+        },
+        {
+            "filename": "ilust-13-1.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/ilust-13-1-600x718.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                }
+            ],
+            "filesize": 107558,
+            "dimensions": [
+                702,
+                840
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/victory-line-design-style-isometric-web-banner-77SLKJT"
+        },
+        {
+            "filename": "img-1.jpg",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/img-1-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 78938,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/business-planning-landing-page-illustration-SNBCSVJ"
+        },
+        {
+            "filename": "awward-satu.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/awward-satu.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 3728,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "logoipusum-tiga.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/logoipusum-tiga.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 983,
+            "dimensions": [
+                179,
+                90
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/logoipsum.com\/"
+        },
+        {
+            "filename": "logoipsumdua.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/logoipsumdua.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 972,
+            "dimensions": [
+                179,
+                90
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/logoipsum.com\/"
+        },
+        {
+            "filename": "logoipsum-satu.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/logoipsum-satu.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 914,
+            "dimensions": [
+                179,
+                90
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/logoipsum.com\/"
+        },
+        {
+            "filename": "logoipsum-empat.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/logoipsum-empat.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 855,
+            "dimensions": [
+                179,
+                90
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/logoipsum.com\/"
+        },
+        {
+            "filename": "kutip.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/kutip.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 404,
+            "dimensions": [
+                30,
+                24
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "avatar-1-1.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/avatar-1-1.png",
+            "templates": [
+                {
+                    "source": "templates\/home-02.json",
+                    "name": "Home 02"
+                },
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 22322,
+            "dimensions": [
+                300,
+                300
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-people-flat-design-style-characters-URJZ6US"
+        },
+        {
+            "filename": "asset1.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/asset1.png",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                },
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                },
+                {
+                    "source": "templates\/contact.json",
+                    "name": "Contact"
+                },
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                },
+                {
+                    "source": "templates\/faqs.json",
+                    "name": "FAQs"
+                },
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 5061,
+            "dimensions": [
+                218,
+                633
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "asset3.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/asset3.png",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                },
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                },
+                {
+                    "source": "templates\/contact.json",
+                    "name": "Contact"
+                },
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                },
+                {
+                    "source": "templates\/faqs.json",
+                    "name": "FAQs"
+                },
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 3101,
+            "dimensions": [
+                182,
+                500
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "img-2.jpg",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/img-2-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 81886,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/business-tax-report-landing-page-illustration-AXKU2L5"
+        },
+        {
+            "filename": "img-3.jpg",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/img-3-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 85226,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/business-customer-review-landing-page-illustration-TKS9BG4"
+        },
+        {
+            "filename": "p-empat.jpg",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/p-empat-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                }
+            ],
+            "filesize": 83262,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/business-year-end-sale-landing-page-illustration-43MHJWP"
+        },
+        {
+            "filename": "p-satu.jpg",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/p-satu-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                }
+            ],
+            "filesize": 82825,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/business-app-analytic-landing-page-illustration-HLSB7PT"
+        },
+        {
+            "filename": "p-dua.jpg",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/p-dua-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                }
+            ],
+            "filesize": 85501,
+            "dimensions": [
+                1370,
+                913
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/business-online-shopping-landing-page-illustration-YSL8Q2Q"
+        },
+        {
+            "filename": "done.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/done.png",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                }
+            ],
+            "filesize": 601,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "smile.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/smile.png",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                }
+            ],
+            "filesize": 663,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "rewardsss.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/rewardsss.png",
+            "templates": [
+                {
+                    "source": "templates\/project.json",
+                    "name": "Project"
+                }
+            ],
+            "filesize": 753,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "illust-delapan.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/illust-delapan-600x649.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                }
+            ],
+            "filesize": 85667,
+            "dimensions": [
+                698,
+                755
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/teambuilding-line-design-style-isometric-banner-YRB2GV6"
+        },
+        {
+            "filename": "illus-10.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/illus-10.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                }
+            ],
+            "filesize": 20288,
+            "dimensions": [
+                336,
+                327
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/literature-and-online-reading-line-desig-banners-7TSH2TU"
+        },
+        {
+            "filename": "ilust-13.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/ilust-13.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                }
+            ],
+            "filesize": 14321,
+            "dimensions": [
+                330,
+                318
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/literature-and-online-reading-line-desig-banners-7TSH2TU"
+        },
+        {
+            "filename": "ilust12.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/ilust12.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                }
+            ],
+            "filesize": 14144,
+            "dimensions": [
+                311,
+                322
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/literature-and-online-reading-line-desig-banners-7TSH2TU"
+        },
+        {
+            "filename": "01.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/01.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                },
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                }
+            ],
+            "filesize": 816,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "02.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/02.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                },
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                }
+            ],
+            "filesize": 1144,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "03.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/03.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                }
+            ],
+            "filesize": 1207,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "04.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/04.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                }
+            ],
+            "filesize": 1009,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "05.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/05.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                }
+            ],
+            "filesize": 1080,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "06.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/06.png",
+            "templates": [
+                {
+                    "source": "templates\/service-detail.json",
+                    "name": "Service Detail"
+                }
+            ],
+            "filesize": 1273,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "result-3.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/result-3-600x542.png",
+            "templates": [
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                }
+            ],
+            "filesize": 183632,
+            "dimensions": [
+                1028,
+                928
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/makeapp-wireframe-kit-LH6JDU2"
+        },
+        {
+            "filename": "result-4.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/result-4-600x542.png",
+            "templates": [
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                }
+            ],
+            "filesize": 322534,
+            "dimensions": [
+                1028,
+                928
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/mobile-wireframe-kit-KJANMR"
+        },
+        {
+            "filename": "result-5.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/08\/result-5-600x542.png",
+            "templates": [
+                {
+                    "source": "templates\/project-detail.json",
+                    "name": "Project Detail"
+                }
+            ],
+            "filesize": 419650,
+            "dimensions": [
+                1028,
+                928
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/dailyui-v32-discover-mountain-tour-website-hero-LGLXMGP"
+        },
+        {
+            "filename": "featur-akun.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/featur-akun.png",
+            "templates": [
+                {
+                    "source": "templates\/faqs.json",
+                    "name": "FAQs"
+                }
+            ],
+            "filesize": 693,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "featur-privacy.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/featur-privacy.png",
+            "templates": [
+                {
+                    "source": "templates\/faqs.json",
+                    "name": "FAQs"
+                }
+            ],
+            "filesize": 500,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "featur-price.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/featur-price.png",
+            "templates": [
+                {
+                    "source": "templates\/faqs.json",
+                    "name": "FAQs"
+                }
+            ],
+            "filesize": 520,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "featur-tips.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/featur-tips.png",
+            "templates": [
+                {
+                    "source": "templates\/faqs.json",
+                    "name": "FAQs"
+                }
+            ],
+            "filesize": 621,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "featur-support.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/featur-support.png",
+            "templates": [
+                {
+                    "source": "templates\/faqs.json",
+                    "name": "FAQs"
+                }
+            ],
+            "filesize": 491,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "cc0",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/www.flaticon.com\/"
+        },
+        {
+            "filename": "ava-7.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/ava-7.png",
+            "templates": [
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 20154,
+            "dimensions": [
+                300,
+                300
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-people-flat-design-style-characters-URJZ6US"
+        },
+        {
+            "filename": "avatar-3.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/avatar-3.png",
+            "templates": [
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 16298,
+            "dimensions": [
+                300,
+                300
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-people-flat-design-style-characters-URJZ6US"
+        },
+        {
+            "filename": "avatar-4.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/avatar-4.png",
+            "templates": [
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 31081,
+            "dimensions": [
+                300,
+                300
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-people-flat-design-style-characters-URJZ6US"
+        },
+        {
+            "filename": "avatar-6.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/avatar-6.png",
+            "templates": [
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                }
+            ],
+            "filesize": 27112,
+            "dimensions": [
+                300,
+                300
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-people-flat-design-style-characters-URJZ6US"
+        },
+        {
+            "filename": "avatar-2.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/avatar-2.png",
+            "templates": [
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                }
+            ],
+            "filesize": 18338,
+            "dimensions": [
+                300,
+                300
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-people-flat-design-style-characters-URJZ6US"
+        },
+        {
+            "filename": "Cycling.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/Cycling-600x252.png",
+            "templates": [
+                {
+                    "source": "templates\/team.json",
+                    "name": "Team"
+                }
+            ],
+            "filesize": 67862,
+            "dimensions": [
+                885,
+                372
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/teamwork-cycling-website-header-illustration-JETA2BX"
+        },
+        {
+            "filename": "Brainstorming.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/Brainstorming-600x320.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                }
+            ],
+            "filesize": 53675,
+            "dimensions": [
+                706,
+                377
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/teamwork-brainstorm-website-header-illustration-3FDV93A"
+        },
+        {
+            "filename": "feature-dua.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/feature-dua.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 625,
+            "dimensions": [
+                66,
+                66
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/creative-icon-set-ASTQFFC"
+        },
+        {
+            "filename": "angka-1.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/angka-1.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 1608,
+            "dimensions": [
+                248,
+                63
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "angka-3.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/angka-3.png",
+            "templates": [
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 1500,
+            "dimensions": [
+                246,
+                63
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "tick.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/tick.png",
+            "templates": [
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 896,
+            "dimensions": [
+                53,
+                53
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "tick_af.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/tick_af.png",
+            "templates": [
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 662,
+            "dimensions": [
+                53,
+                53
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "kutips01.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/07\/kutips01.png",
+            "templates": [
+                {
+                    "source": "templates\/pricing.json",
+                    "name": "Pricing"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 946,
+            "dimensions": [
+                207,
+                123
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "illus-tiga.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/illus-tiga-600x412.png",
+            "templates": [
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                }
+            ],
+            "filesize": 46177,
+            "dimensions": [
+                755,
+                519
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/teamwork-report-analysis-website-illustration-AYD792E"
+        },
+        {
+            "filename": "happy.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/happy.png",
+            "templates": [
+                {
+                    "source": "templates\/about.json",
+                    "name": "About"
+                },
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 914,
+            "dimensions": [
+                53,
+                53
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "illus-satu.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/illus-satu-600x285.png",
+            "templates": [
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 56226,
+            "dimensions": [
+                1012,
+                481
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/teamwork-meeting-website-header-illustration-L9KBQGT"
+        },
+        {
+            "filename": "illus-empat.png",
+            "thumbnail_url": "http:\/\/templatekit.pinisiart.com\/digitalkit\/wp-content\/uploads\/sites\/2\/2020\/06\/illus-empat-600x552.png",
+            "templates": [
+                {
+                    "source": "templates\/home-01.json",
+                    "name": "Home 01"
+                }
+            ],
+            "filesize": 55829,
+            "dimensions": [
+                616,
+                567
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/teamwork-report-analysis-website-illustration-AYD792E"
+        }
+    ]
+}

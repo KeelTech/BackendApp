@@ -1,0 +1,20 @@
+.sect-header { width:100%; margin-top:20px;}
+.sect-header img { float:left; margin-top: -8px; }
+.sect-header h1 { font-size:32px; font-family:"Segoe UI"; color:#444444;	font-weight:normal;	float:left;	margin:0px;	padding:0px; margin-left:15px; }
+.sect-row { width:100%; 	height:auto; margin-top:20px; }
+.sect-row h2 { font-size:24px; font-family:"Segoe UI"; color:#444444; font-weight:normal; margin:0px; padding:0px; }
+.gen-container { width:100%; background-color:#f0f0f0; margin:0px; padding:0px; margin-top:20px; float:left; }
+.gen-container p { font-size:14px; font-family:"Segoe UI"; color:#444444; font-weight:normal; float:left; margin:0px; padding:15px; line-height:22px; width:70%; text-align:justify;}
+.leads-button {font-size:16px; line-height:1.4em;}
+.gen-container a.leads-button { background-color:#3b89b0; float:right; color:#FFF; text-decoration:none; margin-top:25px;  margin-right:20px; padding:6px 20px; font-family:"Segoe UI"; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+.gen-container a.leads-button:hover { background-color:#4d9ac0; }
+.gen-container p a { text-decoration:none; color:#309afc; }
+.sect-tracking { width:100%; height:auto; margin-top:20px; }
+.sect-tracking h2 { font-size:24px; font-family:"Segoe UI"; color:#444444; font-weight:normal; margin:0px; padding:0px; }
+.sect-tracking p { font-size:14px; font-family:"Segoe UI"; color:#444444; font-weight:normal; float:left; margin:0px; margin-left:10px; margin-top:15px; line-height:22px; width:95%; }
+.sect-tracking input { float:left; margin-top:20px; }
+#patient_table img { margin: 40px 200px 40px 600px; }
+#leadsquare-api-key input[type="text"] { width: 25em; }
+#leadsquared-setting-form p  { font-family: sans-serif; font-size: 12px; font-style: italic; color: #666666; }
+.powered-by{ float:right; margin: -4em 2em -6em 0;  }
+.submit input[type="reset"] { width: 60px; }

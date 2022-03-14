@@ -1,0 +1,13 @@
+2022-03-09T18:04:45+00:00 CRITICAL Uncaught TypeError: Argument 2 passed to Elementor\TemplateLibrary\Source_Local::on_save_post() must be an instance of WP_Post, instance of stdClass given, called in /home/ubuntu/keelapps/wordePress/wp-website/wp-includes/class-wp-hook.php on line 309 and defined in /home/ubuntu/keelapps/wordePress/wp-website/wp-content/plugins/elementor/includes/template-library/sources/local.php:1042
+Stack trace:
+#0 /home/ubuntu/keelapps/wordePress/wp-website/wp-includes/class-wp-hook.php(309): Elementor\TemplateLibrary\Source_Local->on_save_post()
+#1 /home/ubuntu/keelapps/wordePress/wp-website/wp-includes/class-wp-hook.php(331): WP_Hook->apply_filters()
+#2 /home/ubuntu/keelapps/wordePress/wp-website/wp-includes/plugin.php(474): WP_Hook->do_action()
+#3 /home/ubuntu/keelapps/wordePress/wp-website/wp-includes/post.php(4687): do_action()
+#4 /home/ubuntu/keelapps/wordePress/wp-website/wp-includes/post.php(4789): wp_insert_post()
+#5 /home/ubuntu/keelapps/wordePress/wp-website/wp-content/plugins/elementor/core/settings/page/manag in /home/ubuntu/keelapps/wordePress/wp-website/wp-content/plugins/elementor/includes/template-library/sources/local.php on line 1042
+
+2022-03-09T18:53:59+00:00 CRITICAL syntax error, unexpected '&' in /home/ubuntu/keelapps/wordePress/wp-website/wp-content/themes/hello-elementor/functions.php on line 357
+
+2022-03-09T19:05:34+00:00 CRITICAL syntax error, unexpected '}', expecting end of file in /home/ubuntu/keelapps/wordePress/wp-website/wp-content/themes/hello-elementor/functions.php on line 363
+

@@ -1,0 +1,163 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+ 
+#trustifyWrapper .popup_template {
+    background-color: #e0e0e0; 
+    bottom: 20px;
+    border-radius: 0;
+}
+
+#trustifyWrapper  .popup_position {
+    position: fixed; 
+    z-index: 99999;
+    width: 250px;
+}
+
+#trustifyWrapper  .popup_position.bottomRight {
+    bottom: 10px;
+    right: 10px;
+}
+
+#trustifyWrapper .popup_position.bottomLeft {
+    bottom: 10px;
+    left: 10px;
+}
+
+#trustifyWrapper  .popup_position.topRight {
+    top: 10px;
+    right: 10px;
+}
+
+#trustifyWrapper .popup_position.topLeft {
+    top: 10px;
+    left: 10px;
+}
+
+#trustifyWrapper .popup-item {
+    padding: 10px;
+    width: 100%; 
+    float: left;
+    display: inline-flex;
+    align-items: center;
+}
+
+#trustifyWrapper figure{
+    margin: 0; 
+    width: 75px; 
+    height: 75px;
+    overflow: hidden;
+    float: left;
+    margin-right: 5px;
+}
+#trustifyWrapper figure img{
+    height: 100%;
+    object-fit: contain;
+}
+
+#trustifyWrapper .imageOnRight figure{
+    float: right;
+}
+
+#trustifyWrapper .textOnly  figure{
+   display: none;
+}
+#trustifyWrapper .popup_position .image-circle figure {
+    border-radius: 50%;
+}
+
+#trustifyWrapper figure img{
+    width: 100%;
+}
+
+#trustifyWrapper .trustify-content-wrap{
+    width: calc(100% - 85px);    
+    float: right; 
+    font-size: 14px;
+    color: #1e1e1e;
+    line-height: 1.4;
+}
+
+#trustifyWrapper .imageOnRight .trustify-content-wrap{
+    float: left;
+}
+
+#trustifyWrapper .textOnly .trustify-content-wrap{
+   width: 100%;
+}
+
+#trustifyWrapper .trustify-content-wrap .t-product{
+    display: block; 
+    font-size: 120%;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+#trustifyWrapper .trustify-content-wrap small{
+    font-size: 70%;
+    font-style: italic;
+}
+ 
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.popup_close {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 0;
+    background-color: #9a9a9a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup_close:before, 
+.popup_close:after {
+    content: '';
+    width: 8px;
+    height: 1px;
+    background-color: #fff;
+    position: absolute;
+    transform: rotate(45deg);
+}
+.popup_close:after{
+    transform: rotate(-45deg);
+    
+}
+@media screen and ( max-width: 767px){
+    #trustifyWrapper .popup-item{
+        padding: 10px !important;
+    }
+
+    #trustifyWrapper .popup_position.bottomRight {
+        bottom: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        left: 0 !important;
+    }  
+
+    #trustifyWrapper .popup_position .trustify-content-wrap {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+    } 
+    #trustifyWrapper .popup_position {
+        max-width: calc(100% - 20px);
+    }
+
+    #trustifyWrapper figure {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+
+ 

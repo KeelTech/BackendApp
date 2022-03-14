@@ -6,12 +6,12 @@ import ButtonIconAndLabel from './ButtonIconAndLabel'
 import ButtonElement from './ButtonElement'
 import { getImportedKitUrl } from '../../utils/linkGenerator'
 
-export const DoTheFileUpload = ({ chosenFile, onComplete }) => {
+export const DoTheFileUpload = ({ chosenFile, onSuccess }) => {
   const { loading, data, error } = uploadTemplateKitZipFile({ file: chosenFile })
 
   if (!loading && !error && data && data.templateKitId) {
     setTimeout(() => {
-      onComplete(getImportedKitUrl({ importedTemplateKitId: data.templateKitId }))
+      onSuccess(getImportedKitUrl({ importedTemplateKitId: data.templateKitId }))
     }, 200)
   }
 
@@ -37,7 +37,8 @@ const UploadTemplateKitButton = ({ history }) => {
       </ButtonElement>
       {chosenFile ? (
         <DoTheFileUpload
-          chosenFile={chosenFile} onComplete={(redirectUrl) => {
+          chosenFile={chosenFile}
+          onSuccess={(redirectUrl) => {
             setChosenFile(false)
             history.push(redirectUrl)
           }}

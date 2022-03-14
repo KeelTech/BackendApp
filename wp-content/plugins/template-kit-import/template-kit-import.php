@@ -4,11 +4,11 @@
  * Description: Import Template Kits to WordPress
  * Author: Envato
  * Author URI: https://envato.com
- * Version: 1.0.11
+ * Version: 1.0.14
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Elementor tested up to: 3.2.0
- * Elementor Pro tested up to: 3.1.0
+ * Elementor tested up to: 3.5.0
+ * Elementor Pro tested up to: 3.5.0
  *
  * Text Domain: template-kit-import
  *
@@ -30,12 +30,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'ENVATO_TEMPLATE_KIT_IMPORT_SLUG', 'template-kit-import' );
-define( 'ENVATO_TEMPLATE_KIT_IMPORT_VER', '1.0.11' );
+define( 'ENVATO_TEMPLATE_KIT_IMPORT_VER', '1.0.14' );
 define( 'ENVATO_TEMPLATE_KIT_IMPORT_FILE', __FILE__ );
 define( 'ENVATO_TEMPLATE_KIT_IMPORT_DIR', plugin_dir_path( ENVATO_TEMPLATE_KIT_IMPORT_FILE ) );
 define( 'ENVATO_TEMPLATE_KIT_IMPORT_URI', plugins_url( '/', ENVATO_TEMPLATE_KIT_IMPORT_FILE ) );
 define( 'ENVATO_TEMPLATE_KIT_IMPORT_PHP_VERSION', '5.6' );
 define( 'ENVATO_TEMPLATE_KIT_IMPORT_API_NAMESPACE', ENVATO_TEMPLATE_KIT_IMPORT_SLUG . '/v2' );
+
+
+/**
+ * Our supported import types
+ */
+if( ! defined( 'ENVATO_TEMPLATE_KIT_IMPORT_TYPE_ENVATO' ) ) {
+	define( 'ENVATO_TEMPLATE_KIT_IMPORT_TYPE_ENVATO', 'template-kit' );
+}
+if ( ! defined( 'ENVATO_TEMPLATE_KIT_IMPORT_TYPE_ELEMENTOR' ) ) {
+	define( 'ENVATO_TEMPLATE_KIT_IMPORT_TYPE_ELEMENTOR', 'elementor-kit' );
+}
 
 add_action( 'plugins_loaded', 'template_kit_import_load_plugin_textdomain' );
 

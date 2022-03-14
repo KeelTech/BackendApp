@@ -1,0 +1,455 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-10 11:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: admin/class-trustify-admin.php:117
+msgid "Settings Saved!"
+msgstr ""
+
+#: admin/class-trustify-admin.php:124
+msgid "Opps! An error has occurred."
+msgstr ""
+
+#: admin/class-trustify-admin.php:134
+msgid "Notifications"
+msgstr ""
+
+#: admin/class-trustify-admin.php:135
+msgid "Notification"
+msgstr ""
+
+#. Name of the plugin
+#: admin/class-trustify-admin.php:136 admin/class-trustify-admin.php:137
+msgid "Trustify"
+msgstr ""
+
+#: admin/class-trustify-admin.php:138
+msgid "Add New"
+msgstr ""
+
+#: admin/class-trustify-admin.php:139
+msgid "Add New Notification"
+msgstr ""
+
+#: admin/class-trustify-admin.php:140
+msgid "New Notification"
+msgstr ""
+
+#: admin/class-trustify-admin.php:141
+msgid "Edit Notification"
+msgstr ""
+
+#: admin/class-trustify-admin.php:142
+msgid "View Notification"
+msgstr ""
+
+#: admin/class-trustify-admin.php:143
+msgid "Mannual Notifications"
+msgstr ""
+
+#: admin/class-trustify-admin.php:144
+msgid "Search Notifications"
+msgstr ""
+
+#: admin/class-trustify-admin.php:145
+msgid "Parent Notifications:"
+msgstr ""
+
+#: admin/class-trustify-admin.php:146
+msgid "No Notifications found."
+msgstr ""
+
+#: admin/class-trustify-admin.php:147
+msgid "No Notifications found in Trash."
+msgstr ""
+
+#: admin/class-trustify-admin.php:152
+msgid "Description."
+msgstr ""
+
+#: admin/class-trustify-admin.php:176
+msgid "Set Notification Contents"
+msgstr ""
+
+#: admin/class-trustify-admin.php:193
+msgid "Text Field"
+msgstr ""
+
+#: admin/class-trustify-admin.php:194
+msgid "Someone Purchased"
+msgstr ""
+
+#: admin/class-trustify-admin.php:197
+msgid "Heading Field"
+msgstr ""
+
+#: admin/class-trustify-admin.php:198
+msgid "Product name"
+msgstr ""
+
+#: admin/class-trustify-admin.php:201
+msgid "Set Notification Time"
+msgstr ""
+
+#: admin/class-trustify-admin.php:202
+msgid "e.g: 10 min"
+msgstr ""
+
+#: admin/class-trustify-admin.php:203
+msgid "min or hour"
+msgstr ""
+
+#: admin/class-trustify-admin.php:203
+msgid "Ago"
+msgstr ""
+
+#: admin/class-trustify-admin.php:206
+msgid "Set Date"
+msgstr ""
+
+#: admin/class-trustify-admin.php:208
+msgid "To"
+msgstr ""
+
+#: admin/class-trustify-admin.php:209
+msgid "End date"
+msgstr ""
+
+#: admin/class-trustify-admin.php:251
+msgid "Exclude Trustify From"
+msgstr ""
+
+#: admin/class-trustify-admin.php:267
+msgid "Default WordPress Pages"
+msgstr ""
+
+#: admin/class-trustify-admin.php:269
+msgid "Front Page"
+msgstr ""
+
+#: admin/class-trustify-admin.php:270
+msgid "Archive Page"
+msgstr ""
+
+#: admin/class-trustify-admin.php:271
+msgid "404 Page"
+msgstr ""
+
+#: admin/class-trustify-admin.php:272
+msgid "Search Page"
+msgstr ""
+
+#: admin/class-trustify-admin.php:273
+msgid "All Single Post/Page"
+msgstr ""
+
+#: admin/class-trustify-admin.php:288
+msgid "Specific "
+msgstr ""
+
+#: admin/class-trustify-admin.php:339
+msgid "Trustify Notification Global Setting"
+msgstr ""
+
+#: admin/class-trustify-admin.php:365
+msgid "Check to enable Auto Notification"
+msgstr ""
+
+#: admin/class-trustify-admin.php:373
+msgid "Add name of person"
+msgstr ""
+
+#: admin/class-trustify-admin.php:382
+msgid "Add name of Country"
+msgstr ""
+
+#: admin/class-trustify-admin.php:391
+msgid "Add Products"
+msgstr ""
+
+#: admin/class-trustify-admin.php:400
+msgid "Configure Static Texts"
+msgstr ""
+
+#: admin/class-trustify-admin.php:423 admin/class-trustify-admin.php:572
+msgid "Popup Time Settings"
+msgstr ""
+
+#: admin/class-trustify-admin.php:431 admin/class-trustify-admin.php:618
+msgid "Design Settings"
+msgstr ""
+
+#: admin/class-trustify-admin.php:439 admin/class-trustify-admin.php:708
+msgid "Typography Settings"
+msgstr ""
+
+#: admin/class-trustify-admin.php:447 admin/class-trustify-admin.php:746
+msgid "Additional Settings"
+msgstr ""
+
+#: admin/class-trustify-admin.php:470
+msgid "NOTE: Your mannually created notifications will be disabled."
+msgstr ""
+
+#: admin/class-trustify-admin.php:516
+msgid "Procuct name "
+msgstr ""
+
+#: admin/class-trustify-admin.php:524
+msgid "Upload"
+msgstr ""
+
+#: admin/class-trustify-admin.php:530
+msgid "Delete Product"
+msgstr ""
+
+#: admin/class-trustify-admin.php:536
+msgid "Add Product"
+msgstr ""
+
+#: admin/class-trustify-admin.php:548
+msgid "[name]"
+msgstr ""
+
+#: admin/class-trustify-admin.php:550
+msgid "[country]"
+msgstr ""
+
+#: admin/class-trustify-admin.php:552
+msgid "[product name]"
+msgstr ""
+
+#: admin/class-trustify-admin.php:579
+msgid "Popup Start Time"
+msgstr ""
+
+#: admin/class-trustify-admin.php:580 admin/class-trustify-admin.php:586
+#: admin/class-trustify-admin.php:593
+msgid "Sec"
+msgstr ""
+
+#: admin/class-trustify-admin.php:585
+msgid "Popup Stay Time"
+msgstr ""
+
+#: admin/class-trustify-admin.php:591
+msgid "Popup Frequency"
+msgstr ""
+
+#: admin/class-trustify-admin.php:592
+msgid "to"
+msgstr ""
+
+#: admin/class-trustify-admin.php:625
+msgid "Popup Position"
+msgstr ""
+
+#: admin/class-trustify-admin.php:627
+msgid "Bottom Left"
+msgstr ""
+
+#: admin/class-trustify-admin.php:628
+msgid "Bottom Right"
+msgstr ""
+
+#: admin/class-trustify-admin.php:634
+msgid "Animation Style"
+msgstr ""
+
+#: admin/class-trustify-admin.php:636
+msgid "Fade in Left"
+msgstr ""
+
+#: admin/class-trustify-admin.php:637
+msgid "Fade in Up"
+msgstr ""
+
+#: admin/class-trustify-admin.php:638
+msgid "Fade in Right"
+msgstr ""
+
+#: admin/class-trustify-admin.php:639
+msgid "Bounce in Right"
+msgstr ""
+
+#: admin/class-trustify-admin.php:640
+msgid "Bounce in Left"
+msgstr ""
+
+#: admin/class-trustify-admin.php:641
+msgid "Bounce in Up"
+msgstr ""
+
+#: admin/class-trustify-admin.php:647
+msgid "Image Position"
+msgstr ""
+
+#: admin/class-trustify-admin.php:649
+msgid "Image on left"
+msgstr ""
+
+#: admin/class-trustify-admin.php:650
+msgid "Image on right"
+msgstr ""
+
+#: admin/class-trustify-admin.php:651
+msgid "Text only"
+msgstr ""
+
+#: admin/class-trustify-admin.php:657
+msgid "Popup Width"
+msgstr ""
+
+#: admin/class-trustify-admin.php:658 admin/class-trustify-admin.php:670
+#: admin/class-trustify-admin.php:685 admin/class-trustify-admin.php:688
+#: admin/class-trustify-admin.php:720
+msgid "px"
+msgstr ""
+
+#: admin/class-trustify-admin.php:663
+msgid "Background Color"
+msgstr ""
+
+#: admin/class-trustify-admin.php:669
+msgid "Inner page padding"
+msgstr ""
+
+#: admin/class-trustify-admin.php:675
+msgid "Check to Enable Border"
+msgstr ""
+
+#: admin/class-trustify-admin.php:682
+msgid "Border Color"
+msgstr ""
+
+#: admin/class-trustify-admin.php:684
+msgid "Border Radius"
+msgstr ""
+
+#: admin/class-trustify-admin.php:687
+msgid "Border Width"
+msgstr ""
+
+#: admin/class-trustify-admin.php:714
+msgid "Text Color"
+msgstr ""
+
+#: admin/class-trustify-admin.php:719
+msgid "Font Size"
+msgstr ""
+
+#: admin/class-trustify-admin.php:724
+msgid "Text Transform"
+msgstr ""
+
+#: admin/class-trustify-admin.php:726
+msgid "Default"
+msgstr ""
+
+#: admin/class-trustify-admin.php:727
+msgid "Uppercase"
+msgstr ""
+
+#: admin/class-trustify-admin.php:728
+msgid "Lowercase"
+msgstr ""
+
+#: admin/class-trustify-admin.php:729
+msgid "Capitalize"
+msgstr ""
+
+#: admin/class-trustify-admin.php:752
+msgid "Check to Enable Responsive Mode"
+msgstr ""
+
+#: admin/class-trustify-admin.php:771
+msgid "Global Notification Settings"
+msgstr ""
+
+#: admin/class-trustify-admin.php:774
+msgid "Auto Notification Settings"
+msgstr ""
+
+#: admin/class-trustify-admin.php:780
+msgid "Trustify Global Settings"
+msgstr ""
+
+#: admin/class-trustify-admin.php:781
+msgid "Set Trustify Notice Global Variables"
+msgstr ""
+
+#: admin/class-trustify-admin.php:795
+msgid "Preview Section"
+msgstr ""
+
+#: admin/class-trustify-admin.php:803
+msgid "Someone Purchased an Item"
+msgstr ""
+
+#: admin/class-trustify-admin.php:804
+msgid "From Nepal"
+msgstr ""
+
+#: admin/class-trustify-admin.php:805
+msgid "16 min ago"
+msgstr ""
+
+#: admin/class-trustify-admin.php:814
+msgid "Trustify Auto Notification Settings"
+msgstr ""
+
+#: admin/class-trustify-admin.php:815
+msgid "Set Trustify Auto Notification Variables"
+msgstr ""
+
+#: admin/class-trustify-admin.php:838
+msgid "Start Date"
+msgstr ""
+
+#: admin/class-trustify-admin.php:839
+msgid "End Date"
+msgstr ""
+
+#: public/partials/trustify-public-display-auto-content.php:45
+msgid "mins"
+msgstr ""
+
+#: public/partials/trustify-public-display-auto-content.php:46
+#: public/partials/trustify-public-display-auto-content.php:47
+msgid "hours"
+msgstr ""
+
+#: public/partials/trustify-public-display-auto-content.php:78
+#: public/partials/trustify-public-display-content.php:132
+msgid "ago"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Help to create fake sales popup which will display in a certain time "
+"interval on the screen in all pages or selected pages from backend."
+msgstr ""
+
+#. URI of the plugin
+msgid "http://demo.kaththemes.com/plugins/trustify/"
+msgstr ""
+
+#. Author of the plugin
+msgid "Kaththemes"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://kaththemes.com/"
+msgstr ""

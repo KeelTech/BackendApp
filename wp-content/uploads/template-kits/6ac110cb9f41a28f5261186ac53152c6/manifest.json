@@ -1,0 +1,723 @@
+{
+    "manifest_version": "1.0.14",
+    "title": "TechUp",
+    "page_builder": "elementor",
+    "kit_version": "1.0.1",
+    "templates": [
+        {
+            "name": "Global Kit Styles",
+            "screenshot": "screenshots\/global-kit-styles.jpg",
+            "source": "templates\/global.json",
+            "preview_url": "https:\/\/kits.pixel-show.com",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "global-styles",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "additional_template_information": [
+                    "These are the global theme styles configured through the Elementor Theme Styles area."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home v2",
+            "screenshot": "screenshots\/home-v2.jpg",
+            "source": "templates\/home-v2.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/template-kit\/home-v2\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home v1",
+            "screenshot": "screenshots\/home-v1.jpg",
+            "source": "templates\/home-v1.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/template-kit\/home-v1\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "IT Services",
+            "screenshot": "screenshots\/it-services.jpg",
+            "source": "templates\/it-services.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/template-kit\/it-services\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "FAQs",
+            "screenshot": "screenshots\/faqs.jpg",
+            "source": "templates\/faqs.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/template-kit\/faqs\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Careers",
+            "screenshot": "screenshots\/careers.jpg",
+            "source": "templates\/careers.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/template-kit\/careers\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Pricing",
+            "screenshot": "screenshots\/pricing.jpg",
+            "source": "templates\/pricing.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/template-kit\/pricing\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Contact",
+            "screenshot": "screenshots\/contact.jpg",
+            "source": "templates\/contact.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/template-kit\/contact\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "About Us",
+            "screenshot": "screenshots\/about-us.jpg",
+            "source": "templates\/about-us.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/template-kit\/about-us\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Single Post",
+            "screenshot": "screenshots\/single-post.jpg",
+            "source": "templates\/single-post.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/?elementor_library=single-post",
+            "type": "single",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-post",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "single",
+                "elementor_pro_conditions": [
+                    "include\/singular\/post"
+                ],
+                "additional_template_information": [
+                    "This is a \"Single\" template for Elementor Pro.",
+                    "This template will display on: Posts."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Blog",
+            "screenshot": "screenshots\/blog.jpg",
+            "source": "templates\/blog.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/?elementor_library=blog",
+            "type": "archive",
+            "category": "page",
+            "metadata": {
+                "template_type": "archive-blog",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "archive",
+                "elementor_pro_conditions": [
+                    "include\/archive"
+                ],
+                "additional_template_information": [
+                    "This is a \"Archive\" template for Elementor Pro.",
+                    "This template will display on: All Archives."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Footer",
+            "screenshot": "screenshots\/footer.jpg",
+            "source": "templates\/footer.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/?elementor_library=footer",
+            "type": "footer",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "footer",
+                "elementor_pro_conditions": [
+                    "include\/general"
+                ],
+                "additional_template_information": [
+                    "This is a \"Footer\" template for Elementor Pro.",
+                    "This template will display on: Entire Site."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Header",
+            "screenshot": "screenshots\/header.jpg",
+            "source": "templates\/header.json",
+            "preview_url": "https:\/\/kits.pixel-show.com\/techup\/?elementor_library=header",
+            "type": "header",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "header",
+                "elementor_pro_conditions": [
+                    "include\/general"
+                ],
+                "additional_template_information": [
+                    "This is a \"Header\" template for Elementor Pro.",
+                    "This template will display on: Entire Site."
+                ]
+            },
+            "elementor_pro_required": true
+        }
+    ],
+    "required_plugins": [
+        {
+            "name": "ElementsKit Lite",
+            "version": "1.5.10",
+            "file": "elementskit-lite\/elementskit-lite.php",
+            "author": "Wpmet"
+        },
+        {
+            "name": "Elementor",
+            "version": "2.9.14",
+            "file": "elementor\/elementor.php",
+            "author": "Elementor.com"
+        },
+        {
+            "name": "Elementor Pro",
+            "version": "2.8.3",
+            "file": "elementor-pro\/elementor-pro.php",
+            "author": "Elementor.com"
+        }
+    ],
+    "images": [
+        {
+            "filename": "map-3.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/map-3-600x361.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v2.json",
+                    "name": "Home v2"
+                },
+                {
+                    "source": "templates\/contact.json",
+                    "name": "Contact"
+                }
+            ],
+            "filesize": 168827,
+            "dimensions": [
+                1800,
+                1082
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "dots.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/dots-600x962.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v2.json",
+                    "name": "Home v2"
+                },
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/it-services.json",
+                    "name": "IT Services"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 10075,
+            "dimensions": [
+                624,
+                1000
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "service-1.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/service-1-600x600.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v2.json",
+                    "name": "Home v2"
+                },
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/it-services.json",
+                    "name": "IT Services"
+                }
+            ],
+            "filesize": 18522,
+            "dimensions": [
+                800,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-line-design-style-banners-set-GWXKGJQ"
+        },
+        {
+            "filename": "service-3.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/service-3-600x600.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v2.json",
+                    "name": "Home v2"
+                },
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/it-services.json",
+                    "name": "IT Services"
+                }
+            ],
+            "filesize": 15933,
+            "dimensions": [
+                800,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-line-design-style-banners-set-GWXKGJQ"
+        },
+        {
+            "filename": "service-4.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/service-4-600x600.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v2.json",
+                    "name": "Home v2"
+                },
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/it-services.json",
+                    "name": "IT Services"
+                }
+            ],
+            "filesize": 19953,
+            "dimensions": [
+                800,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-line-design-style-banners-set-GWXKGJQ"
+        },
+        {
+            "filename": "check-blue.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/check-blue.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v2.json",
+                    "name": "Home v2"
+                },
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 2946,
+            "dimensions": [
+                403,
+                400
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "pretty-teenage-girls-and-their-boyfriends-in-casua-WHRMLRA-copy.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/pretty-teenage-girls-and-their-boyfriends-in-casua-WHRMLRA-copy-600x447.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v2.json",
+                    "name": "Home v2"
+                },
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 106365,
+            "dimensions": [
+                1200,
+                893
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/pretty-teenage-girls-and-their-boyfriends-in-casua-WHRMLRA"
+        },
+        {
+            "filename": "check-pink.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/check-pink.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 2941,
+            "dimensions": [
+                403,
+                400
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "casual-woman-happy-smile-young-asain-girl-hold-tab-9ZCVQUD.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/casual-woman-happy-smile-young-asain-girl-hold-tab-9ZCVQUD-600x766.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                }
+            ],
+            "filesize": 183396,
+            "dimensions": [
+                971,
+                1239
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-9ZCVQUD"
+        },
+        {
+            "filename": "2-min.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/2-min.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 312731,
+            "dimensions": [
+                500,
+                500
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/young-business-lady-TAY76PP"
+        },
+        {
+            "filename": "signature.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/signature.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 3893,
+            "dimensions": [
+                220,
+                84
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "creative-business-people-working-on-business-proje-58FUABR.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/creative-business-people-working-on-business-proje-58FUABR-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 75856,
+            "dimensions": [
+                1200,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-58FUABR"
+        },
+        {
+            "filename": "office-lifestyle-business-and-people-concept-attra-4MLRBMH.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/office-lifestyle-business-and-people-concept-attra-4MLRBMH-600x739.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 84158,
+            "dimensions": [
+                1000,
+                1232
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-4MLRBMH"
+        },
+        {
+            "filename": "creative-business-people-discussing-over-digital-t-KL7SHQF.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/creative-business-people-discussing-over-digital-t-KL7SHQF-600x400.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 107821,
+            "dimensions": [
+                1200,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-KL7SHQF"
+        },
+        {
+            "filename": "sevices-2.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/sevices-2-600x600.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                }
+            ],
+            "filesize": 18213,
+            "dimensions": [
+                800,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "no",
+            "image_urls": "https:\/\/elements.envato.com\/web-development-line-design-style-banners-set-GWXKGJQ"
+        },
+        {
+            "filename": "face-5-min.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/face-5-min.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                }
+            ],
+            "filesize": 33990,
+            "dimensions": [
+                600,
+                600
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/gorgeous-young-business-woman-looking-camera-XPQU4EY"
+        },
+        {
+            "filename": "6.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/6.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                }
+            ],
+            "filesize": 272944,
+            "dimensions": [
+                500,
+                500
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/beautiful-woman-posing-in-doctors-office-LWVPG3D"
+        },
+        {
+            "filename": "confident-man-dressed-in-suit-9DV7XHT.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/confident-man-dressed-in-suit-9DV7XHT-600x675.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                }
+            ],
+            "filesize": 52442,
+            "dimensions": [
+                800,
+                900
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-9DV7XHT"
+        },
+        {
+            "filename": "confident-male-designer-in-office-BQL3TV8.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/confident-male-designer-in-office-BQL3TV8-600x675.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                }
+            ],
+            "filesize": 55492,
+            "dimensions": [
+                800,
+                900
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/image-BQL3TV8"
+        },
+        {
+            "filename": "face-9-min.jpg",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/face-9-min.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                }
+            ],
+            "filesize": 62511,
+            "dimensions": [
+                600,
+                600
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/portrait-of-a-young-man-in-a-studio-dressed-in-gra-X2FNTMP"
+        },
+        {
+            "filename": "4-min.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/4-min.png",
+            "templates": [
+                {
+                    "source": "templates\/home-v1.json",
+                    "name": "Home v1"
+                }
+            ],
+            "filesize": 261848,
+            "dimensions": [
+                500,
+                500
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/smiling-creative-professional-having-coffee-in-P7XTU6K"
+        },
+        {
+            "filename": "payments.png",
+            "thumbnail_url": "https:\/\/kits.pixel-show.com\/techup\/wp-content\/uploads\/sites\/20\/2020\/08\/payments.png",
+            "templates": [
+                {
+                    "source": "templates\/footer.json",
+                    "name": "Footer"
+                }
+            ],
+            "filesize": 9089,
+            "dimensions": [
+                255,
+                22
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        }
+    ]
+}

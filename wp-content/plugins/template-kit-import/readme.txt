@@ -2,9 +2,9 @@
 Contributors: envato
 Tags: elementor, template, templates
 Requires at least: 5.3
-Tested up to: 5.6
+Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 1.0.11
+Stable tag: 1.0.14
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,6 +35,15 @@ Create your own "Template Kit" for others with the "[Template Kit Export](https:
 3. **Select templates.**
 
 == Changelog ==
+
+= 1.0.14 - 2021-10-21 =
+* Fix: Swap to using ZipArchive for Template Kit extraction
+
+= 1.0.13 - 2021-09-17 =
+* Feature: Better compatibility with Elementor Kits
+
+= 1.0.12 - 2021-07-19 =
+* Update: Compatibility with Elementor 3.3.0
 
 = 1.0.11 - 2021-02-02 =
 * Feature: Support for Elementor Landing Page templates

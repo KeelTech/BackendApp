@@ -1,0 +1,1 @@
+>*ëa<?php exit; ?>a:1:{s:7:"content";s:232:"a:3:{s:23:"elementor/elementor.php";a:2:{i:0;s:21:"Elementor\Maintenance";i:1;s:9:"uninstall";}s:27:"wp-optimize/wp-optimize.php";s:21:"wpo_uninstall_actions";s:27:"autoptimize/autoptimize.php";s:29:"autoptimizeMain::on_uninstall";}";}

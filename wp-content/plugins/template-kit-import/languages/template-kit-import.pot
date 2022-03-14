@@ -17,16 +17,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. translators: %s: PHP version
-#: template-kit-import.php:77
+#: template-kit-import.php:88
 msgid "Template Kit Import plugin requires PHP version %1$s+, plugin is currently NOT ACTIVE. Please contact the hosting provider. WordPress recommends version %2$s."
 msgstr ""
 
-#: template-kit-import.php:82
+#: template-kit-import.php:93
 msgid "7.2 or above"
 msgstr ""
 
 #. translators: %s: WordPress version
-#: template-kit-import.php:101
+#: template-kit-import.php:112
 msgid "Envato Elements requires WordPress version %s+. Because you are using an earlier version, the plugin is currently NOT ACTIVE."
 msgstr ""
 
@@ -42,10 +42,10 @@ msgstr ""
 msgid "Something went wrong."
 msgstr ""
 
-#: vendor/template-kit-import/inc/class-builder-elementor.php:167
+#: vendor/template-kit-import/inc/class-builder-elementor.php:174
 msgid "Import into Elementor Library"
 msgstr ""
 
-#: vendor/template-kit-import/inc/class-builder.php:257
+#: vendor/template-kit-import/inc/class-builder.php:274
 msgid "Import Template"
 msgstr ""

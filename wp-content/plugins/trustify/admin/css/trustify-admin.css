@@ -1,0 +1,578 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.clear {
+    clear: both;
+}
+
+div#trustify-settings {
+    margin-top: 30px;
+    width: 98%;
+}
+
+#trustify-settings .trustify-settings-tab {
+    display: block;
+}
+
+#trustify-settings .trustify-settings-tab ul {
+    margin: 0 0 -1px;
+    padding: 0;
+    position: relative;
+    z-index: 2;
+}
+
+#trustify-settings .trustify-settings-tab ul li {
+    border: 1px solid #acbee3;
+    border-width: 1px 1px 0;
+    margin: 0 3px 0 0;
+    border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    background-color: #bdcbe8;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    padding: 15px 25px;
+    text-align: center;
+    color: #3c475f;
+}
+
+#trustify-settings .trustify-settings-tab ul li.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#trustify-settings .tab-pane {
+    padding: 30px 20px;
+    background-color: #fff;
+    border: 1px solid #acbee3;
+    border-width: 1px 1px 1px;
+}
+
+
+
+/*---- main setting ---------*/
+
+#trustify-settings .trustify-main-settings {
+    float: left;
+    width: 40%;
+}
+
+#trustify-settings h2 {
+    font-size: 1.5em;
+    margin: 0 0 20px;
+    line-height: 1.3;
+}
+
+#trustify-settings h2 span {
+    display: block;
+    font-size: 70%;
+    padding-top: 5px;
+    color: #686868;
+    font-weight: normal;
+}
+
+#trustify-settings h4 {
+    font-size: 1em;
+    margin: 0 0 10px;
+}
+
+#trustify-settings .trustify-settings-tabs,
+.mifi-toggle-tab-header {
+    display: block;
+    background: #e7ebf4;
+    padding: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    font-size: 15px;
+    color: #2f3d5d;
+}
+
+.trustify-backend-preview h3{
+    color: #2f3d5d;
+}
+
+.trustify-settings-wrap label {
+    font-size: 14px;
+    font-weight: 400;
+    width: 38%;
+    display: inline-block;
+    color: #686868;
+}
+
+.trustify-settings-wrap.add label {
+    width: 85%;
+}
+
+.trustify-settings-tabs span.toggle-indicator {
+    position: absolute;
+    right: 10px;
+    top: 14px;
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    line-height: 1;
+}
+
+.trustify-settings-tabs span.toggle-indicator:before {
+    content: "\f142";
+    display: inline-block;
+    font: 400 20px/1 dashicons;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-decoration: none!important;
+    color: #687694;
+}
+
+.trustify-settings-tabs.toggle-active span.toggle-indicator {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+}
+
+
+.trustify-main-settings .form-table th {
+    display: none;
+}
+
+.trustify-main-settings .form-table td {
+    padding: 0;
+}
+
+.trustify-main-settings .popup-design-section,
+.trustify-main-settings .popup-time-section,
+.trustify-main-settings .popup-typo-section,
+.trustify-main-settings .popup-typo-section,
+.trustify-main-settings .popup-add-section {
+    margin-bottom: 5px;
+}
+
+.trustify-settings-wrap,
+.mifi-postbox-fields.mifi-toggle-tab-body {
+    background: #f6f8fbdb;
+    padding: 12px;
+}
+
+#trustify-settings input[type=text],
+#mifi_time_meta input[type=text],
+#trustify-settings input[type=search],
+#trustify-settings input[type=radio],
+#trustify-settings input[type=tel],
+#trustify-settings input[type=time],
+#trustify-settings input[type=url],
+#trustify-settings input[type=week],
+#trustify-settings input[type=password],
+#trustify-settings input[type=checkbox],
+#trustify-settings input[type=color],
+#trustify-settings input[type=date],
+#trustify-settings input[type=datetime],
+#trustify-settings input[type=datetime-local],
+#trustify-settings input[type=email],
+#trustify-settings input[type=month],
+#trustify-settings input[type=number],
+#mifi_time_meta input[type=number],
+#trustify-settings select,
+#trustify-settings textarea {
+    height: initial;
+    margin: 5px;
+    padding: 7px;
+    display: inline-block;
+    vertical-align: middle;
+    min-width: 150px;
+    border-color: #acbee3;
+}
+
+#trustify-settings input[type=number] {
+    width: 90px;
+    text-align: center;
+    min-width: initial;
+}
+#trustify-settings .padding-wrap input[type=number] {
+    width: 11%;
+}
+#trustify-settings .wp-picker-container {
+    display: inline-block;
+    padding: 10px;
+}
+
+#trustify-settings input[type=radio],
+#trustify-settings input[type=checkbox] {
+    min-width: initial;
+    width: 25px;
+    height: 25px;
+}
+
+#trustify-settings input[type=checkbox]:checked:before {
+    margin: 0;
+}
+
+.trustify-auto-settings .products-meta-section-wrapper h3 {
+    margin: 0 0 10px;
+}
+
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
+/*---------- preview ------*/
+
+#trustify-settings .plug_header {
+    text-align: center;
+}
+
+#trustify-settings .trustify-backend-preview {
+    margin-top: 6px;
+    float: right;
+    width: 58%;
+    border: 1px solid #acbee3;
+    min-height: 410px;
+    position: relative;
+    background-color: #f7f9fc;
+}
+
+#trustify-settings .popup_position {
+    position: absolute;
+}
+
+#trustify-settings .popup_position.bottomRight {
+    right: 10px;
+    bottom: 10px;
+}
+
+#trustify-settings .popup_position.bottomLeft {
+    left: 10px;
+    bottom: 10px;
+}
+
+#trustify-settings .popup_position.topRight {
+    right: 10px;
+    top: 10px;
+}
+
+#trustify-settings .popup_position.topLeft {
+    left: 10px;
+    top: 10px;
+}
+#trustify-settings .popup_position img {
+    border: none;
+    height: 100px;
+    margin-top: 4px;
+    width: 100px;
+    background-color: beige;
+}
+.img-circle img {
+    border-radius: 50%;
+}
+#trustify-settings .popup_position p {
+    float: right;
+    margin-left: 16px;
+    font-size: 18px;
+}
+
+#trustify-settings .popup_template {
+    background-color: #747474;
+    color: #fff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-blend-mode: overlay;
+}
+
+#trustify-settings .popup_template {
+    display: inline-block;
+}
+
+#trustify-settings .popup_template.textOnly img {
+    display: none;
+}
+
+#trustify-settings .popup_template.textOnly p {
+    float: none;
+    padding-right: 41px;
+    padding-left: 59px;
+}
+
+#trustify-settings .popup_template.imageOnRight img {
+    float: right;
+}
+
+#trustify-settings .mifi-toggle-tab-header {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    padding: 10px 40px 10px 20px;
+    position: relative;
+    background: #ddd;
+    cursor: pointer;
+}
+
+#trustify-settings .mifi-toggle-tab-header:hover,
+#trustify-settings .mifi-toggle-tab-header.mifi-toggle-active {
+    background: #523f6d;
+    color: #fff;
+}
+
+#trustify-settings .mifi-toggle-tab-header h4 {
+    margin: 0;
+}
+
+#trustify-settings .mifi-toggle-tab-header span.toggle-indicator {
+    position: absolute;
+    right: 15px;
+    top: 8px;
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    line-height: 1;
+}
+
+#trustify-settings .mifi-toggle-tab-header.mifi-toggle-active span.toggle-indicator {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+}
+
+
+#trustify-settings .option-wrap .auto-en-wrap {
+    display: inline-block;
+}
+
+
+#trustify-settings span.auto-ttl {
+    font-size: 12px;
+    font-style: italic;
+    font-family: unset;
+    color: #666;
+}
+
+#trustify-settings .products-meta-section-wrapper {
+    position: relative;
+}
+
+#trustify-settings .product-imagefield {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+}
+
+#trustify-settings span.prd-image {
+    border: 1px solid #ddd;
+    padding: 3px;
+    display: inline-block;
+    border-radius: 3px;
+}
+
+#trustify-settings span.prd-image img {
+    line-height: 1;
+    display: block;
+}
+
+#trustify-settings .sme_galimg_ctrl {
+    margin: 3px 10px 0 5px;
+    border: 2px solid #0073aa;
+    display: inline-block;
+}
+
+#trustify-settings span.sme_galimg_ctrl a {
+    text-decoration: none;
+    padding: 3px 10px;
+    display: block;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+#trustify-settings .delete-table-product {
+    padding-left: 5px;
+}
+
+#trustify-settings span.delete-button.table-products {
+    display: block;
+    padding: 15px 5px;
+}
+
+#trustify-settings a.docopy-table-product.button{
+    background: #0085ba;
+    border-color: #0073aa #006799 #006799;
+    box-shadow: 0 1px 0 #006799;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+}
+
+#trustify-settings a.docopy-table-product.button:hover{
+    background: #008ec2;
+    border-color: #006799;
+    color: #fff;
+}
+
+#trustify-settings .popup-item {
+    padding: 10px;
+}
+
+#trustify-settings .popup_template.border {
+    border: 2px solid #383838;
+}
+
+#trustify-settings .popup_template.radius,
+#trustify-settings .popup_template.b-radius {
+    border-radius: 0px !important;
+}
+
+
+#trustify-settings .notice {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    vertical-align: middle;
+    font-style: italic;
+    border:0;
+}
+
+#trustify-settings .trustify-auto textarea {
+    width: 100%;
+    height: 100px;
+}
+
+#trustify-settings .single-product .product-inputfield input[type="text"] {
+    width: 37%;
+}
+
+#trustify-settings .single-product h4 {
+    margin-left: 5px;
+    font-size: 1em;
+    margin-bottom: 0px;
+}
+
+
+/*------- notifaction setting --------*/
+
+.mifi-postbox-fields + .mifi-postbox-fields{
+    margin-top: 5px;
+}
+
+.mifi-toggle-tab-header{
+    padding: 10px;
+}
+
+.mifi-toggle-tab-header h4,
+#mifi_time_meta h4{ 
+    margin: 0; 
+    position: relative; 
+}
+
+.mifi-toggle-tab-header h4 span.toggle-indicator{
+    position: absolute; 
+    right: 0;
+    transform: rotate(180deg);
+}
+
+.mifi-toggle-tab-header.mifi-toggle-active h4 span.toggle-indicator{
+    transform: rotate(0);
+}
+
+.mifi-postbox-fields.mifi-toggle-tab-body{
+    padding: 1px 10px;
+}
+
+#mifi_time_meta .form-table td{
+    padding: 5px 10px;
+}
+
+#trustify-settings .single-product{
+    padding-bottom: 35px;
+}
+#trustify-settings .bg-image{
+    display: inline-flex;
+    align-items: center;
+}
+#trustify-settings .bg-image .sme_galimg_ctrl{
+    margin: 0;
+}
+.trustify-date-filter{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+.trustify-date-filter p.submit {
+    margin: 0;
+    padding: 0;
+}
+
+#trustify-settings ul.option-wrap li,
+#trustify-settings .form-table th, 
+#trustify-settings .form-wrap label{
+    color: #686868;
+}
+.popup_close {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 10px;
+    background-color: #9a9a9a;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/*count down*/
+.click-stat-view {
+    background-color: #fff;
+    padding: 40px 30px;
+    border: 1px solid #c3c4c7;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
+}
+.click-stat-view h5 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+}
+
+.click-stat-view p {
+    margin-bottom: 20px;
+}
+
+.click-stat-view ul {
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin: 0;
+}
+
+.click-stat-view ul>li {
+    width: 120px;
+    height: 60px;
+    margin: 0;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}
+.click-stat-view ul>li:not(:last-child){
+    border-right: 1px solid #c3c4c7;
+
+}
+.click-stat-view ul>li .click-number {
+    display: block;
+    text-align: center;
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.click-stat-view ul>li span.click-label {
+    text-align: center;
+    display: block;
+}
