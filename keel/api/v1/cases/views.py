@@ -28,6 +28,7 @@ from .serializers import (
     CasesSerializer,
     CaseTrackerSerializer,
 )
+from .utils import sort_case_chat_list
 
 logger = logging.getLogger("app-logger")
 
@@ -78,8 +79,12 @@ class CaseUnreadChats(generics.ListAPIView):
             )
             .filter(agent=user)
         )
-        serializer = self.serializer_class(queryset, many=True)
-        response["message"] = serializer.data
+        serializer = self.serializer_class(queryset, many=True).data
+
+        # sort case chat list
+        sorted_list = sort_case_chat_list(serializer)
+
+        response["message"] = sorted_list
         return Response(response)
 
 

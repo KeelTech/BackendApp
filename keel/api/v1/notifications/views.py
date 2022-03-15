@@ -21,7 +21,7 @@ class NotificationViews(GenericViewSet):
         response = {
             "status": 1,
             "message": "Successfully retrived notification",
-            "data": "",
+            "data": [],
         }
 
         # check recent query param
