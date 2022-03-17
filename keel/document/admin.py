@@ -12,7 +12,7 @@ class PublicDocumentAdmin(CustomBaseModelAdmin):
 	list_display = ('original_name', 'file_link')
 	
 	def file_link(self, obj):
-		if obj and obj.url:
+		if obj and obj.avatar and obj.avatar.url:
 			return obj.url
 		return ""
 
