@@ -13,7 +13,7 @@ class PublicDocumentAdmin(CustomBaseModelAdmin):
 	
 	def file_link(self, obj):
 		if obj and obj.avatar and obj.avatar.url:
-			return obj.url
+			return obj.avatar.url
 		return ""
 
 	# file_link.allow_tags = True
