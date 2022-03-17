@@ -10,8 +10,8 @@ admin.site.register(PublicDocuments, PublicDocumentAdmin)
 
 class PublicDocumentAdmin(CustomBaseModelAdmin):
 	list_display = ('original_name', 'file_link')
-
-	 def file_link(self, obj):
+	
+	def file_link(self, obj):
 	 	if obj and obj.url:
         	return obj.url
     	return ""
