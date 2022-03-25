@@ -20,7 +20,7 @@ class WebsiteContactDataView(ModelViewSet):
         except Exception as e:
             response["status"] = 0
             response["message"] = str(e)
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["data"] = serializer.data
         return Response(response, status=status.HTTP_201_CREATED)
 
@@ -38,6 +38,6 @@ class HomeLeadsView(ModelViewSet):
         except Exception as e:
             response["status"] = 0
             response["message"] = str(e)
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["data"] = serializer.data
         return Response(response, status=status.HTTP_201_CREATED)
