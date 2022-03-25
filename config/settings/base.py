@@ -90,6 +90,7 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount.providers.linkedin_oauth2',
     'rest_auth',
     'rest_auth.registration',
+    'ckeditor',
 )
 
 
@@ -112,6 +113,7 @@ LOCAL_APPS = (
     'keel.stripe',
     'keel.questionnaire',
     'keel.records',
+    'keel.web',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -315,5 +317,30 @@ REDIS_HOST=env("REDIS_HOST")
 REDIS_PORTNAME=6379
 REDIS_DBNAME=0
 
-
-
+# DEFAULT_CONFIG = {
+    # "skin": "moono",
+    # "toolbar_Basic": [["Source", "-", "Bold", "Italic"]],
+    # "toolbar_Full": [
+    #     [
+    #         "Styles",
+    #         "Format",
+    #         "Bold",
+    #         "Italic",
+    #         "Underline",
+    #         "Strike",
+    #         "SpellChecker",
+    #         "Undo",
+    #         "Redo",
+    #     ],
+    #     ["Link", "Unlink", "Anchor"],
+    #     ["Image", "Flash", "Table", "HorizontalRule"],
+    #     ["TextColor", "BGColor"],
+    #     ["Smiley", "SpecialChar"],
+    #     ["Source"],
+    # ],
+    # "toolbar": "Full",
+    # "height": 291,
+    # "width": 835,
+    # "filebrowserWindowWidth": 940,
+    # "filebrowserWindowHeight": 725,
+# }
