@@ -12,4 +12,4 @@ class WebsiteContactDataSerializer(serializers.ModelSerializer):
 class HomeLeadsSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeLeads
-        fields = ('id', 'name', 'email', 'phone')
+        fields = ('id', 'email', 'phone')
