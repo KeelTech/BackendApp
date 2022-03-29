@@ -20,6 +20,8 @@ class Web(HtmlField):
 class BaseContactData(TimeStampedModel):
     email = models.EmailField(default=None, blank=True, null=True)
     phone = models.CharField(max_length=20, default=None, blank=True, null=True)
+    leadsquared_id = models.CharField(max_length=50, default=None, blank=True, null=True)
+    leadsquared_status_code = models.CharField(max_length=20, default=None, blank=True, null=True)
 
     class Meta:
         abstract = True
