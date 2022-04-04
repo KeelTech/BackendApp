@@ -18,4 +18,4 @@ class HomeLeadsSerializer(serializers.ModelSerializer):
 class WebsiteComponentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebsiteComponents
-        fields = "__all__"
+        fields = ('id', 'title', 'component_name', 'body')
