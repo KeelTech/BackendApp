@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from keel.web.models import HomeLeads, WebsiteContactData
+from keel.web.models import HomeLeads, WebsiteContactData, WebsiteComponents
 
 
 
@@ -13,3 +13,9 @@ class HomeLeadsSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeLeads
         fields = ('id', 'email', 'phone')
+
+
+class WebsiteComponentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WebsiteComponents
+        fields = "__all__"
