@@ -1,3 +1,5 @@
+from ast import Or
+from locale import currency
 import uuid
 
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -107,3 +109,11 @@ class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
 
     def __str__(self) -> str:
         return str(self.case)
+
+
+class RazorPayTransactions(TimeStampedModel):
+    order_id = models.ForeignKey(Order, on_delete=models.DO_NOTHING, related_name="order_razorpay_transactions")
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_razorpay_transactions")
+    plan_type = models.CharField(max_length=512, null=True, blank=True)
+    order_payment_id = models.CharField(max_length=512, null=True, blank=True)
+    partial_payment = models.BooleanField(default=False)
