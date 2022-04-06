@@ -1,10 +1,12 @@
 import imp
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.response import Response
-from rest_framework import status
 
-from .serializers import WebsiteContactDataSerializer, HomeLeadsSerializer
-from keel.web.models import HomeLeads, WebsiteContactData
+from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+
+from .serializers import (HomeLeadsSerializer, WebsiteComponentsSerializer,
+                          WebsiteContactDataSerializer)
 
 
 class WebsiteContactDataView(ModelViewSet):
@@ -41,3 +43,12 @@ class HomeLeadsView(ModelViewSet):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["data"] = serializer.data
         return Response(response, status=status.HTTP_201_CREATED)
+
+
+class WebsiteComponentsView(ModelViewSet):
+    queryset = WebsiteComponents.objects.all()
+    serializer_class = WebsiteComponentsSerializer
+
+    def list(self, request):
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
