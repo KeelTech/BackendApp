@@ -1,5 +1,3 @@
-from ast import Or
-from locale import currency
 import uuid
 
 from django.contrib.contenttypes.fields import GenericForeignKey
