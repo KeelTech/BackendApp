@@ -111,10 +111,11 @@ class UserOrderDetailsView(GenericViewSet):
         # save razor pay transaction details
         try:
             razor_pay_transaction = RazorPayTransactions(
-                order_payment_id=generate_order_id["id"],
+                order_id=generate_order_id["id"],
                 user_order_details=serializer.instance,
                 amount=amount,
                 transaction_id=transaction_id,
+                currency=currency,
             )
             razor_pay_transaction.save()
         except Exception as err:
@@ -133,4 +134,46 @@ class UserOrderDetailsView(GenericViewSet):
             "transaction_id": transaction_id,
         }
         response["data"] = data
+        return Response(response, status.HTTP_200_OK)
+
+
+class CaptureRazorpayPayment(GenericViewSet):
+    
+    def verify_payment_signature(self, request):
+        response = {"status": 1, "message": "Payment verified", "data": {}}
+        payment_id = request.data.get("payment_id")
+        transaction_id = request.data.get("transaction_id")
+        order_id = request.data.get("order_id")
+
+        # retrieve transaction details with transaction_id and order_id
+        razor_pay_transaction = RazorPayTransactions.objects.filter(
+            transaction_id=transaction_id, order_payment_id=order_id).first()
+        if razor_pay_transaction is None:
+            response["status"] = 0
+            response["message"] = "Transaction not found"
+            return Response(response, status.HTTP_404_NOT_FOUND)
+        
+        # update payment_id in razor_pay_transaction
+        try:
+            razor_pay_transaction.payment_id = payment_id
+            razor_pay_transaction.save()
+        except Exception as err:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "CaptureRazorpayPayment:verify_payment_signature",
+                "",
+                description=str(err),
+            )
+            response["status"] = 0
+            response["message"] = str(err)
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        # verify payment signature
+        amount = razor_pay_transaction.amount
+        currency = razor_pay_transaction.currency
+
+        verify_payment = RazorPay(amount=amount, currency=currency)
+        capture = verify_payment.capture_payment(payment_id)
+        print(capture)
+
         return Response(response, status.HTTP_200_OK)
