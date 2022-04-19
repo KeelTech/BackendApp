@@ -1,6 +1,5 @@
 from keel.authentication.backends import JWTAuthentication
-from keel.Core.constants import (LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY,
-                                 LOGGER_MODERATE_SEVERITY)
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
 from keel.Core.err_log import logging_format
 from keel.payment.implementation.pay_manager import (
     PaymentManager, StructNewPaymentDetailArgs)
@@ -9,8 +8,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from yaml import serialize
-
+from .razor_payment import RazorPay
 from .serializers import UserOrderDetailsSerializer
 
 PAYMENT_CLIENT_TYPE = Order.PAYMENT_CLIENT_STRIPE
@@ -83,6 +81,12 @@ class UserOrderDetailsView(GenericViewSet):
         response = {"status": 1, "message": "Data added", "data": {}}
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        
+        user = request.user
+        amount = request.data.get("amount", 0)
+        currency = request.data.get("currency", "INR")
+
+        # save user details
         try:
             serializer.save()
         except Exception as err:
@@ -94,6 +98,12 @@ class UserOrderDetailsView(GenericViewSet):
             response["status"] = 0
             response["message"] = str(err)
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        # initiate order process
+        order_init = RazorPay(amount, currency, user)
+        generate_order_id = order_init.create_order()
 
+        # add details to response
         response["data"] = serializer.data
+        response["data"]["order_details"] = generate_order_id
         return Response(response, status.HTTP_201_CREATED)
