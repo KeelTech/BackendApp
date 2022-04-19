@@ -135,13 +135,6 @@ class UserOrderDetails(TimeStampedModel):
 
 
 class RazorPayTransactions(TimeStampedModel):
-    order_id = models.ForeignKey(
-        Order,
-        on_delete=models.DO_NOTHING,
-        related_name="order_razorpay_transactions",
-        null=True,
-        blank=True,
-    )
     transaction_id = models.CharField(max_length=100, null=True, blank=True)
     user_order_details = models.ForeignKey(
         UserOrderDetails,

@@ -19,7 +19,7 @@ class UserOrderDetailsAdmin(admin.ModelAdmin):
     list_display = ("first_name", "last_name", "phone_number", "email")
 
 class RazorPayTransactionsAdmin(admin.ModelAdmin):
-    list_display = ("order_id", "user_order_details", "plan_type", "order_payment_id", "amount")
+    list_display = ( "user_order_details", "plan_type", "order_payment_id", "amount")
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem)
