@@ -1,14 +1,17 @@
 from keel.authentication.backends import JWTAuthentication
-from keel.Core.constants import LOGGER_CRITICAL_SEVERITY
-from keel.Core.err_log import logging_format
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
+from keel.Core.err_log import log_error, logging_format
 from keel.payment.implementation.pay_manager import (
-    PaymentManager, StructNewPaymentDetailArgs)
-from keel.payment.models import Order
+    PaymentManager,
+    StructNewPaymentDetailArgs,
+)
+from keel.payment.models import Order, RazorPayTransactions
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from .razor_payment import RazorPay
+
+from .razor_payment import RazorPay, generate_transaction_id
 from .serializers import UserOrderDetailsSerializer
 
 PAYMENT_CLIENT_TYPE = Order.PAYMENT_CLIENT_STRIPE
@@ -81,8 +84,10 @@ class UserOrderDetailsView(GenericViewSet):
         response = {"status": 1, "message": "Data added", "data": {}}
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
-        user = request.user
+
+        # generate transaction id
+        transaction_id = generate_transaction_id()
+
         amount = request.data.get("amount", 0)
         currency = request.data.get("currency", "INR")
 
@@ -98,12 +103,34 @@ class UserOrderDetailsView(GenericViewSet):
             response["status"] = 0
             response["message"] = str(err)
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
         # initiate order process
-        order_init = RazorPay(amount, currency, user)
+        order_init = RazorPay(amount, currency)
         generate_order_id = order_init.create_order()
 
-        # add details to response
-        response["data"] = serializer.data
-        response["data"]["order_details"] = generate_order_id
-        return Response(response, status.HTTP_201_CREATED)
+        # save razor pay transaction details
+        try:
+            razor_pay_transaction = RazorPayTransactions(
+                order_payment_id=generate_order_id["id"],
+                user_order_details=serializer.instance,
+                amount=amount,
+                transaction_id=transaction_id,
+            )
+            razor_pay_transaction.save()
+        except Exception as err:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "RazorPay:create_order",
+                "",
+                description=str(err),
+            )
+            response["status"] = 0
+            response["message"] = str(err)
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        data = {
+            "order_id": generate_order_id["id"],
+            "transaction_id": transaction_id,
+        }
+        response["data"] = data
+        return Response(response, status.HTTP_200_OK)

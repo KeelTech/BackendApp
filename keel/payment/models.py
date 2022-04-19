@@ -6,11 +6,9 @@ from django.db import models
 from keel.authentication.models import User
 from keel.cases.models import Case
 from keel.Core.models import SoftDeleteModel, TimeStampedModel
-from keel.payment.constants import (
-    ORDER_ITEM_PLAN_TYPE,
-    ORDER_ITEM_QUOTATION_TYPE,
-    ORDER_ITEM_SERVICE_TYPE,
-)
+from keel.payment.constants import (ORDER_ITEM_PLAN_TYPE,
+                                    ORDER_ITEM_QUOTATION_TYPE,
+                                    ORDER_ITEM_SERVICE_TYPE)
 from keel.plans.models import Plan, Service
 from keel.quotations.models import QuotationMilestone
 
@@ -138,8 +136,13 @@ class UserOrderDetails(TimeStampedModel):
 
 class RazorPayTransactions(TimeStampedModel):
     order_id = models.ForeignKey(
-        Order, on_delete=models.DO_NOTHING, related_name="order_razorpay_transactions"
+        Order,
+        on_delete=models.DO_NOTHING,
+        related_name="order_razorpay_transactions",
+        null=True,
+        blank=True,
     )
+    transaction_id = models.CharField(max_length=100, null=True, blank=True)
     user_order_details = models.ForeignKey(
         UserOrderDetails,
         on_delete=models.DO_NOTHING,
