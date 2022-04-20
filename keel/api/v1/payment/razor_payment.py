@@ -26,6 +26,7 @@ class RazorPay(object):
             "amount": amount,
             "currency": self.currency,
         }
+        response = {}
         try:
             response = requests.request(
                 "POST",
@@ -34,16 +35,17 @@ class RazorPay(object):
                 auth=HTTPBasicAuth(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET),
             )
             response_json = response.json()
-            return response_json
-
+            response["id"] = response_json.get("id")
         except Exception as err:
             log_error(
                 LOGGER_LOW_SEVERITY,
-                "RazorPay:create_order",
+                "RazorPay: create_order",
                 "",
                 description=str(err),
             )
-            return str(err)
+            response['error'] = str(err)
+        return response
+        
 
 
 def generate_transaction_id():
