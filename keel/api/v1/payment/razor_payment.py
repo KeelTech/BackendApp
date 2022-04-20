@@ -1,4 +1,3 @@
-import json
 import uuid
 
 import requests
@@ -36,6 +35,7 @@ class RazorPay(object):
             )
             response_json = response.json()
             resp["id"] = response_json.get("id")
+
         except Exception as err:
             log_error(
                 LOGGER_LOW_SEVERITY,
@@ -45,7 +45,31 @@ class RazorPay(object):
             )
             resp['error'] = str(err)
         return resp
-        
+
+    def capture_payment(self, payment_id):
+        amount = self.amount * 1000
+
+        url = f"https://api.razorpay.com/v1/payments/{payment_id}/capture"
+
+        payload = {"amount": amount, "currency": self.currency}
+
+        try:
+            response = requests.request(
+                "POST",
+                url,
+                data=payload,
+                auth=HTTPBasicAuth(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET),
+            )
+        except Exception as err:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "RazorPay:capture_payment",
+                "",
+                description=str(err),
+            )
+            return str(err)
+
+        return response.json()
 
 
 def generate_transaction_id():
