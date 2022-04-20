@@ -90,6 +90,7 @@ class UserOrderDetailsView(GenericViewSet):
 
         amount = request.data.get("amount", 0)
         currency = request.data.get("currency", "INR")
+        plan_type = request.data.get("plan_id", None)
 
         # save user details
         try:
@@ -116,6 +117,7 @@ class UserOrderDetailsView(GenericViewSet):
                 amount=amount,
                 transaction_id=transaction_id,
                 currency=currency,
+                plan_type=plan_type
             )
             razor_pay_transaction.save()
         except Exception as err:

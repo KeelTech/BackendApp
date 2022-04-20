@@ -41,6 +41,7 @@ class RazorPay(object):
                 "",
                 description=str(err),
             )
+            print(str(err))
             return str(err)
 
         return response_json
