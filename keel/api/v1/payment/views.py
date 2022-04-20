@@ -1,4 +1,7 @@
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from keel.authentication.backends import JWTAuthentication
+from keel.cases.models import Case
 from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
 from keel.Core.err_log import log_error, logging_format
 from keel.payment.implementation.pay_manager import (
@@ -13,8 +16,6 @@ from rest_framework.viewsets import GenericViewSet
 
 from .razor_payment import RazorPay, generate_transaction_id
 from .serializers import UserOrderDetailsSerializer
-from django.contrib.auth import get_user_model
-from django.conf import settings
 
 User = get_user_model()
 
@@ -121,7 +122,7 @@ class UserOrderDetailsView(GenericViewSet):
                 amount=amount,
                 transaction_id=transaction_id,
                 currency=currency,
-                plan_type=plan_type
+                plan_type=plan_type,
             )
             razor_pay_transaction.save()
         except Exception as err:
@@ -189,11 +190,34 @@ class CaptureRazorpayPayment(GenericViewSet):
         email = razor_pay_transaction.user_order_details.email
         user = User.objects.filter(email=email).first()
         if user is None:
-            user = User.objects.create_user(email=email, password=settings.DEFAULT_USER_PASS)
-            user.save()
+            try:
+                user = User.objects.create_user(
+                    email=email, password=settings.DEFAULT_USER_PASS
+                )
+            except Exception as err:
+                log_error(
+                    LOGGER_LOW_SEVERITY,
+                    "CaptureRazorpayPayment:create_user",
+                    "",
+                    description=str(err),
+                )
+                response["status"] = 0
+                response["message"] = str(err)
+                return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # create case for user
-        case = Case.objects.create(
-
+        plan = razor_pay_transaction.plan_type
+        try:
+            case = Case.objects.create(user=user, plan=plan)
+        except Exception as err:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "CaptureRazorpayPayment:verify_payment_signature",
+                "",
+                description=str(err),
+            )
+            response["status"] = 0
+            response["message"] = str(err)
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response(response, status.HTTP_200_OK)
