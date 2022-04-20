@@ -26,7 +26,7 @@ class RazorPay(object):
             "amount": amount,
             "currency": self.currency,
         }
-        response = {}
+        resp = {}
         try:
             response = requests.request(
                 "POST",
@@ -35,7 +35,7 @@ class RazorPay(object):
                 auth=HTTPBasicAuth(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET),
             )
             response_json = response.json()
-            response["id"] = response_json.get("id")
+            resp["id"] = response_json.get("id")
         except Exception as err:
             log_error(
                 LOGGER_LOW_SEVERITY,
@@ -43,8 +43,8 @@ class RazorPay(object):
                 "",
                 description=str(err),
             )
-            response['error'] = str(err)
-        return response
+            resp['error'] = str(err)
+        return resp
         
 
 
