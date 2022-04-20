@@ -86,7 +86,7 @@ class UserOrderDetailsView(GenericViewSet):
     serializer_class = UserOrderDetailsSerializer
 
     def create(self, request):
-        response = {"status": 1, "message": "Data added", "data": {}}
+        response = {"status": 1, "message": "", "data": {}}
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -113,6 +113,10 @@ class UserOrderDetailsView(GenericViewSet):
         # initiate order process
         order_init = RazorPay(amount, currency)
         generate_order_id = order_init.create_order()
+        if "id" not in generate_order_id:
+            response["status"] = 0
+            response["message"] = generate_order_id["error"]
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # save razor pay transaction details
         try:
@@ -128,7 +132,7 @@ class UserOrderDetailsView(GenericViewSet):
         except Exception as err:
             log_error(
                 LOGGER_LOW_SEVERITY,
-                "RazorPay:create_order",
+                "UserOrderDetailsView: RazorPayTreansaction Model Create Error",
                 "",
                 description=str(err),
             )
