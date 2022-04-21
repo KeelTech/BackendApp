@@ -43,7 +43,7 @@ class RazorPay(object):
                 "",
                 description=str(err),
             )
-            resp['error'] = str(err)
+            resp["error"] = str(err)
         return resp
 
     def capture_payment(self, payment_id):
