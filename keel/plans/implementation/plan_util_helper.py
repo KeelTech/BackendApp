@@ -1,3 +1,5 @@
+from keel.plans.models import Plan
+
 
 class PlanUtilHelper:
     def __init__(self):
@@ -23,5 +25,9 @@ class PlanUtilHelper:
             "title": plan_model_obj.title,
             "description": plan_model_obj.description,
             "total_plan_price": plan_model_obj.price,
-            "currency": plan_model_obj.currency
+            "currency": plan_model_obj.currency,
         }
+
+
+def get_plan_instance_with_id(plan_id):
+    return Plan.objects.filter(id=plan_id).first() if not None else None

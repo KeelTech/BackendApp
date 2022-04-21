@@ -15,7 +15,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from .razor_payment import RazorPay, generate_transaction_id
-from .serializers import UserOrderDetailsSerializer
+from .serializers import UserOrderDetailsSerializer, RazorpayCaptureserializer
+from keel.plans.implementation.plan_util_helper import get_plan_instance_with_id
 
 User = get_user_model()
 
@@ -95,7 +96,8 @@ class UserOrderDetailsView(GenericViewSet):
 
         amount = request.data.get("amount", 0)
         currency = request.data.get("currency", "INR")
-        plan_type = request.data.get("plan_id", None)
+        plan_id = request.data.get("plan_id", None)
+        plan_instance = get_plan_instance_with_id(plan_id)
 
         # save user details
         try:
@@ -126,7 +128,7 @@ class UserOrderDetailsView(GenericViewSet):
                 amount=amount,
                 transaction_id=transaction_id,
                 currency=currency,
-                plan_type=plan_type,
+                plan_id=plan_instance,
             )
             razor_pay_transaction.save()
         except Exception as err:
@@ -149,11 +151,17 @@ class UserOrderDetailsView(GenericViewSet):
 
 
 class CaptureRazorpayPayment(GenericViewSet):
+    serializer_class = RazorpayCaptureserializer
+
     def verify_payment_signature(self, request):
         response = {"status": 1, "message": "Payment verified", "data": {}}
-        payment_id = request.data.get("payment_id")
-        transaction_id = request.data.get("transaction_id")
-        order_id = request.data.get("order_id")
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        payment_id = validated_data.get("payment_id", None)
+        transaction_id = validated_data.get("transaction_id", None)
+        order_id = validated_data.get("order_id", None)
 
         # retrieve transaction details with transaction_id and order_id
         razor_pay_transaction = (

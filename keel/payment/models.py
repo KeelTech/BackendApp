@@ -142,7 +142,8 @@ class RazorPayTransactions(TimeStampedModel):
         related_name="user_razorpay_transactions",
     )
     amount = models.CharField(max_length=50, null=True, blank=True)
-    plan_type = models.CharField(max_length=512, null=True, blank=True)
+    # plan_type = models.CharField(max_length=512, null=True, blank=True)
+    plan_id = models.ForeignKey(Plan, on_delete=models.DO_NOTHING, null=True, blank=True)
     order_id = models.CharField(max_length=512, null=True, blank=True)
     payment_id = models.CharField(max_length=50, null=True, blank=True)
     partial_payment = models.BooleanField(default=False)
