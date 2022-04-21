@@ -17,12 +17,12 @@ class RazorPay(object):
         self.currency = currency
 
     def create_order(self):
-        # amount = self.amount * 1000
+        amount_in_paise = self.amount * 100
 
         url = "https://api.razorpay.com/v1/orders"
 
         payload = {
-            "amount": self.amount,
+            "amount": amount_in_paise,
             "currency": self.currency,
         }
         resp = {}
