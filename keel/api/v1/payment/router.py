@@ -1,7 +1,11 @@
 from django.urls import path
 
-from .views import (OrderViewSet, PaymentTransactionViewSet,
-                    UserOrderDetailsView)
+from .views import (
+    CaptureRazorpayPayment,
+    OrderViewSet,
+    PaymentTransactionViewSet,
+    UserOrderDetailsView,
+)
 
 urlpatterns = [
     path(
@@ -13,5 +17,9 @@ urlpatterns = [
         "create-order-details",
         UserOrderDetailsView.as_view({"post": "create"}),
         name="create-order-details",
+    ),
+    path(
+        "capture-payment",
+        CaptureRazorpayPayment.as_view({"post": "verify_payment_signature"}),
     ),
 ]
