@@ -1,16 +1,16 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from keel.authentication.backends import JWTAuthentication
-from keel.authentication.implementation.auth_util_helper import create_user_and_case
+from keel.authentication.implementation.auth_util_helper import \
+    create_user_and_case
 from keel.cases.models import Case
 from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
 from keel.Core.err_log import log_error, logging_format
 from keel.payment.implementation.pay_manager import (
-    PaymentManager,
-    StructNewPaymentDetailArgs,
-)
+    PaymentManager, StructNewPaymentDetailArgs)
 from keel.payment.models import Order, RazorPayTransactions
-from keel.plans.implementation.plan_util_helper import get_plan_instance_with_id
+from keel.plans.implementation.plan_util_helper import \
+    get_plan_instance_with_id
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -203,45 +203,22 @@ class CaptureRazorpayPayment(GenericViewSet):
         )
         # PENDING: CHECK RESPONSE FROM RAZORPAY
 
-        # check email and create user if not exist
+        # check and create user and case if not exist
         data = {
             "email": razor_pay_transaction.user_order_details.email,
             "plan": razor_pay_transaction.plan_id,
         }
-        user_case_create = create_user_and_case(**data)
-
-        # # check email and create user if not exist
-        # email = razor_pay_transaction.user_order_details.email
-        # user = User.objects.filter(email=email).first()
-        # if user is None:
-        #     try:
-        #         user = User.objects.create_user(
-        #             email=email, password=settings.DEFAULT_USER_PASS
-        #         )
-        #     except Exception as err:
-        #         log_error(
-        #             LOGGER_LOW_SEVERITY,
-        #             "CaptureRazorpayPayment:create_user",
-        #             "",
-        #             description=str(err),
-        #         )
-        #         response["status"] = 0
-        #         response["message"] = str(err)
-        #         return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # # create case for user
-        # plan = razor_pay_transaction.plan_id
-        # try:
-        #     case = Case.objects.create(user=user, plan=plan)
-        # except Exception as err:
-        #     log_error(
-        #         LOGGER_LOW_SEVERITY,
-        #         "CaptureRazorpayPayment:verify_payment_signature",
-        #         "",
-        #         description=str(err),
-        #     )
-        #     response["status"] = 0
-        #     response["message"] = str(err)
-        #     return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        try:
+            user_case_create = create_user_and_case(**data)
+        except Exception as err:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "CaptureRazorpayPayment:create_user_and_case",
+                "",
+                description=str(err),
+            )
+            response["status"] = 0
+            response["message"] = str(err)
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response(response, status.HTTP_200_OK)
