@@ -1,16 +1,17 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from keel.api.v1.auth.helpers.email_helper import order_created_email
 from keel.authentication.backends import JWTAuthentication
-from keel.authentication.implementation.auth_util_helper import \
-    create_user_and_case
+from keel.authentication.implementation.auth_util_helper import create_user_and_case
 from keel.cases.models import Case
 from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
 from keel.Core.err_log import log_error, logging_format
 from keel.payment.implementation.pay_manager import (
-    PaymentManager, StructNewPaymentDetailArgs)
+    PaymentManager,
+    StructNewPaymentDetailArgs,
+)
 from keel.payment.models import Order, RazorPayTransactions
-from keel.plans.implementation.plan_util_helper import \
-    get_plan_instance_with_id
+from keel.plans.implementation.plan_util_helper import get_plan_instance_with_id
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -99,6 +100,7 @@ class UserOrderDetailsView(GenericViewSet):
         currency = request.data.get("currency", "INR")
         plan_id = request.data.get("plan_id", None)
         plan_instance = get_plan_instance_with_id(plan_id)
+        print(plan_instance)
 
         # save user details
         try:
@@ -142,6 +144,24 @@ class UserOrderDetailsView(GenericViewSet):
             response["status"] = 0
             response["message"] = str(err)
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # send email to user after order created successfully
+        email = serializer.validated_data.get("email")
+        first_name = serializer.validated_data.get("first_name")
+        plan = plan_instance.title
+        try:
+            context = {
+                "plan": plan,
+                "first_name": first_name,
+            }
+            order_created_email(context, email)
+        except Exception as e:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "UserOrderDetailsView:Send order email failed",
+                "",
+                description=str(e),
+            )
 
         data = {
             "order_id": generate_order_id["id"],
