@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from keel.api.v1.auth.helpers.email_helper import order_created_email
 from keel.authentication.backends import JWTAuthentication
+from keel.authentication.implementation.auth_util_helper import create_user_and_case
 from keel.cases.models import Case
 from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
 from keel.Core.err_log import log_error, logging_format
@@ -9,13 +11,14 @@ from keel.payment.implementation.pay_manager import (
     StructNewPaymentDetailArgs,
 )
 from keel.payment.models import Order, RazorPayTransactions
+from keel.plans.implementation.plan_util_helper import get_plan_instance_with_id
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from .razor_payment import RazorPay, generate_transaction_id
-from .serializers import UserOrderDetailsSerializer
+from .serializers import RazorpayCaptureserializer, UserOrderDetailsSerializer
 
 User = get_user_model()
 
@@ -95,7 +98,9 @@ class UserOrderDetailsView(GenericViewSet):
 
         amount = request.data.get("amount", 0)
         currency = request.data.get("currency", "INR")
-        plan_type = request.data.get("plan_id", None)
+        plan_id = request.data.get("plan_id", None)
+        plan_instance = get_plan_instance_with_id(plan_id)
+        print(plan_instance)
 
         # save user details
         try:
@@ -126,7 +131,7 @@ class UserOrderDetailsView(GenericViewSet):
                 amount=amount,
                 transaction_id=transaction_id,
                 currency=currency,
-                plan_type=plan_type,
+                plan_id=plan_instance,
             )
             razor_pay_transaction.save()
         except Exception as err:
@@ -140,6 +145,24 @@ class UserOrderDetailsView(GenericViewSet):
             response["message"] = str(err)
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+        # send email to user after order created successfully
+        email = serializer.validated_data.get("email")
+        first_name = serializer.validated_data.get("first_name")
+        plan = plan_instance.title
+        try:
+            context = {
+                "plan": plan,
+                "first_name": first_name,
+            }
+            order_created_email(context, email)
+        except Exception as e:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "UserOrderDetailsView:Send order email failed",
+                "",
+                description=str(e),
+            )
+
         data = {
             "order_id": generate_order_id["id"],
             "transaction_id": transaction_id,
@@ -149,11 +172,17 @@ class UserOrderDetailsView(GenericViewSet):
 
 
 class CaptureRazorpayPayment(GenericViewSet):
+    serializer_class = RazorpayCaptureserializer
+
     def verify_payment_signature(self, request):
         response = {"status": 1, "message": "Payment verified", "data": {}}
-        payment_id = request.data.get("payment_id")
-        transaction_id = request.data.get("transaction_id")
-        order_id = request.data.get("order_id")
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        payment_id = validated_data.get("payment_id", None)
+        transaction_id = validated_data.get("transaction_id", None)
+        order_id = validated_data.get("order_id", None)
 
         # retrieve transaction details with transaction_id and order_id
         razor_pay_transaction = (
@@ -188,35 +217,23 @@ class CaptureRazorpayPayment(GenericViewSet):
         verify_payment = RazorPay(amount=amount, currency=currency)
         capture = verify_payment.capture_payment(payment_id)
 
+        # FOR DEBUGGIN PUROSES
+        log_error(
+            LOGGER_LOW_SEVERITY, "CaptureRazorpayPayment:Capture response", capture
+        )
         # PENDING: CHECK RESPONSE FROM RAZORPAY
 
-        # check email and create user if not exist
-        email = razor_pay_transaction.user_order_details.email
-        user = User.objects.filter(email=email).first()
-        if user is None:
-            try:
-                user = User.objects.create_user(
-                    email=email, password=settings.DEFAULT_USER_PASS
-                )
-            except Exception as err:
-                log_error(
-                    LOGGER_LOW_SEVERITY,
-                    "CaptureRazorpayPayment:create_user",
-                    "",
-                    description=str(err),
-                )
-                response["status"] = 0
-                response["message"] = str(err)
-                return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # create case for user
-        plan = razor_pay_transaction.plan_type
+        # check and create user and case if not exist
+        data = {
+            "email": razor_pay_transaction.user_order_details.email,
+            "plan": razor_pay_transaction.plan_id,
+        }
         try:
-            case = Case.objects.create(user=user, plan=plan)
+            user_case_create = create_user_and_case(**data)
         except Exception as err:
             log_error(
                 LOGGER_LOW_SEVERITY,
-                "CaptureRazorpayPayment:verify_payment_signature",
+                "CaptureRazorpayPayment:create_user_and_case",
                 "",
                 description=str(err),
             )

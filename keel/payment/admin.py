@@ -40,7 +40,7 @@ class UserOrderDetailsAdmin(admin.ModelAdmin):
 class RazorPayTransactionsAdmin(admin.ModelAdmin):
     list_display = (
         "user_order_details",
-        "plan_type",
+        "plan_id",
         "order_id",
         "payment_id",
         "amount",
