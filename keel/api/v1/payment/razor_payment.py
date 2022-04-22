@@ -2,7 +2,7 @@ import uuid
 
 import requests
 from django.conf import settings
-from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.constants import LOGGER_LOW_SEVERITY, LOGGER_LOG_MESSAGE
 from keel.Core.err_log import log_error
 from keel.payment.models import RazorPayTransactions
 from requests.auth import HTTPBasicAuth
@@ -17,12 +17,12 @@ class RazorPay(object):
         self.currency = currency
 
     def create_order(self):
-        amount = self.amount * 1000
+        amount_in_paise = self.amount * 100
 
         url = "https://api.razorpay.com/v1/orders"
 
         payload = {
-            "amount": amount,
+            "amount": amount_in_paise,
             "currency": self.currency,
         }
         resp = {}
@@ -35,6 +35,12 @@ class RazorPay(object):
             )
             response_json = response.json()
             resp["id"] = response_json.get("id")
+            log_error(
+                LOGGER_LOG_MESSAGE,
+                "RazorPay: create_order::success",
+                "",
+                description=str(response_json),
+            )
 
         except Exception as err:
             log_error(
