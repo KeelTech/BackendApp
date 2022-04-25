@@ -62,3 +62,9 @@ def send_crs_score(context, to_email):
     subject = 'CRS Score'
     html_content = get_template('crs_score.html').render(context)
     base_send_email(subject, html_content, to_email)
+
+
+def order_created_email(context, to_email):
+    subject = 'Order Created'
+    html_content = get_template('order_created.html').render(context)
+    base_send_email(subject, html_content, to_email)
