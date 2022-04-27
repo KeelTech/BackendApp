@@ -2,8 +2,14 @@ from django.contrib import admin
 from keel.api.v1.payment.razor_payment import RazorPay
 from keel.Core.admin import CustomBaseModelAdmin
 
-from .models import (CasePaymentProfile, Order, OrderItem,
-                     RazorPayTransactions, Transaction, UserOrderDetails)
+from .models import (
+    CasePaymentProfile,
+    Order,
+    OrderItem,
+    RazorPayTransactions,
+    Transaction,
+    UserOrderDetails,
+)
 
 
 class OrderAdmin(CustomBaseModelAdmin):
@@ -34,13 +40,12 @@ class CasePaymentProfileAdmin(CustomBaseModelAdmin):
 
 
 class UserOrderDetailsAdmin(admin.ModelAdmin):
-    list_display = ("first_name", "last_name", "phone_number", "email")
+    list_display = ("first_name", "last_name", "phone_number", "email", "plan_id")
 
 
 class RazorPayTransactionsAdmin(admin.ModelAdmin):
     list_display = (
         "user_order_details",
-        "plan_id",
         "order_id",
         "payment_id",
         "amount",
