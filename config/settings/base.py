@@ -219,6 +219,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(ROOT_DIR('media'))
 
