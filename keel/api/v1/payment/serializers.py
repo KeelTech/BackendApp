@@ -1,11 +1,12 @@
 from keel.payment.models import UserOrderDetails
 from rest_framework import serializers
+from keel.plans.implementation.plan_util_helper import get_plan_instance_with_id
 
 
 class UserOrderDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserOrderDetails
-        fields = ["id", "first_name", "last_name", "phone_number", "email"]
+        fields = ["id", "first_name", "last_name", "phone_number", "email", "plan_id"]
 
 
 class RazorpayCaptureserializer(serializers.Serializer):

@@ -6,9 +6,11 @@ from django.db import models
 from keel.authentication.models import User
 from keel.cases.models import Case
 from keel.Core.models import SoftDeleteModel, TimeStampedModel
-from keel.payment.constants import (ORDER_ITEM_PLAN_TYPE,
-                                    ORDER_ITEM_QUOTATION_TYPE,
-                                    ORDER_ITEM_SERVICE_TYPE)
+from keel.payment.constants import (
+    ORDER_ITEM_PLAN_TYPE,
+    ORDER_ITEM_QUOTATION_TYPE,
+    ORDER_ITEM_SERVICE_TYPE,
+)
 from keel.plans.models import Plan, Service
 from keel.quotations.models import QuotationMilestone
 
@@ -129,6 +131,9 @@ class UserOrderDetails(TimeStampedModel):
     last_name = models.CharField(max_length=50, null=True, blank=True)
     phone_number = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    plan_id = models.ForeignKey(
+        Plan, on_delete=models.DO_NOTHING, null=True, blank=True
+    )
 
     def __str__(self):
         return str(self.email)
@@ -143,7 +148,6 @@ class RazorPayTransactions(TimeStampedModel):
     )
     amount = models.CharField(max_length=50, null=True, blank=True)
     # plan_type = models.CharField(max_length=512, null=True, blank=True)
-    plan_id = models.ForeignKey(Plan, on_delete=models.DO_NOTHING, null=True, blank=True)
     order_id = models.CharField(max_length=512, null=True, blank=True)
     payment_id = models.CharField(max_length=50, null=True, blank=True)
     partial_payment = models.BooleanField(default=False)

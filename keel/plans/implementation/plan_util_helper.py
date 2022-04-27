@@ -1,4 +1,6 @@
 from keel.plans.models import Plan
+from keel.Core.constants import LOGGER_CRITICAL_SEVERITY, LOGGER_LOW_SEVERITY
+from keel.Core.err_log import log_error
 
 
 class PlanUtilHelper:
@@ -30,4 +32,18 @@ class PlanUtilHelper:
 
 
 def get_plan_instance_with_id(plan_id):
-    return Plan.objects.filter(id=plan_id).first() if not None else None
+    response = {"message": "", "plan_obj": "", "status": 1}
+    try:
+        plan_model_obj = Plan.objects.get(id=plan_id)
+    except Plan.DoesNotExist as err:
+        log_error(
+            LOGGER_LOW_SEVERITY,
+            "plan_util_helper:get_plan_instance_with_id",
+            "",
+            description=str(err),
+        )
+        response["status"] = 0
+        response["message"] = f"Plan with id {plan_id} does not exist"
+        return response
+    response["plan_obj"] = plan_model_obj
+    return response
