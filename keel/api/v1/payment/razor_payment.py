@@ -17,7 +17,7 @@ class RazorPay(object):
         self.currency = currency
 
     def create_order(self):
-        amount_in_paise = self.amount * 100
+        amount_in_paise = int(self.amount) * 100
 
         url = "https://api.razorpay.com/v1/orders"
 
@@ -53,12 +53,12 @@ class RazorPay(object):
         return resp
 
     def capture_payment(self, payment_id):
-        amount = self.amount * 1000
+        amount_in_paise = int(self.amount) * 100
 
         url = f"https://api.razorpay.com/v1/payments/{payment_id}/capture"
 
-        payload = {"amount": amount, "currency": self.currency}
-
+        payload = {"amount": amount_in_paise, "currency": self.currency}
+        resp = {}
         try:
             response = requests.request(
                 "POST",
@@ -66,6 +66,14 @@ class RazorPay(object):
                 data=payload,
                 auth=HTTPBasicAuth(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET),
             )
+            response_json = response.json()
+            log_error(
+                LOGGER_LOG_MESSAGE,
+                "RazorPay: capture_payment::success",
+                "",
+                description=str(response_json),
+            )
+            resp["status"] = response_json.get("status")
         except Exception as err:
             log_error(
                 LOGGER_LOW_SEVERITY,
@@ -73,9 +81,9 @@ class RazorPay(object):
                 "",
                 description=str(err),
             )
-            return str(err)
+            resp["error"] = str(err)
 
-        return response.json()
+        return resp
 
 
 def generate_transaction_id():

@@ -51,10 +51,10 @@ class Order(TimeStampedModel, SoftDeleteModel):
         User, on_delete=models.DO_NOTHING, related_name="customer_order"
     )
     initiator = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, related_name="initiator_order"
+        User, on_delete=models.DO_NOTHING, related_name="initiator_order", null=True, blank=True
     )
     case = models.ForeignKey(Case, on_delete=models.DO_NOTHING, null=True)
-    order_items = models.ManyToManyField(OrderItem)
+    order_items = models.ManyToManyField(OrderItem, null=True, blank=True)
     status = models.PositiveSmallIntegerField(
         choices=STATUS_CHOICES, default=STATUS_PENDING
     )
