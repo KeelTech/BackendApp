@@ -18,7 +18,7 @@ class OrderAdmin(CustomBaseModelAdmin):
         "customer",
         "initiator",
         "case",
-        "payment_client_type",
+        # "payment_client_type",
         "total_amount",
         "status",
     )

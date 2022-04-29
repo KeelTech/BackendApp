@@ -238,4 +238,27 @@ class CaptureRazorpayPayment(GenericViewSet):
             response["message"] = str(err)
             return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+        # create order
+        customer = user_case_create["user"]
+        case = user_case_create["case"]
+        try:
+            order = Order(
+                customer=customer,
+                case=case,
+                total_amount=amount,
+                currency=currency,
+                status=Order.STATUS_COMPLETED,
+            )
+            order.save()
+        except Exception as err:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "CaptureRazorpayPayment:Order Model Create Error",
+                "",
+                description=str(err),
+            )
+            response["status"] = 0
+            response["message"] = str(err)
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return Response(response, status.HTTP_200_OK)

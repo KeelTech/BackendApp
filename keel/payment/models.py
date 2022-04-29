@@ -51,18 +51,18 @@ class Order(TimeStampedModel, SoftDeleteModel):
         User, on_delete=models.DO_NOTHING, related_name="customer_order"
     )
     initiator = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, related_name="initiator_order"
+        User, on_delete=models.DO_NOTHING, related_name="initiator_order", null=True, blank=True
     )
     case = models.ForeignKey(Case, on_delete=models.DO_NOTHING, null=True)
-    order_items = models.ManyToManyField(OrderItem)
+    order_items = models.ManyToManyField(OrderItem, null=True, blank=True)
     status = models.PositiveSmallIntegerField(
         choices=STATUS_CHOICES, default=STATUS_PENDING
     )
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
     currency = models.CharField(max_length=10, null=True, blank=True, default=None)
-    payment_client_type = models.PositiveSmallIntegerField(
-        choices=PAYMENT_CLIENT_CHOICE, default=PAYMENT_CLIENT_STRIPE
-    )
+    # payment_client_type = models.PositiveSmallIntegerField(
+    #     choices=PAYMENT_CLIENT_CHOICE, default=PAYMENT_CLIENT_STRIPE
+    # )
 
     class Meta:
         db_table = "order"

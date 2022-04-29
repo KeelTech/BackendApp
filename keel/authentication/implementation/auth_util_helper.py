@@ -16,4 +16,4 @@ def create_user_and_case(**kwargs):
     if case is None:
         case = Case.objects.create(user=user, plan=kwargs.get("plan"))
 
-    return user, case
+    return {"user": user, "case": case}
