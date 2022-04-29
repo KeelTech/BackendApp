@@ -60,9 +60,9 @@ class Order(TimeStampedModel, SoftDeleteModel):
     )
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
     currency = models.CharField(max_length=10, null=True, blank=True, default=None)
-    payment_client_type = models.PositiveSmallIntegerField(
-        choices=PAYMENT_CLIENT_CHOICE, default=PAYMENT_CLIENT_STRIPE
-    )
+    # payment_client_type = models.PositiveSmallIntegerField(
+    #     choices=PAYMENT_CLIENT_CHOICE, default=PAYMENT_CLIENT_STRIPE
+    # )
 
     class Meta:
         db_table = "order"
