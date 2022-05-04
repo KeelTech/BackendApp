@@ -148,7 +148,7 @@ class CustomToken(TimeStampedModel):
         db_table = "custom_token"
     
     def __str__(self):
-        return str(self.user)
+        return str(self.pk)
 
 
 class PasswordResetToken(TimeStampedModel):

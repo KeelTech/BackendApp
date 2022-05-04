@@ -17,6 +17,11 @@ class SalesUserAdmin(CustomBaseModelAdmin):
     list_filter = ("plan", )
     readonly_fields = ("deleted_at", "created_by")
 
+    # select_related on fk fields
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related("plan", "agent", "created_by")
+
     def get_readonly_fields(self, request, obj=None):
         if obj:
             return self.readonly_fields + ("plan", "email", "agent")
