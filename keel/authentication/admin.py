@@ -101,6 +101,11 @@ class EducationalCreationalAssessmentLabelAdmin(CustomBaseModelAdmin):
 class UserDocumentAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'doc', 'task')
 
+    # select related field on fk fields
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('user', 'doc', 'task')
+
 admin.site.register(User, UserAdmin)
 admin.site.register(SMSOtpModel)
 admin.site.register(UserService, UserServiceAdmin)
