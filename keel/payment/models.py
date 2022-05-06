@@ -122,8 +122,8 @@ class CasePaymentProfile(TimeStampedModel, SoftDeleteModel):
     class Meta:
         db_table = "user_case_payment_profile"
 
-    # def __str__(self) -> str:
-    #     return str(self.case)
+    def __str__(self) -> str:
+        return str(self.case)
 
 
 class UserOrderDetails(TimeStampedModel):
@@ -135,8 +135,8 @@ class UserOrderDetails(TimeStampedModel):
         Plan, on_delete=models.DO_NOTHING, null=True, blank=True
     )
 
-    # def __str__(self):
-    #     return str(self.email)
+    def __str__(self):
+        return str(self.email)
 
 
 class RazorPayTransactions(TimeStampedModel):
@@ -152,3 +152,6 @@ class RazorPayTransactions(TimeStampedModel):
     payment_id = models.CharField(max_length=50, null=True, blank=True)
     partial_payment = models.BooleanField(default=False)
     currency = models.CharField(max_length=5, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.transaction_id)
