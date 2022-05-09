@@ -5,6 +5,11 @@ from .models import Country, City, State, TriggeredEmails
 class CustomBaseModelAdmin(admin.ModelAdmin):
     readonly_fields = ('deleted_at', )
 
+    # # reduce queryset count query
+    # def get_queryset(self, request):
+    #     qs = super().get_queryset(request)
+    #     return 
+
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     readonly_fields = ('deleted_at', )

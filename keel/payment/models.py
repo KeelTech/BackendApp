@@ -68,7 +68,7 @@ class Order(TimeStampedModel, SoftDeleteModel):
         db_table = "order"
 
     def __str__(self):
-        return str(self.customer)
+        return str(self.pk)
 
 
 class Transaction(TimeStampedModel, SoftDeleteModel):
@@ -152,3 +152,6 @@ class RazorPayTransactions(TimeStampedModel):
     payment_id = models.CharField(max_length=50, null=True, blank=True)
     partial_payment = models.BooleanField(default=False)
     currency = models.CharField(max_length=5, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.transaction_id)

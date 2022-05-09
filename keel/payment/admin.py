@@ -22,7 +22,11 @@ class OrderAdmin(CustomBaseModelAdmin):
         "total_amount",
         "status",
     )
-
+    
+    # select related on fk fields
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related("customer", "initiator", "case")
 
 class TransactionAdmin(CustomBaseModelAdmin):
     list_display = ("id", "webhook_payment_clients_unique_id", "order", "status")
