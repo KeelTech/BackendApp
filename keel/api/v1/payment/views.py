@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from keel.api.v1.auth.helpers.email_helper import order_created_email
+from keel.api.v1.auth.helpers.email_helper import send_email_template_instance
 from keel.authentication.backends import JWTAuthentication
 from keel.authentication.implementation.auth_util_helper import create_user_and_case
 from keel.cases.models import Case
@@ -154,7 +154,7 @@ class UserOrderDetailsView(GenericViewSet):
                 "plan": plan,
                 "first_name": first_name,
             }
-            order_created_email(context, email)
+            send_email_template_instance("razorpay_order_created", context, email)
         except Exception as e:
             log_error(
                 LOGGER_LOW_SEVERITY,

@@ -16,9 +16,12 @@ class WebsiteComponenetsAdmin(CustomBaseModelAdmin):
         "component_name",
     )
 
+class EmailTemplateModelAdmin(CustomBaseModelAdmin):
+    pass
+
 
 admin.site.register(Web)
 admin.site.register(HomeLeads)
 admin.site.register(WebsiteContactData)
 admin.site.register(WebsiteComponents, WebsiteComponenetsAdmin)
-admin.site.register(EmailTemplateModel)
+admin.site.register(EmailTemplateModel, EmailTemplateModelAdmin)

@@ -1,24 +1,19 @@
-from keel.authentication.backends import JWTAuthentication
+from keel.api.v1.auth.helpers.email_helper import send_email_template_instance
+from keel.api.v1.eligibility_calculator.helpers import (
+    crs_calculator_with_spouse,
+    crs_calculator_without_spouse,
+)
 from keel.Core.constants import LOGGER_LOW_SEVERITY
 from keel.Core.err_log import log_error
-from keel.questionnaire.models import DropDownModel, Question, SpouseQuestion
-from rest_framework import response, status
-from rest_framework.permissions import IsAuthenticated
+from keel.questionnaire.models import DropDownModel, Question
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from keel.api.v1.questionnaire.helper.answer_dict import AnswerDict
-from keel.api.v1.auth.helpers.email_helper import send_crs_score
 
-from keel.api.v1.eligibility_calculator.helpers import (
-    crs_calculator,
-    crs_calculator_without_spouse,
-    crs_calculator_with_spouse,
-)
 from .serializers import (
     AnsweredQuestionSerializer,
-    QuestionSerializer,
-    SpouseQuestionSerializer,
     QuestionnaireAnalysisSerializer,
+    QuestionSerializer,
 )
 
 
@@ -120,7 +115,7 @@ class QuestionnarieViewSet(GenericViewSet):
             context = {
                 "score": crs_score,
             }
-            send_crs_score(context, email)
+            send_email_template_instance("crs_score", context, email)
         except Exception as e:
             log_error(
                 LOGGER_LOW_SEVERITY,
