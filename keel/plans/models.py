@@ -83,7 +83,7 @@ class Vendor(TimeStampedModel, SoftDeleteModel):
     name = models.CharField(max_length=512, null=True, blank=True, default=None)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class Service(TimeStampedModel, SoftDeleteModel):
     title = models.CharField(max_length=512, null=True, blank=True, default=None)
@@ -125,5 +125,5 @@ class ServicesPlans(TimeStampedModel, SoftDeleteModel):
     service = models.ForeignKey(Service, on_delete=models.deletion.DO_NOTHING, related_name='services_plans')
 
     def __str__(self):
-        return self.plan
+        return str(self.plan)
 

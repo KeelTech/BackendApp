@@ -15,6 +15,11 @@ class CaseAdmin(admin.ModelAdmin):
     autocomplete_fields = ["user", "agent", "account_manager"]
     readonly_fields = ("deleted_at", "case_id", "display_id")
 
+    # select_related on fk fields
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related("user", "agent", "account_manager", "plan")
+
     def get_readonly_fields(self, request, obj):
         user = request.user
         if obj:

@@ -193,8 +193,8 @@ class Program(TimeStampedModel, SoftDeleteModel):
         max_length=512, choices=CHOICES_CATEGORY, default=EXPRESS_ENTRY
     )
 
-    def __str__(self) -> str:
-        return self.choice
+    def __str__(self):
+        return str(self.choice)
 
 
 class AgentNotes(TimeStampedModel, SoftDeleteModel):
@@ -216,6 +216,9 @@ class AgentNotes(TimeStampedModel, SoftDeleteModel):
     )
     title = models.CharField(max_length=255, default=None, blank=True, null=True)
     notes = models.TextField(default=None, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.title)
 
 
 class CaseCheckPoint(TimeStampedModel, SoftDeleteModel):
@@ -255,3 +258,6 @@ class CaseTracker(TimeStampedModel, SoftDeleteModel):
     )
     comments = models.CharField(max_length=255, default=None, blank=True, null=True)
     index = models.IntegerField(default=None, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.case_id)

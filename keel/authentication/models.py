@@ -150,7 +150,7 @@ class CustomToken(TimeStampedModel):
         db_table = "custom_token"
     
     def __str__(self):
-        return str(self.user)
+        return str(self.token)
 
 
 class PasswordResetToken(TimeStampedModel):
@@ -277,6 +277,9 @@ class QualificationLabel(TimeStampedModel, SoftDeleteModel):
     country_label = models.CharField(max_length=512)
     start_date_label = models.CharField(max_length=512)
     end_date_label = models.CharField(max_length=512)
+
+    def __str__(self):
+        return str(self.user)
 
 
 class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):

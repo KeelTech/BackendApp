@@ -2,8 +2,14 @@ from django.contrib import admin
 from keel.api.v1.payment.razor_payment import RazorPay
 from keel.Core.admin import CustomBaseModelAdmin
 
-from .models import (CasePaymentProfile, Order, OrderItem,
-                     RazorPayTransactions, Transaction, UserOrderDetails)
+from .models import (
+    CasePaymentProfile,
+    Order,
+    OrderItem,
+    RazorPayTransactions,
+    Transaction,
+    UserOrderDetails,
+)
 
 
 class OrderAdmin(CustomBaseModelAdmin):
@@ -12,11 +18,15 @@ class OrderAdmin(CustomBaseModelAdmin):
         "customer",
         "initiator",
         "case",
-        "payment_client_type",
+        # "payment_client_type",
         "total_amount",
         "status",
     )
-
+    
+    # select related on fk fields
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related("customer", "initiator", "case")
 
 class TransactionAdmin(CustomBaseModelAdmin):
     list_display = ("id", "webhook_payment_clients_unique_id", "order", "status")
@@ -34,13 +44,12 @@ class CasePaymentProfileAdmin(CustomBaseModelAdmin):
 
 
 class UserOrderDetailsAdmin(admin.ModelAdmin):
-    list_display = ("first_name", "last_name", "phone_number", "email")
+    list_display = ("first_name", "last_name", "phone_number", "email", "plan_id")
 
 
 class RazorPayTransactionsAdmin(admin.ModelAdmin):
     list_display = (
         "user_order_details",
-        "plan_id",
         "order_id",
         "payment_id",
         "amount",

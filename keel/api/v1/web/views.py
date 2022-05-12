@@ -50,5 +50,6 @@ class WebsiteComponentsView(ModelViewSet):
     serializer_class = WebsiteComponentsSerializer
 
     def list(self, request):
-        serializer = self.get_serializer(self.queryset.all(), many=True)
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

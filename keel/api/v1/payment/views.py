@@ -98,16 +98,14 @@ class UserOrderDetailsView(GenericViewSet):
 
         amount = request.data.get("amount", 0)
         currency = request.data.get("currency", "INR")
-        plan_id = request.data.get("plan_id", None)
-        plan_instance = get_plan_instance_with_id(plan_id)
-        print(plan_instance)
 
         # save user details
         try:
             serializer.save()
         except Exception as err:
-            logger.error(
-                logging_format(LOGGER_CRITICAL_SEVERITY, "UserOrderDetailsView:create"),
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "UserOrderDetailsView: User Detials Model Create Error",
                 "",
                 description=str(err),
             )
@@ -131,7 +129,6 @@ class UserOrderDetailsView(GenericViewSet):
                 amount=amount,
                 transaction_id=transaction_id,
                 currency=currency,
-                plan_id=plan_instance,
             )
             razor_pay_transaction.save()
         except Exception as err:
@@ -148,7 +145,7 @@ class UserOrderDetailsView(GenericViewSet):
         # send email to user after order created successfully
         email = serializer.validated_data.get("email")
         first_name = serializer.validated_data.get("first_name")
-        plan = plan_instance.title
+        plan = serializer.validated_data.get("plan_id").title
         try:
             context = {
                 "plan": plan,
@@ -226,7 +223,7 @@ class CaptureRazorpayPayment(GenericViewSet):
         # check and create user and case if not exist
         data = {
             "email": razor_pay_transaction.user_order_details.email,
-            "plan": razor_pay_transaction.plan_id,
+            "plan": razor_pay_transaction.user_order_details.plan_id,
         }
         try:
             user_case_create = create_user_and_case(**data)
@@ -234,6 +231,29 @@ class CaptureRazorpayPayment(GenericViewSet):
             log_error(
                 LOGGER_LOW_SEVERITY,
                 "CaptureRazorpayPayment:create_user_and_case",
+                "",
+                description=str(err),
+            )
+            response["status"] = 0
+            response["message"] = str(err)
+            return Response(response, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # create order
+        customer = user_case_create["user"]
+        case = user_case_create["case"]
+        try:
+            order = Order(
+                customer=customer,
+                case=case,
+                total_amount=amount,
+                currency=currency,
+                status=Order.STATUS_COMPLETED,
+            )
+            order.save()
+        except Exception as err:
+            log_error(
+                LOGGER_LOW_SEVERITY,
+                "CaptureRazorpayPayment:Order Model Create Error",
                 "",
                 description=str(err),
             )
