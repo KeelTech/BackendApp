@@ -28,6 +28,7 @@ class WebsiteComponents(HtmlField):
         (CONTACT_US, "Contact Us"),
         (HOME, "Home"),
         (TESTIMONIALS, "Testimonials"),
+        (BLOG, "Blog"),
     )
 
     title = models.CharField(max_length=50, null=True, blank=True)
