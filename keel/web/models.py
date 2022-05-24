@@ -22,6 +22,7 @@ class WebsiteComponents(HtmlField):
     CONTACT_US = 1
     HOME = 2
     TESTIMONIALS = 3
+    BLOGS = 4
 
     COMPONENT_NAME_CHOICES = (
         (CONTACT_US, "Contact Us"),
