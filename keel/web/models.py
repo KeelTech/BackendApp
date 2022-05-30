@@ -1,6 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.db import models
-from keel.Core.models import TimeStampedModel, SoftDeleteModel
+from keel.Core.models import SoftDeleteModel, TimeStampedModel
+from keel.Core.storage_backends import PrivateStorage
 
 
 class HtmlField(TimeStampedModel, SoftDeleteModel):
@@ -35,6 +36,8 @@ class WebsiteComponents(HtmlField):
     component_name = models.PositiveSmallIntegerField(
         choices=COMPONENT_NAME_CHOICES, default=CONTACT_US
     )
+    blog_img = models.FileField(
+        ("Blog Image"), upload_to="blog", blank=True)
 
     def __str__(self):
         return str(self.pk)

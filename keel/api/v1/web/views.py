@@ -1,12 +1,14 @@
-import imp
-
 from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .serializers import (HomeLeadsSerializer, WebsiteComponentsSerializer,
-                          WebsiteContactDataSerializer)
+from .serializers import (
+    BlogListSerializer,
+    HomeLeadsSerializer,
+    WebsiteComponentsSerializer,
+    WebsiteContactDataSerializer,
+)
 
 
 class WebsiteContactDataView(ModelViewSet):
@@ -53,3 +55,35 @@ class WebsiteComponentsView(ModelViewSet):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class BlogListView(ModelViewSet):
+    serializer_class = WebsiteComponentsSerializer
+
+    def get_queryset(self, pk=None):
+        if pk:
+            return WebsiteComponents.objects.filter(id=pk)
+
+        return WebsiteComponents.objects.filter(component_name=WebsiteComponents.BLOGS)
+
+    def list(self, request):
+        response = {
+            "status": 1,
+            "message": "Successfully retrived blog list",
+            "data": {},
+        }
+        queryset = self.get_queryset()
+        serializer = BlogListSerializer(queryset, many=True)
+        response["data"] = serializer.data
+        return Response(response, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, pk=None):
+        response = {
+            "status": 1,
+            "message": "Successfully retrived blog details",
+            "data": {},
+        }
+        queryset = self.get_queryset(pk=pk)
+        serializer = self.get_serializer(queryset, many=True)
+        response["data"] = serializer.data
+        return Response(response, status=status.HTTP_200_OK)
