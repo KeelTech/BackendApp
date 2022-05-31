@@ -15,12 +15,22 @@ class HomeLeadsSerializer(serializers.ModelSerializer):
 
 
 class WebsiteComponentsSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+
     class Meta:
         model = WebsiteComponents
-        fields = ("id", "title", "component_name", "body", "blog_img")
+        exclude = ("updated_at", "deleted_at")
+
+    def get_created_at(self, obj):
+        return obj.created_at.strftime("%B %d, %Y")
 
 
 class BlogListSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+
     class Meta:
         model = WebsiteComponents
-        fields = ("id", "title", "blog_img")
+        fields = ("id", "title", "blog_img", "created_at")
+
+    def get_created_at(self, obj):
+        return obj.created_at.strftime("%B %d, %Y")

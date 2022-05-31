@@ -32,12 +32,13 @@ class WebsiteComponents(HtmlField):
         (BLOGS, "Blog"),
     )
 
-    title = models.CharField(max_length=50, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
     component_name = models.PositiveSmallIntegerField(
         choices=COMPONENT_NAME_CHOICES, default=CONTACT_US
     )
     blog_img = models.FileField(
         ("Blog Image"), upload_to="blog", blank=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.pk)

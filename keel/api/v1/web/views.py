@@ -64,7 +64,9 @@ class BlogListView(ModelViewSet):
         if pk:
             return WebsiteComponents.objects.filter(id=pk)
 
-        return WebsiteComponents.objects.filter(component_name=WebsiteComponents.BLOGS)
+        return WebsiteComponents.objects.filter(
+            component_name=WebsiteComponents.BLOGS, is_active=True
+        )
 
     def list(self, request):
         response = {
