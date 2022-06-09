@@ -114,6 +114,7 @@ LOCAL_APPS = (
     'keel.questionnaire',
     'keel.records',
     'keel.web',
+    'keel.study',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

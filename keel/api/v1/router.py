@@ -16,6 +16,7 @@ from .stripe.router import urlpatterns as stripe_url
 from .questionnaire.router import urlpatterns as questionnaire_url
 from .tasks.router import urlpatterns as tasks_url
 from .web.routers import urlpatterns as web_url
+from .study.routers import urlpatterns as study_url
 
 urlpatterns = [
     path('user/', include(auth_url), name="authentication"),
@@ -33,4 +34,5 @@ urlpatterns = [
     path('questionnaire/', include(questionnaire_url)),
     path('notification/', include(notification_url)),
     path('web/', include(web_url)),
+    path('study/', include(study_url)),
 ]
