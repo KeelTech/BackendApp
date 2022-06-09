@@ -16,19 +16,8 @@ class StudentLoginSerializer(serializers.Serializer):
         # get insensitive email match
         user = User.objects.filter(email__iexact=email).first()
 
-        if not user:
+        if not user and not user.check_password(password) and not user.is_active:
             raise serializers.ValidationError("Invalid Credentials, Try Again")
-
-        check_password = user.check_password(password)
-
-        # check password
-        if not check_password:
-            raise serializers.ValidationError("Invalid Credentials, Try Again")
-
-        if not user.is_active:
-            raise serializers.ValidationError(
-                "User is not active. Contact Administrator"
-            )
 
         # check user type
         if user.user_type != user.STUDENT:

@@ -46,7 +46,7 @@ class StudyStudentViewset(viewsets.GenericViewSet):
             )
             response["status"] = 0
             response["message"] = str(e)
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         data = {
             "email": obj.user.email,
