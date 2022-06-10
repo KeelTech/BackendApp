@@ -57,12 +57,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     RCIC=2
     ACCOUNT_MANAGER=3
     STAFF=4
+    STUDENT = 5
 
     USER_TYPE_CHOICES = (
         (CUSTOMER, 'CUSTOMER'),
         (RCIC, 'RCIC'),
         (ACCOUNT_MANAGER, 'ACCOUNT_MANAGER'),
         (STAFF, 'STAFF'),
+        (STUDENT, 'STUDENT'),
     )
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username=None
