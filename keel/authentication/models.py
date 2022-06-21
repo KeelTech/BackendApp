@@ -12,7 +12,7 @@ from keel.plans.models import Service
 from keel.Core.constants import LOGGER_LOW_SEVERITY
 from keel.Core.err_log import logging_format
 from keel.Core.models import Country, City, State
-from keel.api.v1.auth.helpers import email_helper
+from keel.api.v1.auth.helpers.email_helper import send_email_template_instance
 
 
 # from safedelete import SOFT_DELETE
@@ -120,7 +120,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         if not self.pk:
             # trigger welcome email only on new user creation
-            email_helper.send_welcome_email(self.email)
+            # email_helper.send_welcome_email(self.email)
+            send_email_template_instance("welcome_email", {"name": self.email}, self.email)
+            pass
             
         super().save(*args, **kwargs)
 

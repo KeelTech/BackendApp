@@ -59,3 +59,8 @@ class WebsiteContactData(BaseContactData):
 
 class HomeLeads(BaseContactData):
     pass
+
+
+class EmailTemplateModel(HtmlField):
+    subject = models.CharField(max_length=100, blank=True, null=True)
+    key = models.CharField(max_length=255, blank=True, null=True)

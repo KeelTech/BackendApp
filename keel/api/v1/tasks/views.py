@@ -3,18 +3,14 @@ from datetime import datetime
 import pytz
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.db.models import Count, Q
 from django.http import Http404
 from keel.api.permissions import IsRCICUser
-from keel.api.v1.auth.helpers import email_helper
+from keel.api.v1.auth.helpers.email_helper import send_email_template_instance
 from keel.api.v1.cases.serializers import CaseIDSerializer
 from keel.authentication.backends import JWTAuthentication
-from keel.cases.models import Case
 from keel.Core.constants import GENERIC_ERROR
 from keel.Core.err_log import log_error
 from keel.Core.helpers import generate_unique_id
-from keel.notifications.constants import CHAT, DOCUMENT, HOME, TASKS
-from keel.notifications.models import InAppNotification
 from keel.tasks.models import Task, TaskComments, TaskTemplate
 from rest_framework import mixins, serializers
 from rest_framework import status as HTTP_STATUS
@@ -25,10 +21,16 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from .instances import create_template_task
-from .serializers import (CreateTaskCommentSerializer, ListTaskSerializer,
-                          TaskCreateSerializer, TaskIDCheckSerializer,
-                          TaskSerializer, TaskStatusChangeSerializer,
-                          TaskTemplateSerializer, TaskUpdateSerializer)
+from .serializers import (
+    CreateTaskCommentSerializer,
+    ListTaskSerializer,
+    TaskCreateSerializer,
+    TaskIDCheckSerializer,
+    TaskSerializer,
+    TaskStatusChangeSerializer,
+    TaskTemplateSerializer,
+    TaskUpdateSerializer,
+)
 
 User = get_user_model()
 
@@ -154,7 +156,8 @@ class ListTask(GenericViewSet):
             "name": task_obj.user.user_profile.first_name,
             "task_name": response["data"]["title"],
         }
-        email_helper.send_update_task_email(context, user.email)
+        # email_helper.send_update_task_email(context, user.email)
+        send_email_template_instance("update_task", context, user.email)
 
         return Response(response, status=HTTP_STATUS.HTTP_200_OK)
 
@@ -211,7 +214,8 @@ class TaskAdminOperations(GenericViewSet):
             "name": user.user_profile.first_name,
             "task_name": response["data"]["title"],
         }
-        email_helper.send_create_task_email(context, user.email)
+        # email_helper.send_create_task_email(context, user.email)
+        send_email_template_instance("create_task", context, user.email)
 
         return Response(response, status=HTTP_STATUS.HTTP_200_OK)
 
@@ -250,7 +254,8 @@ class TaskAdminOperations(GenericViewSet):
         # send email to user after creating task
         user = task.user
         context = {"name": user.user_profile.first_name, "task_name": task.title}
-        email_helper.send_delete_task_email(context, user.email)
+        # email_helper.send_delete_task_email(context, user.email)
+        send_email_template_instance("delete_task", context, user.email)
 
         return Response(response, status=HTTP_STATUS.HTTP_200_OK)
 
