@@ -23,3 +23,22 @@ class StudentEducation(TimeStampedModel, SoftDeleteModel):
     )
     course_name = models.CharField(max_length=50, default=None, blank=True, null=True)
     score = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+
+class StudentProfileLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(default="user", max_length=10)
+    first_name_label = models.CharField(max_length=10)
+    last_name_label = models.CharField(max_length=10)
+    nationality_label = models.CharField(max_length=10)
+    date_of_birth_label = models.CharField(max_length=15)
+
+
+class StudentQualificationLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(default="user", max_length=512)
+    start_year_label = models.CharField(max_length=512)
+    end_year_label = models.CharField(max_length=512)
+    name_of_institute_label = models.CharField(max_length=512)
+    course_name_label = models.CharField(
+        max_length=255, default=None, null=True, blank=True
+    )
+    score_label = models.CharField(max_length=255, default=None, null=True, blank=True)
