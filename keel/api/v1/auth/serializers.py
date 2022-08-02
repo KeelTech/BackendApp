@@ -133,6 +133,10 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
             "age",
             "address",
             "date_of_birth",
+            "passport_number",
+            "passport_country",
+            "passport_issue_date",
+            "passport_expiry_date"
         )
 
     def create(self, validated_data):
@@ -145,6 +149,10 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         current_country = validated_data.get("current_country")
         desired_country = validated_data.get("desired_country")
         date_of_birth = validated_data.get("date_of_birth")
+        passport_number = validated_data.get("passport_number")
+        passport_country = validated_data.get("passport_country")
+        passport_issue_date = validated_data.get("passport_issue_date")
+        passport_expiry_date = validated_data.get("passport_expiry_date")
         user = validated_data.get("user")
         try:
             profile = CustomerProfile.objects.get(user=user)
@@ -166,12 +174,16 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         profile.current_country = current_country
         profile.desired_country = desired_country
         profile.date_of_birth = date_of_birth
+        profile.passport_number = passport_number
+        profile.passport_country = passport_country
+        profile.passport_issue_date = passport_issue_date
+        profile.passport_expiry_date = passport_expiry_date
         profile.save()
         return profile
 
 
 class CustomerProfileLabelSerializer(serializers.ModelSerializer):
-    labels = serializers.SerializerMethodField()
+    # labels = serializers.SerializerMethodField()
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
     mother_fullname = serializers.SerializerMethodField()
@@ -182,6 +194,10 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
     desired_country = serializers.SerializerMethodField()
+    passport_number = serializers.SerializerMethodField()
+    passport_country = serializers.SerializerMethodField()
+    passport_issue_date = serializers.SerializerMethodField()
+    passport_expiry_date = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -283,6 +299,43 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                     "type": "drop-down",
                     "labels": self.context["labels"]["desired_country_label"],
                 }
+    def get_passport_number(self, obj):
+        var = obj.passport_number
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["passport_number_label"],
+            }
+
+    def get_passport_country(self, obj):
+        var=None; name=None;
+        if obj.passport_country is not None:
+            var = obj.passport_country.id
+            name = obj.passport_country.name
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "name": name,
+                "type": "drop-down",
+                "labels": self.context["labels"]["passport_country_label"],
+            }
+    def get_passport_issue_date(self, obj):
+        var = obj.passport_issue_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["passport_issue_date_label"],
+            }
+    def get_passport_expiry_date(self, obj):
+        var = obj.passport_expiry_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["passport_expiry_date_label"],
+            }
 
     class Meta:
         model = CustomerProfileLabel
@@ -297,7 +350,11 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             "current_country",
             "desired_country",
             "address",
-            "labels",
+            # "labels",
+            'passport_number',
+            'passport_country',
+            'passport_issue_date',
+            'passport_expiry_date',
         )
 
 
@@ -1142,6 +1199,7 @@ class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer
     eca_authority_name = serializers.SerializerMethodField()
     eca_authority_number = serializers.SerializerMethodField()
     canadian_equivalency_summary = serializers.SerializerMethodField()
+    eca_date = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -1175,6 +1233,15 @@ class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer
                 "labels": self.context["labels"]["canadian_equivalency_summary_label"],
             }
 
+    def get_eca_date(self, obj):
+        var = obj.eca_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["eca_date_label"],
+            }
+
     class Meta:
         model = EducationalCreationalAssessmentLabel
         fields = (
@@ -1182,4 +1249,5 @@ class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer
             "eca_authority_name",
             "eca_authority_number",
             "canadian_equivalency_summary",
+            "eca_date",
         )

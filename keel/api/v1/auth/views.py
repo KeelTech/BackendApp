@@ -481,6 +481,7 @@ class ProfileView(GenericViewSet):
             labels['eca_authority_name_label'] = label.eca_authority_name_label
             labels['eca_authority_number_label'] = label.eca_authority_number_label
             labels['canadian_equivalency_summary_label'] = label.canadian_equivalency_summary_label
+            labels['eca_date_label'] = label.eca_date_label
         queryset = EducationalCreationalAssessment.objects.filter(user=request.user)
         if queryset:
             serializer = self.serializer_class_education_assessment(queryset, many=True, context={"labels":labels})
@@ -546,10 +547,14 @@ class ProfileView(GenericViewSet):
             labels['phone_number_label'] = label.phone_number_label
             labels['current_country_label'] = label.current_country_label
             labels['desired_country_label'] = label.desired_country_label
+            labels['passport_number_label'] = label.passport_number_label
+            labels['passport_country_label'] = label.passport_country_label
+            labels['passport_issue_date_label'] = label.passport_issue_date_label
+            labels['passport_expiry_date_label'] = label.passport_expiry_date_label
         profile = CustomerProfile.objects.filter(user=self.request.user.id).first()
         if profile:
             serializer = self.serializer_class_profile(profile, context={"labels":labels})
-            serializer.data.pop("labels")
+            # serializer.data.pop("labels")
             return serializer.data
         else:
             data = constants.PROFILE
@@ -602,6 +607,10 @@ class ProfileView(GenericViewSet):
             "date_of_birth" : datas['date_of_birth'].get("value"),
             "current_country" : datas['current_country'].get("value"),
             "desired_country" : datas['desired_country'].get("value"),
+            "passport_number": datas['desired_country'].get("value"),
+            "passport_country": datas['passport_country'].get("value"),
+            "passport_issue_date": datas['passport_issue_date'].get("value"),
+            "passport_expiry_date": datas['passport_expiry_date'].get("value"),
         }
         return profile
 
@@ -743,9 +752,9 @@ class ProfileView(GenericViewSet):
         cases = self.get_queryset_cases(request)
         
         response["message"] = {
-                        "profile" : profile, 
-                        "qualification" : qualification, 
-                        "work_experience" : work_experience, 
+                        "profile" : profile,
+                        "qualification" : qualification,
+                        "work_experience" : work_experience,
                         "relative_in_canada" : relative_in_canada,
                         "education_assessment" : education_assessment,
                         # "cases":cases

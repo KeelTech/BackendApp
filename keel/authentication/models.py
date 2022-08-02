@@ -184,11 +184,16 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
     address = models.CharField(max_length=512, blank=True, null=True, default=None)
-    date_of_birth = models.DateField(default=None, null=True,blank=False)
+    date_of_birth = models.DateField(default=None, null=True, blank=True)
     current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="current_country_profile", 
                                         default=None, blank=True, null=True)
     desired_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="desired_country_profile", 
                                         default=None, blank=True, null=True)
+    passport_number = models.CharField(max_length=512, blank=True, null=True)
+    passport_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="passport_country_profile",
+                                        default=None, blank=True, null=True)
+    passport_issue_date = models.DateField(null=True, blank=True)
+    passport_expiry_date = models.DateField(null=True, blank=True)
     
     def __str__(self):
         return str(self.user)
@@ -236,6 +241,10 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     phone_number_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     current_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     desired_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
+    passport_number_label = models.CharField(max_length=512, blank=True, null=True)
+    passport_country_label = models.CharField(max_length=128, blank=True, null=True, default=None)
+    passport_issue_date_label = models.CharField(max_length=128, blank=True, null=True, default=None)
+    passport_expiry_date_label = models.CharField(max_length=128, blank=True, null=True, default=None)
 
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
@@ -353,15 +362,18 @@ class EducationalCreationalAssessment(TimeStampedModel, SoftDeleteModel):
     eca_authority_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     eca_authority_number = models.CharField(max_length=512, default=None, blank=True, null=True)
     canadian_equivalency_summary = models.CharField(max_length=512, default=None, blank=True, null=True)
+    eca_date = models.DateField(max_length=512, default=None, blank=True, null=True)
 
     def __str__(self):
         return str(self.user)
-        
+
+
 class EducationalCreationalAssessmentLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=215, default="user")
     eca_authority_name_label = models.CharField(max_length=215)
     eca_authority_number_label = models.CharField(max_length=215)
     canadian_equivalency_summary_label = models.CharField(max_length=215)
+    eca_date_label = models.CharField(max_length=215, null=True, blank=True)
 
 
 class SMSOtpModel(TimeStampedModel, SoftDeleteModel):

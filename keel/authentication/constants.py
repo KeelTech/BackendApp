@@ -44,6 +44,7 @@ ECA = [{
     "eca_authority_name": {"value": "", "type": "char", "labels": "ECA Authority Name"},
     "eca_authority_number": {"value": "", "type": "char", "labels": "ECA Authority Number"},
     "canadian_equivalency_summary": {"value": "", "type": "char", "labels": "Canadian Equivalency Summary"},
+    "eca_date": {"value": "", "type": "calendar", "labels": "ECA Date"},
 }]
 
 RELATIVE = {
