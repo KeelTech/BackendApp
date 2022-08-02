@@ -607,7 +607,7 @@ class ProfileView(GenericViewSet):
             "date_of_birth" : datas['date_of_birth'].get("value"),
             "current_country" : datas['current_country'].get("value"),
             "desired_country" : datas['desired_country'].get("value"),
-            "passport_number": datas['desired_country'].get("value"),
+            "passport_number": datas['passport_number'].get("value"),
             "passport_country": datas['passport_country'].get("value"),
             "passport_issue_date": datas['passport_issue_date'].get("value"),
             "passport_expiry_date": datas['passport_expiry_date'].get("value"),
