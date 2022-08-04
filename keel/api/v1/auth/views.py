@@ -615,7 +615,7 @@ class ProfileView(GenericViewSet):
             "age" : datas['age'].get("value"),
             "address" : datas['address'].get("value"),
             "phone_number" : datas['phone_number'].get("value"),
-            "date_of_birth" : datas['date_of_birth'].get("value"),
+            # "date_of_birth" : datas['date_of_birth'].get("value"),
             "current_country" : datas['current_country'].get("value"),
             "desired_country" : datas['desired_country'].get("value"),
             "passport_number": datas['passport_number'].get("value"),
@@ -790,7 +790,7 @@ class ProfileView(GenericViewSet):
                 "writing_score": info["writing_score"].get("value"),
                 "speaking_score": info["speaking_score"].get("value"),
                 "reading_score": info["reading_score"].get("value"),
-                "mother_tongue": info["mother_tongue"].get("value"),
+                # "mother_tongue": info["mother_tongue"].get("value"),
             }
 
             out.append(customer_lang_score)
