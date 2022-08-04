@@ -723,15 +723,15 @@ class ProfileView(GenericViewSet):
         # update education instance
         update_education_assessment = EducationalCreationalAssessmentView.update_educational_creational_assessment(request)
 
-        # update_lang_scores = self.update_language_score((request))
+        update_lang_scores = self.update_language_score(request)
 
         response["message"] = {
                                 "profile" : update_profile.data,
                                 "qualification":update_qualification.data,
                                 "work_experience":update_work_experience.data,
                                 "relative_in_canada":update_relative_in_canada.data, 
-                                "education_assessment":update_education_assessment.data,
-                                # "language_scores": update_lang_scores,
+                                "education_assessment": update_education_assessment.data,
+                                "language_scores": update_lang_scores,
                                 }
         return Response(response)
     
@@ -785,9 +785,9 @@ class ProfileView(GenericViewSet):
                 "test_type": info["test_type"].get("value"),
                 "result_date": info["result_date"].get("value"),
                 "listening_score": info["listening_score"].get("value"),
-                "test_version": info["test_version"].get("cityId"),
-                "report_form_number": info["report_form_number"].get("stateId"),
-                "writing_score": info["writing_score"].get("countryId"),
+                "test_version": info["test_version"].get("value"),
+                "report_form_number": info["report_form_number"].get("value"),
+                "writing_score": info["writing_score"].get("value"),
                 "speaking_score": info["speaking_score"].get("value"),
                 "reading_score": info["reading_score"].get("value"),
                 "mother_tongue": info["mother_tongue"].get("value"),
@@ -805,16 +805,30 @@ class ProfileView(GenericViewSet):
         request_data = self.extract_lang_data(request.data.get('language_scores'))
         serializer = serializers.CustomerLanguageUpdateSerializer(data=request_data, many=True)
         serializer.is_valid(raise_exception=True)
-        # validated_data = serializer.validated_data
+        validated_data = serializer.validated_data
+        enum_validated_data = dict(enumerate(validated_data))
+        count = 0
         try:
-            serializer.save()
-
+            for ids in request_data:
+                validated_data_from_dict = enum_validated_data[count]
+                CustomerLanguageScore.objects.update_or_create(id=ids.get('id'),
+                                                               defaults={
+                                                                 "test_type": validated_data_from_dict.get('test_type'),
+                                                                 "result_date": validated_data_from_dict.get('result_date'),
+                                                                 "test_version": validated_data_from_dict.get('test_version'),
+                                                                 "report_form_number": validated_data_from_dict.get('report_form_number'),
+                                                                 "listening_score": validated_data_from_dict.get('listening_score'),
+                                                                 "writing_score": validated_data_from_dict.get('writing_score'),
+                                                                 "speaking_score": validated_data_from_dict.get('speaking_score'),
+                                                                 "reading_score": validated_data_from_dict.get('reading_score'),
+                                                                 # "mother_tongue": validated_data_from_dict.get('mother_tongue'),
+                                                                 "user": user
+                                                                 })
+                count += 1
         except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:LangUpdate ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-        data = serializer.data
-        response["message"] = data
+            logger.error('ERROR: AUTHENTICATION:LanguageScore:update_lang_score ' + str(e))
+
+        response["message"] = serializer.data
         return response
 
 
@@ -923,10 +937,10 @@ class QualificationView(GenericViewSet):
                                                     "country":country, 
                                                     "user":user
                                                 })
-        except CustomerQualifications.DoesNotExist as err:
+        except Exception as err:
             logger.error(logging_format(LOGGER_LOW_SEVERITY, "QualificationView:create"),
                 "", description=str(err))
-            raise serializers.ValidationError("Qualification ID does not exist")
+            raise serializers.ValidationError(str(err))
         return qualification
 
     @classmethod
@@ -937,16 +951,11 @@ class QualificationView(GenericViewSet):
             "message" : ""
         }
         CustomerQualifications.objects.filter(user=user).delete()
-        try:
-            request = self.extract(request.data.get('qualification'))
-            serializer = self.serializer_class_update(data=request, many=True)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:QualificationView:update_qualification ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        request = self.extract(request.data.get('qualification'))
+        serializer = self.serializer_class_update(data=request, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         for ids in request:
@@ -1054,10 +1063,10 @@ class WorkExperienceView(GenericViewSet):
                                             "end_date":end_date, 
                                             "user":user
                                         })
-        except CustomerWorkExperience.DoesNotExist as err:
+        except Exception as err:
             logger.error(logging_format(LOGGER_LOW_SEVERITY, "WorkExperienceView:create"),
                 "", description=str(err))
-            raise serializers.ValidationError('Customer Work experience with ID does not exist')
+            raise serializers.ValidationError(str(err))
         return work
 
     @classmethod
@@ -1088,6 +1097,7 @@ class WorkExperienceView(GenericViewSet):
             count += 1
         response["message"] = serializer.data
         return Response(response)
+
 
 class RelativeInCanadaView(GenericViewSet):
     permission_classes = (IsAuthenticated, )
@@ -1251,10 +1261,10 @@ class EducationalCreationalAssessmentView(GenericViewSet):
                                         "canadian_equivalency_summary":canadian_equivalency_summary,
                                         "user":user
                                     })
-        except EducationalCreationalAssessment.DoesNotExist as err:
+        except Exception as err:
             logger.error(logging_format(LOGGER_LOW_SEVERITY, "EducationalCreationalAssessmentView:create"),
                 "", description=str(err))
-            raise serializers.ValidationError("Education Assessment with ID does not exist")
+            raise serializers.ValidationError(str(err))
         return education_assessment
 
     @classmethod
@@ -1406,6 +1416,7 @@ class LoginOTP(GenericViewSet):
         else:
             response["data"] = "Incorrect OTP entered"
             return Response(response, status = status.HTTP_400_BAD_REQUEST)
+
 
 class UploadDocument(GenericViewSet):
 

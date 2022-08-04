@@ -1309,7 +1309,7 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "char",
+                "type": "int",
                 "labels": self.context["labels"]["listening_score_label"],
             }
 
@@ -1318,7 +1318,7 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "char",
+                "type": "int",
                 "labels": self.context["labels"]["writing_score_label"],
             }
 
@@ -1327,7 +1327,7 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "char",
+                "type": "int",
                 "labels": self.context["labels"]["speaking_score_label"],
             }
 
@@ -1336,7 +1336,7 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "char",
+                "type": "int",
                 "labels": self.context["labels"]["reading_score_label"],
             }
 
