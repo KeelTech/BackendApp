@@ -21,7 +21,7 @@ from keel.authentication.models import (
     SMSOtpModel,
     User,
     UserDocument,
-    WorkExperienceLabel,
+    WorkExperienceLabel, CustomerLanguageScoreLabel, CustomerLanguageScore,
 )
 from keel.Core.constants import LOGGER_LOW_SEVERITY
 from keel.Core.err_log import log_error, logging_format
@@ -190,7 +190,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     father_fullname = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
-    date_of_birth = serializers.SerializerMethodField()
+    # date_of_birth = serializers.SerializerMethodField()
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
     desired_country = serializers.SerializerMethodField()
@@ -299,6 +299,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                     "type": "drop-down",
                     "labels": self.context["labels"]["desired_country_label"],
                 }
+
     def get_passport_number(self, obj):
         var = obj.passport_number
         if "labels" in self.context:
@@ -320,6 +321,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                 "type": "drop-down",
                 "labels": self.context["labels"]["passport_country_label"],
             }
+
     def get_passport_issue_date(self, obj):
         var = obj.passport_issue_date
         if "labels" in self.context:
@@ -328,6 +330,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                 "type": "calendar",
                 "labels": self.context["labels"]["passport_issue_date_label"],
             }
+
     def get_passport_expiry_date(self, obj):
         var = obj.passport_expiry_date
         if "labels" in self.context:
@@ -342,7 +345,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
         fields = (
             "first_name",
             "last_name",
-            "date_of_birth",
+            # "date_of_birth",
             "age",
             "phone_number",
             "mother_fullname",
@@ -1251,3 +1254,101 @@ class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer
             "canadian_equivalency_summary",
             "eca_date",
         )
+
+
+class LanguageScoreLabelSerializer(serializers.ModelSerializer):
+    test_type = serializers.SerializerMethodField()
+    result_date = serializers.SerializerMethodField()
+    test_version = serializers.SerializerMethodField()
+    report_form_number = serializers.SerializerMethodField()
+    listening_score = serializers.SerializerMethodField()
+    writing_score = serializers.SerializerMethodField()
+    speaking_score = serializers.SerializerMethodField()
+    reading_score = serializers.SerializerMethodField()
+    # mother_tongue = serializers.SerializerMethodField()
+
+    def get_test_type(self, obj):
+        var = obj.test_type
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "choices": CustomerLanguageScore.TEST_TYPE,
+                "type": "drop-down",
+                "labels": self.context["labels"]["test_type_label"],
+            }
+
+    def get_result_date(self, obj):
+        var = obj.result_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["result_date_label"],
+            }
+
+    def get_test_version(self, obj):
+        var = obj.test_version
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["test_version_label"],
+            }
+
+    def get_report_form_number(self, obj):
+        var = obj.report_form_number
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["report_form_number_label"],
+            }
+
+    def get_listening_score(self, obj):
+        var = obj.listening_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["listening_score_label"],
+            }
+
+    def get_writing_score(self, obj):
+        var = obj.writing_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["writing_score_label"],
+            }
+
+    def get_speaking_score(self, obj):
+        var = obj.speaking_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["speaking_score_label"],
+            }
+
+    def get_reading_score(self, obj):
+        var = obj.reading_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["reading_score_label"],
+            }
+
+    class Meta:
+        model = CustomerLanguageScoreLabel
+        fields = ('test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
+                  'speaking_score', 'reading_score', )
+
+
+class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerLanguageScore
+        fields = (
+            "id", 'test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
+            'speaking_score', 'reading_score', )

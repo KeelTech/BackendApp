@@ -11,13 +11,9 @@ from allauth.socialaccount.providers.facebook.views import \
 from allauth.socialaccount.providers.linkedin_oauth2.views import \
     LinkedInOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dateutil.parser import parse
-from dateutil.relativedelta import relativedelta
 from dj_rest_auth.registration.views import SocialLoginView
 from django.contrib.auth import get_user_model
-from django.contrib.sites.shortcuts import get_current_site
 from django.db import IntegrityError, transaction, utils
-from django.http import HttpResponseRedirect
 from django.template.loader import get_template
 from django.utils import timezone
 from keel.api.permissions import IsRCICUser
@@ -37,7 +33,7 @@ from keel.authentication.models import (AgentProfile, CustomerProfile,
                                         EducationalCreationalAssessmentLabel,
                                         PasswordResetToken, QualificationLabel,
                                         RelativeInCanada,
-                                        RelativeInCanadaLabel)
+                                        RelativeInCanadaLabel, CustomerLanguageScoreLabel, CustomerLanguageScore)
 from keel.authentication.models import User as user_model
 from keel.authentication.models import UserDocument, WorkExperienceLabel
 from keel.cases.models import Case
@@ -46,32 +42,28 @@ from keel.Core.constants import (GENERIC_ERROR, LOGGER_CRITICAL_SEVERITY,
 from keel.Core.err_log import log_error, logging_format
 from keel.Core.helpers import generate_random_int, generate_unique_id
 from keel.Core.notifications import EmailNotification, SMSNotification
-from keel.Core.redis import create_token, get_token
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.document.models import Documents
 from keel.notifications.constants import DOCUMENT
 from keel.notifications.models import InAppNotification
 from keel.plans.models import Plan
 from rest_framework import generics, mixins, status, viewsets
-from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
-from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from .adapter import GoogleOAuth2AdapterIdToken
-from .auth_token import generate_auth_login_token
 from .helpers import email_helper, instances
 from .helpers.otp_helpers import OTPHelper
 from .helpers.email_helper import base_send_email
 
-# from keel.authentication.models import (OtpVerifications, )
 
 logger = logging.getLogger('app-logger')
 
 User = get_user_model()
+
+
 class UserViewset(GenericViewSet):
 
     permission_classes = (AllowAny, )
@@ -127,6 +119,7 @@ class UserViewset(GenericViewSet):
     
     def verify_account(self, request):
         pass
+
 
 class LoginViewset(GenericViewSet):
     serializer_class_customer = serializers.CustomerLoginSerializer
@@ -192,6 +185,7 @@ class LoginViewset(GenericViewSet):
         }
         response["message"] = data
         return Response(response, status=status.HTTP_200_OK)
+
 
 class GeneratePasswordReset(GenericViewSet):
     serializer_class = serializers.GenerateTokenSerializer
@@ -315,6 +309,7 @@ class ChangePasswordView(GenericViewSet):
         response["message"] = "User password changed successfully"
         return Response(response)
 
+
 class FacebookLogin(GenericViewSet):
     serializer_class = serializers.FacebookSocialLoginSerializer
 
@@ -367,6 +362,7 @@ class FacebookLogin(GenericViewSet):
         response["message"] =  data
         return Response(response)
 
+
 class LinkedinLogin(SocialLoginView):
     adapter_class = LinkedInOAuth2Adapter
     client_class = OAuth2Client
@@ -415,6 +411,7 @@ class GoogleLogin(SocialLoginView):
         response["message"] =  data
         return Response(response)
 
+
 class UserDeleteTokenView(GenericViewSet):
     permission_classes = (IsAuthenticated, )
     authentication_classes = (JWTAuthentication, )
@@ -450,6 +447,7 @@ class ProfileView(GenericViewSet):
     serializer_class_relative_in_canada = serializers.RelativeInCanadaLabelSerializer
     serializer_class_education_assessment = serializers.EducationalCreationalAssessmentLabelSerializer
     serializer_class_cases = CasesSerializer
+    serializer_class_language_scores = serializers.LanguageScoreLabelSerializer
 
     def get_queryset_qualification(self, request):
         get_labels = QualificationLabel.objects.filter(user_label="user")
@@ -524,13 +522,26 @@ class ProfileView(GenericViewSet):
             labels['start_date_label'] = label.start_date_label
             labels['end_date_label'] = label.end_date_label
         queryset = CustomerWorkExperience.objects.filter(user=request.user)
-        if queryset:
+        if len(queryset):
             serializer = self.serializer_class_experience(queryset, many=True, context={"labels":labels})
             for label in serializer.data:
                 label.pop("labels")
             return serializer.data
         else:
             data = constants.WORK_EXPERIENCE
+            return data
+
+    def get_queryset_language_scores(self, request):
+        labels_queryset = CustomerLanguageScoreLabel.objects.filter(user_label="user").values()
+        if len(labels_queryset):
+            labels = labels_queryset[0]
+
+        queryset = CustomerLanguageScore.objects.filter(user=request.user)
+        if len(queryset):
+            serializer = self.serializer_class_language_scores(queryset, many=True,  context={"labels": labels})
+            return serializer.data
+        else:
+            data = constants.LANGUAGESCORE
             return data
 
     def get_queryset_profile(self, request):
@@ -543,7 +554,7 @@ class ProfileView(GenericViewSet):
             labels['father_fullname_label'] = label.father_fullname_label
             labels['age_label'] = label.age_label
             labels['address_label'] = label.address_label
-            labels['date_of_birth_label'] = label.date_of_birth_label
+            # labels['date_of_birth_label'] = label.date_of_birth_label
             labels['phone_number_label'] = label.phone_number_label
             labels['current_country_label'] = label.current_country_label
             labels['desired_country_label'] = label.desired_country_label
@@ -712,12 +723,15 @@ class ProfileView(GenericViewSet):
         # update education instance
         update_education_assessment = EducationalCreationalAssessmentView.update_educational_creational_assessment(request)
 
+        # update_lang_scores = self.update_language_score((request))
+
         response["message"] = {
                                 "profile" : update_profile.data,
                                 "qualification":update_qualification.data,
                                 "work_experience":update_work_experience.data,
                                 "relative_in_canada":update_relative_in_canada.data, 
-                                "education_assessment":update_education_assessment.data
+                                "education_assessment":update_education_assessment.data,
+                                # "language_scores": update_lang_scores,
                                 }
         return Response(response)
     
@@ -749,7 +763,8 @@ class ProfileView(GenericViewSet):
         work_experience = self.get_queryset_experience(request)
         relative_in_canada = self.get_queryset_relative_in_canada(request)
         education_assessment = self.get_queryset_education_assessment(request)
-        cases = self.get_queryset_cases(request)
+        language_scores = self.get_queryset_language_scores(request)
+        # cases = self.get_queryset_cases(request)
         
         response["message"] = {
                         "profile" : profile,
@@ -757,9 +772,50 @@ class ProfileView(GenericViewSet):
                         "work_experience" : work_experience,
                         "relative_in_canada" : relative_in_canada,
                         "education_assessment" : education_assessment,
+                        "language_scores": language_scores,
                         # "cases":cases
                     }
         return Response(response)
+
+    def extract_lang_data(self, data):
+        out = []
+        for info in data:
+            customer_lang_score = {
+                "id": info.get("id"),
+                "test_type": info["test_type"].get("value"),
+                "result_date": info["result_date"].get("value"),
+                "listening_score": info["listening_score"].get("value"),
+                "test_version": info["test_version"].get("cityId"),
+                "report_form_number": info["report_form_number"].get("stateId"),
+                "writing_score": info["writing_score"].get("countryId"),
+                "speaking_score": info["speaking_score"].get("value"),
+                "reading_score": info["reading_score"].get("value"),
+                "mother_tongue": info["mother_tongue"].get("value"),
+            }
+
+            out.append(customer_lang_score)
+        return out
+
+    def update_language_score(self, request):
+        user = request.user
+        response = {
+            "status": 1,
+            "message": ""
+        }
+        request_data = self.extract_lang_data(request.data.get('language_scores'))
+        serializer = serializers.CustomerLanguageUpdateSerializer(data=request_data, many=True)
+        serializer.is_valid(raise_exception=True)
+        # validated_data = serializer.validated_data
+        try:
+            serializer.save()
+
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LangUpdate ' + str(e))
+            response['message'] = str(e)
+            response['status'] = 0
+        data = serializer.data
+        response["message"] = data
+        return response
 
 
 class QualificationView(GenericViewSet):

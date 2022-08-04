@@ -5,8 +5,9 @@ from .models import (User, CustomToken, PasswordResetToken, UserService,
                     CustomerProfile, CustomerQualifications, QualificationLabel, WorkExperienceLabel,
                     CustomerWorkExperience, CustomerProfileLabel, RelativeInCanada, RelativeInCanadaLabel,
                     EducationalCreationalAssessment, EducationalCreationalAssessmentLabel, AgentProfile, 
-                    AccountManagerProfile, UserDocument, SMSOtpModel)
+                    AccountManagerProfile, UserDocument, SMSOtpModel, CustomerLanguageScoreLabel, CustomerLanguageScore, )
 from keel.Core.models import Country, State, City
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ['email', 'user_type', 'is_active', 'is_verified', 'is_staff']
@@ -24,23 +25,30 @@ class UserAdmin(admin.ModelAdmin):
                 queryset = queryset.filter(Q(user_type=User.RCIC) | Q(user_type=User.ACCOUNT_MANAGER))
         return queryset, use_distinct
 
+
 class UserServiceAdmin(CustomBaseModelAdmin):
     pass
+
 
 class CustomerProfileAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'first_name', 'last_name', 'age',)
     autocomplete_fields = ('user', )
+
 
 class AgentProfileAdmin(CustomBaseModelAdmin):
     list_display = ('agent', 'full_name', 'license', 'country')
     autocomplete_fields = ('agent', )
     readonly_fields = ('deleted_at', )
 
+
 class AccountManagerProfileAdmin(AgentProfileAdmin):
     pass
 
+
 class CustomerProfileLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
+
+
 
 class CustomerQualificationsAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'institute', 'country', 'start_date', 'end_date')
@@ -57,13 +65,10 @@ class CustomerQualificationsAdmin(CustomBaseModelAdmin):
             return form
         return super().get_form(request, obj=obj, **kwargs)
 
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     print(kwargs)
-    #     if db_field.name == "state":
-    #         kwargs['queryset'] = State.objects.filter()
-    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 class QualificationLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
+
 
 class CustomerWorkExperienceAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'company_name', 'designation', 'start_date', 'end_date')
@@ -80,22 +85,37 @@ class CustomerWorkExperienceAdmin(CustomBaseModelAdmin):
             return form
         return super().get_form(request, obj=obj, **kwargs)
 
+
 class WorkExperienceLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
+
 
 class RelativeInCanadaAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'full_name', 'email_address', 'relationship', 'immigration_status')
     readonly_fields = ('deleted_at', )
 
+
 class RelativeInCanadaLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
+
 
 class EducationalCreationalAssessmentAdmin(CustomBaseModelAdmin):
     list_display = ('user', 'eca_authority_name', 'eca_authority_number', 'canadian_equivalency_summary')
     readonly_fields = ('deleted_at', )
 
+
 class EducationalCreationalAssessmentLabelAdmin(CustomBaseModelAdmin):
     readonly_fields = ('deleted_at', )
+
+
+class CustomerLanguageScoreLabelAdmin(CustomBaseModelAdmin):
+    list_per_page = 10
+
+
+class CustomerLanguageScoreAdmin(CustomBaseModelAdmin):
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('user')
 
 
 class UserDocumentAdmin(CustomBaseModelAdmin):
@@ -105,6 +125,7 @@ class UserDocumentAdmin(CustomBaseModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('user', 'doc', 'task')
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(SMSOtpModel)
@@ -124,3 +145,5 @@ admin.site.register(RelativeInCanadaLabel, RelativeInCanadaLabelAdmin)
 admin.site.register(EducationalCreationalAssessment, EducationalCreationalAssessmentAdmin)
 admin.site.register(EducationalCreationalAssessmentLabel, EducationalCreationalAssessmentLabelAdmin)
 admin.site.register(UserDocument, UserDocumentAdmin)
+admin.site.register(CustomerLanguageScoreLabel, CustomerLanguageScoreLabelAdmin)
+admin.site.register(CustomerLanguageScore, CustomerLanguageScoreAdmin)

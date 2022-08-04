@@ -176,6 +176,7 @@ class UserService(TimeStampedModel, SoftDeleteModel):
     def __str__(self):
         return self.user.email
 
+
 class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     user = models.OneToOneField(User, related_name="user_profile", on_delete=models.DO_NOTHING)
     first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
@@ -184,7 +185,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
     address = models.CharField(max_length=512, blank=True, null=True, default=None)
-    date_of_birth = models.DateField(default=None, null=True, blank=True)
+    # date_of_birth = models.DateField(default=None, null=True, blank=True)
     current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="current_country_profile", 
                                         default=None, blank=True, null=True)
     desired_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="desired_country_profile", 
@@ -346,6 +347,7 @@ class RelativeInCanada(TimeStampedModel, SoftDeleteModel):
     def __str__(self):
         return str(self.user)
 
+
 class RelativeInCanadaLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=215, default="user")
     full_name_label = models.CharField(max_length=215)
@@ -385,3 +387,48 @@ class SMSOtpModel(TimeStampedModel, SoftDeleteModel):
 
     def __str__(self):
         return str(self.user)
+
+
+class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel):
+
+    IELTS = 1
+    CELPIP = 2
+    PTE = 3
+
+    TEST_TYPE = (
+        (IELTS, 'IELTS'),
+        (CELPIP, 'CELPIP'),
+        (PTE, 'PTE'),
+    )
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_lang_score")
+    test_type = models.PositiveSmallIntegerField(choices=TEST_TYPE)
+    result_date = models.DateField(blank=True, null=True)
+    test_version = models.CharField(max_length=256, blank=True, null=True)
+    report_form_number = models.CharField(max_length=512, blank=True, null=True)
+    listening_score = models.IntegerField()
+    writing_score = models.IntegerField()
+    speaking_score = models.IntegerField()
+    reading_score = models.IntegerField()
+    mother_tongue = models.CharField(max_length=256, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.test_type)
+
+    class Meta:
+        db_table = "customer_language_scores"
+
+
+class CustomerLanguageScoreLabel(TimeStampedModel, SoftDeleteModel):
+    user_label = models.CharField(max_length=255, default="user")
+    test_type_label = models.CharField(max_length=255)
+    result_date_label = models.CharField(max_length=255)
+    test_version_label = models.CharField(max_length=255)
+    report_form_number_label = models.CharField(max_length=255)
+    listening_score_label = models.CharField(max_length=255)
+    writing_score_label = models.CharField(max_length=255, default=None, null=True, blank=True)
+    speaking_score_label = models.CharField(max_length=255, default=None, null=True, blank=True)
+    reading_score_label = models.CharField(max_length=255)
+    mother_tongue_label = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "language_scores_label"

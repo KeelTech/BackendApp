@@ -2,6 +2,7 @@
 This file contains all defaults objects to be returned
 for profile api if not instance is found in the databse
 """
+from keel.authentication.models import CustomerLanguageScore
 
 PROFILE = {
     "first_name": {"value": "", "type": "char", "labels": "First Name"},
@@ -56,6 +57,17 @@ RELATIVE = {
     "email_address": {"value": "", "type": "char", "labels": "Email Address"},
     "is_blood_relationship" : {"value": False, "type":"checkbox", "labels":"Is Blood Relationship"}
 }
+
+LANGUAGESCORE = [{
+    "test_type": {"value": "", "choices": CustomerLanguageScore.TEST_TYPE,"type": "drop-down", "labels": "Test Type"},
+    "test_version": {"value": "", "type": "char", "labels": "test Version"},
+    "result_date": {"value": "", "type": "calendar", "labels": "Result Date"},
+    "report_form_number": {"value": "", "type": "char", "labels": "Test Report Form Number"},
+    "listening_score": {"value": "", "type": "char", "labels": "Listening Score"},
+    "writing_score": {"value": "", "type": "char", "labels": "Writing Score"},
+    "speaking_score": {"value": "", "type": "char", "labels": "Speaking Score"},
+    "reading_score": {"value": "", "type": "char", "labels": "Reading Score"},
+}]
 
 WORK_EXPERIENCE = [{
     "company_name": {"value": "", "type": "char", "labels": "Company Name"},
