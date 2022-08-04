@@ -60,7 +60,7 @@ RELATIVE = {
 
 LANGUAGESCORE = [{
     "test_type": {"value": "", "choices": CustomerLanguageScore.TEST_TYPE,"type": "drop-down", "labels": "Test Type"},
-    "test_version": {"value": "", "type": "char", "labels": "test Version"},
+    "test_version": {"value": "", "type": "char", "labels": "Test Version"},
     "result_date": {"value": "", "type": "calendar", "labels": "Result Date"},
     "report_form_number": {"value": "", "type": "char", "labels": "Test Report Form Number"},
     "listening_score": {"value": "", "type": "char", "labels": "Listening Score"},
