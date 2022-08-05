@@ -731,7 +731,7 @@ class ProfileView(GenericViewSet):
                                 "work_experience":update_work_experience.data,
                                 "relative_in_canada":update_relative_in_canada.data, 
                                 "education_assessment": update_education_assessment.data,
-                                "language_scores": update_lang_scores,
+                                "language_scores": update_lang_scores.data,
                                 }
         return Response(response)
     
@@ -829,7 +829,7 @@ class ProfileView(GenericViewSet):
             logger.error('ERROR: AUTHENTICATION:LanguageScore:update_lang_score ' + str(e))
 
         response["message"] = serializer.data
-        return response
+        return Response(response)
 
 
 class QualificationView(GenericViewSet):
