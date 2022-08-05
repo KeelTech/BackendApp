@@ -804,7 +804,7 @@ class ProfileView(GenericViewSet):
         }
         request_data = self.extract_lang_data(request.data.get('language_scores'))
         serializer = serializers.CustomerLanguageUpdateSerializer(data=request_data, many=True)
-        # serializer.is_valid(raise_exception=True)
+        serializer.is_valid()
         validated_data = serializer.validated_data
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
