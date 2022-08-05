@@ -1176,7 +1176,7 @@ class EducationalCreationalAssessmentSerializer(serializers.ModelSerializer):
     eca_authority_name = serializers.CharField(required=True)
     eca_authority_number = serializers.CharField(required=True)
     canadian_equivalency_summary = serializers.CharField(required=True)
-    eca_date = serializers.DateField(required=False, allow_null=True, blank=True)
+    eca_date = serializers.DateField(required=False, allow_null=True)
 
     class Meta:
         model = EducationalCreationalAssessment
