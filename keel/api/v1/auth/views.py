@@ -802,10 +802,11 @@ class ProfileView(GenericViewSet):
             "status": 1,
             "message": ""
         }
+        CustomerLanguageScore.objects.filter(user=user).delete()
         request_data = self.extract_lang_data(request.data.get('language_scores'))
         try:
             serializer = serializers.CustomerLanguageUpdateSerializer(data=request_data, many=True)
-            serializer.is_valid()
+            serializer.is_valid(raise_exception=True)
             validated_data = serializer.validated_data
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:LangTestSerializer ' + str(e))
