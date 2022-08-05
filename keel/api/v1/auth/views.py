@@ -1210,9 +1210,10 @@ class EducationalCreationalAssessmentView(GenericViewSet):
         for info in datas:
             customer_work_info = {
                 "id" : info.get("id"),
-                "eca_authority_name" : info["eca_authority_name"].get("value"),
-                "eca_authority_number" : info["eca_authority_number"].get("value"),
-                "canadian_equivalency_summary" : info["canadian_equivalency_summary"].get("value"),
+                "eca_authority_name": info["eca_authority_name"].get("value"),
+                "eca_authority_number": info["eca_authority_number"].get("value"),
+                "canadian_equivalency_summary": info["canadian_equivalency_summary"].get("value"),
+                "eca_date": info["eca_date"].get("value"),
             }
             data.append(customer_work_info)
         return data
