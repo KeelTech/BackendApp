@@ -554,7 +554,7 @@ class ProfileView(GenericViewSet):
             labels['father_fullname_label'] = label.father_fullname_label
             labels['age_label'] = label.age_label
             labels['address_label'] = label.address_label
-            # labels['date_of_birth_label'] = label.date_of_birth_label
+            labels['date_of_birth_label'] = label.date_of_birth_label
             labels['phone_number_label'] = label.phone_number_label
             labels['current_country_label'] = label.current_country_label
             labels['desired_country_label'] = label.desired_country_label
@@ -615,7 +615,7 @@ class ProfileView(GenericViewSet):
             "age" : datas['age'].get("value"),
             "address" : datas['address'].get("value"),
             "phone_number" : datas['phone_number'].get("value"),
-            # "date_of_birth" : datas['date_of_birth'].get("value"),
+            "date_of_birth" : datas['date_of_birth'].get("value"),
             "current_country" : datas['current_country'].get("value"),
             "desired_country" : datas['desired_country'].get("value"),
             "passport_number": datas['passport_number'].get("value"),

@@ -132,7 +132,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
             "father_fullname",
             "age",
             "address",
-            # "date_of_birth",
+            "date_of_birth",
             "passport_number",
             "passport_country",
             "passport_issue_date",
@@ -148,7 +148,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         address = validated_data.get("address")
         current_country = validated_data.get("current_country")
         desired_country = validated_data.get("desired_country")
-        # date_of_birth = validated_data.get("date_of_birth")
+        date_of_birth = validated_data.get("date_of_birth")
         passport_number = validated_data.get("passport_number")
         passport_country = validated_data.get("passport_country")
         passport_issue_date = validated_data.get("passport_issue_date")
@@ -173,7 +173,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         profile.address = address
         profile.current_country = current_country
         profile.desired_country = desired_country
-        # profile.date_of_birth = date_of_birth
+        profile.date_of_birth = date_of_birth
         profile.passport_number = passport_number
         profile.passport_country = passport_country
         profile.passport_issue_date = passport_issue_date
@@ -190,7 +190,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     father_fullname = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
-    # date_of_birth = serializers.SerializerMethodField()
+    date_of_birth = serializers.SerializerMethodField()
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
     desired_country = serializers.SerializerMethodField()
@@ -345,7 +345,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
         fields = (
             "first_name",
             "last_name",
-            # "date_of_birth",
+            "date_of_birth",
             "age",
             "phone_number",
             "mother_fullname",
