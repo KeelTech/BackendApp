@@ -803,9 +803,13 @@ class ProfileView(GenericViewSet):
             "message": ""
         }
         request_data = self.extract_lang_data(request.data.get('language_scores'))
-        serializer = serializers.CustomerLanguageUpdateSerializer(data=request_data, many=True)
-        serializer.is_valid()
-        validated_data = serializer.validated_data
+        try:
+            serializer = serializers.CustomerLanguageUpdateSerializer(data=request_data, many=True)
+            serializer.is_valid()
+            validated_data = serializer.validated_data
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LangTestSerializer ' + str(e))
+
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         try:
