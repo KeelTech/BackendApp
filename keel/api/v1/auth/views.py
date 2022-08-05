@@ -730,7 +730,7 @@ class ProfileView(GenericViewSet):
                                 "qualification":update_qualification.data,
                                 "work_experience":update_work_experience.data,
                                 "relative_in_canada":update_relative_in_canada.data, 
-                                "education_assessment": update_education_assessment.data,
+                                "education_assessment": update_education_assessment,
                                 "language_scores": update_lang_scores,
                                 }
         return Response(response)
@@ -867,14 +867,17 @@ class QualificationView(GenericViewSet):
             }
             try:
                 # get city instance
-                city = instances.city_instance(customer_work_info.get('city'))
-                customer_work_info['city'] = city.id
+                if customer_work_info.get('city'):
+                    city = instances.city_instance(customer_work_info.get('city'))
+                    customer_work_info['city'] = city.id
                 # get state instance
-                state = instances.state_instance(customer_work_info.get('state'))
-                customer_work_info['state'] = state.id
+                if customer_work_info.get('state'):
+                    state = instances.state_instance(customer_work_info.get('state'))
+                    customer_work_info['state'] = state.id
                 # get country
-                country = instances.country_instance(customer_work_info.get('country'))
-                customer_work_info['country'] = country.id
+                if customer_work_info.get('country'):
+                    country = instances.country_instance(customer_work_info.get('country'))
+                    customer_work_info['country'] = country.id
             except Exception as e:
                 logger.error('ERROR: AUTHENTICATION:QualificationView:extract ' + str(e))
                 pass
@@ -1283,7 +1286,9 @@ class EducationalCreationalAssessmentView(GenericViewSet):
             logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if not len(validated_data):
+            return response
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         for ids in request:
@@ -1293,7 +1298,7 @@ class EducationalCreationalAssessmentView(GenericViewSet):
             instance = self.create(validated_data_from_dict)
             count += 1
         response["message"] = serializer.data
-        return Response(response)
+        return response
 
 
 class LoginOTP(GenericViewSet):
