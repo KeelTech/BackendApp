@@ -961,10 +961,14 @@ class QualificationView(GenericViewSet):
         }
         CustomerQualifications.objects.filter(user=user).delete()
         request = self.extract(request.data.get('qualification'))
-        serializer = self.serializer_class_update(data=request, many=True)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-
+        try:
+            serializer = self.serializer_class_update(data=request, many=True)
+            serializer.is_valid(raise_exception=True)
+            validated_data = serializer.validated_data
+        except Exception as e:
+            logger.error('AUTHENTICATION QQUALIFACTION update viewset ', str(e))
+            response['message'] = str(e)
+            return  Response(response)
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         for ids in request:
@@ -1286,7 +1290,7 @@ class EducationalCreationalAssessmentView(GenericViewSet):
             logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            # return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return response
         if not len(validated_data):
             return response
         enum_validated_data = dict(enumerate(validated_data))
