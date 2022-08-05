@@ -713,7 +713,7 @@ class ProfileView(GenericViewSet):
             "message":""
         }
         # update profile
-        update_profile = self.update_profile(request)
+        # update_profile = self.update_profile(request)
         # update qualification instance
         update_qualification = QualificationView.update_qualification(request)
         # update work experience instance
@@ -726,7 +726,7 @@ class ProfileView(GenericViewSet):
         update_lang_scores = self.update_language_score(request)
 
         response["message"] = {
-                                "profile" : update_profile.data,
+                                # "profile" : update_profile.data,
                                 "qualification":update_qualification.data,
                                 "work_experience":update_work_experience.data,
                                 "relative_in_canada":update_relative_in_canada.data, 
@@ -809,7 +809,8 @@ class ProfileView(GenericViewSet):
             validated_data = serializer.validated_data
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:LangTestSerializer ' + str(e))
-
+        if not len(validated_data):
+            return
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         try:
