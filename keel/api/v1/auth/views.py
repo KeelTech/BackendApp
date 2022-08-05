@@ -1222,17 +1222,12 @@ class EducationalCreationalAssessmentView(GenericViewSet):
     def educational_creational_assessment(self, request):
         user = request.user
         response = {
-            "status" : 1,
-            "message" : ""
+            "status": 1,
+            "message": ""
         }
-        try:
-            request = self.extract(request.data.get("education_assessment"))
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        serializer = self.serializer_class(data=request, many=True)
+
+        request = self.extract(request.data.get("education_assessment"))
+        serializer = self.serializer_class(data=request)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         for data in validated_data:
@@ -1249,18 +1244,15 @@ class EducationalCreationalAssessmentView(GenericViewSet):
     
     @staticmethod
     def create(validated_data):
-        id = validated_data.get('id')
-        eca_authority_name = validated_data.get('eca_authority_name')
-        eca_authority_number = validated_data.get('eca_authority_number')
-        canadian_equivalency_summary = validated_data.get('canadian_equivalency_summary')
-        user = validated_data.get('user')
+
         try:
-            education_assessment, created = EducationalCreationalAssessment.objects.update_or_create(id=id, 
+            education_assessment, created = EducationalCreationalAssessment.objects.update_or_create(id=validated_data.get('id'),
                                 defaults={
-                                        "eca_authority_name":eca_authority_name, 
-                                        "eca_authority_number":eca_authority_number, 
-                                        "canadian_equivalency_summary":canadian_equivalency_summary,
-                                        "user":user
+                                        "eca_authority_name":validated_data.get('eca_authority_name'),
+                                        "eca_authority_number":validated_data.get('eca_authority_number'),
+                                        "canadian_equivalency_summary":validated_data.get('canadian_equivalency_summary'),
+                                        "eca_date": validated_data.get("eca_date"),
+                                        "user": validated_data.get('user')
                                     })
         except Exception as err:
             logger.error(logging_format(LOGGER_LOW_SEVERITY, "EducationalCreationalAssessmentView:create"),

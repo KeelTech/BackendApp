@@ -1197,6 +1197,7 @@ class EducationalCreationalAssessmentUpdateSerializer(serializers.ModelSerialize
             "eca_authority_name",
             "eca_authority_number",
             "canadian_equivalency_summary",
+            "eca_date",
         )
 
 
