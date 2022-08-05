@@ -730,8 +730,8 @@ class ProfileView(GenericViewSet):
                                 "qualification":update_qualification.data,
                                 "work_experience":update_work_experience.data,
                                 "relative_in_canada":update_relative_in_canada.data, 
-                                "education_assessment": update_education_assessment,
-                                "language_scores": update_lang_scores,
+                                "education_assessment": update_education_assessment.data,
+                                "language_scores": update_lang_scores.data,
                                 }
         return Response(response)
     
@@ -809,9 +809,11 @@ class ProfileView(GenericViewSet):
             validated_data = serializer.validated_data
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:LangTestSerializer ' + str(e))
+            response["message"] = str(e)
+            return Response(response)
         if not len(validated_data):
             response["message"] = serializer.data
-            return response
+            return Response(response)
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         try:
@@ -835,7 +837,7 @@ class ProfileView(GenericViewSet):
             logger.error('ERROR: AUTHENTICATION:LanguageScore:update_lang_score ' + str(e))
 
         response["message"] = serializer.data
-        return response
+        return Response(response)
 
 
 class QualificationView(GenericViewSet):
@@ -968,7 +970,7 @@ class QualificationView(GenericViewSet):
         except Exception as e:
             logger.error('AUTHENTICATION QQUALIFACTION update viewset ', str(e))
             response['message'] = str(e)
-            return  Response(response)
+            return Response(response)
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         for ids in request:
@@ -1290,9 +1292,9 @@ class EducationalCreationalAssessmentView(GenericViewSet):
             logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
             response['message'] = str(e)
             response['status'] = 0
-            return response
+            return Response(response)
         if not len(validated_data):
-            return response
+            return Response(response)
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         for ids in request:
@@ -1302,7 +1304,7 @@ class EducationalCreationalAssessmentView(GenericViewSet):
             instance = self.create(validated_data_from_dict)
             count += 1
         response["message"] = serializer.data
-        return response
+        return Response(response)
 
 
 class LoginOTP(GenericViewSet):
