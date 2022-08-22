@@ -133,6 +133,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
             "age",
             "address",
             "date_of_birth",
+            "type_of_visa",
             "passport_number",
             "passport_country",
             "passport_issue_date",
@@ -140,19 +141,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         )
 
     def create(self, validated_data):
-        first_name = validated_data.get("first_name")
-        last_name = validated_data.get("last_name")
-        mother_fullname = validated_data.get("mother_fullname")
-        father_fullname = validated_data.get("father_fullname")
-        age = validated_data.get("age")
-        address = validated_data.get("address")
-        current_country = validated_data.get("current_country")
-        desired_country = validated_data.get("desired_country")
-        date_of_birth = validated_data.get("date_of_birth")
-        passport_number = validated_data.get("passport_number")
-        passport_country = validated_data.get("passport_country")
-        passport_issue_date = validated_data.get("passport_issue_date")
-        passport_expiry_date = validated_data.get("passport_expiry_date")
+
         user = validated_data.get("user")
         try:
             profile = CustomerProfile.objects.get(user=user)
@@ -165,19 +154,20 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
                 description=str(err),
             )
             raise serializers.ValidationError("No profile for this user")
-        profile.first_name = first_name
-        profile.last_name = last_name
-        profile.mother_fullname = mother_fullname
-        profile.father_fullname = father_fullname
-        profile.age = age
-        profile.address = address
-        profile.current_country = current_country
-        profile.desired_country = desired_country
-        profile.date_of_birth = date_of_birth
-        profile.passport_number = passport_number
-        profile.passport_country = passport_country
-        profile.passport_issue_date = passport_issue_date
-        profile.passport_expiry_date = passport_expiry_date
+        profile.first_name = validated_data.get("first_name")
+        profile.last_name = validated_data.get("last_name")
+        profile.mother_fullname = validated_data.get("mother_fullname")
+        profile.father_fullname = validated_data.get("father_fullname")
+        profile.age = validated_data.get("age")
+        profile.address = validated_data.get("address")
+        profile.current_country = validated_data.get("current_country")
+        profile.desired_country = validated_data.get("desired_country")
+        profile.date_of_birth = validated_data.get("date_of_birth")
+        profile.type_of_visa = validated_data.get("type_of_visa")
+        profile.passport_number = validated_data.get("passport_number")
+        profile.passport_country = validated_data.get("passport_country")
+        profile.passport_issue_date = validated_data.get("passport_issue_date")
+        profile.passport_expiry_date = validated_data.get("passport_expiry_date")
         profile.save()
         return profile
 
@@ -194,6 +184,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
     desired_country = serializers.SerializerMethodField()
+    type_of_visa = serializers.SerializerMethodField()
     passport_number = serializers.SerializerMethodField()
     passport_country = serializers.SerializerMethodField()
     passport_issue_date = serializers.SerializerMethodField()
@@ -299,6 +290,15 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                     "type": "drop-down",
                     "labels": self.context["labels"]["desired_country_label"],
                 }
+    def get_type_of_visa(self, obj):
+        var = obj.type_of_visa
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "drop-down",
+                "choices": CustomerProfile.VISA_TYPE,
+                "labels": self.context["labels"]["type_of_visa_label"],
+            }
 
     def get_passport_number(self, obj):
         var = obj.passport_number
@@ -353,7 +353,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             "current_country",
             "desired_country",
             "address",
-            # "labels",
+            "type_of_visa",
             'passport_number',
             'passport_country',
             'passport_issue_date',
@@ -661,7 +661,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "char",
+                "type": "textarea",
                 "labels": self.context["labels"]["job_description_label"],
             }
 

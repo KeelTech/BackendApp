@@ -3,7 +3,7 @@ import logging
 
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 
-ALLOWED_HOSTS = ['getkeel.com','admin.keel.com']
+ALLOWED_HOSTS = ['getkeel.com', 'staging.getkeel.com', 'app.getkeel.com', 'admin.keel.com']
 
 DATABASES['default']['ATOMIC_REQUESTS'] = True  # noqa F405
 # DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=60)
@@ -141,7 +141,8 @@ PRIVATE_FILE_STORAGE = 'keel.Core.storage_backends.PrivateMediaStorage'
 SENDER_EMAIL = env('SENDER_EMAIL')
 EMAIL_HOST_USER =  env('SENDGRID_USER_NAME')
 EMAIL_HOST_PASSWORD = env('SENDGRID_API_KEY')
-EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'keel.Core.notification_backend.SMTPEmailBackend'

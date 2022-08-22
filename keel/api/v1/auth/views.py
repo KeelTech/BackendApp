@@ -545,26 +545,30 @@ class ProfileView(GenericViewSet):
             return data
 
     def get_queryset_profile(self, request):
-        get_labels = CustomerProfileLabel.objects.filter(user_label="user")
-        labels = {}
-        for label in get_labels:
-            labels['first_name_label'] = label.first_name_label
-            labels['last_name_label'] = label.last_name_label
-            labels['mother_fullname_label'] = label.mother_fullname_label
-            labels['father_fullname_label'] = label.father_fullname_label
-            labels['age_label'] = label.age_label
-            labels['address_label'] = label.address_label
-            labels['date_of_birth_label'] = label.date_of_birth_label
-            labels['phone_number_label'] = label.phone_number_label
-            labels['current_country_label'] = label.current_country_label
-            labels['desired_country_label'] = label.desired_country_label
-            labels['passport_number_label'] = label.passport_number_label
-            labels['passport_country_label'] = label.passport_country_label
-            labels['passport_issue_date_label'] = label.passport_issue_date_label
-            labels['passport_expiry_date_label'] = label.passport_expiry_date_label
+        labels_queryset = CustomerProfileLabel.objects.filter(user_label="user").values()
+        if len(labels_queryset):
+            labels = labels_queryset[0]
+        # labels = {}
+        # for label in get_labels:
+        #     labels['first_name_label'] = label.first_name_label
+        #     labels['last_name_label'] = label.last_name_label
+        #     labels['mother_fullname_label'] = label.mother_fullname_label
+        #     labels['father_fullname_label'] = label.father_fullname_label
+        #     labels['age_label'] = label.age_label
+        #     labels['address_label'] = label.address_label
+        #     labels['date_of_birth_label'] = label.date_of_birth_label
+        #     labels['phone_number_label'] = label.phone_number_label
+        #     labels['current_country_label'] = label.current_country_label
+        #     labels['desired_country_label'] = label.desired_country_label
+        #     labels['type_of_visa'] = label.type_of_visa
+        #     labels['passport_number_label'] = label.passport_number_label
+        #     labels['passport_country_label'] = label.passport_country_label
+        #     labels['passport_issue_date_label'] = label.passport_issue_date_label
+        #     labels['passport_expiry_date_label'] = label.passport_expiry_date_label
+
         profile = CustomerProfile.objects.filter(user=self.request.user.id).first()
         if profile:
-            serializer = self.serializer_class_profile(profile, context={"labels":labels})
+            serializer = self.serializer_class_profile(profile, context={"labels": labels})
             # serializer.data.pop("labels")
             return serializer.data
         else:
@@ -618,6 +622,7 @@ class ProfileView(GenericViewSet):
             "date_of_birth" : datas['date_of_birth'].get("value"),
             "current_country" : datas['current_country'].get("value"),
             "desired_country" : datas['desired_country'].get("value"),
+            "type_of_visa": datas['type_of_visa'].get("value"),
             "passport_number": datas['passport_number'].get("value"),
             "passport_country": datas['passport_country'].get("value"),
             "passport_issue_date": datas['passport_issue_date'].get("value"),
@@ -628,8 +633,8 @@ class ProfileView(GenericViewSet):
     def update_profile(self, request):
         user = request.user
         response = {
-            "status" : 1,
-            "message" : ""
+            "status": 1,
+            "message": ""
         }
         try:
             request = self.extract(request.data.get('profile'))

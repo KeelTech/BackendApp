@@ -100,4 +100,5 @@ SMS_BACKEND = 'keel.Core.notification_backend.ConsoleSMSBackend'
 
 FAST_2_SMS_URL = os.getenv("FAST_2_SMS_URL")
 FAST_2_SMS_KEY = os.getenv("FAST_2_SMS_KEY")
+APP_DIRS=True
 

@@ -2,7 +2,7 @@
 This file contains all defaults objects to be returned
 for profile api if not instance is found in the databse
 """
-from keel.authentication.models import CustomerLanguageScore
+from keel.authentication.models import CustomerLanguageScore, CustomerProfile
 
 PROFILE = {
     "first_name": {"value": "", "type": "char", "labels": "First Name"},
@@ -12,6 +12,7 @@ PROFILE = {
     "phone_number": {"value": "", "type": "char", "labels": "Phone Number"},
     "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
     "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
+    "type_of_visa": {"value": "", "type": "drop-down", "choices": CustomerProfile.VISA_TYPE, "labels": "Type of Visa"},
     "current_country": {"value": "", "type": "drop-down", "labels": "Current Country"},
     "desired_country": {"value": "", "type": "drop-down", "labels": "Desired Country"},
     "address": {"value": "", "type": "char", "labels": "Address"},
@@ -25,7 +26,7 @@ QUALIFICATION = [{
     "country": {"value": "", "type": "char", "labels": "Country"},
     "state": {"value": "", "type": "char", "labels": "State"},
     "city": {"value": "", "type": "char", "labels": "City"},
-    "full_address" : { 
+    "full_address": {
         "type": 'address', 
         "countryLabel":"Country", 
         "country": "",
@@ -59,7 +60,7 @@ RELATIVE = {
 }
 
 LANGUAGESCORE = [{
-    "test_type": {"value": "", "choices": CustomerLanguageScore.TEST_TYPE,"type": "drop-down", "labels": "Test Type"},
+    "test_type": {"value": "", "choices": CustomerLanguageScore.TEST_TYPE, "type": "drop-down", "labels": "Test Type"},
     "test_version": {"value": "", "type": "char", "labels": "Test Version"},
     "result_date": {"value": "", "type": "calendar", "labels": "Result Date"},
     "report_form_number": {"value": "", "type": "char", "labels": "Test Report Form Number"},
@@ -73,7 +74,7 @@ WORK_EXPERIENCE = [{
     "company_name": {"value": "", "type": "char", "labels": "Company Name"},
     "designation": {"value": "", "type": "char", "labels": "Desgination"},
     "job_type": {"value": "", "type": "char", "labels": "Job Type"},
-    "job_description": {"value": "", "type": "char", "labels": "Job Description"},
+    "job_description": {"value": "", "type": "textarea", "labels": "Job Description"},
     "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
     "start_date": {"value": None, "type": "char", "labels": "Start Date"},
     "end_date": {"value": None, "type": "char", "labels": "End Date"},

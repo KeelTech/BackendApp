@@ -178,6 +178,19 @@ class UserService(TimeStampedModel, SoftDeleteModel):
 
 
 class CustomerProfile(TimeStampedModel, SoftDeleteModel):
+    STUDY = 1
+    PGWP = 2
+    WORKPERMIT = 3
+    PR = 4
+    DEPENDANT = 5
+    VISIT = 6
+    CITIZENSHIP = 7
+
+    VISA_TYPE = (
+        (STUDY, 'Study'), (PGWP, 'PGWP'), (WORKPERMIT, 'WorkPermit'),
+        (PR, 'PR'), (DEPENDANT, 'Dependant'), (VISIT, 'Visit'), (CITIZENSHIP, 'Citizenship'),
+    )
+
     user = models.OneToOneField(User, related_name="user_profile", on_delete=models.DO_NOTHING)
     first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
@@ -190,6 +203,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
                                         default=None, blank=True, null=True)
     desired_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="desired_country_profile", 
                                         default=None, blank=True, null=True)
+    type_of_visa = models.PositiveSmallIntegerField(null=True, blank=True, choices=VISA_TYPE)
     passport_number = models.CharField(max_length=512, blank=True, null=True)
     passport_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="passport_country_profile",
                                         default=None, blank=True, null=True)
@@ -242,6 +256,7 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     phone_number_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     current_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     desired_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
+    type_of_visa_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     passport_number_label = models.CharField(max_length=512, blank=True, null=True)
     passport_country_label = models.CharField(max_length=128, blank=True, null=True, default=None)
     passport_issue_date_label = models.CharField(max_length=128, blank=True, null=True, default=None)
@@ -306,7 +321,7 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     end_date = models.DateField(max_length=512, default=None, blank=True, null=True)
     job_type = models.CharField(max_length=512, default=None, blank=True, null=True)
     designation = models.CharField(max_length=512, default=None, blank=True, null=True)
-    job_description = models.CharField(max_length=512, default=None, blank=True, null=True)
+    job_description = models.CharField(max_length=4096, default=None, blank=True, null=True)
     company_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING, related_name="city_customer_experience", 
                                 max_length=512, blank=True, null=True, default=None)
@@ -432,3 +447,25 @@ class CustomerLanguageScoreLabel(TimeStampedModel, SoftDeleteModel):
 
     class Meta:
         db_table = "language_scores_label"
+
+
+# class CustomerSpouseProfile(TimeStampedModel, SoftDeleteModel):
+#
+#     profile = models.OneToOneField(CustomerProfile, related_name="customer_spouse", on_delete=models.DO_NOTHING)
+#     first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+#     last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+#     mother_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
+#     father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
+#     # age = models.CharField(max_length=512, blank=True, null=True, default=None)
+#     address = models.CharField(max_length=512, blank=True, null=True, default=None)
+#     date_of_birth = models.DateField(default=None, null=True, blank=True)
+#     # type_of_visa = models.CharField(null=True, blank=True, choices=VISA_TYPE)
+#     passport_number = models.CharField(max_length=512, blank=True, null=True)
+#     passport_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="passport_country_profile",
+#                                          default=None, blank=True, null=True)
+#     passport_issue_date = models.DateField(null=True, blank=True)
+#     passport_expiry_date = models.DateField(null=True, blank=True)
+#
+#     def __str__(self):
+#         return str(self.profile)
+
