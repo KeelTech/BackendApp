@@ -132,7 +132,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
             "father_fullname",
             "age",
             "address",
-            "date_of_birth",
+            # "date_of_birth",
             "type_of_visa",
             "passport_number",
             "passport_country",
@@ -162,7 +162,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         profile.address = validated_data.get("address")
         profile.current_country = validated_data.get("current_country")
         profile.desired_country = validated_data.get("desired_country")
-        profile.date_of_birth = validated_data.get("date_of_birth")
+        # profile.date_of_birth = validated_data.get("date_of_birth")
         profile.type_of_visa = validated_data.get("type_of_visa")
         profile.passport_number = validated_data.get("passport_number")
         profile.passport_country = validated_data.get("passport_country")
@@ -180,7 +180,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     father_fullname = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
-    date_of_birth = serializers.SerializerMethodField()
+    # date_of_birth = serializers.SerializerMethodField()
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
     desired_country = serializers.SerializerMethodField()
@@ -345,7 +345,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
         fields = (
             "first_name",
             "last_name",
-            "date_of_birth",
+            # "date_of_birth",
             "age",
             "phone_number",
             "mother_fullname",
