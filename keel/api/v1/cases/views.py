@@ -26,7 +26,7 @@ from .serializers import (
     CaseIDSerializer,
     CaseProgramSerializer,
     CasesSerializer,
-    CaseTrackerSerializer,
+    CaseTrackerSerializer, CaseStatusCommentSerializer
 )
 from .utils import sort_case_chat_list
 
@@ -277,3 +277,38 @@ class CaseTrackerView(GenericViewSet):
 
         response["data"] = serializer.data
         return Response(response)
+
+
+class CaseStatusComments(GenericViewSet):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def list_status_comments(self, request, **kwargs):
+        pk = kwargs.get("case_id")
+        response = {"status": 1, "message": "", "data": ""}
+        queryset = CaseStatusComments.objects.filter(case_id=pk)
+        serializer = CaseStatusCommentSerializer(queryset, many=True)
+        response["data"] = serializer.data
+        return Response(response)
+
+    def post_status_omments(self, request, format="json"):
+
+        response = {
+            "status": 0,
+            "data": {},
+        }
+        comment_serializer = CaseStatusCommentSerializer(data=request.data)
+        comment_serializer.is_valid(raise_exception=True)
+        try:
+            comment_obj = comment_serializer.save()
+        except Exception as e:
+            log_error(
+                "ERORR", "CaseStatusComment: post post_status_comments", err=str(e)
+            )
+            response["message"] = str(e)
+            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return Response(response, status=resp_status)
+        response["data"] = CaseStatusCommentSerializer(comment_obj).data
+        return Response(response)
+
+

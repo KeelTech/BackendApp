@@ -261,3 +261,11 @@ class CaseTracker(TimeStampedModel, SoftDeleteModel):
 
     def __str__(self):
         return str(self.case_id)
+
+
+class CaseStatusComments(TimeStampedModel):
+    case = models.ForeignKey(
+        Case, on_delete=models.deletion.DO_NOTHING, related_name="case_status_comments"
+    )
+    msg = models.TextField()
+

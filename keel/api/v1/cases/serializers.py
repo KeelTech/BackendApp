@@ -1,7 +1,7 @@
 import logging
 
 from keel.api.v1.auth.serializers import UserDetailsSerializer
-from keel.cases.models import AgentNotes, Case, Program, CaseCheckPoint, CaseTracker
+from keel.cases.models import AgentNotes, Case, Program, CaseCheckPoint, CaseTracker, CaseStatusComments
 from keel.chats.implementation.unread_chats import UnreadChats
 from keel.Core.err_log import log_error
 from rest_framework import serializers
@@ -159,3 +159,9 @@ class CaseTrackerSerializer(serializers.ModelSerializer):
 
     def get_case_checkpoint(self, obj):
         return CaseCheckPointSerializer(obj.case_checkpoint).data
+
+
+class CaseStatusCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CaseStatusComments
+        fields = ("id",  "case", "msg")
