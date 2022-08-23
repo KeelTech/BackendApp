@@ -291,7 +291,7 @@ class CaseStatusCommentsView(GenericViewSet):
         response["data"] = serializer.data
         return Response(response)
 
-    def post_status_omments(self, request, format="json"):
+    def post_status_comments(self, request, format="json"):
 
         response = {
             "status": 0,
