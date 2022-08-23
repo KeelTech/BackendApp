@@ -6,15 +6,15 @@ from .views import (
     UpdateCaseProgramView,
     AgentNotesViewSet,
     CaseTrackerView,
-    CaseUnreadChats, CaseStatusComments
+    CaseUnreadChats, CaseStatusCommentsView
 )
 
 
 urlpatterns = [
     path("create-cases", CaseView.as_view(), name="create-case"),
     path("list-cases", FilterUserCases.as_view(), name="list-cases"),
-    path("list-case-comments/<str:case_id>", CaseStatusComments.as_view({"get": "list_status_comments"}), name="list-status-comments"),
-    path("post-case-comments", CaseStatusComments.as_view({"get": "post_status_comments"}), name="post-status-comments"),
+    path("list-case-comments/<str:case_id>", CaseStatusCommentsView.as_view({"get": "list_status_comments"}), name="list-status-comments"),
+    path("post-case-comments", CaseStatusCommentsView.as_view({"get": "post_status_comments"}), name="post-status-comments"),
     path(
         "list-case-programs",
         UpdateCaseProgramView.as_view({"get": "get_all_programs"}),

@@ -11,7 +11,7 @@ from django.db.models import Prefetch
 from keel.api.v1.chats.views import ChatList
 from keel.api.v1.tasks.instances import number_of_tasks_per_status
 from keel.authentication.backends import JWTAuthentication
-from keel.cases.models import AgentNotes, Case, Program
+from keel.cases.models import AgentNotes, Case, Program, CaseStatusComments
 from keel.Core.err_log import log_error
 from keel.tasks.models import Task
 from rest_framework import generics, permissions, response, serializers, status
@@ -279,7 +279,7 @@ class CaseTrackerView(GenericViewSet):
         return Response(response)
 
 
-class CaseStatusComments(GenericViewSet):
+class CaseStatusCommentsView(GenericViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
