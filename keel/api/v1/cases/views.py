@@ -286,7 +286,7 @@ class CaseStatusComments(GenericViewSet):
     def list_status_comments(self, request, **kwargs):
         pk = kwargs.get("case_id")
         response = {"status": 1, "message": "", "data": ""}
-        queryset = CaseStatusComments.objects.filter(case_id=pk)
+        queryset = CaseStatusComments.objects.filter(case_id=pk).order_by('-updated_at')
         serializer = CaseStatusCommentSerializer(queryset, many=True)
         response["data"] = serializer.data
         return Response(response)
