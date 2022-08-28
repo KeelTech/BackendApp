@@ -162,6 +162,8 @@ class CaseTrackerSerializer(serializers.ModelSerializer):
 
 
 class CaseStatusCommentSerializer(serializers.ModelSerializer):
+    updated_at = serializers.DateTimeField(required=False)
+
     class Meta:
         model = CaseStatusComments
-        fields = ("id",  "case", "msg")
+        fields = ("id",  "case", "msg", 'updated_at')
