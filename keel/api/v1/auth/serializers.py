@@ -365,6 +365,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             "desired_country",
             "address",
             "type_of_visa",
+            "marital_status",
             'passport_number',
             'passport_country',
             'passport_issue_date',
