@@ -5,7 +5,8 @@ from .models import (User, CustomToken, PasswordResetToken, UserService,
                     CustomerProfile, CustomerQualifications, QualificationLabel, WorkExperienceLabel,
                     CustomerWorkExperience, CustomerProfileLabel, RelativeInCanada, RelativeInCanadaLabel,
                     EducationalCreationalAssessment, EducationalCreationalAssessmentLabel, AgentProfile, 
-                    AccountManagerProfile, UserDocument, SMSOtpModel, CustomerLanguageScoreLabel, CustomerLanguageScore, )
+                    AccountManagerProfile, UserDocument, SMSOtpModel, CustomerLanguageScoreLabel, CustomerLanguageScore,
+                     CustomerSpouseProfileLabel, CustomerSpouseProfile)
 from keel.Core.models import Country, State, City
 
 
@@ -147,3 +148,4 @@ admin.site.register(EducationalCreationalAssessmentLabel, EducationalCreationalA
 admin.site.register(UserDocument, UserDocumentAdmin)
 admin.site.register(CustomerLanguageScoreLabel, CustomerLanguageScoreLabelAdmin)
 admin.site.register(CustomerLanguageScore, CustomerLanguageScoreAdmin)
+admin.site.register(CustomerSpouseProfileLabel)

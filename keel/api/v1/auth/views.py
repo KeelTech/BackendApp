@@ -32,7 +32,7 @@ from keel.authentication.models import (AgentProfile, CustomerProfile,
                                         EducationalCreationalAssessment,
                                         EducationalCreationalAssessmentLabel,
                                         PasswordResetToken, QualificationLabel,
-                                        RelativeInCanada,
+                                        RelativeInCanada, CustomerSpouseProfile, CustomerSpouseProfileLabel,
                                         RelativeInCanadaLabel, CustomerLanguageScoreLabel, CustomerLanguageScore)
 from keel.authentication.models import User as user_model
 from keel.authentication.models import UserDocument, WorkExperienceLabel
@@ -442,6 +442,7 @@ class ProfileView(GenericViewSet):
     serializer_class_pro = serializers.CustomerProfileSerializer
     serializer_class_pro_update = serializers.CustomerUpdateProfileSerializer
     serializer_class_profile = serializers.CustomerProfileLabelSerializer
+    serializer_class_spouse_profile = serializers.CustomerSpouseProfileLabelSerializer
     serializer_class_qualification = serializers.CustomerQualificationsLabelSerializer
     serializer_class_experience = serializers.WorkExperienceLabelSerializer
     serializer_class_relative_in_canada = serializers.RelativeInCanadaLabelSerializer
@@ -548,23 +549,6 @@ class ProfileView(GenericViewSet):
         labels_queryset = CustomerProfileLabel.objects.filter(user_label="user").values()
         if len(labels_queryset):
             labels = labels_queryset[0]
-        # labels = {}
-        # for label in get_labels:
-        #     labels['first_name_label'] = label.first_name_label
-        #     labels['last_name_label'] = label.last_name_label
-        #     labels['mother_fullname_label'] = label.mother_fullname_label
-        #     labels['father_fullname_label'] = label.father_fullname_label
-        #     labels['age_label'] = label.age_label
-        #     labels['address_label'] = label.address_label
-        #     labels['date_of_birth_label'] = label.date_of_birth_label
-        #     labels['phone_number_label'] = label.phone_number_label
-        #     labels['current_country_label'] = label.current_country_label
-        #     labels['desired_country_label'] = label.desired_country_label
-        #     labels['type_of_visa'] = label.type_of_visa
-        #     labels['passport_number_label'] = label.passport_number_label
-        #     labels['passport_country_label'] = label.passport_country_label
-        #     labels['passport_issue_date_label'] = label.passport_issue_date_label
-        #     labels['passport_expiry_date_label'] = label.passport_expiry_date_label
 
         profile = CustomerProfile.objects.filter(user=self.request.user.id).first()
         if profile:
@@ -573,6 +557,20 @@ class ProfileView(GenericViewSet):
             return serializer.data
         else:
             data = constants.PROFILE
+            return data
+
+    def get_queryset_spouse_profile(self, request):
+        labels_queryset = CustomerSpouseProfileLabel.objects.filter(user_label="user").values()
+        if len(labels_queryset):
+            labels = labels_queryset[0]
+
+        profile = CustomerSpouseProfile.objects.filter(customer__user=self.request.user.id).first()
+        if profile:
+            serializer = self.serializer_class_spouse_profile(profile, context={"labels": labels})
+            # serializer.data.pop("labels")
+            return serializer.data
+        else:
+            data = constants.SPOUSEPROFILE
             return data
     
     def get_queryset_cases(self, user):
@@ -764,6 +762,7 @@ class ProfileView(GenericViewSet):
             "message" : ""
         }   
         profile = self.get_queryset_profile(request)
+        spouse_profile = self.get_queryset_spouse_profile(request)
         qualification = self.get_queryset_qualification(request)
         work_experience = self.get_queryset_experience(request)
         relative_in_canada = self.get_queryset_relative_in_canada(request)

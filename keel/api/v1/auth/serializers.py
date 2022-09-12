@@ -20,7 +20,7 @@ from keel.authentication.models import (
     RelativeInCanadaLabel,
     SMSOtpModel,
     User,
-    UserDocument,
+    UserDocument, CustomerSpouseProfileLabel,
     WorkExperienceLabel, CustomerLanguageScoreLabel, CustomerLanguageScore,
 )
 from keel.Core.constants import LOGGER_LOW_SEVERITY
@@ -180,11 +180,12 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     father_fullname = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
-    date_of_birth = serializers.SerializerMethodField()
+    # date_of_birth = serializers.SerializerMethodField()
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
     desired_country = serializers.SerializerMethodField()
     type_of_visa = serializers.SerializerMethodField()
+    marital_status = serializers.SerializerMethodField()
     passport_number = serializers.SerializerMethodField()
     passport_country = serializers.SerializerMethodField()
     passport_issue_date = serializers.SerializerMethodField()
@@ -279,6 +280,16 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                     "labels": self.context["labels"]["current_country_label"],
                 }
 
+    def get_marital_status(self, obj):
+        var = obj.marital_status
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "drop-down",
+                "choices": CustomerProfile.MARITAL_TYPE,
+                "labels": self.context["labels"]["marital_status_label"],
+            }
+
     def get_desired_country(self, obj):
         if obj.desired_country is not None:
             var = obj.desired_country.id
@@ -345,7 +356,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
         fields = (
             "first_name",
             "last_name",
-            "date_of_birth",
+            # "date_of_birth",
             "age",
             "phone_number",
             "mother_fullname",
@@ -1355,3 +1366,120 @@ class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
         fields = (
             "id", 'test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
             'speaking_score', 'reading_score', )
+
+
+class CustomerSpouseProfileLabelSerializer(serializers.ModelSerializer):
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    mother_fullname = serializers.SerializerMethodField()
+    father_fullname = serializers.SerializerMethodField()
+    age = serializers.SerializerMethodField()
+    passport_number = serializers.SerializerMethodField()
+    passport_country = serializers.SerializerMethodField()
+    passport_issue_date = serializers.SerializerMethodField()
+    passport_expiry_date = serializers.SerializerMethodField()
+
+    def get_labels(self, obj):
+        if "labels" in self.context:
+            return self.context["labels"]
+        return None
+
+    def get_first_name(self, obj):
+        var = obj.first_name
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["first_name_label"],
+            }
+
+    def get_last_name(self, obj):
+        var = obj.last_name
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["last_name_label"],
+            }
+
+    def get_mother_fullname(self, obj):
+        var = obj.mother_fullname
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["mother_fullname_label"],
+            }
+
+    def get_father_fullname(self, obj):
+        var = obj.father_fullname
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["father_fullname_label"],
+            }
+
+    def get_age(self, obj):
+        var = obj.age
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "int",
+                "labels": self.context["labels"]["age_label"],
+            }
+
+    def get_passport_number(self, obj):
+        var = obj.passport_number
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["passport_number_label"],
+            }
+
+    def get_passport_country(self, obj):
+        var = None;
+        name = None;
+        if obj.passport_country is not None:
+            var = obj.passport_country.id
+            name = obj.passport_country.name
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "name": name,
+                "type": "drop-down",
+                "labels": self.context["labels"]["passport_country_label"],
+            }
+
+    def get_passport_issue_date(self, obj):
+        var = obj.passport_issue_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["passport_issue_date_label"],
+            }
+
+    def get_passport_expiry_date(self, obj):
+        var = obj.passport_expiry_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["passport_expiry_date_label"],
+            }
+
+    class Meta:
+        model = CustomerSpouseProfileLabel
+        fields = (
+            "first_name",
+            "last_name",
+            "age",
+            "mother_fullname",
+            "father_fullname",
+            'passport_number',
+            'passport_country',
+            'passport_issue_date',
+            'passport_expiry_date',
+        )

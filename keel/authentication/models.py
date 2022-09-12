@@ -186,6 +186,14 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     VISIT = 6
     CITIZENSHIP = 7
 
+    SINGLE = 1
+    MARRIED = 2
+    DIVORCED = 3
+
+    MARITAL_TYPE = (
+        (SINGLE, 'Single'), (MARRIED, 'Married'), (DIVORCED, 'Divorced'),
+    )
+
     VISA_TYPE = (
         (STUDY, 'Study'), (PGWP, 'PGWP'), (WORKPERMIT, 'WorkPermit'),
         (PR, 'PR'), (DEPENDANT, 'Dependant'), (VISIT, 'Visit'), (CITIZENSHIP, 'Citizenship'),
@@ -198,12 +206,13 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
     address = models.CharField(max_length=512, blank=True, null=True, default=None)
-    date_of_birth = models.DateField(default=None, null=True, blank=True)
+    # date_of_birth = models.DateField(default=None, null=True, blank=True)
     current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="current_country_profile", 
                                         default=None, blank=True, null=True)
     desired_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="desired_country_profile", 
                                         default=None, blank=True, null=True)
     type_of_visa = models.PositiveSmallIntegerField(null=True, blank=True, choices=VISA_TYPE)
+    marital_status = models.PositiveSmallIntegerField(null=True, blank=True, choices=MARITAL_TYPE)
     passport_number = models.CharField(max_length=512, blank=True, null=True)
     passport_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="passport_country_profile",
                                         default=None, blank=True, null=True)
@@ -257,6 +266,7 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     current_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     desired_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     type_of_visa_label = models.CharField(max_length=512, blank=True, null=True, default=None)
+    marital_status_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     passport_number_label = models.CharField(max_length=512, blank=True, null=True)
     passport_country_label = models.CharField(max_length=128, blank=True, null=True, default=None)
     passport_issue_date_label = models.CharField(max_length=128, blank=True, null=True, default=None)
@@ -449,23 +459,43 @@ class CustomerLanguageScoreLabel(TimeStampedModel, SoftDeleteModel):
         db_table = "language_scores_label"
 
 
-# class CustomerSpouseProfile(TimeStampedModel, SoftDeleteModel):
-#
-#     profile = models.OneToOneField(CustomerProfile, related_name="customer_spouse", on_delete=models.DO_NOTHING)
-#     first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
-#     last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
-#     mother_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
-#     father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
-#     # age = models.CharField(max_length=512, blank=True, null=True, default=None)
-#     address = models.CharField(max_length=512, blank=True, null=True, default=None)
-#     date_of_birth = models.DateField(default=None, null=True, blank=True)
-#     # type_of_visa = models.CharField(null=True, blank=True, choices=VISA_TYPE)
-#     passport_number = models.CharField(max_length=512, blank=True, null=True)
-#     passport_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="passport_country_profile",
-#                                          default=None, blank=True, null=True)
-#     passport_issue_date = models.DateField(null=True, blank=True)
-#     passport_expiry_date = models.DateField(null=True, blank=True)
-#
-#     def __str__(self):
-#         return str(self.profile)
+class CustomerSpouseProfile(TimeStampedModel):
 
+    customer = models.OneToOneField(CustomerProfile, related_name="customer_spouse", on_delete=models.DO_NOTHING)
+    first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+    last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+    mother_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
+    father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
+    age = models.CharField(max_length=512, blank=True, null=True, default=None)
+    # date_of_birth = models.DateField(default=None, null=True, blank=True)
+    passport_number = models.CharField(max_length=512, blank=True, null=True)
+    passport_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="passport_country_spouse_profile",
+                                         default=None, blank=True, null=True)
+    passport_issue_date = models.DateField(null=True, blank=True)
+    passport_expiry_date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.customer)
+
+    class Meta:
+        db_table = "customer_spouse_profile"
+
+
+class CustomerSpouseProfileLabel(TimeStampedModel):
+    user_label = models.CharField(max_length=255, default="user")
+    customer_label = models.CharField(max_length=255)
+    first_name_label = models.CharField(max_length=255)
+    last_name_label = models.CharField(max_length=255)
+    mother_fullname_label = models.CharField(max_length=255)
+    father_fullname_label = models.CharField(max_length=255)
+    age_label = models.CharField(max_length=255)
+    passport_number_label = models.CharField(max_length=255)
+    passport_country_label = models.CharField(max_length=255)
+    passport_issue_date_label = models.CharField(max_length=255)
+    passport_expiry_date_label = models.CharField(max_length=255)
+
+    def __str__(self):
+        return str(self.customer_label)
+
+    class Meta:
+        db_table = "customer_spouse_profile_label"
