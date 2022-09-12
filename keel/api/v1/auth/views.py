@@ -567,7 +567,6 @@ class ProfileView(GenericViewSet):
         profile = CustomerSpouseProfile.objects.filter(customer__user=self.request.user.id).first()
         if profile:
             serializer = self.serializer_class_spouse_profile(profile, context={"labels": labels})
-            # serializer.data.pop("labels")
             return serializer.data
         else:
             data = constants.SPOUSEPROFILE

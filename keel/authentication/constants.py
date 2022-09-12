@@ -18,6 +18,17 @@ PROFILE = {
     "address": {"value": "", "type": "char", "labels": "Address"},
 }
 
+SPOUSEPROFILE = {
+    "first_name": {"value": "", "type": "char", "labels": "First Name"},
+    "last_name": {"value": "", "type": "char", "labels": "Last Name"},
+    "age": {"value": "", "type": "char", "labels": "Age"},
+    "phone_number": {"value": "", "type": "char", "labels": "Phone Number"},
+    "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
+    "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
+    "current_country": {"value": "", "type": "drop-down", "labels": "Current Country"},
+    "desired_country": {"value": "", "type": "drop-down", "labels": "Desired Country"},
+}
+
 QUALIFICATION = [{
     "institute": {"value": "", "type": "char", "labels": "Institute"},
     "degree": {"value": "", "type": "char", "labels": "Degree"},
