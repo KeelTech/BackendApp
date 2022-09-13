@@ -494,8 +494,8 @@ class CustomerSpouseProfile(TimeStampedModel):
 class CustomerSpouseProfileLabel(TimeStampedModel):
     user_label = models.CharField(max_length=255, default="user")
     customer_label = models.CharField(max_length=255)
-    date_of_marriage_label = models.CharField(max_length=255)
-    number_of_children_label = models.CharField(max_length=255)
+    date_of_marriage_label = models.CharField(max_length=255, null=True, blank=True)
+    number_of_children_label = models.CharField(max_length=255, null=True, blank=True)
     first_name_label = models.CharField(max_length=255)
     last_name_label = models.CharField(max_length=255)
     mother_fullname_label = models.CharField(max_length=255)
