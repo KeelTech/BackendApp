@@ -770,12 +770,13 @@ class ProfileView(GenericViewSet):
         # cases = self.get_queryset_cases(request)
         
         response["message"] = {
-                        "profile" : profile,
-                        "qualification" : qualification,
-                        "work_experience" : work_experience,
-                        "relative_in_canada" : relative_in_canada,
-                        "education_assessment" : education_assessment,
+                        "profile": profile,
+                        "qualification": qualification,
+                        "work_experience": work_experience,
+                        "relative_in_canada": relative_in_canada,
+                        "education_assessment": education_assessment,
                         "language_scores": language_scores,
+                        "spouse_profile": spouse_profile,
                         # "cases":cases
                     }
         return Response(response)

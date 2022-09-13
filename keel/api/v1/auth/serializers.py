@@ -180,6 +180,10 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     father_fullname = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
+    any_previous_marriage = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+    city_of_birth = serializers.SerializerMethodField()
+    first_language = serializers.SerializerMethodField()
     # date_of_birth = serializers.SerializerMethodField()
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
@@ -203,6 +207,42 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                 "value": var,
                 "type": "char",
                 "labels": self.context["labels"]["first_name_label"],
+            }
+
+    def get_any_previous_marriage(self, obj):
+        var = obj.any_previous_marriage
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "bool",
+                "labels": self.context["labels"]["any_previous_marriage_label"],
+            }
+
+    def get_email(self, obj):
+        var = obj.email
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["email_label"],
+            }
+
+    def get_city_of_birth(self, obj):
+        var = obj.city_of_birth
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["city_of_birth_label"],
+            }
+
+    def get_first_language(self, obj):
+        var = obj.first_language
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["first_language_label"],
             }
 
     def get_last_name(self, obj):
@@ -366,6 +406,10 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             "address",
             "type_of_visa",
             "marital_status",
+            "any_previous_marriage",
+            "email",
+            "city_of_birth",
+            "first_language",
             'passport_number',
             'passport_country',
             'passport_issue_date',

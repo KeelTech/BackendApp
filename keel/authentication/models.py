@@ -213,7 +213,11 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
                                         default=None, blank=True, null=True)
     type_of_visa = models.PositiveSmallIntegerField(null=True, blank=True, choices=VISA_TYPE)
     marital_status = models.PositiveSmallIntegerField(null=True, blank=True, choices=MARITAL_TYPE)
+    any_previous_marriage = models.BooleanField(null=True, blank=True)
     passport_number = models.CharField(max_length=512, blank=True, null=True)
+    email = models.CharField(max_length=512, blank=True, null=True)
+    city_of_birth = models.CharField(max_length=256, blank=True, null=True)
+    first_language = models.CharField(max_length=256, blank=True, null=True)
     passport_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="passport_country_profile",
                                         default=None, blank=True, null=True)
     passport_issue_date = models.DateField(null=True, blank=True)
@@ -262,6 +266,10 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     age_label = models.CharField(max_length=512)
     address_label = models.CharField(max_length=512)
     date_of_birth_label = models.CharField(max_length=512)
+    any_previous_marriage_label = models.CharField(max_length=512, null=True, blank=True)
+    email_label = models.CharField(max_length=512, null=True, blank=True)
+    city_of_birth_label = models.CharField(max_length=512, null=True, blank=True)
+    first_language_label = models.CharField(max_length=512, null=True, blank=True)
     phone_number_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     current_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
     desired_country_label = models.CharField(max_length=512, blank=True, null=True, default=None)
@@ -462,6 +470,8 @@ class CustomerLanguageScoreLabel(TimeStampedModel, SoftDeleteModel):
 class CustomerSpouseProfile(TimeStampedModel):
 
     customer = models.OneToOneField(CustomerProfile, related_name="customer_spouse", on_delete=models.DO_NOTHING)
+    date_of_marriage = models.DateField(null=True, blank=True)
+    number_of_children = models.PositiveSmallIntegerField(null=True, blank=True)
     first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
     last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
     mother_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
@@ -484,6 +494,8 @@ class CustomerSpouseProfile(TimeStampedModel):
 class CustomerSpouseProfileLabel(TimeStampedModel):
     user_label = models.CharField(max_length=255, default="user")
     customer_label = models.CharField(max_length=255)
+    date_of_marriage_label = models.CharField(max_length=255)
+    number_of_children_label = models.CharField(max_length=255)
     first_name_label = models.CharField(max_length=255)
     last_name_label = models.CharField(max_length=255)
     mother_fullname_label = models.CharField(max_length=255)
