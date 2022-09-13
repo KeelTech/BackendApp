@@ -222,6 +222,8 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
                                         default=None, blank=True, null=True)
     passport_issue_date = models.DateField(null=True, blank=True)
     passport_expiry_date = models.DateField(null=True, blank=True)
+    height = models.CharField(max_length=256, blank=True, null=True)
+    eye_color = models.CharField(max_length=256, blank=True, null=True)
     
     def __str__(self):
         return str(self.user)
@@ -279,6 +281,8 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     passport_country_label = models.CharField(max_length=128, blank=True, null=True, default=None)
     passport_issue_date_label = models.CharField(max_length=128, blank=True, null=True, default=None)
     passport_expiry_date_label = models.CharField(max_length=128, blank=True, null=True, default=None)
+    height_label = models.CharField(max_length=128, blank=True, null=True, default=None)
+    eye_color_label = models.CharField(max_length=128, blank=True, null=True, default=None)
 
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
@@ -435,6 +439,7 @@ class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel):
     )
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_lang_score")
     test_type = models.PositiveSmallIntegerField(choices=TEST_TYPE)
+    test_date = models.DateField(blank=True, null=True)
     result_date = models.DateField(blank=True, null=True)
     test_version = models.CharField(max_length=256, blank=True, null=True)
     report_form_number = models.CharField(max_length=512, blank=True, null=True)
@@ -454,6 +459,7 @@ class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel):
 class CustomerLanguageScoreLabel(TimeStampedModel, SoftDeleteModel):
     user_label = models.CharField(max_length=255, default="user")
     test_type_label = models.CharField(max_length=255)
+    test_date_label = models.CharField(max_length=255, null=True, blank=True)
     result_date_label = models.CharField(max_length=255)
     test_version_label = models.CharField(max_length=255)
     report_form_number_label = models.CharField(max_length=255)

@@ -194,6 +194,8 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     passport_country = serializers.SerializerMethodField()
     passport_issue_date = serializers.SerializerMethodField()
     passport_expiry_date = serializers.SerializerMethodField()
+    height = serializers.SerializerMethodField()
+    eye_color = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -392,6 +394,24 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                 "labels": self.context["labels"]["passport_expiry_date_label"],
             }
 
+    def get_height(self, obj):
+        var = obj.height
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["height_label"],
+            }
+
+    def get_eye_color(self, obj):
+        var = obj.eye_color
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["eye_color_label"],
+            }
+
     class Meta:
         model = CustomerProfileLabel
         fields = (
@@ -415,6 +435,8 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             'passport_country',
             'passport_issue_date',
             'passport_expiry_date',
+            'height',
+            'eye_color',
         )
 
 
