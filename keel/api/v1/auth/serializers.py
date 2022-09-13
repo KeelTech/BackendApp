@@ -327,6 +327,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                 "value": var,
                 "type": "drop-down",
                 "choices": CustomerProfile.MARITAL_TYPE,
+                "display_spouse": 2,
                 "labels": self.context["labels"]["marital_status_label"],
             }
 
