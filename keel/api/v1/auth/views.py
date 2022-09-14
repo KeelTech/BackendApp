@@ -619,6 +619,13 @@ class ProfileView(GenericViewSet):
             # "date_of_birth" : datas['date_of_birth'].get("value"),
             "current_country" : datas['current_country'].get("value"),
             "desired_country" : datas['desired_country'].get("value"),
+
+            "height": datas['height'].get("value"),
+            "eye_color": datas['eye_color'].get("value"),
+            "first_language": datas['first_language'].get("value"),
+            "city_of_birth": datas['city_of_birth'].get("value"),
+            "email": datas['email'].get("value"),
+
             "type_of_visa": datas['type_of_visa'].get("value"),
             "passport_number": datas['passport_number'].get("value"),
             "passport_country": datas['passport_country'].get("value"),
@@ -705,14 +712,14 @@ class ProfileView(GenericViewSet):
         create_education_assessment = EducationalCreationalAssessmentView.educational_creational_assessment(request)
 
         response["message"] = {"profile":update_profile.data, "qualification":create_qualification.data, 
-                                "work_experience":create_work_experience.data, "relative_in_canada":create_relative_in_canada.data, 
+                                "work_experience": create_work_experience.data, "relative_in_canada":create_relative_in_canada.data,
                                 "education_assessment":create_education_assessment.data}
         return Response(response)
     
     def update_full_profile(self, request):
         response = {
-            "status":1,
-            "message":""
+            "status": 1,
+            "message": ""
         }
         # update profile
         update_profile = self.update_profile(request)
@@ -727,6 +734,8 @@ class ProfileView(GenericViewSet):
 
         update_lang_scores = self.update_language_score(request)
 
+        update_spouse_profile = self.update_spouse_profile(request)
+
         response["message"] = {
                                 "profile" : update_profile.data,
                                 "qualification":update_qualification.data,
@@ -734,6 +743,7 @@ class ProfileView(GenericViewSet):
                                 "relative_in_canada":update_relative_in_canada.data, 
                                 "education_assessment": update_education_assessment.data,
                                 "language_scores": update_lang_scores.data,
+                                "spouse_profile": update_spouse_profile,
                                 }
         return Response(response)
     
@@ -836,12 +846,77 @@ class ProfileView(GenericViewSet):
                                                                  "writing_score": validated_data_from_dict.get('writing_score'),
                                                                  "speaking_score": validated_data_from_dict.get('speaking_score'),
                                                                  "reading_score": validated_data_from_dict.get('reading_score'),
-                                                                 # "mother_tongue": validated_data_from_dict.get('mother_tongue'),
                                                                  "user": user
                                                                  })
                 count += 1
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:LanguageScore:update_lang_score ' + str(e))
+
+        response["message"] = serializer.data
+        return Response(response)
+
+    def extract_spouse_data(self, data):
+        out = []
+        for info in data:
+            customer_spouse_score = {
+                "id": info.get("id"),
+                "date_of_marriage": info["date_of_marriage"].get("value"),
+                "number_of_children": info["number_of_children"].get("value"),
+                "first_name": info["first_name"].get("value"),
+                "last_name": info["last_name"].get("value"),
+                "mother_fullname": info["mother_fullname"].get("value"),
+                "age": info["age"].get("value"),
+                "passport_number": info["passport_number"].get("value"),
+                "passport_country": info["passport_country"].get("value"),
+                "passport_issue_date": info["passport_issue_date"].get("value"),
+                "passport_expiry_date": info["passport_expiry_date"].get("value"),
+            }
+
+            out.append(customer_spouse_score)
+        return out
+
+    def update_spouse_profile(self, request):
+        user = request.user
+        response = {
+            "status": 1,
+            "message": ""
+        }
+        CustomerSpouseProfile.objects.filter(customer__user=user).delete()
+        request_data = self.extract_spouse_data(request.data.get('spouse_profile'))
+        try:
+            serializer = serializers.CustomerSpouseProfileUpdateSerializer(data=request_data, many=True)
+            serializer.is_valid(raise_exception=True)
+            validated_data = serializer.validated_data
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:SpouseProfileSerializer ' + str(e))
+            response["message"] = str(e)
+            return Response(response)
+        if not len(validated_data):
+            response["message"] = serializer.data
+            return Response(response)
+        enum_validated_data = dict(enumerate(validated_data))
+        count = 0
+        try:
+            for ids in request_data:
+                validated_data_from_dict = enum_validated_data[count]
+                CustomerSpouseProfile.objects.update_or_create(id=ids.get('id'),
+                                                               defaults={
+                                                                 "date_of_marriage": validated_data_from_dict.get('date_of_marriage'),
+                                                                 "number_of_children": validated_data_from_dict.get('number_of_children'),
+                                                                 "first_name": validated_data_from_dict.get('first_name'),
+                                                                 "last_name": validated_data_from_dict.get('last_name'),
+                                                                 "mother_fullname": validated_data_from_dict.get('mother_fullname'),
+                                                                 "father_fullname": validated_data_from_dict.get('father_fullname'),
+                                                                 "age": validated_data_from_dict.get('age'),
+                                                                 "passport_number": validated_data_from_dict.get('passport_number'),
+                                                                 "passport_country": validated_data_from_dict.get('passport_country'),
+                                                                 "passport_issue_date": validated_data_from_dict.get('passport_issue_date'),
+                                                                 "passport_expiry_date": validated_data_from_dict.get('passport_expiry_date'),
+                                                                 "customer": user.user_profile
+                                                                 })
+                count += 1
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LanguageScore:update_spouse_profile ' + str(e))
 
         response["message"] = serializer.data
         return Response(response)

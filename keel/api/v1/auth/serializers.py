@@ -20,7 +20,7 @@ from keel.authentication.models import (
     RelativeInCanadaLabel,
     SMSOtpModel,
     User,
-    UserDocument, CustomerSpouseProfileLabel,
+    UserDocument, CustomerSpouseProfileLabel, CustomerSpouseProfile,
     WorkExperienceLabel, CustomerLanguageScoreLabel, CustomerLanguageScore,
 )
 from keel.Core.constants import LOGGER_LOW_SEVERITY
@@ -1450,6 +1450,14 @@ class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
         fields = (
             "id", 'test_type', 'test_date', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
             'speaking_score', 'reading_score', )
+
+
+class CustomerSpouseProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerSpouseProfile
+        fields = (
+            "id", 'date_of_marriage', 'number_of_children', 'first_name', 'last_name',  'mother_fullname', 'age',
+            'passport_number', 'passport_country', 'passport_issue_date', 'passport_expiry_date')
 
 
 class CustomerSpouseProfileLabelSerializer(serializers.ModelSerializer):
