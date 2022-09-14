@@ -1356,6 +1356,7 @@ class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer
 
 class LanguageScoreLabelSerializer(serializers.ModelSerializer):
     test_type = serializers.SerializerMethodField()
+    test_date = serializers.SerializerMethodField()
     result_date = serializers.SerializerMethodField()
     test_version = serializers.SerializerMethodField()
     report_form_number = serializers.SerializerMethodField()
@@ -1373,6 +1374,15 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
                 "choices": CustomerLanguageScore.TEST_TYPE,
                 "type": "drop-down",
                 "labels": self.context["labels"]["test_type_label"],
+            }
+
+    def get_test_date(self, obj):
+        var = obj.test_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["test_date_label"],
             }
 
     def get_result_date(self, obj):
