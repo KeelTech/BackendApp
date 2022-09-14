@@ -134,6 +134,13 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
             "address",
             "date_of_birth",
             "type_of_visa",
+            "first_language",
+            "city_of_birth",
+            "email",
+            "marital_status",
+            "any_previous_marriage",
+            "height",
+            "eye_color",
             "passport_number",
             "passport_country",
             "passport_issue_date",
@@ -164,6 +171,15 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         profile.desired_country = validated_data.get("desired_country")
         profile.date_of_birth = validated_data.get("date_of_birth")
         profile.type_of_visa = validated_data.get("type_of_visa")
+
+        profile.first_language = validated_data.get("first_language")
+        profile.city_of_birth = validated_data.get("city_of_birth")
+        profile.email = validated_data.get("email")
+        profile.marital_status = validated_data.get("marital_status")
+        profile.any_previous_marriage = validated_data.get("any_previous_marriage")
+        profile.height = validated_data.get("height")
+        profile.eye_color = validated_data.get("eye_color")
+
         profile.passport_number = validated_data.get("passport_number")
         profile.passport_country = validated_data.get("passport_country")
         profile.passport_issue_date = validated_data.get("passport_issue_date")
@@ -1432,7 +1448,7 @@ class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerLanguageScore
         fields = (
-            "id", 'test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
+            "id", 'test_type', 'test_date', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
             'speaking_score', 'reading_score', )
 
 

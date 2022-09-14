@@ -787,6 +787,7 @@ class ProfileView(GenericViewSet):
             customer_lang_score = {
                 "id": info.get("id"),
                 "test_type": info["test_type"].get("value"),
+                "test_date": info["test_date"].get("value"),
                 "result_date": info["result_date"].get("value"),
                 "listening_score": info["listening_score"].get("value"),
                 "test_version": info["test_version"].get("value"),
@@ -827,6 +828,7 @@ class ProfileView(GenericViewSet):
                 CustomerLanguageScore.objects.update_or_create(id=ids.get('id'),
                                                                defaults={
                                                                  "test_type": validated_data_from_dict.get('test_type'),
+                                                                 "test_date": validated_data_from_dict.get('test_date'),
                                                                  "result_date": validated_data_from_dict.get('result_date'),
                                                                  "test_version": validated_data_from_dict.get('test_version'),
                                                                  "report_form_number": validated_data_from_dict.get('report_form_number'),
