@@ -743,7 +743,7 @@ class ProfileView(GenericViewSet):
                                 "relative_in_canada":update_relative_in_canada.data, 
                                 "education_assessment": update_education_assessment.data,
                                 "language_scores": update_lang_scores.data,
-                                "spouse_profile": update_spouse_profile,
+                                "spouse_profile": update_spouse_profile.data,
                                 }
         return Response(response)
     
@@ -856,24 +856,23 @@ class ProfileView(GenericViewSet):
         return Response(response)
 
     def extract_spouse_data(self, data):
-        out = []
-        for info in data:
-            customer_spouse_score = {
-                "id": info.get("id"),
-                "date_of_marriage": info["date_of_marriage"].get("value"),
-                "number_of_children": info["number_of_children"].get("value"),
-                "first_name": info["first_name"].get("value"),
-                "last_name": info["last_name"].get("value"),
-                "mother_fullname": info["mother_fullname"].get("value"),
-                "age": info["age"].get("value"),
-                "passport_number": info["passport_number"].get("value"),
-                "passport_country": info["passport_country"].get("value"),
-                "passport_issue_date": info["passport_issue_date"].get("value"),
-                "passport_expiry_date": info["passport_expiry_date"].get("value"),
-            }
-
-            out.append(customer_spouse_score)
-        return out
+        pass
+        # out = []
+        # customer_spouse_score = {
+        #     "id": info.get("id"),
+        #     "date_of_marriage": info["date_of_marriage"].get("value"),
+        #     "number_of_children": info["number_of_children"].get("value"),
+        #     "first_name": info["first_name"].get("value"),
+        #     "last_name": info["last_name"].get("value"),
+        #     "mother_fullname": info["mother_fullname"].get("value"),
+        #     "age": info["age"].get("value"),
+        #     "passport_number": info["passport_number"].get("value"),
+        #     "passport_country": info["passport_country"].get("value"),
+        #     "passport_issue_date": info["passport_issue_date"].get("value"),
+        #     "passport_expiry_date": info["passport_expiry_date"].get("value"),
+        # }
+        #
+        # return customer_spouse_score
 
     def update_spouse_profile(self, request):
         user = request.user
@@ -882,9 +881,10 @@ class ProfileView(GenericViewSet):
             "message": ""
         }
         CustomerSpouseProfile.objects.filter(customer__user=user).delete()
-        request_data = self.extract_spouse_data(request.data.get('spouse_profile'))
+        # request_data = self.extract_spouse_data(request.data.get('spouse_profile'))
+        request_data = request.data.get('spouse_profile')
         try:
-            serializer = serializers.CustomerSpouseProfileUpdateSerializer(data=request_data, many=True)
+            serializer = serializers.CustomerSpouseProfileUpdateSerializer(data=request_data)
             serializer.is_valid(raise_exception=True)
             validated_data = serializer.validated_data
         except Exception as e:
