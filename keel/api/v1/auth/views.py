@@ -856,23 +856,23 @@ class ProfileView(GenericViewSet):
         return Response(response)
 
     def extract_spouse_data(self, data):
-        pass
-        # out = []
-        # customer_spouse_score = {
-        #     "id": info.get("id"),
-        #     "date_of_marriage": info["date_of_marriage"].get("value"),
-        #     "number_of_children": info["number_of_children"].get("value"),
-        #     "first_name": info["first_name"].get("value"),
-        #     "last_name": info["last_name"].get("value"),
-        #     "mother_fullname": info["mother_fullname"].get("value"),
-        #     "age": info["age"].get("value"),
-        #     "passport_number": info["passport_number"].get("value"),
-        #     "passport_country": info["passport_country"].get("value"),
-        #     "passport_issue_date": info["passport_issue_date"].get("value"),
-        #     "passport_expiry_date": info["passport_expiry_date"].get("value"),
-        # }
-        #
-        # return customer_spouse_score
+
+        customer_lang_score = {
+            "id": data.get("id"),
+            "first_name": data["first_name"].get("value"),
+            "last_name": data["last_name"].get("value"),
+            "age": data["age"].get("value"),
+            "date_of_marriage": data["date_of_marriage"].get("value"),
+            "number_of_children": data["number_of_children"].get("value"),
+            "mother_fullname": data["mother_fullname"].get("value"),
+            "father_fullname": data["father_fullname"].get("value"),
+            "passport_number": data["passport_number"].get("value"),
+            "passport_country": data["passport_country"].get("value"),
+            "passport_issue_date": data["passport_issue_date"].get("value"),
+            "passport_expiry_date": data["passport_expiry_date"].get("value"),
+            }
+
+        return customer_lang_score
 
     def update_spouse_profile(self, request):
         user = request.user
@@ -881,8 +881,8 @@ class ProfileView(GenericViewSet):
             "message": ""
         }
         CustomerSpouseProfile.objects.filter(customer__user=user).delete()
-        # request_data = self.extract_spouse_data(request.data.get('spouse_profile'))
-        request_data = request.data.get('spouse_profile')
+        request_data = self.extract_spouse_data(request.data.get('spouse_profile'))
+        # request_data = request.data.get('spouse_profile')
         try:
             serializer = serializers.CustomerSpouseProfileUpdateSerializer(data=request_data)
             serializer.is_valid(raise_exception=True)
