@@ -224,6 +224,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     passport_expiry_date = models.DateField(null=True, blank=True)
     height = models.CharField(max_length=256, blank=True, null=True)
     eye_color = models.CharField(max_length=256, blank=True, null=True)
+    funds_available = models.CharField(max_length=128, blank=True, null=True)
     
     def __str__(self):
         return str(self.user)
@@ -283,6 +284,7 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     passport_expiry_date_label = models.CharField(max_length=128, blank=True, null=True, default=None)
     height_label = models.CharField(max_length=128, blank=True, null=True, default=None)
     eye_color_label = models.CharField(max_length=128, blank=True, null=True, default=None)
+    funds_available_label = models.CharField(max_length=128, blank=True, null=True, default=None)
 
 
 class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
@@ -447,7 +449,8 @@ class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel):
     writing_score = models.IntegerField()
     speaking_score = models.IntegerField()
     reading_score = models.IntegerField()
-    mother_tongue = models.CharField(max_length=256, blank=True, null=True)
+    overall_score = models.IntegerField()
+    # mother_tongue = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
         return str(self.test_type)
@@ -467,7 +470,8 @@ class CustomerLanguageScoreLabel(TimeStampedModel, SoftDeleteModel):
     writing_score_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     speaking_score_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     reading_score_label = models.CharField(max_length=255)
-    mother_tongue_label = models.CharField(max_length=255)
+    overall_score_label = models.CharField(max_length=255)
+    # mother_tongue_label = models.CharField(max_length=255)
 
     class Meta:
         db_table = "language_scores_label"
@@ -517,3 +521,8 @@ class CustomerSpouseProfileLabel(TimeStampedModel):
 
     class Meta:
         db_table = "customer_spouse_profile_label"
+
+
+class ChildrenInformation(TimeStampedModel):
+    pass
+

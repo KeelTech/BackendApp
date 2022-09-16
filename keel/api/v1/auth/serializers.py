@@ -144,7 +144,8 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
             "passport_number",
             "passport_country",
             "passport_issue_date",
-            "passport_expiry_date"
+            "passport_expiry_date",
+            "funds_available"
         )
 
     def create(self, validated_data):
@@ -179,6 +180,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         profile.any_previous_marriage = validated_data.get("any_previous_marriage")
         profile.height = validated_data.get("height")
         profile.eye_color = validated_data.get("eye_color")
+        profile.funds_available = validated_data.get("funds_available")
 
         profile.passport_number = validated_data.get("passport_number")
         profile.passport_country = validated_data.get("passport_country")
@@ -212,6 +214,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     passport_expiry_date = serializers.SerializerMethodField()
     height = serializers.SerializerMethodField()
     eye_color = serializers.SerializerMethodField()
+    funds_available = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -428,6 +431,15 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
                 "labels": self.context["labels"]["eye_color_label"],
             }
 
+    def get_funds_available(self, obj):
+        var = obj.funds_available
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["funds_available_label"],
+            }
+
     class Meta:
         model = CustomerProfileLabel
         fields = (
@@ -453,6 +465,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             'passport_expiry_date',
             'height',
             'eye_color',
+            'funds_available',
         )
 
 
@@ -1364,6 +1377,7 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
     writing_score = serializers.SerializerMethodField()
     speaking_score = serializers.SerializerMethodField()
     reading_score = serializers.SerializerMethodField()
+    overall_score = serializers.SerializerMethodField()
     # mother_tongue = serializers.SerializerMethodField()
 
     def get_test_type(self, obj):
@@ -1448,6 +1462,14 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
                 "labels": self.context["labels"]["reading_score_label"],
             }
 
+    def get_overall_score(self, obj):
+        var = obj.overall_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "int",
+                "labels": self.context["labels"]["overall_score_label"],
+            }
     class Meta:
         model = CustomerLanguageScoreLabel
         fields = ('id', 'test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',

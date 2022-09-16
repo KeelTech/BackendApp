@@ -83,6 +83,7 @@ LANGUAGESCORE = [{
     "writing_score": {"value": "", "type": "char", "labels": "Writing Score"},
     "speaking_score": {"value": "", "type": "char", "labels": "Speaking Score"},
     "reading_score": {"value": "", "type": "char", "labels": "Reading Score"},
+    "overall_score": {"value": "", "type": "char", "labels": "Overall Score"},
 }]
 
 WORK_EXPERIENCE = [{

@@ -449,6 +449,7 @@ class ProfileView(GenericViewSet):
     serializer_class_education_assessment = serializers.EducationalCreationalAssessmentLabelSerializer
     serializer_class_cases = CasesSerializer
     serializer_class_language_scores = serializers.LanguageScoreLabelSerializer
+    serializer_class_language_scores = serializers.LanguageScoreLabelSerializer
 
     def get_queryset_qualification(self, request):
         get_labels = QualificationLabel.objects.filter(user_label="user")
@@ -625,6 +626,7 @@ class ProfileView(GenericViewSet):
             "first_language": datas['first_language'].get("value"),
             "city_of_birth": datas['city_of_birth'].get("value"),
             "email": datas['email'].get("value"),
+            "funds_available": datas['funds_available'].get("value"),
 
             "type_of_visa": datas['type_of_visa'].get("value"),
             "passport_number": datas['passport_number'].get("value"),
@@ -805,6 +807,7 @@ class ProfileView(GenericViewSet):
                 "writing_score": info["writing_score"].get("value"),
                 "speaking_score": info["speaking_score"].get("value"),
                 "reading_score": info["reading_score"].get("value"),
+                "overall_score": info["overall_score"].get("value"),
                 # "mother_tongue": info["mother_tongue"].get("value"),
             }
 
@@ -846,6 +849,7 @@ class ProfileView(GenericViewSet):
                                                                  "writing_score": validated_data_from_dict.get('writing_score'),
                                                                  "speaking_score": validated_data_from_dict.get('speaking_score'),
                                                                  "reading_score": validated_data_from_dict.get('reading_score'),
+                                                                 "overall_score": validated_data_from_dict.get('overall_score'),
                                                                  "user": user
                                                                  })
                 count += 1
