@@ -449,7 +449,7 @@ class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel):
     writing_score = models.IntegerField()
     speaking_score = models.IntegerField()
     reading_score = models.IntegerField()
-    overall_score = models.IntegerField()
+    overall_score = models.IntegerField(null=True, blank=True)
     # mother_tongue = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
@@ -470,7 +470,7 @@ class CustomerLanguageScoreLabel(TimeStampedModel, SoftDeleteModel):
     writing_score_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     speaking_score_label = models.CharField(max_length=255, default=None, null=True, blank=True)
     reading_score_label = models.CharField(max_length=255)
-    overall_score_label = models.CharField(max_length=255)
+    overall_score_label = models.CharField(max_length=255, null=True, blank=True)
     # mother_tongue_label = models.CharField(max_length=255)
 
     class Meta:
@@ -487,7 +487,6 @@ class CustomerSpouseProfile(TimeStampedModel):
     mother_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
     father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
-    # date_of_birth = models.DateField(default=None, null=True, blank=True)
     passport_number = models.CharField(max_length=512, blank=True, null=True)
     passport_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="passport_country_spouse_profile",
                                          default=None, blank=True, null=True)
@@ -523,6 +522,6 @@ class CustomerSpouseProfileLabel(TimeStampedModel):
         db_table = "customer_spouse_profile_label"
 
 
-class ChildrenInformation(TimeStampedModel):
-    pass
+# class ChildrenInformation(TimeStampedModel):
+#     pass
 
