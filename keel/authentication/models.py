@@ -502,7 +502,7 @@ class CustomerSpouseProfile(TimeStampedModel):
 
 class CustomerSpouseProfileLabel(TimeStampedModel):
     user_label = models.CharField(max_length=255, default="user")
-    customer_label = models.CharField(max_length=255)
+    # customer_label = models.CharField(max_length=255)
     date_of_marriage_label = models.CharField(max_length=255, null=True, blank=True)
     number_of_children_label = models.CharField(max_length=255, null=True, blank=True)
     first_name_label = models.CharField(max_length=255)
@@ -522,6 +522,60 @@ class CustomerSpouseProfileLabel(TimeStampedModel):
         db_table = "customer_spouse_profile_label"
 
 
-# class ChildrenInformation(TimeStampedModel):
-#     pass
+class CustomerFamilyInformation(TimeStampedModel):
+    FATHER = 1
+    MOTHER = 2
+    BROTHER = 3
+    SISTER = 4
 
+    RELATION_TYPE = (
+        (FATHER, 'FATHER'),
+        (MOTHER, 'MOTHER'),
+        (BROTHER, 'BROTHER'),
+        (SISTER, 'SISTER'),
+    )
+    relationship = models.PositiveSmallIntegerField(choices=RELATION_TYPE)
+    customer = models.ForeignKey(CustomerProfile, related_name="customer_family", on_delete=models.DO_NOTHING)
+
+    first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+    last_name = models.CharField(max_length=512, blank=True, null=True, default=None)
+    date_of_birth = models.DateField(blank=True, null=True, default=None)
+    date_of_death = models.DateField(blank=True, null=True, default=None)
+    city_of_birth = models.CharField(max_length=256, null=True, blank=True)
+    country_of_birth = models.ForeignKey(Country, null=True, blank=True, on_delete=models.DO_NOTHING,
+                                         related_name='customer_family_birth_country')
+
+    street_address = models.CharField(max_length=512, blank=True, null=True)
+    current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, blank=True, null=True,
+                                        related_name='customer_family_current_country')
+    current_state = models.ForeignKey(State, on_delete=models.DO_NOTHING, null=True, blank=True,
+                                      related_name='customer_family_current_state')
+    current_occupation = models.CharField(max_length=256, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.customer)
+
+    class Meta:
+        db_table = "customer_family_information"
+
+
+class CustomerFamilyInformationLabel(TimeStampedModel):
+    user_label = models.CharField(max_length=255, default="user")
+    # customer_label = models.CharField(max_length=255)
+    date_of_birth_label = models.CharField(max_length=255, null=True, blank=True)
+    date_of_death_label = models.CharField(max_length=255, null=True, blank=True)
+    first_name_label = models.CharField(max_length=255)
+    last_name_label = models.CharField(max_length=255)
+    city_of_birth_label = models.CharField(max_length=255)
+    country_of_birth_label = models.CharField(max_length=255)
+    street_address_label = models.CharField(max_length=255)
+    current_country_label = models.CharField(max_length=255)
+    current_state_label = models.CharField(max_length=255)
+    current_occupation_label = models.CharField(max_length=255)
+    # passport_expiry_date_label = models.CharField(max_length=255)
+
+    def __str__(self):
+        return str(self.customer_label)
+
+    class Meta:
+        db_table = "customer_family_information_label"

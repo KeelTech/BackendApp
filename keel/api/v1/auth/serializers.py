@@ -19,7 +19,7 @@ from keel.authentication.models import (
     RelativeInCanada,
     RelativeInCanadaLabel,
     SMSOtpModel,
-    User,
+    User, CustomerFamilyInformation, CustomerFamilyInformationLabel,
     UserDocument, CustomerSpouseProfileLabel, CustomerSpouseProfile,
     WorkExperienceLabel, CustomerLanguageScoreLabel, CustomerLanguageScore,
 )
@@ -1607,3 +1607,113 @@ class CustomerSpouseProfileLabelSerializer(serializers.ModelSerializer):
             'passport_issue_date',
             'passport_expiry_date',
         )
+
+
+class CustomerFamilyInfoLabelSerializer(serializers.ModelSerializer):
+    relationship = serializers.SerializerMethodField()
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    date_of_birth = serializers.SerializerMethodField()
+    date_of_death = serializers.SerializerMethodField()
+    city_of_birth = serializers.SerializerMethodField()
+    country_of_birth = serializers.SerializerMethodField()
+    street_address = serializers.SerializerMethodField()
+    current_country = serializers.SerializerMethodField()
+    current_state = serializers.SerializerMethodField()
+    current_occupation = serializers.SerializerMethodField()
+
+    def get_relationship(self, obj):
+        var = obj.relationship
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "choices": CustomerFamilyInformation.RELATION_TYPE,
+                "type": "drop-down",
+                "labels": self.context["labels"]["relationship_label"],
+            }
+
+    def get_test_date(self, obj):
+        var = obj.test_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["test_date_label"],
+            }
+
+    def get_result_date(self, obj):
+        var = obj.result_date
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["result_date_label"],
+            }
+
+    def get_test_version(self, obj):
+        var = obj.test_version
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["test_version_label"],
+            }
+
+    def get_report_form_number(self, obj):
+        var = obj.report_form_number
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["report_form_number_label"],
+            }
+
+    def get_listening_score(self, obj):
+        var = obj.listening_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "int",
+                "labels": self.context["labels"]["listening_score_label"],
+            }
+
+    def get_writing_score(self, obj):
+        var = obj.writing_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "int",
+                "labels": self.context["labels"]["writing_score_label"],
+            }
+
+    def get_speaking_score(self, obj):
+        var = obj.speaking_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "int",
+                "labels": self.context["labels"]["speaking_score_label"],
+            }
+
+    def get_reading_score(self, obj):
+        var = obj.reading_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "int",
+                "labels": self.context["labels"]["reading_score_label"],
+            }
+
+    def get_overall_score(self, obj):
+        var = obj.overall_score
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "int",
+                "labels": self.context["labels"]["overall_score_label"],
+            }
+    class Meta:
+        model = CustomerLanguageScoreLabel
+        fields = ('id', 'test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
+                  'speaking_score', 'reading_score', )
+

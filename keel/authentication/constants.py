@@ -2,7 +2,7 @@
 This file contains all defaults objects to be returned
 for profile api if not instance is found in the databse
 """
-from keel.authentication.models import CustomerLanguageScore, CustomerProfile
+from keel.authentication.models import CustomerLanguageScore, CustomerProfile, CustomerFamilyInformation
 
 PROFILE = {
     "first_name": {"value": "", "type": "char", "labels": "First Name"},
@@ -30,6 +30,20 @@ SPOUSEPROFILE = {
     "passport_country": {"value": "", "type": "char", "labels": "passport Country"},
     "passport_issue_date": {"value": "", "type": "calendar", "labels": "Passport Issue Date"},
     "passport_expiry_date": {"value": "", "type": "calendar", "labels": "Passport Expiry Date"},
+}
+
+CUSTOMERFAMILYINFO = {
+    "relationship": {"value": "", "type": "drop-down", "labels": "Relationship", "choices": CustomerFamilyInformation.RELATION_TYPE,},
+    "first_name": {"value": "", "type": "char", "labels": "First Name"},
+    "last_name": {"value": "", "type": "char", "labels": "Last Name"},
+    "date_of_birth": {"value": "", "type": "calendar", "labels": "Date of Birth"},
+    "date_of_death": {"value": "", "type": "calendar", "labels": "Date of Death"},
+    "city_of_birth": {"value": "", "type": "char", "labels": "City of Birth"},
+    "country_of_birth": {"value": "", "type": "drop-down", "labels": "Country of Birth"},
+    "street_address": {"value": "", "type": "char", "labels": "Street Address"},
+    "current_country": {"value": "", "type": "drop-down", "labels": "Current Country"},
+    "current_state": {"value": "", "type": "drop-down", "labels": "Current State"},
+    "current_occupation": {"value": "", "type": "char", "labels": "Current Occupation"},
 }
 
 QUALIFICATION = [{

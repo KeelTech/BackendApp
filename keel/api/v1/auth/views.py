@@ -30,8 +30,8 @@ from keel.authentication.models import (AgentProfile, CustomerProfile,
                                         CustomerQualifications,
                                         CustomerWorkExperience, CustomToken,
                                         EducationalCreationalAssessment,
-                                        EducationalCreationalAssessmentLabel,
-                                        PasswordResetToken, QualificationLabel,
+                                        EducationalCreationalAssessmentLabel, CustomerFamilyInformationLabel,
+                                        PasswordResetToken, QualificationLabel, CustomerFamilyInformation,
                                         RelativeInCanada, CustomerSpouseProfile, CustomerSpouseProfileLabel,
                                         RelativeInCanadaLabel, CustomerLanguageScoreLabel, CustomerLanguageScore)
 from keel.authentication.models import User as user_model
@@ -449,7 +449,7 @@ class ProfileView(GenericViewSet):
     serializer_class_education_assessment = serializers.EducationalCreationalAssessmentLabelSerializer
     serializer_class_cases = CasesSerializer
     serializer_class_language_scores = serializers.LanguageScoreLabelSerializer
-    serializer_class_language_scores = serializers.LanguageScoreLabelSerializer
+    # serializer_class_family_info = serializers.CustomerFamilyInfoLabelSerializer
 
     def get_queryset_qualification(self, request):
         get_labels = QualificationLabel.objects.filter(user_label="user")
@@ -544,6 +544,19 @@ class ProfileView(GenericViewSet):
             return serializer.data
         else:
             data = constants.LANGUAGESCORE
+            return data
+
+    def get_queryset_family_info(self, request):
+        labels_queryset = CustomerFamilyInformationLabel.objects.filter(user_label="user").values()
+        if len(labels_queryset):
+            labels = labels_queryset[0]
+
+        queryset = CustomerFamilyInformation.objects.filter(user=request.user)
+        if len(queryset):
+            serializer = self.serializer_class_family_info(queryset, many=True, context={"labels": labels})
+            return serializer.data
+        else:
+            data = constants.CUSTOMERFAMILYINFO
             return data
 
     def get_queryset_profile(self, request):
@@ -779,6 +792,7 @@ class ProfileView(GenericViewSet):
         relative_in_canada = self.get_queryset_relative_in_canada(request)
         education_assessment = self.get_queryset_education_assessment(request)
         language_scores = self.get_queryset_language_scores(request)
+        # family_information = self.get_queryset_family_info(request)
         # cases = self.get_queryset_cases(request)
         
         response["message"] = {
