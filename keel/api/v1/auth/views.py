@@ -751,14 +751,17 @@ class ProfileView(GenericViewSet):
 
         update_spouse_profile = self.update_spouse_profile(request)
 
+        family_information = self.update_family_information(request)
+
         response["message"] = {
-                                "profile" : update_profile.data,
-                                "qualification":update_qualification.data,
-                                "work_experience":update_work_experience.data,
-                                "relative_in_canada":update_relative_in_canada.data, 
+                                "profile": update_profile.data,
+                                "qualification": update_qualification.data,
+                                "work_experience": update_work_experience.data,
+                                "relative_in_canada": update_relative_in_canada.data,
                                 "education_assessment": update_education_assessment.data,
                                 "language_scores": update_lang_scores.data,
                                 "spouse_profile": update_spouse_profile.data,
+                                "family_information": family_information.data,
                                 }
         return Response(response)
     
@@ -940,6 +943,71 @@ class ProfileView(GenericViewSet):
         response["message"] = serializer.data
         return Response(response)
 
+    def extract_family_data(self, data):
+        out = []
+        for info in data:
+            family_data = {
+                "id": info.get("id"),
+                "relationship": info["relationship"].get("value"),
+                "first_name": info["first_name"].get("value"),
+                "last_name": info["last_name"].get("value"),
+                "date_of_birth": info["date_of_birth"].get("value"),
+                "date_of_death": info["date_of_death"].get("value"),
+                "city_of_birth": info["city_of_birth"].get("value"),
+                "country_of_birth": info["country_of_birth"].get("value"),
+                "street_address": info["street_address"].get("value"),
+                "current_country": info["current_country"].get("value"),
+                "current_state": info["current_state"].get("value"),
+                "current_occupation": info["current_occupation"].get("value"),
+            }
+
+            out.append(family_data)
+        return out
+
+    def update_family_information(self, request):
+        user = request.user
+        response = {
+            "status": 1,
+            "message": ""
+        }
+        CustomerFamilyInformation.objects.filter(customer__user=user).delete()
+        request_data = self.extract_family_data(request.data.get('family_information'))
+        try:
+            serializer = serializers.CustomerFamilyInfoUpdateSerializer(data=request_data, many=True)
+            serializer.is_valid(raise_exception=True)
+            validated_data = serializer.validated_data
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LangTestSerializer ' + str(e))
+            response["message"] = str(e)
+            return Response(response)
+        if not len(validated_data):
+            response["message"] = serializer.data
+            return Response(response)
+        enum_validated_data = dict(enumerate(validated_data))
+        count = 0
+        try:
+            for ids in request_data:
+                validated_data_from_dict = enum_validated_data[count]
+                CustomerFamilyInformation.objects.update_or_create(id=ids.get('id'),
+                                                               defaults={
+                                                                 "relationship": validated_data_from_dict.get('relationship'),
+                                                                 "first_name": validated_data_from_dict.get('first_name'),
+                                                                 "last_name": validated_data_from_dict.get('last_name'),
+                                                                 "date_of_birth": validated_data_from_dict.get('date_of_birth'),
+                                                                 "date_of_death": validated_data_from_dict.get('date_of_death'),
+                                                                 "city_of_birth": validated_data_from_dict.get('city_of_birth'),
+                                                                 "country_of_birth": validated_data_from_dict.get('country_of_birth'),
+                                                                 "street_address": validated_data_from_dict.get('street_address'),
+                                                                 "current_country": validated_data_from_dict.get('current_country'),
+                                                                 "current_state": validated_data_from_dict.get('current_state'),
+                                                                 "current_occupation": validated_data_from_dict.get('current_occupation'),
+                                                                 "customer": user.user_profile
+                                                                 })
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:FamilyInfo:update_family_information ' + str(e))
+
+        response["message"] = serializer.data
+        return Response(response)
 
 class QualificationView(GenericViewSet):
     permission_classes = (IsAuthenticated, )

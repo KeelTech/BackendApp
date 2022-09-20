@@ -1484,6 +1484,14 @@ class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
             'speaking_score', 'reading_score', )
 
 
+class CustomerFamilyInfoUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerFamilyInformation
+        fields = (
+            "id", 'relationship', 'first_name', 'last_name', 'date_of_birth',  'date_of_death', 'city_of_birth', 'country_of_birth',
+            'street_address', 'current_country', 'current_state', 'current_occupation', )
+
+
 class CustomerSpouseProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerSpouseProfile
