@@ -37,7 +37,7 @@ CUSTOMERFAMILYINFO = [{
     "first_name": {"value": "", "type": "char", "labels": "First Name"},
     "last_name": {"value": "", "type": "char", "labels": "Last Name"},
     "date_of_birth": {"value": "", "type": "calendar", "labels": "Date of Birth"},
-    "date_of_death": {"value": "", "type": "calendar", "labels": "Date of Death"},
+    "date_of_death": {"value": "", "type": "calendar", "labels": "Date of Death", "is_optional": True},
     "city_of_birth": {"value": "", "type": "char", "labels": "City of Birth"},
     "country_of_birth": {"value": 1, "type": "drop-down", "labels": "Country of Birth"},
     "street_address": {"value": "", "type": "char", "labels": "Street Address"},

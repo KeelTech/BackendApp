@@ -1673,6 +1673,7 @@ class CustomerFamilyInfoLabelSerializer(serializers.ModelSerializer):
             return {
                 "value": var,
                 "type": "calendar",
+                "is_optional": True,
                 "labels": self.context["labels"]["date_of_death_label"],
             }
 
