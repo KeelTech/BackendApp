@@ -1632,88 +1632,97 @@ class CustomerFamilyInfoLabelSerializer(serializers.ModelSerializer):
                 "labels": self.context["labels"]["relationship_label"],
             }
 
-    def get_test_date(self, obj):
-        var = obj.test_date
-        if "labels" in self.context:
-            return {
-                "value": var,
-                "type": "calendar",
-                "labels": self.context["labels"]["test_date_label"],
-            }
-
-    def get_result_date(self, obj):
-        var = obj.result_date
-        if "labels" in self.context:
-            return {
-                "value": var,
-                "type": "calendar",
-                "labels": self.context["labels"]["result_date_label"],
-            }
-
-    def get_test_version(self, obj):
-        var = obj.test_version
+    def get_first_name(self, obj):
+        var = obj.first_name
         if "labels" in self.context:
             return {
                 "value": var,
                 "type": "char",
-                "labels": self.context["labels"]["test_version_label"],
+                "labels": self.context["labels"]["first_name_label"],
             }
 
-    def get_report_form_number(self, obj):
-        var = obj.report_form_number
+    def get_last_name(self, obj):
+        var = obj.last_name
         if "labels" in self.context:
             return {
                 "value": var,
                 "type": "char",
-                "labels": self.context["labels"]["report_form_number_label"],
+                "labels": self.context["labels"]["last_name_label"],
             }
 
-    def get_listening_score(self, obj):
-        var = obj.listening_score
+    def get_date_of_birth(self, obj):
+        var = obj.date_of_birth
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "int",
-                "labels": self.context["labels"]["listening_score_label"],
+                "type": "calendar",
+                "labels": self.context["labels"]["date_of_birth_label"],
             }
 
-    def get_writing_score(self, obj):
-        var = obj.writing_score
+    def get_date_of_death(self, obj):
+        var = obj.date_of_death
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "int",
-                "labels": self.context["labels"]["writing_score_label"],
+                "type": "calendar",
+                "labels": self.context["labels"]["date_of_death_label"],
             }
 
-    def get_speaking_score(self, obj):
-        var = obj.speaking_score
+    def get_city_of_birth(self, obj):
+        var = obj.city_of_birth
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "int",
-                "labels": self.context["labels"]["speaking_score_label"],
+                "type": "char",
+                "labels": self.context["labels"]["city_of_birth_label"],
             }
 
-    def get_reading_score(self, obj):
-        var = obj.reading_score
+    def get_country_of_birth(self, obj):
+        var = obj.country_of_birth
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "int",
-                "labels": self.context["labels"]["reading_score_label"],
+                "type": "drop-down",
+                "labels": self.context["labels"]["country_of_birth_label"],
             }
 
-    def get_overall_score(self, obj):
-        var = obj.overall_score
+    def get_street_address(self, obj):
+        var = obj.street_address
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "int",
-                "labels": self.context["labels"]["overall_score_label"],
+                "type": "char",
+                "labels": self.context["labels"]["street_address_label"],
             }
+
+    def get_current_country(self, obj):
+        var = obj.current_country
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "drop-down",
+                "labels": self.context["labels"]["current_country_label"],
+            }
+
+    def get_current_state(self, obj):
+        var = obj.current_state
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "drop-down",
+                "labels": self.context["labels"]["current_state_label"],
+            }
+
+    def get_current_occupation(self, obj):
+        var = obj.current_occupation
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["current_occupation_label"],
+            }
+
     class Meta:
-        model = CustomerLanguageScoreLabel
-        fields = ('id', 'test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
-                  'speaking_score', 'reading_score', )
-
+        model = CustomerFamilyInformationLabel
+        fields = ('id', 'relationship', 'first_name', 'last_name',  'date_of_birth', 'date_of_death', 'city_of_birth',
+                  'country_of_birth', 'street_address', 'current_country', 'current_state', 'current_occupation', )

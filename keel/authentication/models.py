@@ -516,7 +516,7 @@ class CustomerSpouseProfileLabel(TimeStampedModel):
     passport_expiry_date_label = models.CharField(max_length=255)
 
     def __str__(self):
-        return str(self.customer_label)
+        return str(self.user_label)
 
     class Meta:
         db_table = "customer_spouse_profile_label"
@@ -560,6 +560,7 @@ class CustomerFamilyInformation(TimeStampedModel):
 
 
 class CustomerFamilyInformationLabel(TimeStampedModel):
+    relationship_label = models.CharField(max_length=255)
     user_label = models.CharField(max_length=255, default="user")
     # customer_label = models.CharField(max_length=255)
     date_of_birth_label = models.CharField(max_length=255, null=True, blank=True)
@@ -572,10 +573,9 @@ class CustomerFamilyInformationLabel(TimeStampedModel):
     current_country_label = models.CharField(max_length=255)
     current_state_label = models.CharField(max_length=255)
     current_occupation_label = models.CharField(max_length=255)
-    # passport_expiry_date_label = models.CharField(max_length=255)
 
     def __str__(self):
-        return str(self.customer_label)
+        return str(self.user_label)
 
     class Meta:
         db_table = "customer_family_information_label"

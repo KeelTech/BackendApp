@@ -32,7 +32,7 @@ SPOUSEPROFILE = {
     "passport_expiry_date": {"value": "", "type": "calendar", "labels": "Passport Expiry Date"},
 }
 
-CUSTOMERFAMILYINFO = {
+CUSTOMERFAMILYINFO = [{
     "relationship": {"value": "", "type": "drop-down", "labels": "Relationship", "choices": CustomerFamilyInformation.RELATION_TYPE,},
     "first_name": {"value": "", "type": "char", "labels": "First Name"},
     "last_name": {"value": "", "type": "char", "labels": "Last Name"},
@@ -44,7 +44,7 @@ CUSTOMERFAMILYINFO = {
     "current_country": {"value": "", "type": "drop-down", "labels": "Current Country"},
     "current_state": {"value": "", "type": "drop-down", "labels": "Current State"},
     "current_occupation": {"value": "", "type": "char", "labels": "Current Occupation"},
-}
+}]
 
 QUALIFICATION = [{
     "institute": {"value": "", "type": "char", "labels": "Institute"},

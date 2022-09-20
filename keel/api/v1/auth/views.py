@@ -449,7 +449,7 @@ class ProfileView(GenericViewSet):
     serializer_class_education_assessment = serializers.EducationalCreationalAssessmentLabelSerializer
     serializer_class_cases = CasesSerializer
     serializer_class_language_scores = serializers.LanguageScoreLabelSerializer
-    # serializer_class_family_info = serializers.CustomerFamilyInfoLabelSerializer
+    serializer_class_family_info = serializers.CustomerFamilyInfoLabelSerializer
 
     def get_queryset_qualification(self, request):
         get_labels = QualificationLabel.objects.filter(user_label="user")
@@ -551,7 +551,7 @@ class ProfileView(GenericViewSet):
         if len(labels_queryset):
             labels = labels_queryset[0]
 
-        queryset = CustomerFamilyInformation.objects.filter(user=request.user)
+        queryset = CustomerFamilyInformation.objects.filter(customer__user=request.user)
         if len(queryset):
             serializer = self.serializer_class_family_info(queryset, many=True, context={"labels": labels})
             return serializer.data
@@ -792,7 +792,7 @@ class ProfileView(GenericViewSet):
         relative_in_canada = self.get_queryset_relative_in_canada(request)
         education_assessment = self.get_queryset_education_assessment(request)
         language_scores = self.get_queryset_language_scores(request)
-        # family_information = self.get_queryset_family_info(request)
+        family_information = self.get_queryset_family_info(request)
         # cases = self.get_queryset_cases(request)
         
         response["message"] = {
@@ -803,6 +803,7 @@ class ProfileView(GenericViewSet):
                         "education_assessment": education_assessment,
                         "language_scores": language_scores,
                         "spouse_profile": spouse_profile,
+                        "family_information": family_information,
                         # "cases":cases
                     }
         return Response(response)
