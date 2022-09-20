@@ -954,7 +954,7 @@ class ProfileView(GenericViewSet):
                 "last_name": info["last_name"].get("value"),
                 "date_of_birth": info["date_of_birth"].get("value"),
                 "date_of_death": info["date_of_death"].get("value"),
-                "city_of_birth": info["city_of_birth"].get("value"),
+                "city_of_birth": info.get("city_of_birth").get("value"),
                 "country_of_birth": info["country_of_birth"].get("value"),
                 "street_address": info["street_address"].get("value"),
                 "current_country": info["current_country"].get("value"),

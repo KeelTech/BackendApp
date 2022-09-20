@@ -1719,6 +1719,7 @@ class CustomerFamilyInfoLabelSerializer(serializers.ModelSerializer):
             return {
                 "value": var,
                 "type": "drop-down",
+                "depends": 'current_country',
                 "labels": self.context["labels"]["current_state_label"],
             }
 
