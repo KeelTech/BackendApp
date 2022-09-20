@@ -578,7 +578,7 @@ class ProfileView(GenericViewSet):
         if len(labels_queryset):
             labels = labels_queryset[0]
 
-        profile = CustomerSpouseProfile.objects.filter(customer__user=self.request.user.id).first()
+        profile = CustomerSpouseProfile.objects.filter(customer__user=self.request.user).first()
         if profile:
             serializer = self.serializer_class_spouse_profile(profile, context={"labels": labels})
             return serializer.data
@@ -919,24 +919,25 @@ class ProfileView(GenericViewSet):
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
         try:
-            for ids in request_data:
-                validated_data_from_dict = enum_validated_data[count]
-                CustomerSpouseProfile.objects.update_or_create(id=ids.get('id'),
-                                                               defaults={
-                                                                 "date_of_marriage": validated_data_from_dict.get('date_of_marriage'),
-                                                                 "number_of_children": validated_data_from_dict.get('number_of_children'),
-                                                                 "first_name": validated_data_from_dict.get('first_name'),
-                                                                 "last_name": validated_data_from_dict.get('last_name'),
-                                                                 "mother_fullname": validated_data_from_dict.get('mother_fullname'),
-                                                                 "father_fullname": validated_data_from_dict.get('father_fullname'),
-                                                                 "age": validated_data_from_dict.get('age'),
-                                                                 "passport_number": validated_data_from_dict.get('passport_number'),
-                                                                 "passport_country": validated_data_from_dict.get('passport_country'),
-                                                                 "passport_issue_date": validated_data_from_dict.get('passport_issue_date'),
-                                                                 "passport_expiry_date": validated_data_from_dict.get('passport_expiry_date'),
-                                                                 "customer": user.user_profile
-                                                                 })
-                count += 1
+            # for ids in request_data:
+            # validated_data_from_dict = enum_validated_data[count]
+            validated_data_from_dict = request_data
+            CustomerSpouseProfile.objects.update_or_create(id=validated_data_from_dict.get('id'),
+                                                           defaults={
+                                                             "date_of_marriage": validated_data_from_dict.get('date_of_marriage'),
+                                                             "number_of_children": validated_data_from_dict.get('number_of_children'),
+                                                             "first_name": validated_data_from_dict.get('first_name'),
+                                                             "last_name": validated_data_from_dict.get('last_name'),
+                                                             "mother_fullname": validated_data_from_dict.get('mother_fullname'),
+                                                             "father_fullname": validated_data_from_dict.get('father_fullname'),
+                                                             "age": validated_data_from_dict.get('age'),
+                                                             "passport_number": validated_data_from_dict.get('passport_number'),
+                                                             "passport_country": validated_data_from_dict.get('passport_country'),
+                                                             "passport_issue_date": validated_data_from_dict.get('passport_issue_date'),
+                                                             "passport_expiry_date": validated_data_from_dict.get('passport_expiry_date'),
+                                                             "customer": user.user_profile
+                                                             })
+            # count += 1
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:LanguageScore:update_spouse_profile ' + str(e))
 

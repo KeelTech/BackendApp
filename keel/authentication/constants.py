@@ -13,8 +13,8 @@ PROFILE = {
     "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
     "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
     "type_of_visa": {"value": "", "type": "drop-down", "choices": CustomerProfile.VISA_TYPE, "labels": "Type of Visa"},
-    "current_country": {"value": "", "type": "drop-down", "labels": "Current Country"},
-    "desired_country": {"value": "", "type": "drop-down", "labels": "Desired Country"},
+    "current_country": {"value": 1, "type": "drop-down", "labels": "Current Country"},
+    "desired_country": {"value": 1, "type": "drop-down", "labels": "Desired Country"},
     "address": {"value": "", "type": "char", "labels": "Address"},
 }
 
@@ -27,7 +27,7 @@ SPOUSEPROFILE = {
     "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
     "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
     "passport_number": {"value": "", "type": "char", "labels": "Passport Number"},
-    "passport_country": {"value": "", "type": "char", "labels": "passport Country"},
+    "passport_country": {"value": 1, "type": "drop-down", "labels": "passport Country"},
     "passport_issue_date": {"value": "", "type": "calendar", "labels": "Passport Issue Date"},
     "passport_expiry_date": {"value": "", "type": "calendar", "labels": "Passport Expiry Date"},
 }
@@ -39,10 +39,10 @@ CUSTOMERFAMILYINFO = [{
     "date_of_birth": {"value": "", "type": "calendar", "labels": "Date of Birth"},
     "date_of_death": {"value": "", "type": "calendar", "labels": "Date of Death"},
     "city_of_birth": {"value": "", "type": "char", "labels": "City of Birth"},
-    "country_of_birth": {"value": "", "type": "drop-down", "labels": "Country of Birth"},
+    "country_of_birth": {"value": 1, "type": "drop-down", "labels": "Country of Birth"},
     "street_address": {"value": "", "type": "char", "labels": "Street Address"},
-    "current_country": {"value": "", "type": "drop-down", "labels": "Current Country"},
-    "current_state": {"value": "", "type": "drop-down", "labels": "Current State"},
+    "current_country": {"value": 1, "type": "drop-down", "labels": "Current Country"},
+    "current_state": {"value": 1, "type": "drop-down", "labels": "Current State"},
     "current_occupation": {"value": "", "type": "char", "labels": "Current Occupation"},
 }]
 
