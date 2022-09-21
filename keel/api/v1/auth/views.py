@@ -640,6 +640,7 @@ class ProfileView(GenericViewSet):
             "city_of_birth": datas['city_of_birth'].get("value"),
             "email": datas['email'].get("value"),
             "funds_available": datas['funds_available'].get("value"),
+            "marital_status": datas['marital_status'].get("value"),
 
             "type_of_visa": datas['type_of_visa'].get("value"),
             "passport_number": datas['passport_number'].get("value"),
