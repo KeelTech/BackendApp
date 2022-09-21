@@ -1687,10 +1687,12 @@ class CustomerFamilyInfoLabelSerializer(serializers.ModelSerializer):
             }
 
     def get_country_of_birth(self, obj):
-        var = obj.country_of_birth
+        var = obj.country_of_birth.id
+        name = obj.country_of_birth.name
         if "labels" in self.context:
             return {
                 "value": var,
+                "name": name,
                 "type": "drop-down",
                 "labels": self.context["labels"]["country_of_birth_label"],
             }
@@ -1705,10 +1707,12 @@ class CustomerFamilyInfoLabelSerializer(serializers.ModelSerializer):
             }
 
     def get_current_country(self, obj):
-        var = obj.current_country
+        var = obj.current_country.id
+        name = obj.current_country.name
         if "labels" in self.context:
             return {
                 "value": var,
+                "name": name,
                 "type": "drop-down",
                 "labels": self.context["labels"]["current_country_label"],
             }

@@ -807,7 +807,6 @@ class ProfileView(GenericViewSet):
                         "language_scores": language_scores,
                         "spouse_profile": spouse_profile,
                         "family_information": family_information,
-                        # "cases":cases
                     }
         return Response(response)
 
