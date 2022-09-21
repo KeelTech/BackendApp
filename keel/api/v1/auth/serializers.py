@@ -1473,7 +1473,7 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerLanguageScoreLabel
         fields = ('id', 'test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
-                  'speaking_score', 'reading_score', 'overall_score', )
+                  'speaking_score', 'reading_score', 'overall_score', 'test_date', )
 
 
 class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
