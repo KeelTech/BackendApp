@@ -138,7 +138,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
             "city_of_birth",
             "email",
             "marital_status",
-            "any_previous_marriage",
+            "previous_marriage",
             "height",
             "eye_color",
             "passport_number",
@@ -177,7 +177,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         profile.city_of_birth = validated_data.get("city_of_birth")
         profile.email = validated_data.get("email")
         profile.marital_status = validated_data.get("marital_status")
-        profile.any_previous_marriage = validated_data.get("any_previous_marriage")
+        profile.previous_marriage = validated_data.get("previous_marriage")
         profile.height = validated_data.get("height")
         profile.eye_color = validated_data.get("eye_color")
         profile.funds_available = validated_data.get("funds_available")
@@ -231,7 +231,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             }
 
     def get_any_previous_marriage(self, obj):
-        var = obj.any_previous_marriage
+        var = obj.previous_marriage
         if "labels" in self.context:
             return {
                 "value": var,

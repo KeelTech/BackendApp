@@ -218,7 +218,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
                                         default=None, blank=True, null=True)
     type_of_visa = models.PositiveSmallIntegerField(null=True, blank=True, choices=VISA_TYPE)
     marital_status = models.PositiveSmallIntegerField(null=True, blank=True, choices=MARITAL_TYPE)
-    any_previous_marriage = models.PositiveSmallIntegerField(choices=PREV_TYPE, null=True, blank=True)
+    previous_marriage = models.PositiveSmallIntegerField(choices=PREV_TYPE, null=True, blank=True)
     passport_number = models.CharField(max_length=512, blank=True, null=True)
     email = models.CharField(max_length=512, blank=True, null=True)
     city_of_birth = models.CharField(max_length=256, blank=True, null=True)
