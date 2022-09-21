@@ -1718,8 +1718,8 @@ class CustomerFamilyInfoLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "drop-down",
-                "depends": 'current_country',
+                "type": "char",
+                # "depends": 'current_country',
                 "labels": self.context["labels"]["current_state_label"],
             }
 

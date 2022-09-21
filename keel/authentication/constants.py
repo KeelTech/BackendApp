@@ -42,7 +42,7 @@ CUSTOMERFAMILYINFO = [{
     "country_of_birth": {"value": 1, "type": "drop-down", "labels": "Country of Birth"},
     "street_address": {"value": "", "type": "char", "labels": "Street Address" },
     "current_country": {"value": 1, "type": "drop-down", "labels": "Current Country"},
-    "current_state": {"value": 1, "type": "drop-down", "labels": "Current State", "depends": 'current_country'},
+    "current_state": {"value": "", "type": "char", "labels": "Current State"},
     "current_occupation": {"value": "", "type": "char", "labels": "Current Occupation"},
 }]
 

@@ -206,7 +206,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
     address = models.CharField(max_length=512, blank=True, null=True, default=None)
-    # date_of_birth = models.DateField(default=None, null=True, blank=True)
+    date_of_birth = models.DateField(default=None, null=True, blank=True)
     current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="current_country_profile", 
                                         default=None, blank=True, null=True)
     desired_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="desired_country_profile", 
@@ -548,8 +548,9 @@ class CustomerFamilyInformation(TimeStampedModel):
     street_address = models.CharField(max_length=512, blank=True, null=True)
     current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, blank=True, null=True,
                                         related_name='customer_family_current_country')
-    current_state = models.ForeignKey(State, on_delete=models.DO_NOTHING, null=True, blank=True,
-                                      related_name='customer_family_current_state')
+    # current_state = models.ForeignKey(State, on_delete=models.DO_NOTHING, null=True, blank=True,
+    #                                   related_name='customer_family_current_state')
+    current_state = models.CharField(max_length=128,  null=True, blank=True)
     current_occupation = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):
