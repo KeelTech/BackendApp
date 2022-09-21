@@ -924,17 +924,17 @@ class ProfileView(GenericViewSet):
             validated_data_from_dict = request_data
             CustomerSpouseProfile.objects.update_or_create(id=validated_data_from_dict.get('id'),
                                                            defaults={
-                                                             "date_of_marriage": validated_data_from_dict.get('date_of_marriage'),
-                                                             "number_of_children": validated_data_from_dict.get('number_of_children'),
-                                                             "first_name": validated_data_from_dict.get('first_name'),
-                                                             "last_name": validated_data_from_dict.get('last_name'),
-                                                             "mother_fullname": validated_data_from_dict.get('mother_fullname'),
-                                                             "father_fullname": validated_data_from_dict.get('father_fullname'),
-                                                             "age": validated_data_from_dict.get('age'),
-                                                             "passport_number": validated_data_from_dict.get('passport_number'),
-                                                             "passport_country": validated_data_from_dict.get('passport_country'),
-                                                             "passport_issue_date": validated_data_from_dict.get('passport_issue_date'),
-                                                             "passport_expiry_date": validated_data_from_dict.get('passport_expiry_date'),
+                                                             "date_of_marriage": validated_data.get('date_of_marriage'),
+                                                             "number_of_children": validated_data.get('number_of_children'),
+                                                             "first_name": validated_data.get('first_name'),
+                                                             "last_name": validated_data.get('last_name'),
+                                                             "mother_fullname": validated_data.get('mother_fullname'),
+                                                             "father_fullname": validated_data.get('father_fullname'),
+                                                             "age": validated_data.get('age'),
+                                                             "passport_number": validated_data.get('passport_number'),
+                                                             "passport_country": validated_data.get('passport_country'),
+                                                             "passport_issue_date": validated_data.get('passport_issue_date'),
+                                                             "passport_expiry_date": validated_data.get('passport_expiry_date'),
                                                              "customer": user.user_profile
                                                              })
             # count += 1

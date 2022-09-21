@@ -1496,8 +1496,8 @@ class CustomerSpouseProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerSpouseProfile
         fields = (
-            "id", 'date_of_marriage', 'number_of_children', 'first_name', 'last_name',  'mother_fullname', 'age',
-            'passport_number', 'passport_country', 'passport_issue_date', 'passport_expiry_date')
+            "id", 'date_of_marriage', 'number_of_children', 'first_name', 'last_name',  'mother_fullname',
+            'father_fullname', 'age', 'passport_number', 'passport_country', 'passport_issue_date', 'passport_expiry_date')
 
 
 class CustomerSpouseProfileLabelSerializer(serializers.ModelSerializer):
