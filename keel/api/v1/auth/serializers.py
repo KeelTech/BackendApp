@@ -235,7 +235,8 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
         if "labels" in self.context:
             return {
                 "value": var,
-                "type": "bool",
+                "type": "drop-down",
+                "choices": CustomerProfile.PREV_TYPE,
                 "labels": self.context["labels"]["any_previous_marriage_label"],
             }
 

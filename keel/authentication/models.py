@@ -190,6 +190,9 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     MARRIED = 2
     DIVORCED = 3
 
+    YES = 1
+    NO = 2
+
     MARITAL_TYPE = (
         (SINGLE, 'Single'), (MARRIED, 'Married'), (DIVORCED, 'Divorced'),
     )
@@ -198,6 +201,8 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
         (STUDY, 'Study'), (PGWP, 'PGWP'), (WORKPERMIT, 'WorkPermit'),
         (PR, 'PR'), (DEPENDANT, 'Dependant'), (VISIT, 'Visit'), (CITIZENSHIP, 'Citizenship'),
     )
+
+    PREV_TYPE = ((YES, 'Yes'), (NO, 'No'),)
 
     user = models.OneToOneField(User, related_name="user_profile", on_delete=models.DO_NOTHING)
     first_name = models.CharField(max_length=512, blank=True, null=True, default=None)
@@ -213,7 +218,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
                                         default=None, blank=True, null=True)
     type_of_visa = models.PositiveSmallIntegerField(null=True, blank=True, choices=VISA_TYPE)
     marital_status = models.PositiveSmallIntegerField(null=True, blank=True, choices=MARITAL_TYPE)
-    any_previous_marriage = models.BooleanField(null=True, blank=True)
+    any_previous_marriage = models.PositiveSmallIntegerField(choices=PREV_TYPE, null=True, blank=True)
     passport_number = models.CharField(max_length=512, blank=True, null=True)
     email = models.CharField(max_length=512, blank=True, null=True)
     city_of_birth = models.CharField(max_length=256, blank=True, null=True)
