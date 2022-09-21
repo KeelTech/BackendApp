@@ -177,7 +177,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         profile.city_of_birth = validated_data.get("city_of_birth")
         profile.email = validated_data.get("email")
         profile.marital_status = validated_data.get("marital_status")
-        profile.previous_marriage = validated_data.get("previous_marriage")
+        profile.previous_marriage = validated_data.get("any_previous_marriage")
         profile.height = validated_data.get("height")
         profile.eye_color = validated_data.get("eye_color")
         profile.funds_available = validated_data.get("funds_available")
