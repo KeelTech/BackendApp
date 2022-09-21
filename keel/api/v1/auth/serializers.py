@@ -1503,6 +1503,8 @@ class CustomerSpouseProfileUpdateSerializer(serializers.ModelSerializer):
 class CustomerSpouseProfileLabelSerializer(serializers.ModelSerializer):
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
+    date_of_marriage = serializers.SerializerMethodField()
+    number_of_children = serializers.SerializerMethodField()
     mother_fullname = serializers.SerializerMethodField()
     father_fullname = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
@@ -1532,6 +1534,24 @@ class CustomerSpouseProfileLabelSerializer(serializers.ModelSerializer):
                 "value": var,
                 "type": "char",
                 "labels": self.context["labels"]["last_name_label"],
+            }
+
+    def get_date_of_marriage(self, obj):
+        var = obj.date_of_marriage
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "calendar",
+                "labels": self.context["labels"]["date_of_marriage_label"],
+            }
+
+    def get_number_of_children(self, obj):
+        var = obj.number_of_children
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "char",
+                "labels": self.context["labels"]["number_of_children_label"],
             }
 
     def get_mother_fullname(self, obj):
@@ -1607,6 +1627,8 @@ class CustomerSpouseProfileLabelSerializer(serializers.ModelSerializer):
         fields = (
             "first_name",
             "last_name",
+            "number_of_children",
+            "date_of_marriage",
             "age",
             "mother_fullname",
             "father_fullname",
