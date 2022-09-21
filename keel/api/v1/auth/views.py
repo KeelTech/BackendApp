@@ -635,7 +635,7 @@ class ProfileView(GenericViewSet):
             "desired_country" : datas['desired_country'].get("value"),
 
             "height": datas['height'].get("value"),
-            "any_previous_marriage": datas['any_previous_marriage'].get("value"),
+            "previous_marriage": datas['any_previous_marriage'].get("value"),
             "eye_color": datas['eye_color'].get("value"),
             "first_language": datas['first_language'].get("value"),
             "city_of_birth": datas['city_of_birth'].get("value"),
