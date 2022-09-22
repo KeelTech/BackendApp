@@ -212,7 +212,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
     address = models.CharField(max_length=512, blank=True, null=True, default=None)
     date_of_birth = models.DateField(default=None, null=True, blank=True)
-    current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="current_country_profile", 
+    current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="current_country_profile",
                                         default=None, blank=True, null=True)
     desired_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="desired_country_profile", 
                                         default=None, blank=True, null=True)
@@ -333,7 +333,7 @@ class QualificationLabel(TimeStampedModel, SoftDeleteModel):
     end_date_label = models.CharField(max_length=512)
 
     def __str__(self):
-        return str(self.user)
+        return str(self.user_label)
 
 
 class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
