@@ -510,9 +510,9 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     degree = serializers.SerializerMethodField()
     grade = serializers.SerializerMethodField()
     year_of_passing = serializers.SerializerMethodField()
-    city = serializers.SerializerMethodField()
-    state = serializers.SerializerMethodField()
-    country = serializers.SerializerMethodField()
+    # city = serializers.SerializerMethodField()
+    # state = serializers.SerializerMethodField()
+    # country = serializers.SerializerMethodField()
     start_date = serializers.SerializerMethodField()
     end_date = serializers.SerializerMethodField()
     full_address = serializers.SerializerMethodField()
@@ -664,9 +664,9 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
             "year_of_passing",
             "degree",
             "grade",
-            "country",
-            "state",
-            "city",
+            # "country",
+            # "state",
+            # "city",
             "start_date",
             "end_date",
             "labels",
