@@ -1480,8 +1480,8 @@ class EducationalCreationalAssessmentView(GenericViewSet):
 
 class LoginOTP(GenericViewSet):
 
-    permission_classes = (IsAuthenticated, )
-    authentication_classes = (JWTAuthentication, )
+    # permission_classes = (IsAuthenticated, )
+    # authentication_classes = (JWTAuthentication, )
     # serializer_class = serializers.OTPSerializer
 
     @transaction.atomic
