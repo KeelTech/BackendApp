@@ -7,8 +7,9 @@ from keel.Core.helpers import generate_random_int
 
 
 class OTPHelper(object):
-    def __init__(self, user):
-        self.user = user
+    def __init__(self, phone_number):
+        self.phone = phone_number
+        self.otp = None
 
     def generate_otp(self):
         otp = generate_random_int(4)
@@ -23,7 +24,7 @@ class OTPHelper(object):
             otp_model = SMSOtpModel(
                 phone_number=phone_number,
                 otp=self.otp,
-                user=self.user,
+                user=None,
                 otp_expiry=expiry_time,
                 otp_status=True,
             )
@@ -32,7 +33,7 @@ class OTPHelper(object):
             log_error(
                 "ERORR",
                 "CommentService: post postComments",
-                str(self.user.id),
+                str(self.phone),
                 err=str(e),
             )
             pass
@@ -40,9 +41,9 @@ class OTPHelper(object):
         return otp_model.otp
 
     def verify_otp(self, otp):
-        otp_model = SMSOtpModel.objects.filter(user=self.user, otp=otp).first()
-        if otp_model != None:
-            otp_model.otp_status=False
+        otp_model = SMSOtpModel.objects.filter(phone_number=self.phone, otp=otp, otp_status=True).first()
+        if otp_model:
+            otp_model.otp_status = False
             otp_model.save()
             data = {"otp": otp_model.otp, "phone_number": otp_model.phone_number}
             return data
@@ -50,6 +51,6 @@ class OTPHelper(object):
             return False
 
     def delete_otp(self):
-        otp_model = SMSOtpModel.objects.filter(user=self.user)
+        otp_model = SMSOtpModel.objects.filter(phone_number=self.phone)
         otp_model.delete()
         return True

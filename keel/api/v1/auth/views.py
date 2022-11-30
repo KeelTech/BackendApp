@@ -1485,7 +1485,7 @@ class LoginOTP(GenericViewSet):
     # serializer_class = serializers.OTPSerializer
 
     @transaction.atomic
-    def generate(self, request, format=None):
+    def generate(self, request):
         # response = {'exists': 0}
         # serializer = serializers.OTPSerializer(data=request.data)
         # serializer.is_valid(raise_exception=True)
@@ -1510,37 +1510,30 @@ class LoginOTP(GenericViewSet):
             "status": "0",
             "data": ""
         }
-        resp_status = status.HTTP_200_OK
-        user = request.user
-        user_id = user.id
         serializer = serializers.OTPSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         data = serializer.validated_data
         phone_number = data['phone_number']
 
-        otp = generate_random_int(4)
-        token_data = {"otp": otp, "phone_number": phone_number}
-        # token = generate_unique_id("mv_") 
-        token = "MOBILE_VERIFICATION_" + str(user.id)
-        # create_token(token, json.dumps(token_data), 10*60*60) # cache for 10 mins
+        token = "MOBILE_VERIFICATION_"
 
         # create otp
-        otp_instance = OTPHelper(user)
+        otp_instance = OTPHelper(phone_number)
         otp = otp_instance.save_otp(phone_number)
         text = "{0} is the OTP for mobile verification".format(otp)
         sms = SMSNotification(phone_number, text)
         err = sms.send_sms()
         if err:
-            log_error("CRITICAL","LoginOTP.generate" ,"Failed to send SMS", err = str(err))
-            response["status"] = 1
-            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            log_error("CRITICAL", "LoginOTP.generate", "Failed to send SMS", err=str(err))
+            response["data"] = str(err)
         else:
             response["data"] = {"token": token}
+            response["status"] = 1
 
         return Response(response)
 
-    def verify(self, request, format=None):
+    def verify(self, request):
 
         # serializer = serializers.OTPVerificationSerializer(data=request.data)
         # serializer.is_valid(raise_exception=True)
@@ -1552,51 +1545,30 @@ class LoginOTP(GenericViewSet):
 
         req_data = request.data
         user = request.user
-        user_id = user.id
 
-        otp_verify = serializers.VerifyOTPSerializer(data = req_data)
-        otp_verify.is_valid(raise_exception = True)
+        otp_verify = serializers.VerifyOTPSerializer(data=req_data)
+        otp_verify.is_valid(raise_exception=True)
         data = otp_verify.validated_data
         otp = data['otp']
-
-        # token = data['token']
-        # token = "MOBILE_VERIFICATION_" + str(user.id)
-
-        # redis_data = get_token(token)
-        # if not redis_data:
-        #     log_error("CRITICAL", "LoginOTP.verify", "OTP is expired")
-        #     response["status"] = "1"
-        #     response["data"] = "OTP has expired. please re-generate"
-        #     return Response(response, status = status.HTTP_400_BAD_REQUEST)
-
-        # token_data = json.loads(redis_data)
-        # value = token_data.get("otp")
-        # phone_number = token_data.get("phone_number")
+        phone = data['phone_number']
 
         # otp instance
-        otp_instance = OTPHelper(user)
+        otp_instance = OTPHelper(phone)
         otp_verify = otp_instance.verify_otp(otp)
 
         if not otp_verify:
-            log_error("CRITICAL", "LoginOTP.verify", "OTP is invalid")
-            response["status"] = "0"
+            log_error("ERROR", "LoginOTP.verify", "OTP is invalid")
             response["data"] = "OTP is invalid"
-            return Response(response, status = status.HTTP_400_BAD_REQUEST)
-        
-        value = otp_verify.get("otp")
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
         phone_number = otp_verify.get("phone_number")
 
-        if int(value) == otp:
+        if not user.is_anonymous():
             user.phone_number = phone_number
             user.save()
-            # delete otp number
-            otp_instance.delete_otp()
-            response["data"] = "OTP validated successfully"
-            return Response(response, status = status.HTTP_200_OK)
-
-        else:
-            response["data"] = "Incorrect OTP entered"
-            return Response(response, status = status.HTTP_400_BAD_REQUEST)
+        otp_instance.delete_otp()
+        response["data"] = "OTP validated successfully"
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class UploadDocument(GenericViewSet):

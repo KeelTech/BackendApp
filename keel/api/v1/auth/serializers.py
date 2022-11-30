@@ -1006,7 +1006,7 @@ class OTPSerializer(serializers.ModelSerializer):
 
 class VerifyOTPSerializer(serializers.Serializer):
     otp = serializers.IntegerField()
-    # token = serializers.CharField()
+    phone_number = serializers.IntegerField(min_value=5000000000, max_value=9999999999)
 
 
 class UserDocumentSerializer(serializers.ModelSerializer):
