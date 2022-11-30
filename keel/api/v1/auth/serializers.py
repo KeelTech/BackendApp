@@ -93,7 +93,7 @@ class CustomerProfileSerializer(BaseProfileSerializer):
     father_fullname = serializers.CharField(required=True)
     age = serializers.CharField(required=True)
     address = serializers.CharField(required=True)
-    date_of_birth = serializers.DateField(required=True)
+    # date_of_birth = serializers.DateField(required=True)
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
     desired_country = serializers.SerializerMethodField()
@@ -110,7 +110,7 @@ class CustomerProfileSerializer(BaseProfileSerializer):
             "father_fullname",
             "age",
             "address",
-            "date_of_birth",
+            # "date_of_birth",
             "phone_number",
         )
 
@@ -132,7 +132,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
             "father_fullname",
             "age",
             "address",
-            "date_of_birth",
+            # "date_of_birth",
             "type_of_visa",
             "first_language",
             "city_of_birth",
@@ -170,7 +170,7 @@ class CustomerUpdateProfileSerializer(BaseProfileSerializer):
         profile.address = validated_data.get("address")
         profile.current_country = validated_data.get("current_country")
         profile.desired_country = validated_data.get("desired_country")
-        profile.date_of_birth = validated_data.get("date_of_birth")
+        # profile.date_of_birth = validated_data.get("date_of_birth")
         profile.type_of_visa = validated_data.get("type_of_visa")
 
         profile.first_language = validated_data.get("first_language")
@@ -202,7 +202,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField()
     city_of_birth = serializers.SerializerMethodField()
     first_language = serializers.SerializerMethodField()
-    date_of_birth = serializers.SerializerMethodField()
+    # date_of_birth = serializers.SerializerMethodField()
     phone_number = serializers.SerializerMethodField()
     current_country = serializers.SerializerMethodField()
     desired_country = serializers.SerializerMethodField()
@@ -446,7 +446,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
         fields = (
             "first_name",
             "last_name",
-            "date_of_birth",
+            # "date_of_birth",
             "age",
             "phone_number",
             "mother_fullname",
