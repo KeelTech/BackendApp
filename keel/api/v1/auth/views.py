@@ -1563,7 +1563,7 @@ class LoginOTP(GenericViewSet):
 
         phone_number = otp_verify.get("phone_number")
 
-        if not user.is_anonymous():
+        if not user.is_anonymous:
             user.phone_number = phone_number
             user.save()
         otp_instance.delete_otp()
