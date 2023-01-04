@@ -440,7 +440,6 @@ class ProfileView(GenericViewSet):
     authentication_classes = (JWTAuthentication, )
     serializer_class_pro_base = serializers.BaseProfileSerializer
     serializer_class_pro = serializers.CustomerProfileSerializer
-    serializer_class_pro_update = serializers.CustomerUpdateProfileSerializer
     serializer_class_profile = serializers.CustomerProfileLabelSerializer
     serializer_class_spouse_profile = serializers.CustomerSpouseProfileLabelSerializer
     serializer_class_qualification = serializers.CustomerQualificationsLabelSerializer
@@ -619,71 +618,7 @@ class ProfileView(GenericViewSet):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["message"] = serializer.data
         return Response(response)
-    
-    @staticmethod
-    def extract(datas):
-        profile = {
-            "first_name" : datas['first_name'].get("value"),
-            "last_name" : datas['last_name'].get("value"),
-            "mother_fullname" : datas['mother_fullname'].get("value"),
-            "father_fullname" : datas['father_fullname'].get("value"),
-            "age" : datas['age'].get("value"),
-            "address" : datas['address'].get("value"),
-            "phone_number" : datas['phone_number'].get("value"),
-            "date_of_birth" : datas['date_of_birth'].get("value"),
-            "current_country" : datas['current_country'].get("value"),
-            "desired_country" : datas['desired_country'].get("value"),
 
-            "height": datas['height'].get("value"),
-            "previous_marriage": datas['any_previous_marriage'].get("value"),
-            "eye_color": datas['eye_color'].get("value"),
-            "first_language": datas['first_language'].get("value"),
-            "city_of_birth": datas['city_of_birth'].get("value"),
-            "email": datas['email'].get("value"),
-            "funds_available": datas['funds_available'].get("value"),
-            "marital_status": datas['marital_status'].get("value"),
-
-            "type_of_visa": datas['type_of_visa'].get("value"),
-            "passport_number": datas['passport_number'].get("value"),
-            "passport_country": datas['passport_country'].get("value"),
-            "passport_issue_date": datas['passport_issue_date'].get("value"),
-            "passport_expiry_date": datas['passport_expiry_date'].get("value"),
-        }
-        return profile
-
-    def update_profile(self, request):
-        user = request.user
-        response = {
-            "status": 1,
-            "message": ""
-        }
-        try:
-            request = self.extract(request.data.get('profile'))
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        phone_number = request.get("phone_number")
-        serializer = self.serializer_class_pro_update(data=request)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        validated_data['user'] = user
-        try:
-            serializer.save()
-            user = User.objects.get(id=user.id)
-            user.phone_number = phone_number
-            user.save()
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        data = serializer.data
-        data['phone_number'] = phone_number
-        response["message"] = data
-        return Response(response)
-    
     def create_initial_profile(self, request):
         response = {
             "status" : 1,
@@ -712,59 +647,35 @@ class ProfileView(GenericViewSet):
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         response["message"] = serializer.data
         return Response(response)
-    
-    def create_full_profile(self, request):
-        response = {
-            "status":1,
-            "message":""
-        }
-        update_profile = self.update_profile(request)
-        # create qualification instance
-        create_qualification = QualificationView.qualification(request)
-        # create work experience instance
-        create_work_experience = WorkExperienceView.work_exp(request)
-        # create relative instance
-        create_relative_in_canada = RelativeInCanadaView.relative_in_canada(request)
-        # create education instance
-        create_education_assessment = EducationalCreationalAssessmentView.educational_creational_assessment(request)
 
-        response["message"] = {"profile":update_profile.data, "qualification":create_qualification.data, 
-                                "work_experience": create_work_experience.data, "relative_in_canada":create_relative_in_canada.data,
-                                "education_assessment":create_education_assessment.data}
-        return Response(response)
-    
     def update_full_profile(self, request):
         response = {
-            "status": 1,
+            "status": 0,
             "message": ""
         }
-        # update profile
-        update_profile = self.update_profile(request)
-        # update qualification instance
-        update_qualification = QualificationView.update_qualification(request)
-        # update work experience instance
-        update_work_experience = WorkExperienceView.update_work_exp(request)
-        # update relative instance
-        update_relative_in_canada = RelativeInCanadaView.update_relative_in_canada(request)
-        # update education instance
-        update_education_assessment = EducationalCreationalAssessmentView.update_educational_creational_assessment(request)
+        profile_components = {'profile': CustomerInformationView,
+                              'qualification': QualificationView,
+                              'work_experience': WorkExperienceView,
+                              'relative_in_canada': RelativeInCanadaView,
+                              'education_assessment': EducationalCreationalAssessmentView,
+                              'language_scores': LanguageScoreView,
+                              'spouse_profile': SpouseProfileView,
+                              'family_information': FamilyInformationView
+                              }
 
-        update_lang_scores = self.update_language_score(request)
+        component_req = list(request.data.keys())[0]
+        if component_req not in profile_components:
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            with transaction.atomic():
+                error, msg = profile_components[component_req].update(request.data[component_req], request.user)
+        except Exception as e:
+            response['message'] = str(e)
+            if error:
+                response['message'] = msg
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        update_spouse_profile = self.update_spouse_profile(request)
-
-        family_information = self.update_family_information(request)
-
-        response["message"] = {
-                                "profile": update_profile.data,
-                                "qualification": update_qualification.data,
-                                "work_experience": update_work_experience.data,
-                                "relative_in_canada": update_relative_in_canada.data,
-                                "education_assessment": update_education_assessment.data,
-                                "language_scores": update_lang_scores.data,
-                                "spouse_profile": update_spouse_profile.data,
-                                "family_information": family_information.data,
-                                }
+        response["status"] = 1
         return Response(response)
     
     def get_profile(self, request):
@@ -779,17 +690,17 @@ class ProfileView(GenericViewSet):
             return Response(response)
 
         serializer = self.serializer_class_pro_base(queryset)
-        response["message"]["profile_exists"]= True
-        response["message"]["profile"]=serializer.data
+        response["message"]["profile_exists"] = True
+        response["message"]["profile"] = serializer.data
         response["message"]["plan_type"] = case.get('plan_type')
 
         return Response(response)
 
     def get_full_profile(self, request):
         response = {
-            "status" : 1,
-            "message" : ""
-        }   
+            "status": 1,
+            "message": ""
+        }
         profile = self.get_queryset_profile(request)
         spouse_profile = self.get_queryset_spouse_profile(request)
         qualification = self.get_queryset_qualification(request)
@@ -812,231 +723,26 @@ class ProfileView(GenericViewSet):
                     }
         return Response(response)
 
-    def extract_lang_data(self, data):
-        out = []
-        for info in data:
-            customer_lang_score = {
-                "id": info.get("id"),
-                "test_type": info["test_type"].get("value"),
-                "test_date": info["test_date"].get("value"),
-                "result_date": info["result_date"].get("value"),
-                "listening_score": info["listening_score"].get("value"),
-                "test_version": info["test_version"].get("value"),
-                "report_form_number": info["report_form_number"].get("value"),
-                "writing_score": info["writing_score"].get("value"),
-                "speaking_score": info["speaking_score"].get("value"),
-                "reading_score": info["reading_score"].get("value"),
-                "overall_score": info["overall_score"].get("value"),
-                # "mother_tongue": info["mother_tongue"].get("value"),
-            }
-
-            out.append(customer_lang_score)
-        return out
-
-    def update_language_score(self, request):
-        user = request.user
-        response = {
-            "status": 1,
-            "message": ""
-        }
-        CustomerLanguageScore.objects.filter(user=user).delete()
-        request_data = self.extract_lang_data(request.data.get('language_scores'))
-        try:
-            serializer = serializers.CustomerLanguageUpdateSerializer(data=request_data, many=True)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:LangTestSerializer ' + str(e))
-            response["message"] = str(e)
-            return Response(response)
-        if not len(validated_data):
-            response["message"] = serializer.data
-            return Response(response)
-        enum_validated_data = dict(enumerate(validated_data))
-        count = 0
-        try:
-            for ids in request_data:
-                validated_data_from_dict = enum_validated_data[count]
-                CustomerLanguageScore.objects.update_or_create(id=ids.get('id'),
-                                                               defaults={
-                                                                 "test_type": validated_data_from_dict.get('test_type'),
-                                                                 "test_date": validated_data_from_dict.get('test_date'),
-                                                                 "result_date": validated_data_from_dict.get('result_date'),
-                                                                 "test_version": validated_data_from_dict.get('test_version'),
-                                                                 "report_form_number": validated_data_from_dict.get('report_form_number'),
-                                                                 "listening_score": validated_data_from_dict.get('listening_score'),
-                                                                 "writing_score": validated_data_from_dict.get('writing_score'),
-                                                                 "speaking_score": validated_data_from_dict.get('speaking_score'),
-                                                                 "reading_score": validated_data_from_dict.get('reading_score'),
-                                                                 "overall_score": validated_data_from_dict.get('overall_score'),
-                                                                 "user": user
-                                                                 })
-                count += 1
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:LanguageScore:update_lang_score ' + str(e))
-
-        response["message"] = serializer.data
-        return Response(response)
-
-    def extract_spouse_data(self, data):
-
-        customer_lang_score = {
-            "id": data.get("id"),
-            "first_name": data["first_name"].get("value"),
-            "last_name": data["last_name"].get("value"),
-            "age": data["age"].get("value"),
-            "date_of_marriage": data["date_of_marriage"].get("value"),
-            "number_of_children": data["number_of_children"].get("value"),
-            "mother_fullname": data["mother_fullname"].get("value"),
-            "father_fullname": data["father_fullname"].get("value"),
-            "passport_number": data["passport_number"].get("value"),
-            "passport_country": data["passport_country"].get("value"),
-            "passport_issue_date": data["passport_issue_date"].get("value"),
-            "passport_expiry_date": data["passport_expiry_date"].get("value"),
-            }
-
-        return customer_lang_score
-
-    def update_spouse_profile(self, request):
-        user = request.user
-        response = {
-            "status": 1,
-            "message": ""
-        }
-        CustomerSpouseProfile.objects.filter(customer__user=user).delete()
-        request_data = self.extract_spouse_data(request.data.get('spouse_profile'))
-        # request_data = request.data.get('spouse_profile')
-        try:
-            serializer = serializers.CustomerSpouseProfileUpdateSerializer(data=request_data)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:SpouseProfileSerializer ' + str(e))
-            response["message"] = str(e)
-            return Response(response)
-        if not len(validated_data):
-            response["message"] = serializer.data
-            return Response(response)
-        enum_validated_data = dict(enumerate(validated_data))
-        count = 0
-        try:
-            # for ids in request_data:
-            # validated_data_from_dict = enum_validated_data[count]
-            validated_data_from_dict = request_data
-            CustomerSpouseProfile.objects.update_or_create(id=validated_data_from_dict.get('id'),
-                                                           defaults={
-                                                             "date_of_marriage": validated_data.get('date_of_marriage'),
-                                                             "number_of_children": validated_data.get('number_of_children'),
-                                                             "first_name": validated_data.get('first_name'),
-                                                             "last_name": validated_data.get('last_name'),
-                                                             "mother_fullname": validated_data.get('mother_fullname'),
-                                                             "father_fullname": validated_data.get('father_fullname'),
-                                                             "age": validated_data.get('age'),
-                                                             "passport_number": validated_data.get('passport_number'),
-                                                             "passport_country": validated_data.get('passport_country'),
-                                                             "passport_issue_date": validated_data.get('passport_issue_date'),
-                                                             "passport_expiry_date": validated_data.get('passport_expiry_date'),
-                                                             "customer": user.user_profile
-                                                             })
-            # count += 1
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:LanguageScore:update_spouse_profile ' + str(e))
-
-        response["message"] = serializer.data
-        return Response(response)
-
-    def extract_family_data(self, data):
-        out = []
-        for info in data:
-            family_data = {
-                "id": info.get("id"),
-                "relationship": info["relationship"].get("value"),
-                "first_name": info["first_name"].get("value"),
-                "last_name": info["last_name"].get("value"),
-                "date_of_birth": info["date_of_birth"].get("value"),
-                "date_of_death": info["date_of_death"].get("value"),
-                "city_of_birth": info.get("city_of_birth").get("value"),
-                "country_of_birth": info["country_of_birth"].get("value"),
-                "street_address": info["street_address"].get("value"),
-                "current_country": info["current_country"].get("value"),
-                "current_state": info["current_state"].get("value"),
-                "current_occupation": info["current_occupation"].get("value"),
-            }
-
-            out.append(family_data)
-        return out
-
-    def update_family_information(self, request):
-        user = request.user
-        response = {
-            "status": 1,
-            "message": ""
-        }
-        CustomerFamilyInformation.objects.filter(customer__user=user).delete()
-        request_data = self.extract_family_data(request.data.get('family_information'))
-        try:
-            serializer = serializers.CustomerFamilyInfoUpdateSerializer(data=request_data, many=True)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:LangTestSerializer ' + str(e))
-            response["message"] = str(e)
-            return Response(response)
-        if not len(validated_data):
-            response["message"] = serializer.data
-            return Response(response)
-        enum_validated_data = dict(enumerate(validated_data))
-        count = 0
-        try:
-            for ids in request_data:
-                validated_data_from_dict = enum_validated_data[count]
-                CustomerFamilyInformation.objects.update_or_create(id=ids.get('id'),
-                                                               defaults={
-                                                                 "relationship": validated_data_from_dict.get('relationship'),
-                                                                 "first_name": validated_data_from_dict.get('first_name'),
-                                                                 "last_name": validated_data_from_dict.get('last_name'),
-                                                                 "date_of_birth": validated_data_from_dict.get('date_of_birth'),
-                                                                 "date_of_death": validated_data_from_dict.get('date_of_death'),
-                                                                 "city_of_birth": validated_data_from_dict.get('city_of_birth'),
-                                                                 "country_of_birth": validated_data_from_dict.get('country_of_birth'),
-                                                                 "street_address": validated_data_from_dict.get('street_address'),
-                                                                 "current_country": validated_data_from_dict.get('current_country'),
-                                                                 "current_state": validated_data_from_dict.get('current_state'),
-                                                                 "current_occupation": validated_data_from_dict.get('current_occupation'),
-                                                                 "customer": user.user_profile
-                                                                 })
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:FamilyInfo:update_family_information ' + str(e))
-
-        response["message"] = serializer.data
-        return Response(response)
 
 class QualificationView(GenericViewSet):
-    permission_classes = (IsAuthenticated, )
-    authentication_classes = (JWTAuthentication, )
     serializer_class = serializers.CustomerQualificationsSerializer
     serializer_class_update = serializers.CustomerQualificationUpdateSerializer
 
-    def get_qualification(self, request, format="json"):
-        queryset = CustomerQualifications.objects.filter(user=request.user)
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
-    
     @staticmethod
     def extract(datas):
         data = []
         for info in datas:
             customer_work_info = {
-                "id" : info.get("id"),
-                "institute" : info["institute"].get("value"),
-                "degree" : info["degree"].get("value"),
-                "year_of_passing" : info["year_of_passing"].get("value"),
-                "city" : info["full_address"].get("cityId"),
-                "state" : info["full_address"].get("stateId"),
-                "country" : info["full_address"].get("countryId"),
-                "grade" : info["grade"].get("value"),
-                "start_date" : info["start_date"].get("value"),
-                "end_date" : info["end_date"].get("value"),
+                "id": info.get("id"),
+                "institute": info["institute"].get("value"),
+                "degree": info["degree"].get("value"),
+                "year_of_passing": info["year_of_passing"].get("value"),
+                "city": info["full_address"].get("cityId"),
+                "state": info["full_address"].get("stateId"),
+                "country": info["full_address"].get("countryId"),
+                "grade": info["grade"].get("value"),
+                "start_date": info["start_date"].get("value"),
+                "end_date": info["end_date"].get("value"),
             }
             try:
                 # get city instance
@@ -1057,232 +763,127 @@ class QualificationView(GenericViewSet):
             data.append(customer_work_info)
         return data
 
-    @classmethod
-    def qualification(self, request, **kwargs):
-        user = request.user
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        try:
-            request = self.extract(request.data.get('qualification'))
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:QualificationView:qualification ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        serializer = self.serializer_class(data=request, many=True)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        for data in validated_data:
-            data['user'] = user
-        try:
-            serializer.save()
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:CreateQualificationView:qualification ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        response["message"] = serializer.data
-        return Response(response)
-
     @staticmethod 
     def create(validated_data):
         id = validated_data.get('id')
-        institute = validated_data.get('institute')
-        degree = validated_data.get('degree')
-        grade = validated_data.get('grade')
-        year_of_passing = validated_data.get('year_of_passing')
         start_date = validated_data.get('start_date')
         end_date = validated_data.get('end_date')
-        city = validated_data.get('city')
-        state = validated_data.get('state')
-        country = validated_data.get('country')
-        user = validated_data.get('user')
 
-        # validate date
-        if end_date is not None and start_date is not None:
-            if end_date < start_date:
-                raise serializers.ValidationError("Start Date cannot be greater then end date")
+        if start_date is not None and end_date is not None and end_date < start_date:
+            raise serializers.ValidationError("Start Date cannot be greater then end date")
         
         try:
-            qualification, created = CustomerQualifications.objects.update_or_create(id=id, 
-                                                defaults={
-                                                    "institute":institute, 
-                                                    "degree":degree,
-                                                    "grade":grade, 
-                                                    "year_of_passing":year_of_passing, 
-                                                    "start_date":start_date, 
-                                                    "end_date":end_date, 
-                                                    "city":city, 
-                                                    "state":state, 
-                                                    "country":country, 
-                                                    "user":user
+            CustomerQualifications.objects.update_or_create(id=id, defaults={
+                                                    "institute": validated_data.get('institute'),
+                                                    "degree": validated_data.get('degree'),
+                                                    "grade": validated_data.get('grade'),
+                                                    "year_of_passing": validated_data.get('year_of_passing'),
+                                                    "start_date": validated_data.get('start_date'),
+                                                    "end_date": validated_data.get('end_date'),
+                                                    "city": validated_data.get('city'),
+                                                    "state": validated_data.get('state'),
+                                                    "country": validated_data.get('country'),
+                                                    "user": validated_data.get('user')
                                                 })
         except Exception as err:
-            logger.error(logging_format(LOGGER_LOW_SEVERITY, "QualificationView:create"),
-                "", description=str(err))
-            raise serializers.ValidationError(str(err))
-        return qualification
+            logger.error(str(err))
+            return False, str(err)
+        return True, ''
 
     @classmethod
-    def update_qualification(self, request):
-        user = request.user
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        CustomerQualifications.objects.filter(user=user).delete()
-        request = self.extract(request.data.get('qualification'))
-        try:
-            serializer = self.serializer_class_update(data=request, many=True)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-        except Exception as e:
-            logger.error('AUTHENTICATION QQUALIFACTION update viewset ', str(e))
-            response['message'] = str(e)
-            return Response(response)
+    def update(cls, data, user):
+
+        # CustomerQualifications.objects.filter(user=user).delete()
+        obj_data = cls.extract(data)
+        serializer = cls.serializer_class_update(data=obj_data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
-        for ids in request:
+        for ids in obj_data:
             validated_data_from_dict = enum_validated_data[count]
             validated_data_from_dict['id'] = ids.get('id')
             validated_data_from_dict['user'] = user
-            instance = self.create(validated_data_from_dict)
+            error, msg = cls.create(validated_data_from_dict)
+            if error:
+                return error, msg
             count += 1
-        response["message"] = serializer.data
-        return Response(response)
+        return error, msg
 
 
 class WorkExperienceView(GenericViewSet):
-    permission_classes = (IsAuthenticated, )
-    authentication_classes = (JWTAuthentication, )
     serializer_class = serializers.CustomerWorkExperienceSerializer
     serializer_class_update = serializers.CustomerUpdateWorkExperienceSerializer
-
-    def get_work_experience(self, request, format="json"):
-        queryset = CustomerWorkExperience.objects.filter(user=request.user)
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
     
     @staticmethod
     def extract(datas):
         data = []
         for info in datas:
             customer_work_info = {
-                "id" : info.get("id"),
-                "company_name" : info["company_name"].get("value"),
-                "job_type" : info["job_type"].get("value"),
-                "designation" : info["designation"].get("value"),
-                "job_description" : info["job_description"].get("value"),
-                "city" : info["full_address"].get("cityId"),
-                "state" : info["full_address"].get("stateId"),
-                "country" : info["full_address"].get("countryId"),
-                "weekly_working_hours" : info["weekly_working_hours"].get("value"),
-                "start_date" : info["start_date"].get("value"),
-                "end_date" : info["end_date"].get("value")
+                "id": info.get("id"),
+                "company_name": info["company_name"].get("value"),
+                "job_type": info["job_type"].get("value"),
+                "designation": info["designation"].get("value"),
+                "job_description": info["job_description"].get("value"),
+                "city": info["full_address"].get("cityId"),
+                "state": info["full_address"].get("stateId"),
+                "country": info["full_address"].get("countryId"),
+                "weekly_working_hours": info["weekly_working_hours"].get("value"),
+                "start_date": info["start_date"].get("value"),
+                "end_date": info["end_date"].get("value")
             }
             data.append(customer_work_info)
         return data
-
-    @classmethod
-    def work_exp(self, request):
-        user = request.user
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        try:
-            request = self.extract(request.data.get("work_experience"))
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:CreateWorkExperienceView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        serializer = self.serializer_class(data=request, many=True)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        for data in validated_data:
-            data['user'] = user
-        try:
-            serializer.save()
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:CreateWorkExperienceView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        response["message"] = serializer.data
-        return Response(response)
     
     @staticmethod
     def create(validated_data):
         id = validated_data.get('id')
-        job_type = validated_data.get('job_type')
-        designation = validated_data.get('designation')
-        company_name = validated_data.get('company_name')
-        job_description = validated_data.get('job_description')
-        city = validated_data.get('city')
-        state = validated_data.get('state')
-        country = validated_data.get('country')
-        weekly_working_hours = validated_data.get('weekly_working_hours')
         start_date = validated_data.get('start_date')
         end_date = validated_data.get('end_date')
-        user = validated_data.get('user')
         
         # validate date
-        if end_date is not None and start_date is not None:
-            if end_date < start_date:
-                return "Start Date cannot be greater then end date"
+        if end_date is not None and start_date is not None and end_date < start_date:
+            raise serializers.ValidationError("Start Date cannot be greater then end date")
         
         try:
-            work, created = CustomerWorkExperience.objects.update_or_create(id=id, 
-                                        defaults={
-                                            "job_type":job_type, 
-                                            "designation":designation,
-                                            "company_name":company_name, 
-                                            "job_description":job_description, 
-                                            "city":city, 
-                                            "state":state,
-                                            "country":country, 
-                                            "weekly_working_hours":weekly_working_hours, 
-                                            "start_date":start_date,
-                                            "end_date":end_date, 
-                                            "user":user
-                                        })
+            CustomerWorkExperience.objects.update_or_create(id=id,
+                                defaults={
+                                    "job_type": validated_data.get('job_type'),
+                                    "designation": validated_data.get('designation'),
+                                    "company_name": validated_data.get('company_name'),
+                                    "job_description": validated_data.get('job_description'),
+                                    "city": validated_data.get('city'),
+                                    "state": validated_data.get('state'),
+                                    "country": validated_data.get('country'),
+                                    "weekly_working_hours": validated_data.get('weekly_working_hours'),
+                                    "start_date": start_date,
+                                    "end_date": end_date,
+                                    "user": validated_data.get('user')
+                                })
         except Exception as err:
-            logger.error(logging_format(LOGGER_LOW_SEVERITY, "WorkExperienceView:create"),
-                "", description=str(err))
-            raise serializers.ValidationError(str(err))
-        return work
+            logger.error(str(err))
+            return False, str(err)
+        return True, ''
 
     @classmethod
-    def update_work_exp(self, request):
-        user = request.user
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        CustomerWorkExperience.objects.filter(user=user).delete()
-        try:
-            request = self.extract(request.data.get("work_experience"))
-            serializer = self.serializer_class_update(data=request, many=True)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:CreateWorkExperienceView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def update(cls, data, user):
+        # CustomerWorkExperience.objects.filter(user=user).delete()
+        obj_data = cls.extract(data)
+        serializer = cls.serializer_class_update(data=obj_data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
-        for ids in request:
+        for ids in obj_data:
             validated_data_from_dict = enum_validated_data[count]
             validated_data_from_dict['id'] = ids.get('id')
             validated_data_from_dict['user'] = user
-            instance = self.create(validated_data_from_dict)
+            error, msg = cls.create(validated_data_from_dict)
+            if error:
+                return error, msg
             count += 1
-        response["message"] = serializer.data
-        return Response(response)
+        return error, msg
 
 
 class RelativeInCanadaView(GenericViewSet):
@@ -1291,74 +892,25 @@ class RelativeInCanadaView(GenericViewSet):
     serializer_class = serializers.RelativeInCanadaSerializer
     serializer_class_update = serializers.RelativeInCanadaUpdateSerializer
 
-    def get_relative_in_canada(self, request):
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        queryset = RelativeInCanada.objects.filter(user=request.user)
-        serializer = self.serializer_class(queryset, many=True)
-        response["message"] = serializer.data
-        return Response(response)
-    
     @staticmethod
     def extract(datas):
-        customer_work_info = {
-            "id" : datas.get("id"),
-            "full_name" : datas["full_name"].get("value"),
-            "relationship" : datas["relationship"].get("value"),
-            "immigration_status" : datas["immigration_status"].get("value"),
-            "address" : datas["address"].get("value"),
-            "contact_number" : datas["contact_number"].get("value"),
-            "email_address" : datas["email_address"].get("value"),
-            "is_blood_relationship" : datas["is_blood_relationship"].get("value")
+        relative_info = {
+            "id": datas.get("id"),
+            "full_name": datas["full_name"].get("value"),
+            "relationship": datas["relationship"].get("value"),
+            "immigration_status": datas["immigration_status"].get("value"),
+            "address": datas["address"].get("value"),
+            "contact_number": datas["contact_number"].get("value"),
+            "email_address": datas["email_address"].get("value"),
+            "is_blood_relationship": datas["is_blood_relationship"].get("value")
         }
-        return customer_work_info
+        return relative_info
 
     @classmethod
-    def relative_in_canada(self, request):
-        user = request.user
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        try:
-            request = self.extract(request.data.get("relative_in_canada"))
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        serializer = self.serializer_class(data=request)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        validated_data['user'] = user
-        try:
-            serializer.save()
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        response["message"] = serializer.data
-        return Response(response)
-
-    @classmethod
-    def update_relative_in_canada(self, request):
-        user = request.user
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        try:
-            request = self.extract(request.data.get("relative_in_canada"))
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        id = request.get('id')
-        serializer = self.serializer_class_update(data=request)
+    def update_relative_in_canada(cls, data, user):
+        obj_data = cls.extract(data)
+        id = obj_data.get('id')
+        serializer = cls.serializer_class_update(data=obj_data)
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         validated_data['user'] = user
@@ -1367,11 +919,8 @@ class RelativeInCanadaView(GenericViewSet):
             serializer.save()
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        response["message"] = serializer.data
-        return Response(response)
+            return False, str(e)
+        return True, ''
 
 
 class EducationalCreationalAssessmentView(GenericViewSet):
@@ -1379,23 +928,13 @@ class EducationalCreationalAssessmentView(GenericViewSet):
     authentication_classes = (JWTAuthentication, )
     serializer_class = serializers.EducationalCreationalAssessmentSerializer
     serializer_class_update = serializers.EducationalCreationalAssessmentUpdateSerializer
-
-    def get_educational_creational_assessment(self, request):
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        queryset = EducationalCreationalAssessment.objects.filter(user=request.user)
-        serializer = self.serializer_class(queryset, many=True)
-        response["message"] = serializer.data
-        return Response(response)
     
     @staticmethod
     def extract(datas):
         data = []
         for info in datas:
             customer_work_info = {
-                "id" : info.get("id"),
+                "id": info.get("id"),
                 "eca_authority_name": info["eca_authority_name"].get("value"),
                 "eca_authority_number": info["eca_authority_number"].get("value"),
                 "canadian_equivalency_summary": info["canadian_equivalency_summary"].get("value"),
@@ -1403,108 +942,47 @@ class EducationalCreationalAssessmentView(GenericViewSet):
             }
             data.append(customer_work_info)
         return data
-
-    @classmethod
-    def educational_creational_assessment(self, request):
-        user = request.user
-        response = {
-            "status": 1,
-            "message": ""
-        }
-
-        request = self.extract(request.data.get("education_assessment"))
-        serializer = self.serializer_class(data=request)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        for data in validated_data:
-            data['user'] = user
-        try:
-            serializer.save()
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        response["message"] = serializer.data
-        return Response(response)
     
     @staticmethod
     def create(validated_data):
-
         try:
-            education_assessment, created = EducationalCreationalAssessment.objects.update_or_create(id=validated_data.get('id'),
+            EducationalCreationalAssessment.objects.update_or_create(id=validated_data.get('id'),
                                 defaults={
-                                        "eca_authority_name":validated_data.get('eca_authority_name'),
-                                        "eca_authority_number":validated_data.get('eca_authority_number'),
-                                        "canadian_equivalency_summary":validated_data.get('canadian_equivalency_summary'),
+                                        "eca_authority_name": validated_data.get('eca_authority_name'),
+                                        "eca_authority_number": validated_data.get('eca_authority_number'),
+                                        "canadian_equivalency_summary": validated_data.get('canadian_equivalency_summary'),
                                         "eca_date": validated_data.get("eca_date"),
                                         "user": validated_data.get('user')
                                     })
         except Exception as err:
-            logger.error(logging_format(LOGGER_LOW_SEVERITY, "EducationalCreationalAssessmentView:create"),
-                "", description=str(err))
-            raise serializers.ValidationError(str(err))
-        return education_assessment
+            logger.error(str(err))
+            return True, str(err)
+        return False, ''
 
     @classmethod
-    def update_educational_creational_assessment(self, request):
-        user = request.user
-        EducationalCreationalAssessment.objects.filter(user=user).delete()
-        response = {
-            "status" : 1,
-            "message" : ""
-        }
-        try:
-            request = self.extract(request.data.get("education_assessment"))
-            serializer = self.serializer_class_update(data=request, many=True)
-            serializer.is_valid(raise_exception=True)
-            validated_data = serializer.validated_data
-        except Exception as e:
-            logger.error('ERROR: AUTHENTICATION:EducationalCreationalAssessment ' + str(e))
-            response['message'] = str(e)
-            response['status'] = 0
-            return Response(response)
-        if not len(validated_data):
-            return Response(response)
+    def update(cls, data, user):
+        # EducationalCreationalAssessment.objects.filter(user=user).delete()
+        obj_data = cls.extract(data)
+        serializer = cls.serializer_class_update(data=obj_data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
         enum_validated_data = dict(enumerate(validated_data))
         count = 0
-        for ids in request:
+        for ids in obj_data:
             validated_data_from_dict = enum_validated_data[count]
             validated_data_from_dict['id'] = ids.get('id')
             validated_data_from_dict['user'] = user
-            instance = self.create(validated_data_from_dict)
+            error, msg = cls.create(validated_data_from_dict)
+            if error:
+                return error, msg
             count += 1
-        response["message"] = serializer.data
-        return Response(response)
+        return error, msg
 
 
 class LoginOTP(GenericViewSet):
 
-    # permission_classes = (IsAuthenticated, )
-    # authentication_classes = (JWTAuthentication, )
-    # serializer_class = serializers.OTPSerializer
-
     @transaction.atomic
     def generate(self, request):
-        # response = {'exists': 0}
-        # serializer = serializers.OTPSerializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
-
-        # data = serializer.validated_data
-        # phone_number = data['phone_number']
-
-        # otp_obj = data.get('otp_obj')
-
-        # req_type = request.query_params.get('type')
-        # via_sms = data.get('via_sms', True)
-        # via_whatsapp = data.get('via_whatsapp', False)
-        # call_source = data.get('request_source')
-        # retry_send = request.query_params.get('retry', False)
-        # otp_message = OtpVerifications.get_otp_message(request.META.get('HTTP_PLATFORM'), req_type, version=request.META.get('HTTP_APP_VERSION'))
-        # otp_message = "test"
-        # send_otp(otp_message, phone_number, retry_send, via_sms=via_sms, via_whatsapp=via_whatsapp, call_source=call_source)
-        # if User.objects.filter(phone_number=phone_number, user_type=User.CONSUMER).exists():
-        #     response['exists'] = 1
 
         response = {
             "status": "0",
@@ -1850,4 +1328,219 @@ class NewUserFromGetRequest(GenericViewSet):
         }
         response["message"] = data
         return Response(response, status=status.HTTP_200_OK)
-            
+
+
+class LanguageScoreView(GenericViewSet):
+
+    @classmethod
+    def extract_lang_data(cls, data):
+        out = []
+        for info in data:
+            customer_lang_score = {
+                "id": info.get("id"),
+                "test_type": info["test_type"].get("value"),
+                "test_date": info["test_date"].get("value"),
+                "result_date": info["result_date"].get("value"),
+                "listening_score": info["listening_score"].get("value"),
+                "test_version": info["test_version"].get("value"),
+                "report_form_number": info["report_form_number"].get("value"),
+                "writing_score": info["writing_score"].get("value"),
+                "speaking_score": info["speaking_score"].get("value"),
+                "reading_score": info["reading_score"].get("value"),
+                "overall_score": info["overall_score"].get("value"),
+                # "mother_tongue": info["mother_tongue"].get("value"),
+            }
+
+            out.append(customer_lang_score)
+        return out
+
+    @classmethod
+    def update(cls, data, user):
+        # CustomerLanguageScore.objects.filter(user=user).delete()
+        obj_data = cls.extract_lang_data(data)
+        serializer = serializers.CustomerLanguageUpdateSerializer(data=obj_data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        enum_validated_data = dict(enumerate(validated_data))
+        count = 0
+        try:
+            for ids in obj_data:
+                validated_data_from_dict = enum_validated_data[count]
+                CustomerLanguageScore.objects.update_or_create(id=ids.get('id'),
+                                                               defaults={
+                                                                 "test_type": validated_data_from_dict.get('test_type'),
+                                                                 "test_date": validated_data_from_dict.get('test_date'),
+                                                                 "result_date": validated_data_from_dict.get('result_date'),
+                                                                 "test_version": validated_data_from_dict.get('test_version'),
+                                                                 "report_form_number": validated_data_from_dict.get('report_form_number'),
+                                                                 "listening_score": validated_data_from_dict.get('listening_score'),
+                                                                 "writing_score": validated_data_from_dict.get('writing_score'),
+                                                                 "speaking_score": validated_data_from_dict.get('speaking_score'),
+                                                                 "reading_score": validated_data_from_dict.get('reading_score'),
+                                                                 "overall_score": validated_data_from_dict.get('overall_score'),
+                                                                 "user": user
+                                                                 })
+                count += 1
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LanguageScore:update_lang_score ' + str(e))
+            return True, str(e)
+        return False, ''
+
+
+class SpouseProfileView(GenericViewSet):
+
+    @classmethod
+    def extract_spouse_data(cls, data):
+
+        customer_lang_score = {
+            "id": data.get("id"),
+            "first_name": data["first_name"].get("value"),
+            "last_name": data["last_name"].get("value"),
+            "age": data["age"].get("value"),
+            "date_of_marriage": data["date_of_marriage"].get("value"),
+            "number_of_children": data["number_of_children"].get("value"),
+            "mother_fullname": data["mother_fullname"].get("value"),
+            "father_fullname": data["father_fullname"].get("value"),
+            "passport_number": data["passport_number"].get("value"),
+            "passport_country": data["passport_country"].get("value"),
+            "passport_issue_date": data["passport_issue_date"].get("value"),
+            "passport_expiry_date": data["passport_expiry_date"].get("value"),
+            }
+
+        return customer_lang_score
+
+    @classmethod
+    def update(cls, data, user):
+        # CustomerSpouseProfile.objects.filter(customer__user=user).delete()
+        obj_data = cls.extract_spouse_data(data)
+        serializer = serializers.CustomerSpouseProfileUpdateSerializer(data=obj_data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        try:
+            CustomerSpouseProfile.objects.update_or_create(id=obj_data.get('id'),
+                                                           defaults={
+                                                             "date_of_marriage": validated_data.get('date_of_marriage'),
+                                                             "number_of_children": validated_data.get('number_of_children'),
+                                                             "first_name": validated_data.get('first_name'),
+                                                             "last_name": validated_data.get('last_name'),
+                                                             "mother_fullname": validated_data.get('mother_fullname'),
+                                                             "father_fullname": validated_data.get('father_fullname'),
+                                                             "age": validated_data.get('age'),
+                                                             "passport_number": validated_data.get('passport_number'),
+                                                             "passport_country": validated_data.get('passport_country'),
+                                                             "passport_issue_date": validated_data.get('passport_issue_date'),
+                                                             "passport_expiry_date": validated_data.get('passport_expiry_date'),
+                                                             "customer": user.user_profile
+                                                             })
+            # count += 1
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:LanguageScore:update_spouse_profile ' + str(e))
+            return True, str(e)
+        return False, ''
+
+
+class FamilyInformationView(GenericViewSet):
+
+    @classmethod
+    def extract_family_data(cls, data):
+        out = []
+        for info in data:
+            family_data = {
+                "id": info.get("id"),
+                "relationship": info["relationship"].get("value"),
+                "first_name": info["first_name"].get("value"),
+                "last_name": info["last_name"].get("value"),
+                "date_of_birth": info["date_of_birth"].get("value"),
+                "date_of_death": info["date_of_death"].get("value"),
+                "city_of_birth": info.get("city_of_birth").get("value"),
+                "country_of_birth": info["country_of_birth"].get("value"),
+                "street_address": info["street_address"].get("value"),
+                "current_country": info["current_country"].get("value"),
+                "current_state": info["current_state"].get("value"),
+                "current_occupation": info["current_occupation"].get("value"),
+            }
+
+            out.append(family_data)
+        return out
+
+    @classmethod
+    def update(cls, data, user):
+        # CustomerFamilyInformation.objects.filter(customer__user=user).delete()
+        obj_data = cls.extract_family_data(data)
+        serializer = serializers.CustomerFamilyInfoUpdateSerializer(data=obj_data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        enum_validated_data = dict(enumerate(validated_data))
+        count = 0
+        try:
+            for ids in obj_data:
+                validated_data_from_dict = enum_validated_data[count]
+                CustomerFamilyInformation.objects.update_or_create(id=ids.get('id'),
+                                                               defaults={
+                                                                 "relationship": validated_data_from_dict.get('relationship'),
+                                                                 "first_name": validated_data_from_dict.get('first_name'),
+                                                                 "last_name": validated_data_from_dict.get('last_name'),
+                                                                 "date_of_birth": validated_data_from_dict.get('date_of_birth'),
+                                                                 "date_of_death": validated_data_from_dict.get('date_of_death'),
+                                                                 "city_of_birth": validated_data_from_dict.get('city_of_birth'),
+                                                                 "country_of_birth": validated_data_from_dict.get('country_of_birth'),
+                                                                 "street_address": validated_data_from_dict.get('street_address'),
+                                                                 "current_country": validated_data_from_dict.get('current_country'),
+                                                                 "current_state": validated_data_from_dict.get('current_state'),
+                                                                 "current_occupation": validated_data_from_dict.get('current_occupation'),
+                                                                 "customer": user.user_profile
+                                                                 })
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:FamilyInfo:update_family_information ' + str(e))
+            return True, str(e)
+        return False, ''
+
+
+class CustomerInformationView(GenericViewSet):
+    @classmethod
+    def extract(cls, datas):
+        profile = {
+            "first_name": datas['first_name'].get("value"),
+            "last_name": datas['last_name'].get("value"),
+            "mother_fullname": datas['mother_fullname'].get("value"),
+            "father_fullname": datas['father_fullname'].get("value"),
+            "age": datas['age'].get("value"),
+            "address": datas['address'].get("value"),
+            "phone_number": datas['phone_number'].get("value"),
+            "date_of_birth": datas['date_of_birth'].get("value"),
+            "current_country": datas['current_country'].get("value"),
+            "desired_country": datas['desired_country'].get("value"),
+
+            "height": datas['height'].get("value"),
+            "previous_marriage": datas['any_previous_marriage'].get("value"),
+            "eye_color": datas['eye_color'].get("value"),
+            "first_language": datas['first_language'].get("value"),
+            "city_of_birth": datas['city_of_birth'].get("value"),
+            "email": datas['email'].get("value"),
+            "funds_available": datas['funds_available'].get("value"),
+            "marital_status": datas['marital_status'].get("value"),
+
+            "type_of_visa": datas['type_of_visa'].get("value"),
+            "passport_number": datas['passport_number'].get("value"),
+            "passport_country": datas['passport_country'].get("value"),
+            "passport_issue_date": datas['passport_issue_date'].get("value"),
+            "passport_expiry_date": datas['passport_expiry_date'].get("value"),
+        }
+        return profile
+
+    @classmethod
+    def update(cls, data, user):
+        obj_data = cls.extract(data)
+        serializer = serializers.CustomerUpdateProfileSerializer(data=obj_data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        validated_data['user'] = user
+        try:
+            serializer.save()
+        except Exception as e:
+            logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
+            return True, str(e)
+        return False, ''
