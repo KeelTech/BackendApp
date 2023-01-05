@@ -39,6 +39,7 @@ class WebsiteComponents(HtmlField):
     blog_img = models.FileField(
         ("Blog Image"), upload_to="blog", blank=True)
     is_active = models.BooleanField(default=True)
+    highlight = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.pk)

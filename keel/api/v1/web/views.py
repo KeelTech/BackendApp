@@ -66,7 +66,7 @@ class BlogListView(ModelViewSet):
 
         return WebsiteComponents.objects.filter(
             component_name=WebsiteComponents.BLOGS, is_active=True
-        )
+        ).order_by('-updated_at')
 
     def list(self, request):
         response = {
