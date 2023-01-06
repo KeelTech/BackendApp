@@ -8,7 +8,6 @@ def get_current_request():
     return _requests.get(current_thread().ident)
 
 
-
 class RequestMiddleware(MiddlewareMixin):
     def process_request(self, request):
         _requests[current_thread().ident] = request

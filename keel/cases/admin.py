@@ -33,9 +33,8 @@ class CaseAdmin(admin.ModelAdmin):
                     "ref_id",
                     "program",
                 )
-            else:
-                return self.readonly_fields
-        
+        else:
+            return self.readonly_fields
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "user":
