@@ -22,17 +22,16 @@ class CaseAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj):
         user = request.user
-        if obj:
-            if user.user_type == User.STAFF:
-                return self.readonly_fields + (
-                    "user",
-                    "plan",
-                    "status",
-                    "account_manager",
-                    "is_active",
-                    "ref_id",
-                    "program",
-                )
+        if obj and user.user_type == User.STAFF:
+            return self.readonly_fields + (
+                "user",
+                "plan",
+                "status",
+                "account_manager",
+                "is_active",
+                "ref_id",
+                "program",
+            )
         else:
             return self.readonly_fields
 
