@@ -2,6 +2,7 @@
 from django.urls import path
 
 from .views import (
+    IeltsListView,
     BlogListView,
     HomeLeadsView,
     WebsiteComponentsView,
@@ -30,4 +31,5 @@ urlpatterns = [
         BlogListView.as_view({"get": "retrieve"}),
         name="blog-list-detail",
     ),
+    path("ielts-list", IeltsListView.as_view({"get": "list"}), name="ielts-list"),
 ]
