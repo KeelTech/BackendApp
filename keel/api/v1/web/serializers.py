@@ -1,4 +1,4 @@
-from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData
+from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData, IeltsData
 from rest_framework import serializers
 
 
@@ -34,3 +34,9 @@ class BlogListSerializer(serializers.ModelSerializer):
 
     def get_updated_at(self, obj):
         return obj.updated_at.strftime("%B %d, %Y")
+
+
+class IeltsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IeltsData
+        fields = ("title", "day", "start_time", "end_time", "exam_type", "module", "ielts_img")
