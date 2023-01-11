@@ -653,6 +653,8 @@ class ProfileView(GenericViewSet):
             "status": 0,
             "message": ""
         }
+        exception = 0
+
         profile_components = {'profile': CustomerInformationView,
                               'qualification': QualificationView,
                               'work_experience': WorkExperienceView,
@@ -666,13 +668,16 @@ class ProfileView(GenericViewSet):
         component_req = list(request.data.keys())[0]
         if component_req not in profile_components:
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             with transaction.atomic():
                 error, msg = profile_components[component_req].update(request.data[component_req], request.user)
         except Exception as e:
             response['message'] = str(e)
-            if error:
-                response['message'] = msg
+            exception = 1
+
+        if error or exception:
+            response['message'] = msg
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         response["status"] = 1
@@ -1510,7 +1515,7 @@ class CustomerInformationView(GenericViewSet):
             "age": datas['age'].get("value"),
             "address": datas['address'].get("value"),
             "phone_number": datas['phone_number'].get("value"),
-            "date_of_birth": datas['date_of_birth'].get("value"),
+            # "date_of_birth": datas['date_of_birth'].get("value"),
             "current_country": datas['current_country'].get("value"),
             "desired_country": datas['desired_country'].get("value"),
 
