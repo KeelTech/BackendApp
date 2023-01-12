@@ -792,8 +792,8 @@ class QualificationView(GenericViewSet):
                                                 })
         except Exception as err:
             logger.error(str(err))
-            return False, str(err)
-        return True, ''
+            return True, str(err)
+        return False, ''
 
     @classmethod
     def update(cls, data, user):
@@ -867,8 +867,8 @@ class WorkExperienceView(GenericViewSet):
                                 })
         except Exception as err:
             logger.error(str(err))
-            return False, str(err)
-        return True, ''
+            return True, str(err)
+        return False, ''
 
     @classmethod
     def update(cls, data, user):
@@ -924,8 +924,8 @@ class RelativeInCanadaView(GenericViewSet):
             serializer.save()
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:RelativeInCanadaView ' + str(e))
-            return False, str(e)
-        return True, ''
+            return True, str(e)
+        return False, ''
 
 
 class EducationalCreationalAssessmentView(GenericViewSet):
