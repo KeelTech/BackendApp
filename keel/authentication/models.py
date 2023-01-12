@@ -359,6 +359,7 @@ class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
     country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="country_customer_experience",
                                         max_length=512, blank=True, null=True, default=None)
     weekly_working_hours = models.CharField(max_length=512, default=None, blank=True, null=True)
+    is_current_job = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
         return str(self.user)
@@ -376,6 +377,7 @@ class WorkExperienceLabel(TimeStampedModel, SoftDeleteModel):
     weekly_working_hours_label = models.CharField(max_length=255)
     start_date_label = models.CharField(max_length=255)
     end_date_label = models.CharField(max_length=255)
+    is_current_job_label = models.CharField(max_length=255, null=True, blank=True)
 
 
 class RelativeInCanada(TimeStampedModel, SoftDeleteModel):
@@ -450,11 +452,11 @@ class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel):
     result_date = models.DateField(blank=True, null=True)
     test_version = models.CharField(max_length=256, blank=True, null=True)
     report_form_number = models.CharField(max_length=512, blank=True, null=True)
-    listening_score = models.IntegerField()
-    writing_score = models.IntegerField()
-    speaking_score = models.IntegerField()
-    reading_score = models.IntegerField()
-    overall_score = models.IntegerField(null=True, blank=True)
+    listening_score = models.FloatField()
+    writing_score = models.FloatField()
+    speaking_score = models.FloatField()
+    reading_score = models.FloatField()
+    overall_score = models.FloatField(null=True, blank=True)
     # mother_tongue = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):

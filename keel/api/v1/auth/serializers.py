@@ -722,6 +722,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField()
     country = serializers.SerializerMethodField()
     weekly_working_hours = serializers.SerializerMethodField()
+    is_current_job = serializers.SerializerMethodField()
     full_address = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
@@ -763,6 +764,15 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
                 "value": var,
                 "type": "calendar",
                 "labels": self.context["labels"]["end_date_label"],
+            }
+
+    def get_is_current_job(self, obj):
+        var = obj.is_current_job
+        if "labels" in self.context:
+            return {
+                "value": var,
+                "type": "checkbox",
+                "labels": self.context["labels"]["is_current_job_label"],
             }
 
     def get_job_description(self, obj):
@@ -886,6 +896,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
             "country",
             "state",
             "city",
+            'is_current_job',
             "full_address",
             "labels",
         )

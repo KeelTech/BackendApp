@@ -522,9 +522,10 @@ class ProfileView(GenericViewSet):
             labels['weekly_working_hours_label'] = label.weekly_working_hours_label
             labels['start_date_label'] = label.start_date_label
             labels['end_date_label'] = label.end_date_label
+            labels['is_current_job_label'] = label.is_current_job_label
         queryset = CustomerWorkExperience.objects.filter(user=request.user)
         if len(queryset):
-            serializer = self.serializer_class_experience(queryset, many=True, context={"labels":labels})
+            serializer = self.serializer_class_experience(queryset, many=True, context={"labels": labels})
             for label in serializer.data:
                 label.pop("labels")
             return serializer.data
@@ -653,7 +654,7 @@ class ProfileView(GenericViewSet):
             "status": 0,
             "message": ""
         }
-        exception = 0
+        error = 0; exception = 0
 
         profile_components = {'profile': CustomerInformationView,
                               'qualification': QualificationView,
@@ -672,12 +673,14 @@ class ProfileView(GenericViewSet):
         try:
             with transaction.atomic():
                 error, msg = profile_components[component_req].update(request.data[component_req], request.user)
+                if error:
+                    exception = 1
+                    response['message'] = msg
         except Exception as e:
             response['message'] = str(e)
             exception = 1
 
-        if error or exception:
-            response['message'] = msg
+        if exception:
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         response["status"] = 1
@@ -835,7 +838,8 @@ class WorkExperienceView(GenericViewSet):
                 "country": info["full_address"].get("countryId"),
                 "weekly_working_hours": info["weekly_working_hours"].get("value"),
                 "start_date": info["start_date"].get("value"),
-                "end_date": info["end_date"].get("value")
+                "end_date": info["end_date"].get("value"),
+                "is_current_job": info["is_current_job"].get("value")
             }
             data.append(customer_work_info)
         return data
@@ -863,6 +867,7 @@ class WorkExperienceView(GenericViewSet):
                                     "weekly_working_hours": validated_data.get('weekly_working_hours'),
                                     "start_date": start_date,
                                     "end_date": end_date,
+                                    "is_current_job": validated_data.get('is_current_job'),
                                     "user": validated_data.get('user')
                                 })
         except Exception as err:
@@ -912,7 +917,7 @@ class RelativeInCanadaView(GenericViewSet):
         return relative_info
 
     @classmethod
-    def update_relative_in_canada(cls, data, user):
+    def update(cls, data, user):
         obj_data = cls.extract(data)
         id = obj_data.get('id')
         serializer = cls.serializer_class_update(data=obj_data)
