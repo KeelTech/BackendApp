@@ -1,6 +1,6 @@
 from django.contrib import admin
 from keel.Core.admin import CustomBaseModelAdmin
-from .models import Web, HomeLeads, WebsiteContactData, WebsiteComponents, IeltsData
+from .models import Web, HomeLeads, WebsiteContactData, WebsiteComponents, IeltsData, JobPostingData
 
 class WebsiteComponenetsAdmin(CustomBaseModelAdmin):
     list_display = ('title', 'component_name', )
@@ -11,3 +11,4 @@ admin.site.register(HomeLeads)
 admin.site.register(WebsiteContactData)
 admin.site.register(WebsiteComponents, WebsiteComponenetsAdmin)
 admin.site.register(IeltsData)
+admin.site.register(JobPostingData)

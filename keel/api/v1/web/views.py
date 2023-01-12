@@ -1,4 +1,4 @@
-from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData, IeltsData
+from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData, IeltsData, JobPostingData
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -8,7 +8,8 @@ from .serializers import (
     HomeLeadsSerializer,
     WebsiteComponentsSerializer,
     WebsiteContactDataSerializer,
-    IeltsListSerializer
+    IeltsListSerializer,
+    JobsPostingListSerializer
 )
 
 
@@ -94,6 +95,15 @@ class BlogListView(ModelViewSet):
 class IeltsListView(ModelViewSet):
     queryset = IeltsData.objects.all()
     serializer_class = IeltsListSerializer
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+class JobPostingListView(ModelViewSet):
+    queryset = JobPostingData.objects.all()
+    serializer_class = JobsPostingListSerializer
 
     def list(self, request):
         queryset = self.get_queryset()

@@ -1,4 +1,4 @@
-from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData, IeltsData
+from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData, IeltsData, JobPostingData
 from rest_framework import serializers
 
 
@@ -40,3 +40,8 @@ class IeltsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = IeltsData
         fields = ("title", "day", "start_time", "end_time", "exam_type", "module", "ielts_img")
+
+class JobsPostingListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobPostingData
+        fields = ("category", "title", "location", "experience", "skills", "description")
