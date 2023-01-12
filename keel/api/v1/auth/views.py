@@ -502,7 +502,7 @@ class ProfileView(GenericViewSet):
             labels['is_blood_relationship_label'] = label.is_blood_relationship_label
         queryset = RelativeInCanada.objects.filter(user=request.user).first()
         if queryset:
-            serializer = self.serializer_class_relative_in_canada(queryset, context={"labels":labels})
+            serializer = self.serializer_class_relative_in_canada(queryset, context={"labels": labels})
             return serializer.data
         else:
             data = constants.RELATIVE

@@ -1493,7 +1493,7 @@ class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
         model = CustomerLanguageScore
         fields = (
             "id", 'test_type', 'test_date', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
-            'speaking_score', 'reading_score', )
+            'speaking_score', 'reading_score', 'overall_score', )
 
 
 class CustomerFamilyInfoUpdateSerializer(serializers.ModelSerializer):
