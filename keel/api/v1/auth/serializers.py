@@ -1273,7 +1273,7 @@ class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
             return {
                 "value": var,
                 "type": "checkbox",
-                "lables": self.context["labels"]["is_blood_relationship_label"],
+                "labels": self.context["labels"]["is_blood_relationship_label"],
             }
 
     def get_email_address(self, obj):
