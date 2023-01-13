@@ -112,16 +112,16 @@ WORK_EXPERIENCE = [{
     "state": {"value": "", "type": "char", "labels": "State"},
     "city": {"value": "", "type": "char", "labels": "City"},
     "is_current_job": {"value": False, "type": "checkbox", "labels": "Is Current Job"},
-    "full_address": {
-        "type": 'address', 
-        "countryLabel": "Country",
-        "country": "",
-        "countryId": "", 
-        "stateLabel": "State",
-        "state": "",
-        "stateId": "",
-        "cityLabel": "City",
-        "city": "",
-        "cityId": ""
-    },
+    # "full_address": {
+    #     "type": 'address',
+    #     "countryLabel": "Country",
+    #     "country": "",
+    #     "countryId": "",
+    #     "stateLabel": "State",
+    #     "state": "",
+    #     "stateId": "",
+    #     "cityLabel": "City",
+    #     "city": "",
+    #     "cityId": ""
+    # },
 }]

@@ -693,6 +693,9 @@ class CustomerWorkExperienceSerializer(serializers.ModelSerializer):
 
 
 class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
+
+    end_date = serializers.DateField(required=False, allow_null=True)
+
     class Meta:
         model = CustomerWorkExperience
         fields = (
@@ -723,7 +726,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     country = serializers.SerializerMethodField()
     weekly_working_hours = serializers.SerializerMethodField()
     is_current_job = serializers.SerializerMethodField()
-    full_address = serializers.SerializerMethodField()
+    # full_address = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -761,6 +764,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
         var = obj.end_date
         if "labels" in self.context:
             return {
+                "is_optional": True,
                 "value": var,
                 "type": "calendar",
                 "labels": self.context["labels"]["end_date_label"],
@@ -768,8 +772,11 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
 
     def get_is_current_job(self, obj):
         var = obj.is_current_job
+        if var is None:
+            var = False
         if "labels" in self.context:
             return {
+                "is_optional": True,
                 "value": var,
                 "type": "checkbox",
                 "labels": self.context["labels"]["is_current_job_label"],
@@ -897,7 +904,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
             "state",
             "city",
             'is_current_job',
-            "full_address",
+            # "full_address",
             "labels",
         )
 
@@ -1497,6 +1504,9 @@ class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
 
 
 class CustomerFamilyInfoUpdateSerializer(serializers.ModelSerializer):
+
+    date_of_death = serializers.DateField(required=False, allow_null=True)
+
     class Meta:
         model = CustomerFamilyInformation
         fields = (

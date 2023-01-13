@@ -833,14 +833,16 @@ class WorkExperienceView(GenericViewSet):
                 "job_type": info["job_type"].get("value"),
                 "designation": info["designation"].get("value"),
                 "job_description": info["job_description"].get("value"),
-                "city": info["full_address"].get("cityId"),
-                "state": info["full_address"].get("stateId"),
-                "country": info["full_address"].get("countryId"),
+                "city": info["city"].get("value"),
+                "state": info["state"].get("value"),
+                "country": info["country"].get("value"),
                 "weekly_working_hours": info["weekly_working_hours"].get("value"),
                 "start_date": info["start_date"].get("value"),
                 "end_date": info["end_date"].get("value"),
                 "is_current_job": info["is_current_job"].get("value")
             }
+            if customer_work_info['end_date'] == '':
+                del customer_work_info['end_date']
             data.append(customer_work_info)
         return data
     
@@ -1471,7 +1473,8 @@ class FamilyInformationView(GenericViewSet):
                 "current_state": info["current_state"].get("value"),
                 "current_occupation": info["current_occupation"].get("value"),
             }
-
+            if family_data['date_of_death'] == '':
+                del family_data['date_of_death']
             out.append(family_data)
         return out
 
@@ -1489,20 +1492,20 @@ class FamilyInformationView(GenericViewSet):
             for ids in obj_data:
                 validated_data_from_dict = enum_validated_data[count]
                 CustomerFamilyInformation.objects.update_or_create(id=ids.get('id'),
-                                                               defaults={
-                                                                 "relationship": validated_data_from_dict.get('relationship'),
-                                                                 "first_name": validated_data_from_dict.get('first_name'),
-                                                                 "last_name": validated_data_from_dict.get('last_name'),
-                                                                 "date_of_birth": validated_data_from_dict.get('date_of_birth'),
-                                                                 "date_of_death": validated_data_from_dict.get('date_of_death'),
-                                                                 "city_of_birth": validated_data_from_dict.get('city_of_birth'),
-                                                                 "country_of_birth": validated_data_from_dict.get('country_of_birth'),
-                                                                 "street_address": validated_data_from_dict.get('street_address'),
-                                                                 "current_country": validated_data_from_dict.get('current_country'),
-                                                                 "current_state": validated_data_from_dict.get('current_state'),
-                                                                 "current_occupation": validated_data_from_dict.get('current_occupation'),
-                                                                 "customer": user.user_profile
-                                                                 })
+                                                       defaults={
+                                                         "relationship": validated_data_from_dict.get('relationship'),
+                                                         "first_name": validated_data_from_dict.get('first_name'),
+                                                         "last_name": validated_data_from_dict.get('last_name'),
+                                                         "date_of_birth": validated_data_from_dict.get('date_of_birth'),
+                                                         "date_of_death": validated_data_from_dict.get('date_of_death'),
+                                                         "city_of_birth": validated_data_from_dict.get('city_of_birth'),
+                                                         "country_of_birth": validated_data_from_dict.get('country_of_birth'),
+                                                         "street_address": validated_data_from_dict.get('street_address'),
+                                                         "current_country": validated_data_from_dict.get('current_country'),
+                                                         "current_state": validated_data_from_dict.get('current_state'),
+                                                         "current_occupation": validated_data_from_dict.get('current_occupation'),
+                                                         "customer": user.user_profile
+                                                         })
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:FamilyInfo:update_family_information ' + str(e))
             return True, str(e)
