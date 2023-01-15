@@ -6,11 +6,9 @@ from .views import (
     HomeLeadsView,
     WebsiteComponentsView,
     WebsiteContactDataView,
+    LeadEngine,
 )
 
-# router = routers.DefaultRouter()
-# router.register(r"website-contact", WebsiteContactDataView)
-# router.register(r"home-lead", HomeLeadsView)
 
 urlpatterns = [
     path(
@@ -30,4 +28,5 @@ urlpatterns = [
         BlogListView.as_view({"get": "retrieve"}),
         name="blog-list-detail",
     ),
+    path("push-lead", LeadEngine.as_view({"post": "push_leadsquared"}), name="push-lead"),
 ]
