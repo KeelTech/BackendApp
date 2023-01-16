@@ -611,31 +611,20 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
 
     def get_full_address(self, obj):
         if "labels" in self.context:
-            if obj.country != None and obj.city != None and obj.state != None:
+            country, state, city = None, None, None
+            if obj.country is not None and obj.city is not None and obj.state is not None:
                 country, state, city = obj.country, obj.state, obj.city
-                return {
-                    "type": "address",
-                    "countryLabel": self.context["labels"]["country_label"],
-                    "country": country.name,
-                    "countryId": country.id,
-                    "stateLabel": self.context["labels"]["state_label"],
-                    "state": state.state,
-                    "stateId": state.id,
-                    "cityLabel": self.context["labels"]["city_label"],
-                    "city": city.city_name,
-                    "cityId": city.id,
-                }
             return {
                 "type": "address",
                 "countryLabel": self.context["labels"]["country_label"],
-                "country": "",
-                "countryId": "",
+                "country": country.name if country else "",
+                "countryId": country.id if country else "",
                 "stateLabel": self.context["labels"]["state_label"],
-                "state": "",
-                "stateId": "",
+                "state": state.state if state else "",
+                "stateId": state.id if state else "",
                 "cityLabel": self.context["labels"]["city_label"],
-                "city": "",
-                "cityId": "",
+                "city": city.city_name if city else "",
+                "cityId": city.id if city else "",
             }
 
     def get_start_date(self, obj):
@@ -721,12 +710,12 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     designation = serializers.SerializerMethodField()
     job_description = serializers.SerializerMethodField()
     company_name = serializers.SerializerMethodField()
-    city = serializers.SerializerMethodField()
-    state = serializers.SerializerMethodField()
-    country = serializers.SerializerMethodField()
+    # city = serializers.SerializerMethodField()
+    # state = serializers.SerializerMethodField()
+    # country = serializers.SerializerMethodField()
     weekly_working_hours = serializers.SerializerMethodField()
     is_current_job = serializers.SerializerMethodField()
-    # full_address = serializers.SerializerMethodField()
+    full_address = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -853,31 +842,20 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
 
     def get_full_address(self, obj):
         if "labels" in self.context:
+            country, state, city = None, None, None
             if obj.country != None and obj.city != None and obj.state != None:
                 country, state, city = obj.country, obj.state, obj.city
-                return {
-                    "type": "address",
-                    "countryLabel": self.context["labels"]["country_label"],
-                    "country": country.name,
-                    "countryId": country.id,
-                    "stateLabel": self.context["labels"]["state_label"],
-                    "state": state.state,
-                    "stateId": state.id,
-                    "cityLabel": self.context["labels"]["city_label"],
-                    "city": city.city_name,
-                    "cityId": city.id,
-                }
             return {
                 "type": "address",
                 "countryLabel": self.context["labels"]["country_label"],
-                "country": "",
-                "countryId": "",
+                "country": country.name if country else "",
+                "countryId": country.id if country else "",
                 "stateLabel": self.context["labels"]["state_label"],
-                "state": "",
-                "stateId": "",
+                "state": state.state if state else "",
+                "stateId": state.id if state else "",
                 "cityLabel": self.context["labels"]["city_label"],
-                "city": "",
-                "cityId": "",
+                "city": city.city_name if city else "",
+                "cityId": city.id if city else "",
             }
 
     def get_weekly_working_hours(self, obj):
@@ -900,11 +878,11 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
             "weekly_working_hours",
             "start_date",
             "end_date",
-            "country",
-            "state",
-            "city",
+            # "country",
+            # "state",
+            # "city",
             'is_current_job',
-            # "full_address",
+            "full_address",
             "labels",
         )
 

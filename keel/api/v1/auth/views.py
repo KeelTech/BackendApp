@@ -752,22 +752,22 @@ class QualificationView(GenericViewSet):
                 "start_date": info["start_date"].get("value"),
                 "end_date": info["end_date"].get("value"),
             }
-            try:
-                # get city instance
-                if customer_work_info.get('city'):
-                    city = instances.city_instance(customer_work_info.get('city'))
-                    customer_work_info['city'] = city.id
-                # get state instance
-                if customer_work_info.get('state'):
-                    state = instances.state_instance(customer_work_info.get('state'))
-                    customer_work_info['state'] = state.id
-                # get country
-                if customer_work_info.get('country'):
-                    country = instances.country_instance(customer_work_info.get('country'))
-                    customer_work_info['country'] = country.id
-            except Exception as e:
-                logger.error('ERROR: AUTHENTICATION:QualificationView:extract ' + str(e))
-                pass
+            # try:
+            #     # get city instance
+            #     if customer_work_info.get('city'):
+            #         city = instances.city_instance(customer_work_info.get('city'))
+            #         customer_work_info['city'] = city.id
+            #     # get state instance
+            #     if customer_work_info.get('state'):
+            #         state = instances.state_instance(customer_work_info.get('state'))
+            #         customer_work_info['state'] = state.id
+            #     # get country
+            #     if customer_work_info.get('country'):
+            #         country = instances.country_instance(customer_work_info.get('country'))
+            #         customer_work_info['country'] = country.id
+            # except Exception as e:
+            #     logger.error('ERROR: AUTHENTICATION:QualificationView:extract ' + str(e))
+            #     pass
             data.append(customer_work_info)
         return data
 
@@ -833,9 +833,12 @@ class WorkExperienceView(GenericViewSet):
                 "job_type": info["job_type"].get("value"),
                 "designation": info["designation"].get("value"),
                 "job_description": info["job_description"].get("value"),
-                "city": info["city"].get("value"),
-                "state": info["state"].get("value"),
-                "country": info["country"].get("value"),
+                # "city": info["city"].get("value"),
+                # "state": info["state"].get("value"),
+                # "country": info["country"].get("value"),
+                "city": info["full_address"].get("cityId"),
+                "state": info["full_address"].get("stateId"),
+                "country": info["full_address"].get("countryId"),
                 "weekly_working_hours": info["weekly_working_hours"].get("value"),
                 "start_date": info["start_date"].get("value"),
                 "end_date": info["end_date"].get("value"),
@@ -1057,6 +1060,7 @@ class LoginOTP(GenericViewSet):
             user.phone_number = phone_number
             user.save()
         otp_instance.delete_otp()
+        response['status'] = 1
         response["data"] = "OTP validated successfully"
         return Response(response, status=status.HTTP_200_OK)
 
