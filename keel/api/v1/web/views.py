@@ -1,7 +1,8 @@
 from keel.web.models import HomeLeads, WebsiteComponents, WebsiteContactData
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+import requests, json
 
 from .serializers import (
     BlogListSerializer,
@@ -71,13 +72,13 @@ class BlogListView(ModelViewSet):
     def list(self, request):
         response = {
             "status": 1,
-            "message": "Successfully retrived blog list",
+            "message": "Successfully retrieved blog list",
             "data": {},
         }
         queryset = self.get_queryset()
         serializer = BlogListSerializer(queryset, many=True)
         response["data"] = serializer.data
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(response)
 
     def retrieve(self, request, pk=None):
         response = {
@@ -88,4 +89,24 @@ class BlogListView(ModelViewSet):
         queryset = self.get_queryset(pk=pk)
         serializer = self.get_serializer(queryset, many=True)
         response["data"] = serializer.data
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(response)
+
+
+class LeadEngine(GenericViewSet):
+
+    def push_leadsquared(self, request):
+        resp = {'status': 0,
+                'message': ''}
+
+        access_key = 'u$r9538ca002d0f679810a27e8f254a2f62'
+        secret_key = 'e342f6d83be820cc15fb10378cc31e6c33e66843'
+        url = 'https://asyncapi-in21.leadsquared.com/lead/capture?accessKey='+access_key+'&secretKey='+secret_key
+        headers_obj = {'x-api-key': 'ZMy4nAMclj8hnKpGQg7DD369ZRNj0Oqy3fZ5Wczl'}
+        req_body = request.data
+
+        req_obj = requests.post(url, json=json.dumps(req_body), headers=headers_obj)
+        if req_obj.status_code in (200, 201):
+            resp['status'] = 1
+        return Response(resp)
+
+

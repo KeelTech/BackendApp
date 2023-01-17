@@ -84,7 +84,7 @@ RELATIVE = {
     "address": {"value": "", "type": "char", "labels": "Address"},
     "contact_number": {"value": "", "type": "char", "labels": "Contact Number"},
     "email_address": {"value": "", "type": "char", "labels": "Email Address"},
-    "is_blood_relationship" : {"value": False, "type":"checkbox", "labels":"Is Blood Relationship"}
+    "is_blood_relationship": {"value": False, "type": "checkbox", "labels": "Is Blood Relationship"}
 }
 
 LANGUAGESCORE = [{
@@ -108,18 +108,19 @@ WORK_EXPERIENCE = [{
     "weekly_working_hours": {"value": "", "type": "char", "labels": "Weekly Working Hours"},
     "start_date": {"value": None, "type": "char", "labels": "Start Date"},
     "end_date": {"value": None, "type": "char", "labels": "End Date"},
-    "country": {"value": "", "type": "char", "labels": "Country"},
-    "state": {"value": "", "type": "char", "labels": "State"},
-    "city": {"value": "", "type": "char", "labels": "City"},
-    "full_address" : { 
-        "type": 'address', 
-        "countryLabel":"Country", 
+    # "country": {"value": "", "type": "char", "labels": "Country"},
+    # "state": {"value": "", "type": "char", "labels": "State"},
+    # "city": {"value": "", "type": "char", "labels": "City"},
+    "is_current_job": {"value": False, "type": "checkbox", "labels": "Is Current Job"},
+    "full_address": {
+        "type": 'address',
+        "countryLabel": "Country",
         "country": "",
-        "countryId": "", 
-        "stateLabel":"State", 
+        "countryId": "",
+        "stateLabel": "State",
         "state": "",
         "stateId": "",
-        "cityLabel":"City",
+        "cityLabel": "City",
         "city": "",
         "cityId": ""
     },
