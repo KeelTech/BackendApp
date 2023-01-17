@@ -105,3 +105,29 @@ class IeltsData(TimeStampedModel):
     ielts_img = models.FileField(
         ("Ielts Image"), upload_to="ielts", blank=True)
 
+class JobPostingData(TimeStampedModel):
+    DESIGN = 1
+    DEVELOPMENT = 2
+    SALES = 3
+    MARKETING = 4
+    UI_UX = 5
+    CATEGORY_CHOICES = (
+        (DESIGN, 'DESIGN'),
+        (DEVELOPMENT, 'DEVELOPMENT'),
+        (SALES, 'SALES'),
+        (MARKETING, 'MARKETING'),
+        (UI_UX, 'UI/UX'),
+    )
+    GURUGRAM = 1
+    REMOTE = 2
+    GURUGRAM_REMOTE = 3
+    LOCATION_CHOICES = (
+        (GURUGRAM, 'Gurugram'),
+        (REMOTE, 'Remote'),
+        (GURUGRAM_REMOTE, 'Gurugram/Remote'),)
+    category = models.PositiveSmallIntegerField(choices=CATEGORY_CHOICES)
+    title = models.CharField(max_length=100, default=None)
+    location = models.PositiveSmallIntegerField(choices=LOCATION_CHOICES)
+    experience = models.CharField(max_length=20, default=None)
+    skills = models.CharField(max_length=100, default=None)
+    description = models.TextField(max_length=200, default=None)
