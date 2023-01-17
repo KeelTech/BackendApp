@@ -1527,7 +1527,7 @@ class CustomerInformationView(GenericViewSet):
             "age": datas['age'].get("value"),
             "address": datas['address'].get("value"),
             "phone_number": datas['phone_number'].get("value"),
-            # "date_of_birth": datas['date_of_birth'].get("value"),
+            "date_of_birth": datas['date_of_birth'].get("value"),
             "current_country": datas['current_country'].get("value"),
             "desired_country": datas['desired_country'].get("value"),
 
