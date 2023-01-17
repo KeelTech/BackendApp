@@ -699,6 +699,7 @@ class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
             "weekly_working_hours",
             "start_date",
             "end_date",
+            "is_current_job",
         )
 
 
