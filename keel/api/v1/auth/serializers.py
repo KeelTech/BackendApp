@@ -1250,6 +1250,7 @@ class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
         var = obj.is_blood_relationship
         if "labels" in self.context:
             return {
+                "is_optional": True,
                 "value": var,
                 "type": "checkbox",
                 "labels": self.context["labels"]["is_blood_relationship_label"],

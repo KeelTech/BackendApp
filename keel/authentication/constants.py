@@ -84,7 +84,7 @@ RELATIVE = {
     "address": {"value": "", "type": "char", "labels": "Address"},
     "contact_number": {"value": "", "type": "char", "labels": "Contact Number"},
     "email_address": {"value": "", "type": "char", "labels": "Email Address"},
-    "is_blood_relationship": {"value": False, "type": "checkbox", "labels": "Is Blood Relationship"}
+    "is_blood_relationship": {"value": False, "type": "checkbox", "labels": "Is Blood Relationship", "is_optional": True}
 }
 
 LANGUAGESCORE = [{
@@ -111,7 +111,7 @@ WORK_EXPERIENCE = [{
     # "country": {"value": "", "type": "char", "labels": "Country"},
     # "state": {"value": "", "type": "char", "labels": "State"},
     # "city": {"value": "", "type": "char", "labels": "City"},
-    "is_current_job": {"value": False, "type": "checkbox", "labels": "Is Current Job"},
+    "is_current_job": {"value": False, "type": "checkbox", "labels": "Is Current Job", "is_optional": True},
     "full_address": {
         "type": 'address',
         "countryLabel": "Country",
