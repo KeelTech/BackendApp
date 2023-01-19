@@ -1557,10 +1557,8 @@ class CustomerInformationView(GenericViewSet):
         validated_data['user'] = user
         try:
             serializer.save()
-            phone = obj_data.get('phone_number')
-            if isinstance(phone, int):
-                user.phone_number = phone
-                user.save()
+            user.phone_number = obj_data.get('phone_number')
+            user.save()
         except Exception as e:
             logger.error('ERROR: AUTHENTICATION:ProfileView ' + str(e))
             return True, str(e)
