@@ -1,24 +1,25 @@
 import logging
-
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.functional import cached_property
-
 from keel.Core.models import SoftDeleteModel, TimeStampedModel
 from keel.document.models import Documents
 from keel.plans.models import Service
-from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.constants import LOGGER_LOW_SEVERITY, VISA_TYPE, OWNER_TYPE, MARITAL_TYPE
 from keel.Core.err_log import logging_format
 from keel.Core.models import Country, City, State
 from keel.api.v1.auth.helpers import email_helper
 
-
-# from safedelete import SOFT_DELETE
-# from safedelete.models import SafeDeleteModel
-
 logger = logging.getLogger(__name__)
+
+
+class ProfileOwner(models.Model):
+    owner = models.CharField(max_length=96, null=True, blank=True, choices=OWNER_TYPE, default='self')
+
+    class Meta:
+        abstract = True
 
 
 class CustomUserManager(BaseUserManager):
@@ -178,29 +179,8 @@ class UserService(TimeStampedModel, SoftDeleteModel):
 
 
 class CustomerProfile(TimeStampedModel, SoftDeleteModel):
-    STUDY = 1
-    PGWP = 2
-    WORKPERMIT = 3
-    PR = 4
-    DEPENDANT = 5
-    VISIT = 6
-    CITIZENSHIP = 7
-
-    SINGLE = 1
-    MARRIED = 2
-    DIVORCED = 3
-
     YES = 1
     NO = 2
-
-    MARITAL_TYPE = (
-        (SINGLE, 'Single'), (MARRIED, 'Married'), (DIVORCED, 'Divorced'),
-    )
-
-    VISA_TYPE = (
-        (STUDY, 'Study'), (PGWP, 'PGWP'), (WORKPERMIT, 'WorkPermit'),
-        (PR, 'PR'), (DEPENDANT, 'Dependant'), (VISIT, 'Visit'), (CITIZENSHIP, 'Citizenship'),
-    )
 
     PREV_TYPE = ((YES, 'Yes'), (NO, 'No'),)
 
@@ -292,7 +272,7 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     funds_available_label = models.CharField(max_length=128, blank=True, null=True, default=None)
 
 
-class CustomerQualifications(TimeStampedModel, SoftDeleteModel):
+class CustomerQualifications(TimeStampedModel, SoftDeleteModel, ProfileOwner):
 
     # BACHELORS = 1
     # MASTERS = 2
@@ -336,7 +316,7 @@ class QualificationLabel(TimeStampedModel, SoftDeleteModel):
         return str(self.user_label)
 
 
-class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel):
+class CustomerWorkExperience(TimeStampedModel, SoftDeleteModel, ProfileOwner):
     
     PART_TIME = 1
     FULL_TIME = 2
@@ -380,7 +360,7 @@ class WorkExperienceLabel(TimeStampedModel, SoftDeleteModel):
     is_current_job_label = models.CharField(max_length=255, null=True, blank=True)
 
 
-class RelativeInCanada(TimeStampedModel, SoftDeleteModel):
+class RelativeInCanada(TimeStampedModel, SoftDeleteModel, ProfileOwner):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="relative_in_canada")
     full_name = models.CharField(max_length=512, default=None, null=True, blank=True)
     relationship = models.CharField(max_length=512, default=None, null=True, blank=True)
@@ -405,7 +385,7 @@ class RelativeInCanadaLabel(TimeStampedModel, SoftDeleteModel):
     is_blood_relationship_label = models.CharField(max_length=215, default=None, null=True)
 
 
-class EducationalCreationalAssessment(TimeStampedModel, SoftDeleteModel):
+class EducationalCreationalAssessment(TimeStampedModel, SoftDeleteModel, ProfileOwner):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="educational_creational")
     eca_authority_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     eca_authority_number = models.CharField(max_length=512, default=None, blank=True, null=True)
@@ -435,7 +415,7 @@ class SMSOtpModel(TimeStampedModel, SoftDeleteModel):
         return str(self.user)
 
 
-class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel):
+class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel, ProfileOwner):
 
     IELTS = 1
     CELPIP = 2
@@ -529,7 +509,7 @@ class CustomerSpouseProfileLabel(TimeStampedModel):
         db_table = "customer_spouse_profile_label"
 
 
-class CustomerFamilyInformation(TimeStampedModel):
+class CustomerFamilyInformation(TimeStampedModel, ProfileOwner):
     FATHER = 1
     MOTHER = 2
     BROTHER = 3

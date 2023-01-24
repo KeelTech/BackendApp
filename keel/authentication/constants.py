@@ -3,6 +3,7 @@ This file contains all defaults objects to be returned
 for profile api if not instance is found in the databse
 """
 from keel.authentication.models import CustomerLanguageScore, CustomerProfile, CustomerFamilyInformation
+from keel.Core import constants as core_const
 
 PROFILE = {
     "first_name": {"value": "", "type": "char", "labels": "First Name"},
@@ -12,7 +13,7 @@ PROFILE = {
     "phone_number": {"value": "", "type": "char", "labels": "Phone Number"},
     "mother_fullname": {"value": "", "type": "char", "labels": "Mother's Fullname"},
     "father_fullname": {"value": "", "type": "char", "labels": "Father's Fullname"},
-    "type_of_visa": {"value": "", "type": "drop-down", "choices": CustomerProfile.VISA_TYPE, "labels": "Type of Visa"},
+    "type_of_visa": {"value": "", "type": "drop-down", "choices": core_const.VISA_TYPE, "labels": "Type of Visa"},
     "current_country": {"value": 1, "type": "drop-down", "labels": "Current Country"},
     "desired_country": {"value": 1, "type": "drop-down", "labels": "Desired Country"},
     "address": {"value": "", "type": "char", "labels": "Address"},
@@ -31,6 +32,7 @@ SPOUSEPROFILE = {
     "passport_issue_date": {"value": "", "type": "calendar", "labels": "Passport Issue Date"},
     "passport_expiry_date": {"value": "", "type": "calendar", "labels": "Passport Expiry Date"},
 }
+
 
 CUSTOMERFAMILYINFO = [{
     "relationship": {"value": "", "type": "drop-down", "labels": "Relationship", "choices": CustomerFamilyInformation.RELATION_TYPE,},
@@ -68,6 +70,7 @@ QUALIFICATION = [{
     },
     "start_date": {"value": None, "type": "char", "labels": "Start Date"},
     "end_date": {"value": None, "type": "char", "labels": "End Date"},
+    "owner": {"value": core_const.SELF, "type": "char", "labels": ""},
 }]
 
 ECA = [{
@@ -75,6 +78,7 @@ ECA = [{
     "eca_authority_number": {"value": "", "type": "char", "labels": "ECA Authority Number"},
     "canadian_equivalency_summary": {"value": "", "type": "char", "labels": "Canadian Equivalency Summary"},
     "eca_date": {"value": "", "type": "calendar", "labels": "ECA Date"},
+    "owner": {"value": core_const.SELF, "type": "char", "labels": ""},
 }]
 
 RELATIVE = {
@@ -84,7 +88,8 @@ RELATIVE = {
     "address": {"value": "", "type": "char", "labels": "Address"},
     "contact_number": {"value": "", "type": "char", "labels": "Contact Number"},
     "email_address": {"value": "", "type": "char", "labels": "Email Address"},
-    "is_blood_relationship": {"value": False, "type": "checkbox", "labels": "Is Blood Relationship", "is_optional": True}
+    "is_blood_relationship": {"value": False, "type": "checkbox", "labels": "Is Blood Relationship", "is_optional": True},
+    "owner": {"value": core_const.SELF, "type": "char", "labels": ""},
 }
 
 LANGUAGESCORE = [{
@@ -98,6 +103,7 @@ LANGUAGESCORE = [{
     "speaking_score": {"value": "", "type": "char", "labels": "Speaking Score"},
     "reading_score": {"value": "", "type": "char", "labels": "Reading Score"},
     "overall_score": {"value": "", "type": "char", "labels": "Overall Score"},
+    "owner": {"value": core_const.SELF, "type": "char", "labels": ""},
 }]
 
 WORK_EXPERIENCE = [{
@@ -112,6 +118,7 @@ WORK_EXPERIENCE = [{
     # "state": {"value": "", "type": "char", "labels": "State"},
     # "city": {"value": "", "type": "char", "labels": "City"},
     "is_current_job": {"value": False, "type": "checkbox", "labels": "Is Current Job", "is_optional": True},
+    "owner": {"value": core_const.SELF, "type": "char", "labels": ""},
     "full_address": {
         "type": 'address',
         "countryLabel": "Country",

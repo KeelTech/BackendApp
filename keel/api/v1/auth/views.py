@@ -37,16 +37,13 @@ from keel.authentication.models import (AgentProfile, CustomerProfile,
 from keel.authentication.models import User as user_model
 from keel.authentication.models import UserDocument, WorkExperienceLabel
 from keel.cases.models import Case
-from keel.Core.constants import (GENERIC_ERROR, LOGGER_CRITICAL_SEVERITY,
-                                 LOGGER_LOW_SEVERITY, LOGGER_MODERATE_SEVERITY)
+from keel.Core import constants as core_constants
 from keel.Core.err_log import log_error, logging_format
-from keel.Core.helpers import generate_random_int, generate_unique_id
 from keel.Core.notifications import EmailNotification, SMSNotification
 from keel.document.exceptions import DocumentInvalid, DocumentTypeInvalid
 from keel.document.models import Documents
 from keel.notifications.constants import DOCUMENT
 from keel.notifications.models import InAppNotification
-from keel.plans.models import Plan
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -54,9 +51,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from .adapter import GoogleOAuth2AdapterIdToken
-from .helpers import email_helper, instances
 from .helpers.otp_helpers import OTPHelper
-from .helpers.email_helper import base_send_email
 
 
 logger = logging.getLogger('app-logger')
@@ -450,7 +445,7 @@ class ProfileView(GenericViewSet):
     serializer_class_language_scores = serializers.LanguageScoreLabelSerializer
     serializer_class_family_info = serializers.CustomerFamilyInfoLabelSerializer
 
-    def get_queryset_qualification(self, request):
+    def get_queryset_qualification(self, request, profile_owner):
         get_labels = QualificationLabel.objects.filter(user_label="user")
         labels = {}
         for label in get_labels:
@@ -463,9 +458,10 @@ class ProfileView(GenericViewSet):
             labels['country_label'] = label.country_label
             labels['start_date_label'] = label.start_date_label
             labels['end_date_label'] = label.end_date_label
-        queryset = CustomerQualifications.objects.filter(user=request.user)
+        queryset = CustomerQualifications.objects.filter(user=request.user, owner=profile_owner)
         if queryset:
-            serializer = self.serializer_class_qualification(queryset, many=True, context={"labels":labels})
+            serializer = self.serializer_class_qualification(queryset, many=True, context={"labels": labels,
+                                                                                           "owner": profile_owner})
             for label in serializer.data:
                 label.pop("labels")
             return serializer.data
@@ -473,7 +469,7 @@ class ProfileView(GenericViewSet):
             data = constants.QUALIFICATION
             return data
     
-    def get_queryset_education_assessment(self, request):
+    def get_queryset_education_assessment(self, request, profile_owner):
         get_labels = EducationalCreationalAssessmentLabel.objects.filter(user_label="user")
         labels = {}
         for label in get_labels:
@@ -481,15 +477,16 @@ class ProfileView(GenericViewSet):
             labels['eca_authority_number_label'] = label.eca_authority_number_label
             labels['canadian_equivalency_summary_label'] = label.canadian_equivalency_summary_label
             labels['eca_date_label'] = label.eca_date_label
-        queryset = EducationalCreationalAssessment.objects.filter(user=request.user)
+        queryset = EducationalCreationalAssessment.objects.filter(user=request.user, owner=profile_owner)
         if queryset:
-            serializer = self.serializer_class_education_assessment(queryset, many=True, context={"labels":labels})
+            serializer = self.serializer_class_education_assessment(queryset, many=True, context={"labels": labels,
+                                                                                                  "owner": profile_owner})
             return serializer.data
         else:
             data = constants.ECA
             return data
     
-    def get_queryset_relative_in_canada(self, request):
+    def get_queryset_relative_in_canada(self, request, profile_owner):
         get_labels = RelativeInCanadaLabel.objects.filter(user_label="user")
         labels = {}
         for label in get_labels:
@@ -500,15 +497,16 @@ class ProfileView(GenericViewSet):
             labels['contact_number_label'] = label.contact_number_label
             labels['email_address_label'] = label.email_address_label
             labels['is_blood_relationship_label'] = label.is_blood_relationship_label
-        queryset = RelativeInCanada.objects.filter(user=request.user).first()
+        queryset = RelativeInCanada.objects.filter(user=request.user, owner=profile_owner).first()
         if queryset:
-            serializer = self.serializer_class_relative_in_canada(queryset, context={"labels": labels})
+            serializer = self.serializer_class_relative_in_canada(queryset, context={"labels": labels,
+                                                                                     "owner": profile_owner})
             return serializer.data
         else:
             data = constants.RELATIVE
             return data
     
-    def get_queryset_experience(self, request):
+    def get_queryset_experience(self, request, profile_owner):
         get_labels = WorkExperienceLabel.objects.filter(user_label="user")
         labels = {}
         for label in get_labels:
@@ -523,9 +521,10 @@ class ProfileView(GenericViewSet):
             labels['start_date_label'] = label.start_date_label
             labels['end_date_label'] = label.end_date_label
             labels['is_current_job_label'] = label.is_current_job_label
-        queryset = CustomerWorkExperience.objects.filter(user=request.user)
+        queryset = CustomerWorkExperience.objects.filter(user=request.user, owner=profile_owner)
         if len(queryset):
-            serializer = self.serializer_class_experience(queryset, many=True, context={"labels": labels})
+            serializer = self.serializer_class_experience(queryset, many=True, context={"labels": labels,
+                                                                                        "owner": profile_owner})
             for label in serializer.data:
                 label.pop("labels")
             return serializer.data
@@ -533,14 +532,15 @@ class ProfileView(GenericViewSet):
             data = constants.WORK_EXPERIENCE
             return data
 
-    def get_queryset_language_scores(self, request):
+    def get_queryset_language_scores(self, request, profile_owner):
         labels_queryset = CustomerLanguageScoreLabel.objects.filter(user_label="user").values()
         if len(labels_queryset):
             labels = labels_queryset[0]
 
-        queryset = CustomerLanguageScore.objects.filter(user=request.user)
+        queryset = CustomerLanguageScore.objects.filter(user=request.user, owner=profile_owner)
         if len(queryset):
-            serializer = self.serializer_class_language_scores(queryset, many=True,  context={"labels": labels})
+            serializer = self.serializer_class_language_scores(queryset, many=True,  context={"labels": labels,
+                                                                                              "owner": profile_owner})
             return serializer.data
         else:
             data = constants.LANGUAGESCORE
@@ -707,28 +707,33 @@ class ProfileView(GenericViewSet):
     def get_full_profile(self, request):
         response = {
             "status": 1,
-            "message": ""
+            "message": {}
         }
+
         profile = self.get_queryset_profile(request)
-        spouse_profile = self.get_queryset_spouse_profile(request)
-        qualification = self.get_queryset_qualification(request)
-        work_experience = self.get_queryset_experience(request)
-        relative_in_canada = self.get_queryset_relative_in_canada(request)
-        education_assessment = self.get_queryset_education_assessment(request)
-        language_scores = self.get_queryset_language_scores(request)
-        family_information = self.get_queryset_family_info(request)
-        # cases = self.get_queryset_cases(request)
-        
-        response["message"] = {
-                        "profile": profile,
-                        "qualification": qualification,
-                        "work_experience": work_experience,
-                        "relative_in_canada": relative_in_canada,
-                        "education_assessment": education_assessment,
-                        "language_scores": language_scores,
-                        "spouse_profile": spouse_profile,
-                        "family_information": family_information,
-                    }
+        spouse_data = {}
+        self_data = {
+            "profile": profile,
+            "qualification": self.get_queryset_qualification(request, core_constants.SELF),
+            "work_experience": self.get_queryset_experience(request, core_constants.SELF),
+            "relative_in_canada": self.get_queryset_relative_in_canada(request, core_constants.SELF),
+            "education_assessment": self.get_queryset_education_assessment(request, core_constants.SELF),
+            "language_scores": self.get_queryset_language_scores(request, core_constants.SELF),
+            "family_information": self.get_queryset_family_info(request),
+        }
+
+        if profile.marital_status == core_constants.MARRIED:
+            spouse_data = {
+                'profile': self.get_queryset_spouse_profile(request),
+                'qualification': self.get_queryset_qualification(request, core_constants.SPOUSE),
+                'work_experience': self.get_queryset_experience(request, core_constants.SPOUSE),
+                'relative_in_canada': self.get_queryset_relative_in_canada(request, core_constants.SPOUSE),
+                'education_assessment': self.get_queryset_education_assessment(request, core_constants.SPOUSE),
+                'language_scores': self.get_queryset_language_scores(request, core_constants.SPOUSE),
+            }
+        response["message"]['self'] = self_data
+        response["message"]['spouse'] = spouse_data
+
         return Response(response)
 
 
@@ -1113,32 +1118,29 @@ class UploadDocument(GenericViewSet):
         try:
             docs = Documents.objects.add_attachments(files, user_id, doc_type)
         except (DocumentInvalid, DocumentTypeInvalid) as e:
-            log_error("ERROR", "UploadDocument:upload DocumentInvalid", str(user_id), err = str(e))
+            log_error("ERROR", "UploadDocument:upload DocumentInvalid", str(user_id), err=str(e))
             response["status"] = 1
             response["message"] = str(e)
             resp_status = status.HTTP_400_BAD_REQUEST
             return Response(response, status = resp_status)
         except Exception as e:
-            log_error("ERROR", "UploadDocument:upload Exception", str(user_id), err = str(e))
+            log_error("ERROR", "UploadDocument:upload Exception", str(user_id), err=str(e))
             response["status"] = 1
-            response["message"] = GENERIC_ERROR
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
-
 
         # Validate for Task Id, and replace the doc_user_id with task.user_id
         try:
             task_id = req_data.get("task_id")
             if task_id:
-                task_serializer = serializers.TaskIDSerializer(data = {"task_id":task_id})
-                task_serializer.is_valid(raise_exception = True)
+                task_serializer = serializers.TaskIDSerializer(data={"task_id": task_id})
+                task_serializer.is_valid(raise_exception=True)
                 task_obj = task_serializer.validated_data
                 doc_user_id = task_obj.user_id
 
         except ValidationError as e:
-            log_error("ERROR","UploadDocument: upload taskValidation", str(user_id), err = str(e))
+            log_error("ERROR","UploadDocument: upload taskValidation", str(user_id), err=str(e))
             response["status"] = 1
-            response["message"] = GENERIC_ERROR
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
@@ -1153,9 +1155,8 @@ class UploadDocument(GenericViewSet):
                 user_docs.append(user_doc_serializer.data) 
             response["data"] = user_docs
         except ValidationError as e:
-            log_error("ERROR","UploadDocument: upload", str(user_id), err = str(e))
+            log_error("ERROR","UploadDocument: upload", str(user_id), err=str(e))
             response["status"] = 1
-            response["message"] = GENERIC_ERROR
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
         
         # create a notification instance
@@ -1208,7 +1209,6 @@ class UploadDocument(GenericViewSet):
         except Exception as e:
             log_error("ERROR", "UploadDocument:fetch exception", str(user.id), err = str(e))
             response["status"] = 1
-            response["message"] = GENERIC_ERROR
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
         return Response(response, status = resp_status)
@@ -1237,7 +1237,7 @@ class UploadDocument(GenericViewSet):
         except Exception as e:
             log_error("ERROR", "UploadDocument: deleteUserDoc ", str(user_id), err = str(e))
             response["status"] = 1
-            response["message"] = GENERIC_ERROR
+            response["message"] = st(e)
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
@@ -1252,7 +1252,6 @@ class UploadDocument(GenericViewSet):
         except Exception as e:
             log_error("ERROR", "UploadDocument: deleteUserDoc mark_delete", str(user_id), err = str(e))
             response["status"] = 1
-            response["message"] = GENERIC_ERROR
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
 
@@ -1276,9 +1275,8 @@ class ItemCount(GenericViewSet):
 
         resp_data, err_msg = get_rcic_item_counts(user)
         if err_msg:
-            log_error("ERROR", "ItemCount:, ", str(user.id), err = str(err_msg))
+            log_error("ERROR", "ItemCount:, ", str(user.id), err=str(err_msg))
             response["status"] = 1
-            response["message"] = GENERIC_ERROR
             return Response(response, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         response['data'] = resp_data
