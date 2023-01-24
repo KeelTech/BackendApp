@@ -710,10 +710,8 @@ class ProfileView(GenericViewSet):
             "message": {}
         }
 
-        profile = self.get_queryset_profile(request)
-        spouse_data = {}
         self_data = {
-            "profile": profile,
+            "profile": self.get_queryset_profile(request),
             "qualification": self.get_queryset_qualification(request, core_constants.SELF),
             "work_experience": self.get_queryset_experience(request, core_constants.SELF),
             "relative_in_canada": self.get_queryset_relative_in_canada(request, core_constants.SELF),
@@ -722,15 +720,14 @@ class ProfileView(GenericViewSet):
             "family_information": self.get_queryset_family_info(request),
         }
 
-        if profile.marital_status == core_constants.MARRIED:
-            spouse_data = {
-                'profile': self.get_queryset_spouse_profile(request),
-                'qualification': self.get_queryset_qualification(request, core_constants.SPOUSE),
-                'work_experience': self.get_queryset_experience(request, core_constants.SPOUSE),
-                'relative_in_canada': self.get_queryset_relative_in_canada(request, core_constants.SPOUSE),
-                'education_assessment': self.get_queryset_education_assessment(request, core_constants.SPOUSE),
-                'language_scores': self.get_queryset_language_scores(request, core_constants.SPOUSE),
-            }
+        spouse_data = {
+            'profile': self.get_queryset_spouse_profile(request),
+            'qualification': self.get_queryset_qualification(request, core_constants.SPOUSE),
+            'work_experience': self.get_queryset_experience(request, core_constants.SPOUSE),
+            'relative_in_canada': self.get_queryset_relative_in_canada(request, core_constants.SPOUSE),
+            'education_assessment': self.get_queryset_education_assessment(request, core_constants.SPOUSE),
+            'language_scores': self.get_queryset_language_scores(request, core_constants.SPOUSE),
+        }
         response["message"]['self'] = self_data
         response["message"]['spouse'] = spouse_data
 

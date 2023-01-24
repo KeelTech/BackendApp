@@ -1339,6 +1339,13 @@ class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer
     eca_date = serializers.SerializerMethodField()
     owner = serializers.SerializerMethodField()
 
+    def get_owner(self, obj):
+        return {
+            "value": self.context.get('owner'),
+            "type": "char",
+            "labels": "",
+        }
+
     def get_labels(self, obj):
         if "labels" in self.context:
             return self.context["labels"]
