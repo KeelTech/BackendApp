@@ -98,14 +98,19 @@ class LeadEngine(GenericViewSet):
         resp = {'status': 0,
                 'message': ''}
 
-        access_key = 'u$r9538ca002d0f679810a27e8f254a2f62'
-        secret_key = 'e342f6d83be820cc15fb10378cc31e6c33e66843'
+        access_key = 'u$r7d916217a5676919cdd9cf6b050e63e7'
+        secret_key = '0dc2429e937f9742fd2153e955d0483ed9a426cb'
         url = 'https://asyncapi-in21.leadsquared.com/lead/capture?accessKey='+access_key+'&secretKey='+secret_key
-        headers_obj = {'x-api-key': 'ZMy4nAMclj8hnKpGQg7DD369ZRNj0Oqy3fZ5Wczl'}
+
+        # url = "https://api-in21.leadsquared.com/v2/LeadManagement.svc/Lead.Capture?accessKey="+access_key+"&secretKey="+secret_key
+        headers_obj = {'x-api-key': 'ZMy4nAMclj8hnKpGQg7DD369ZRNj0Oqy3fZ5Wczl', "Content-Type": "application/json"}
+        # headers_obj = {"Content-Type": "application/json"}
         req_body = request.data
 
-        req_obj = requests.post(url, json=json.dumps(req_body), headers=headers_obj)
+        req_obj = requests.post(url, json=req_body)
+
         if req_obj.status_code in (200, 201):
+            print(req_obj.text)
             resp['status'] = 1
         return Response(resp)
 

@@ -1,12 +1,9 @@
 import logging
 
 from dj_rest_auth.registration.serializers import SocialLoginSerializer
-from django.conf import settings
+
 from django.contrib.auth import authenticate, get_user_model
-from django.db.models import Q
-from django.utils import timezone
-from django.utils.dateparse import parse_datetime
-from keel.api.v1 import utils as v1_utils
+
 from keel.authentication.models import (
     AgentProfile,
     CustomerProfile,
@@ -23,7 +20,7 @@ from keel.authentication.models import (
     UserDocument, CustomerSpouseProfileLabel, CustomerSpouseProfile,
     WorkExperienceLabel, CustomerLanguageScoreLabel, CustomerLanguageScore,
 )
-from keel.Core.constants import LOGGER_LOW_SEVERITY
+from keel.Core.constants import LOGGER_LOW_SEVERITY, MARITAL_TYPE, VISA_TYPE
 from keel.Core.err_log import log_error, logging_format
 from rest_framework import serializers
 
@@ -348,7 +345,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             return {
                 "value": var,
                 "type": "drop-down",
-                "choices": CustomerProfile.MARITAL_TYPE,
+                "choices": MARITAL_TYPE,
                 "display_spouse": 2,
                 "labels": self.context["labels"]["marital_status_label"],
             }
@@ -370,7 +367,7 @@ class CustomerProfileLabelSerializer(serializers.ModelSerializer):
             return {
                 "value": var,
                 "type": "drop-down",
-                "choices": CustomerProfile.VISA_TYPE,
+                "choices": VISA_TYPE,
                 "labels": self.context["labels"]["type_of_visa_label"],
             }
 
@@ -516,11 +513,19 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
     start_date = serializers.SerializerMethodField()
     end_date = serializers.SerializerMethodField()
     full_address = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
             return self.context["labels"]
         return None
+
+    def get_owner(self, obj):
+        return {
+            "value": self.context.get('owner'),
+            "type": "char",
+            "labels": "",
+        }
 
     def get_institute(self, obj):
         var = obj.institute
@@ -660,6 +665,7 @@ class CustomerQualificationsLabelSerializer(serializers.ModelSerializer):
             "end_date",
             "labels",
             "full_address",
+            "owner",
         )
 
 
@@ -717,11 +723,19 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
     weekly_working_hours = serializers.SerializerMethodField()
     is_current_job = serializers.SerializerMethodField()
     full_address = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
             return self.context["labels"]
         return None
+
+    def get_owner(self, obj):
+        return {
+            "value": self.context.get('owner'),
+            "type": "char",
+            "labels": "",
+        }
 
     def get_job_type(self, obj):
         var = obj.job_type
@@ -885,6 +899,7 @@ class WorkExperienceLabelSerializer(serializers.ModelSerializer):
             'is_current_job',
             "full_address",
             "labels",
+            "owner",
         )
 
 
@@ -1195,11 +1210,19 @@ class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
     contact_number = serializers.SerializerMethodField()
     email_address = serializers.SerializerMethodField()
     is_blood_relationship = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
             return self.context["labels"]
         return None
+
+    def get_owner(self, obj):
+        return {
+            "value": self.context.get('owner'),
+            "type": "char",
+            "labels": "",
+        }
 
     def get_full_name(self, obj):
         var = obj.full_name
@@ -1276,6 +1299,7 @@ class RelativeInCanadaLabelSerializer(serializers.ModelSerializer):
             "contact_number",
             "email_address",
             "is_blood_relationship",
+            "owner",
         )
 
 
@@ -1313,6 +1337,7 @@ class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer
     eca_authority_number = serializers.SerializerMethodField()
     canadian_equivalency_summary = serializers.SerializerMethodField()
     eca_date = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
 
     def get_labels(self, obj):
         if "labels" in self.context:
@@ -1363,6 +1388,7 @@ class EducationalCreationalAssessmentLabelSerializer(serializers.ModelSerializer
             "eca_authority_number",
             "canadian_equivalency_summary",
             "eca_date",
+            "owner",
         )
 
 
@@ -1378,6 +1404,7 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
     reading_score = serializers.SerializerMethodField()
     overall_score = serializers.SerializerMethodField()
     # mother_tongue = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
 
     def get_test_type(self, obj):
         var = obj.test_type
@@ -1388,6 +1415,13 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
                 "type": "drop-down",
                 "labels": self.context["labels"]["test_type_label"],
             }
+
+    def get_owner(self, obj):
+        return {
+            "value": self.context.get('owner'),
+            "type": "char",
+            "labels": "",
+        }
 
     def get_test_date(self, obj):
         var = obj.test_date
@@ -1469,10 +1503,11 @@ class LanguageScoreLabelSerializer(serializers.ModelSerializer):
                 "type": "int",
                 "labels": self.context["labels"]["overall_score_label"],
             }
+
     class Meta:
         model = CustomerLanguageScoreLabel
         fields = ('id', 'test_type', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
-                  'speaking_score', 'reading_score', 'overall_score', 'test_date', )
+                  'speaking_score', 'reading_score', 'overall_score', 'test_date', 'owner')
 
 
 class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
