@@ -498,6 +498,7 @@ class CustomerQualificationUpdateSerializer(serializers.ModelSerializer):
             "city",
             "country",
             "state",
+            "owner",
         )
 
 
@@ -706,6 +707,7 @@ class CustomerUpdateWorkExperienceSerializer(serializers.ModelSerializer):
             "start_date",
             "end_date",
             "is_current_job",
+            "owner",
         )
 
 
@@ -1163,6 +1165,7 @@ class RelativeInCanadaUpdateSerializer(serializers.ModelSerializer):
             "contact_number",
             "email_address",
             "is_blood_relationship",
+            "owner",
         )
 
     def create(self, validated_data):
@@ -1329,6 +1332,7 @@ class EducationalCreationalAssessmentUpdateSerializer(serializers.ModelSerialize
             "eca_authority_number",
             "canadian_equivalency_summary",
             "eca_date",
+            "owner",
         )
 
 
@@ -1522,7 +1526,7 @@ class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
         model = CustomerLanguageScore
         fields = (
             "id", 'test_type', 'test_date', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
-            'speaking_score', 'reading_score', 'overall_score', )
+            'speaking_score', 'reading_score', 'overall_score', 'owner', )
 
 
 class CustomerFamilyInfoUpdateSerializer(serializers.ModelSerializer):

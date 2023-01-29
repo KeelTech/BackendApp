@@ -654,7 +654,7 @@ class ProfileView(GenericViewSet):
             "status": 0,
             "message": ""
         }
-        error = 0; exception = 0
+        exception = 0
 
         profile_components = {'profile': CustomerInformationView,
                               'qualification': QualificationView,
@@ -753,23 +753,8 @@ class QualificationView(GenericViewSet):
                 "grade": info["grade"].get("value"),
                 "start_date": info["start_date"].get("value"),
                 "end_date": info["end_date"].get("value"),
+                "owner": info.get("owner"),
             }
-            # try:
-            #     # get city instance
-            #     if customer_work_info.get('city'):
-            #         city = instances.city_instance(customer_work_info.get('city'))
-            #         customer_work_info['city'] = city.id
-            #     # get state instance
-            #     if customer_work_info.get('state'):
-            #         state = instances.state_instance(customer_work_info.get('state'))
-            #         customer_work_info['state'] = state.id
-            #     # get country
-            #     if customer_work_info.get('country'):
-            #         country = instances.country_instance(customer_work_info.get('country'))
-            #         customer_work_info['country'] = country.id
-            # except Exception as e:
-            #     logger.error('ERROR: AUTHENTICATION:QualificationView:extract ' + str(e))
-            #     pass
             data.append(customer_work_info)
         return data
 
@@ -793,7 +778,8 @@ class QualificationView(GenericViewSet):
                                                     "city": validated_data.get('city'),
                                                     "state": validated_data.get('state'),
                                                     "country": validated_data.get('country'),
-                                                    "user": validated_data.get('user')
+                                                    "user": validated_data.get('user'),
+                                                    "owner": validated_data.get('owner'),
                                                 })
         except Exception as err:
             logger.error(str(err))
@@ -835,16 +821,14 @@ class WorkExperienceView(GenericViewSet):
                 "job_type": info["job_type"].get("value"),
                 "designation": info["designation"].get("value"),
                 "job_description": info["job_description"].get("value"),
-                # "city": info["city"].get("value"),
-                # "state": info["state"].get("value"),
-                # "country": info["country"].get("value"),
                 "city": info["full_address"].get("cityId"),
                 "state": info["full_address"].get("stateId"),
                 "country": info["full_address"].get("countryId"),
                 "weekly_working_hours": info["weekly_working_hours"].get("value"),
                 "start_date": info["start_date"].get("value"),
                 "end_date": info["end_date"].get("value"),
-                "is_current_job": info["is_current_job"].get("value")
+                "is_current_job": info["is_current_job"].get("value"),
+                "owner": info.get('owner'),
             }
             if customer_work_info['end_date'] == '':
                 del customer_work_info['end_date']
@@ -875,7 +859,8 @@ class WorkExperienceView(GenericViewSet):
                                     "start_date": start_date,
                                     "end_date": end_date,
                                     "is_current_job": validated_data.get('is_current_job'),
-                                    "user": validated_data.get('user')
+                                    "user": validated_data.get('user'),
+                                    "owner": validated_data.get('owner'),
                                 })
         except Exception as err:
             logger.error(str(err))
@@ -919,7 +904,8 @@ class RelativeInCanadaView(GenericViewSet):
             "address": datas["address"].get("value"),
             "contact_number": datas["contact_number"].get("value"),
             "email_address": datas["email_address"].get("value"),
-            "is_blood_relationship": datas["is_blood_relationship"].get("value")
+            "is_blood_relationship": datas["is_blood_relationship"].get("value"),
+            "owner": datas.get('owner'),
         }
         return relative_info
 
@@ -956,6 +942,7 @@ class EducationalCreationalAssessmentView(GenericViewSet):
                 "eca_authority_number": info["eca_authority_number"].get("value"),
                 "canadian_equivalency_summary": info["canadian_equivalency_summary"].get("value"),
                 "eca_date": info["eca_date"].get("value"),
+                "owner": info.get('owner'),
             }
             data.append(customer_work_info)
         return data
@@ -969,7 +956,8 @@ class EducationalCreationalAssessmentView(GenericViewSet):
                                         "eca_authority_number": validated_data.get('eca_authority_number'),
                                         "canadian_equivalency_summary": validated_data.get('canadian_equivalency_summary'),
                                         "eca_date": validated_data.get("eca_date"),
-                                        "user": validated_data.get('user')
+                                        "user": validated_data.get('user'),
+                                        "owner": validated_data.get('owner'),
                                     })
         except Exception as err:
             logger.error(str(err))
@@ -1359,6 +1347,7 @@ class LanguageScoreView(GenericViewSet):
                 "speaking_score": info["speaking_score"].get("value"),
                 "reading_score": info["reading_score"].get("value"),
                 "overall_score": info["overall_score"].get("value"),
+                "owner": info.get("owner"),
                 # "mother_tongue": info["mother_tongue"].get("value"),
             }
 
@@ -1390,7 +1379,9 @@ class LanguageScoreView(GenericViewSet):
                                                                  "speaking_score": validated_data_from_dict.get('speaking_score'),
                                                                  "reading_score": validated_data_from_dict.get('reading_score'),
                                                                  "overall_score": validated_data_from_dict.get('overall_score'),
-                                                                 "user": user
+                                                                 "user": user,
+                                                                 "owner": validated_data_from_dict.get(
+                                                                       'owner'),
                                                                  })
                 count += 1
         except Exception as e:
