@@ -467,6 +467,7 @@ class ProfileView(GenericViewSet):
             return serializer.data
         else:
             data = constants.QUALIFICATION
+            data[0]['owner']['value'] = profile_owner
             return data
     
     def get_queryset_education_assessment(self, request, profile_owner):
@@ -484,6 +485,7 @@ class ProfileView(GenericViewSet):
             return serializer.data
         else:
             data = constants.ECA
+            data[0]['owner']['value'] = profile_owner
             return data
     
     def get_queryset_relative_in_canada(self, request, profile_owner):
@@ -504,6 +506,7 @@ class ProfileView(GenericViewSet):
             return serializer.data
         else:
             data = constants.RELATIVE
+            data['owner']['value'] = profile_owner
             return data
     
     def get_queryset_experience(self, request, profile_owner):
@@ -530,6 +533,7 @@ class ProfileView(GenericViewSet):
             return serializer.data
         else:
             data = constants.WORK_EXPERIENCE
+            data[0]['owner']['value'] = profile_owner
             return data
 
     def get_queryset_language_scores(self, request, profile_owner):
@@ -544,6 +548,7 @@ class ProfileView(GenericViewSet):
             return serializer.data
         else:
             data = constants.LANGUAGESCORE
+            data[0]['owner']['value'] = profile_owner
             return data
 
     def get_queryset_family_info(self, request):
@@ -828,7 +833,7 @@ class WorkExperienceView(GenericViewSet):
                 "start_date": info["start_date"].get("value"),
                 "end_date": info["end_date"].get("value"),
                 "is_current_job": info["is_current_job"].get("value"),
-                "owner": info.get('owner'),
+                "owner": info.get('owner').get('value'),
             }
             if customer_work_info['end_date'] == '':
                 del customer_work_info['end_date']
@@ -905,7 +910,7 @@ class RelativeInCanadaView(GenericViewSet):
             "contact_number": datas["contact_number"].get("value"),
             "email_address": datas["email_address"].get("value"),
             "is_blood_relationship": datas["is_blood_relationship"].get("value"),
-            "owner": datas.get('owner'),
+            "owner": datas.get('owner').get('value'),
         }
         return relative_info
 
@@ -942,7 +947,7 @@ class EducationalCreationalAssessmentView(GenericViewSet):
                 "eca_authority_number": info["eca_authority_number"].get("value"),
                 "canadian_equivalency_summary": info["canadian_equivalency_summary"].get("value"),
                 "eca_date": info["eca_date"].get("value"),
-                "owner": info.get('owner'),
+                "owner": info.get('owner').get('value'),
             }
             data.append(customer_work_info)
         return data
@@ -1347,7 +1352,7 @@ class LanguageScoreView(GenericViewSet):
                 "speaking_score": info["speaking_score"].get("value"),
                 "reading_score": info["reading_score"].get("value"),
                 "overall_score": info["overall_score"].get("value"),
-                "owner": info.get("owner"),
+                "owner": info.get("owner").get('value'),
                 # "mother_tongue": info["mother_tongue"].get("value"),
             }
 

@@ -53,9 +53,9 @@ QUALIFICATION = [{
     "degree": {"value": "", "type": "char", "labels": "Degree"},
     "year_of_passing": {"value": "", "type": "int", "labels": "Year Of Passing"},
     "grade": {"value": "", "type": "char", "labels": "Grade"},
-    "country": {"value": "", "type": "char", "labels": "Country"},
-    "state": {"value": "", "type": "char", "labels": "State"},
-    "city": {"value": "", "type": "char", "labels": "City"},
+    # "country": {"value": "", "type": "char", "labels": "Country"},
+    # "state": {"value": "", "type": "char", "labels": "State"},
+    # "city": {"value": "", "type": "char", "labels": "City"},
     "full_address": {
         "type": 'address', 
         "countryLabel":"Country", 
