@@ -1673,6 +1673,7 @@ class CustomerSpouseProfileLabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerSpouseProfileLabel
         fields = (
+            "id",
             "first_name",
             "last_name",
             "number_of_children",
