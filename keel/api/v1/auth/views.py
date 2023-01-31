@@ -758,7 +758,7 @@ class QualificationView(GenericViewSet):
                 "grade": info["grade"].get("value"),
                 "start_date": info["start_date"].get("value"),
                 "end_date": info["end_date"].get("value"),
-                "owner": info.get("owner"),
+                "owner": info.get("owner").get('value'),
             }
             data.append(customer_work_info)
         return data
