@@ -726,7 +726,7 @@ class ProfileView(GenericViewSet):
         }
 
         spouse_data = {
-            'profile': self.get_queryset_spouse_profile(request),
+            'spouse_profile': self.get_queryset_spouse_profile(request),
             'qualification': self.get_queryset_qualification(request, core_constants.SPOUSE),
             'work_experience': self.get_queryset_experience(request, core_constants.SPOUSE),
             'relative_in_canada': self.get_queryset_relative_in_canada(request, core_constants.SPOUSE),
