@@ -98,12 +98,12 @@ class LeadEngine(GenericViewSet):
         resp = {'status': 0,
                 'message': ''}
 
-        access_key = 'u$r7d916217a5676919cdd9cf6b050e63e7'
-        secret_key = '0dc2429e937f9742fd2153e955d0483ed9a426cb'
-        url = 'https://asyncapi-in21.leadsquared.com/lead/capture?accessKey='+access_key+'&secretKey='+secret_key
+        access_key = 'u$r1a2b8fa79ff8b2ad3348301c938576b4'
+        secret_key = '9a220c6b229cc9fa5e832668805747ae6fb4ad66'
+        #url = 'https://asyncapi-in21.leadsquared.com/lead/capture?accessKey='+access_key+'&secretKey='+secret_key
 
-        # url = "https://api-in21.leadsquared.com/v2/LeadManagement.svc/Lead.Capture?accessKey="+access_key+"&secretKey="+secret_key
-        headers_obj = {'x-api-key': 'ZMy4nAMclj8hnKpGQg7DD369ZRNj0Oqy3fZ5Wczl', "Content-Type": "application/json"}
+        url = "https://api-in21.leadsquared.com/v2/LeadManagement.svc/Lead.Capture?accessKey="+access_key+"&secretKey="+secret_key
+        # headers_obj = {'x-api-key': 'ZMy4nAMclj8hnKpGQg7DD369ZRNj0Oqy3fZ5Wczl', "Content-Type": "application/json"}
         # headers_obj = {"Content-Type": "application/json"}
         req_body = request.data
 
