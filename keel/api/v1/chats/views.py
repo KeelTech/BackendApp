@@ -82,7 +82,6 @@ class ChatList(GenericViewSet):
         response["requested_by"] = user_id
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
-
     def createChat(self, request, format = 'json'):
 
         response = {
@@ -125,7 +124,7 @@ class ChatList(GenericViewSet):
         return Response(response, status = HTTP_STATUS.HTTP_200_OK)
 
     def get_unread_messages(self, request):
-        response = {'status':1, 'message':'Number of unread messages for user', 'data':''}
+        response = {'status': 1, 'message': 'Number of unread messages for user', 'data':''}
         user = request.user
         user_type= user.user_type
 
@@ -134,7 +133,7 @@ class ChatList(GenericViewSet):
         else:
             response["status"] = 0
             response["message"] = "Can't retrieve unread messages for agent user type"
-            return Response(response, status = HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(response, status=HTTP_STATUS.HTTP_500_INTERNAL_SERVER_ERROR)
         
         unread_message = UnreadChats.user_unread_messages(user_instance)
         response["data"] = unread_message

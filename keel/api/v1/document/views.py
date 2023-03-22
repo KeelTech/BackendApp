@@ -16,69 +16,72 @@ from .serializers import DocumentsSerializer
 import magic
 import base64 
 
+
 class GetDocumentTypeChoices(GenericViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def docTypeList(self, request, format = 'json'):
+    def docTypeList(self, request, format='json'):
 
         response = {
                 "status": 0,
-                "message":"Document Type List fetched successfully",
+                "message": "Document Type List fetched successfully",
                 "data": ""
         }
 
         doc_types = DocumentType.objects.all()
-        response['data'] = ListDocumentTypeSerializer(doc_types, many = True).data
-        return Response(response, status = status.HTTP_200_OK)
+        response['data'] = ListDocumentTypeSerializer(doc_types, many=True).data
+        return Response(response)
+
 
 class GetDocument(GenericViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def generate(self, request, format = 'json', **kwargs):
+    def generate(self, request, **kwargs):
         
         response = {
                 "status": 0,
-                "message":"Document Fetched successfully",
-                "data": ""
         }
-        resp_status = status.HTTP_200_OK
         doc_id = kwargs.get('doc_id')
         user = request.user
         if not doc_id:
-            log_error('ERROR', 'GetDocument/generate', str(user.id), msg = "doc_id missing")
-            response['status'] = 1
-            response['message'] = "Invalid Request Data"
-            resp_status = status.HTTP_400_BAD_REQUEST
-            return Response(response, status = resp_status)
+            log_error('ERROR', 'GetDocument/generate', str(user.id), msg="doc_id missing")
+            response['message'] = "DOC ID missing"
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            doc = Documents.objects.get(doc_pk = doc_id, deleted_at__isnull = True)
-        except Documents.DoesNotExist:
-            log_error('ERROR', 'GetDocument/generate',str(user.id), doc_id = str(doc_id), msg = "Documents.DoesNotExist")
-            response['status'] = 1
-            response['message'] = "Document Id is invalid"
-            resp_status = status.HTTP_400_BAD_REQUEST
-            return Response(response, status = resp_status)
-        try:
+            doc = Documents.objects.get(doc_pk=doc_id, deleted_at__isnull=True)
             file_object = base64.b64encode(doc.avatar.open().read())
-        except FileNotFoundError as e:
-            log_error('ERROR', 'GetDocument/generate', str(user.id), msg = 'FileNotFoundError', doc_id = str(doc_id),
-                                            err = str(e))
-            response['status'] = 1
-            response['message'] = "File Not Found"
-            resp_status = status.HTTP_400_BAD_REQUEST
-            return Response(response, status = resp_status)
+        except Documents.DoesNotExist:
+            log_error('ERROR', 'GetDocument/generate', str(user.id), doc_id=str(doc_id), msg="Documents.DoesNotExist")
+            response['message'] = "Document Id is invalid"
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-        content_type = magic.from_buffer(doc.avatar.open().read(2048), mime = True)
+        content_type = magic.from_buffer(doc.avatar.open().read(2048), mime=True)
         
-        resp_data = {"file_data": file_object, "content_type":content_type}
-        response = Response(resp_data, resp_status)
+        resp_data = {"file_data": file_object, "content_type": content_type}
+        response = Response(resp_data)
         response['Content-Length'] = doc.avatar.size
         response['Content-Disposition'] = 'attachment; filename="%s"' % doc.avatar.name
         response['Original-File-Name'] = doc.original_name
 
         return response
-       
+
+    def update_doc_status(self, request):
+        response = {
+            "status": 0,
+        }
+        req_data = request.data
+        doc_id = req_data.get('doc_id')
+        new_status = req_data.get('status')
+        try:
+            Documents.objects.filter(doc_pk=doc_id, deleted_at__isnull=True).update(verification_status=new_status)
+        except Exception as e:
+            response['message'] = str(e)
+            return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response['status'] = 1
+        response['message'] = 'Status Updated Successfully'
+        return Response(response)
+
