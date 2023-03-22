@@ -191,7 +191,7 @@ class CustomerProfile(TimeStampedModel, SoftDeleteModel):
     father_fullname = models.CharField(max_length=512, blank=True, null=True, default=None)
     age = models.CharField(max_length=512, blank=True, null=True, default=None)
     address = models.CharField(max_length=512, blank=True, null=True, default=None)
-    date_of_birth = models.DateField(default=None, null=True, blank=True)
+    # date_of_birth = models.DateField(default=None, null=True, blank=True)
     current_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="current_country_profile",
                                         default=None, blank=True, null=True)
     desired_country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, related_name="desired_country_profile", 
@@ -253,7 +253,7 @@ class CustomerProfileLabel(TimeStampedModel, SoftDeleteModel):
     father_fullname_label = models.CharField(max_length=512)
     age_label = models.CharField(max_length=512)
     address_label = models.CharField(max_length=512)
-    date_of_birth_label = models.CharField(max_length=512)
+    # date_of_birth_label = models.CharField(max_length=512)
     any_previous_marriage_label = models.CharField(max_length=512, null=True, blank=True)
     email_label = models.CharField(max_length=512, null=True, blank=True)
     city_of_birth_label = models.CharField(max_length=512, null=True, blank=True)
