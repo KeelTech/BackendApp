@@ -30,8 +30,8 @@ urlpatterns = [
     path('get-agent-profile', AgentView.as_view({'get': 'agent_profile'}), name='agent_profile'),
 
     # document
-    path('upload-doc', UploadDocument.as_view({'post':'upload'}),name='doc-upload'),
-    path('get-user-doc',UploadDocument.as_view({'get':'fetch'}), name='get-docs'),
-    path('delete-doc/<int:id>',UploadDocument.as_view({'delete':'deleteUserDoc'}), name='delete-docs'),
-    path('item-count', ItemCount.as_view({'get':'getItemCount'}), name='get-item-count'),
+    path('upload-doc', UploadDocument.as_view({'post': 'upload'}),name='doc-upload'),
+    path('get-user-doc', UploadDocument.as_view({'get': 'fetch'}), name='get-docs'),
+    path('delete-doc/<int:id>', UploadDocument.as_view({'delete': 'deleteUserDoc'}), name='delete-docs'),
+    path('item-count', ItemCount.as_view({'get': 'getItemCount'}), name='get-item-count'),
 ]

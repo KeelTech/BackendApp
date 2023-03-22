@@ -1085,6 +1085,7 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
             "orignal_file_name",
             "created_at",
             "user_type",
+            "verification_status",
         )
 
 

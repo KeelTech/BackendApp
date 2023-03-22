@@ -49,7 +49,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
+from keel.api.v1.cases.serializers import CaseIDSerializer
 from .adapter import GoogleOAuth2AdapterIdToken
 from .helpers.otp_helpers import OTPHelper
 
@@ -1165,7 +1165,7 @@ class UploadDocument(GenericViewSet):
 
         response = {
                 "status": 0,
-                "message":"User Document Fetched successfully",
+                "message": "User Document Fetched successfully",
                 "data": ""
         }
         resp_status = status.HTTP_200_OK
@@ -1177,9 +1177,7 @@ class UploadDocument(GenericViewSet):
 
         # Catching the case Id exception unless FE start passing it, TODO: Remove it once done
         try:
-            from keel.api.v1.cases.serializers import CaseIDSerializer
 
-            # validate Case ID against User/Agent
             case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
             case_serializer.is_valid(raise_exception=True)
             case_obj = case_serializer.validated_data
@@ -1190,18 +1188,12 @@ class UploadDocument(GenericViewSet):
             actual_user_id = user_id
             pass
 
-        try:
-            user_docs = UserDocument.objects.select_related('doc','doc__doc_type'). \
-                            filter(user_id = actual_user_id, deleted_at__isnull = True).order_by("-updated_at")
-            user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many =True)
-            response_data = user_doc_serializer.data
-            response["data"] = response_data
-        except Exception as e:
-            log_error("ERROR", "UploadDocument:fetch exception", str(user.id), err = str(e))
-            response["status"] = 1
-            resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
-
-        return Response(response, status = resp_status)
+        user_docs = UserDocument.objects.select_related('doc', 'doc__doc_type'). \
+                        filter(user_id=actual_user_id, deleted_at__isnull=True).order_by("-updated_at")
+        user_doc_serializer = serializers.ListUserDocumentSerializer(user_docs, many=True)
+        response_data = user_doc_serializer.data
+        response["data"] = response_data
+        return Response(response)
 
     def deleteUserDoc(self, request, format = 'json', **kwargs):
 
