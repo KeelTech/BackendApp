@@ -135,7 +135,7 @@ class UserDocument(TimeStampedModel, SoftDeleteModel):
 
     from keel.tasks.models import Task
     
-    doc = models.ForeignKey(Documents,on_delete=models.deletion.DO_NOTHING, related_name='to_document')
+    doc = models.ForeignKey(Documents, on_delete=models.deletion.DO_NOTHING, related_name='to_document')
     user = models.ForeignKey(User, on_delete=models.deletion.DO_NOTHING, related_name='to_user')
     task = models.ForeignKey(Task, on_delete=models.deletion.DO_NOTHING, related_name='tasks_docs', null=True, blank=True)
 

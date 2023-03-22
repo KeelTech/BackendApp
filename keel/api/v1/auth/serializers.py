@@ -1043,6 +1043,7 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
     task = serializers.SerializerMethodField()
     orignal_file_name = serializers.SerializerMethodField()
     user_type = serializers.SerializerMethodField()
+    verification_status = serializers.SerializerMethodField()
     # doc_link = serializers.SerializerMethodField()
 
     def get_doc_type(self, obj):
@@ -1067,6 +1068,9 @@ class ListUserDocumentSerializer(serializers.ModelSerializer):
 
     # def get_doc_link(self, obj):
     #     return settings.BASE_URL + "/api/v1/doc/get-single-doc" + "/" +str(obj.doc.doc_pk)
+
+    def get_verification_status(self, obj):
+        return obj.doc.verification_status
 
     def get_task(self, obj):
         task = ""
