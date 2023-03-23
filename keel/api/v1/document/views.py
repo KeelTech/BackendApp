@@ -47,10 +47,10 @@ class GetDocumentTypeChoices(GenericViewSet):
             filter(user_id=user.id, deleted_at__isnull=True).order_by("-updated_at")
         user_doc_map = {}
         for u_doc in user_docs:
-            user_doc_map[u_doc.doc.doc_type.id] = 1
+            user_doc_map[u_doc.doc.doc_type.doc_type_name] = 1
         for d_type in doc_types:
-            if d_type.id not in user_doc_map:
-                user_doc_map[d_type.id] = 0
+            if d_type.doc_type_name not in user_doc_map:
+                user_doc_map[d_type.doc_type_name] = 0
         response['status'] = 1
         response['data'] = user_doc_map
         return Response(response)
