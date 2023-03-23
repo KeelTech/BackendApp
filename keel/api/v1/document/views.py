@@ -49,7 +49,7 @@ class GetDocumentTypeChoices(GenericViewSet):
         for u_doc in user_docs:
             user_doc_map[u_doc.doc.doc_type.id] = 1
         for d_type in doc_types:
-            if d_type not in user_doc_map:
+            if d_type.id not in user_doc_map:
                 user_doc_map[d_type.id] = 0
         response['status'] = 1
         response['data'] = user_doc_map
