@@ -10,11 +10,13 @@ class ListDocumentTypeSerializer(serializers.ModelSerializer):
         model = DocumentType
         fields = ('id','doc_type_name')
 
+
 class DocumentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Documents
         fields = ('original_name', 'doc_type','avatar','doc_pk')
+
 
 class DocumentCreateSerializer(serializers.Serializer):
 

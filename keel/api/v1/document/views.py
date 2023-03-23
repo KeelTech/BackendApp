@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from .serializers import ListDocumentTypeSerializer
 
 from keel.document.models import Documents, DocumentType
+from keel.authentication import models as auth_models
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.err_log import log_error
 
@@ -32,6 +33,26 @@ class GetDocumentTypeChoices(GenericViewSet):
 
         doc_types = DocumentType.objects.all()
         response['data'] = ListDocumentTypeSerializer(doc_types, many=True).data
+        return Response(response)
+
+    def user_uploaded_docs(self, request):
+
+        response = {
+                "status": 0,
+                "message": "User Uploaded Document Type List fetched successfully",
+        }
+        user = request.user
+        doc_types = DocumentType.objects.all()
+        user_docs = auth_models.UserDocument.objects.select_related('doc', 'doc__doc_type'). \
+            filter(user_id=user.id, deleted_at__isnull=True).order_by("-updated_at")
+        user_doc_map = {}
+        for u_doc in user_docs:
+            user_doc_map[u_doc.doc.doc_type] = 1
+        for d_type in doc_types:
+            if d_type not in user_doc_map:
+                user_doc_map[d_type] = 0
+        response['status'] = 1
+        response['data'] = user_doc_map
         return Response(response)
 
 
