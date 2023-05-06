@@ -7,16 +7,14 @@ from keel.api.v1.auth.serializers import (
     CustomerWorkExperienceSerializer,
     UserDetailsSerializer,
 )
+from keel.api.v1.auth.helpers.email_helper import email_manager
 from django.db.models import Prefetch
-from keel.api.v1.chats.views import ChatList
 from keel.api.v1.tasks.instances import number_of_tasks_per_status
 from keel.authentication.backends import JWTAuthentication
 from keel.cases.models import AgentNotes, Case, Program, CaseStatusComments
 from keel.Core.err_log import log_error
-from keel.tasks.models import Task
 from rest_framework import generics, permissions, response, serializers, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from keel.chats.models import ChatReceipts, ChatRoom, Chat
 from .serializers import (
@@ -308,6 +306,9 @@ class CaseStatusCommentsView(GenericViewSet):
             response["message"] = str(e)
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status=resp_status)
+
+        email_manager({'case_id': comment_obj.case.case_id, 'name': comment_obj.case.user.get_profile_name()}, comment_obj.case.user.email,
+                      'new_status_added')
         response["data"] = CaseStatusCommentSerializer(comment_obj).data
         return Response(response)
 

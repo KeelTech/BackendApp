@@ -74,7 +74,7 @@ def order_created_email(context, to_email):
 def email_manager(context, to_email, tag):
     tag_obj = EMAIL_DATA.get(tag)
     if tag_obj:
-        subject = tag_obj['subject']
+        subject = tag_obj['subject'].format(case_id=context.get('case_id', ''))
         template = tag_obj['template']
     html_content = get_template(template).render(context)
     base_send_email(subject, html_content, to_email)
