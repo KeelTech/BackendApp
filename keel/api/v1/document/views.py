@@ -100,7 +100,7 @@ class GetDocument(GenericViewSet):
             doc_queryset = Documents.objects.filter(doc_pk=doc_id, deleted_at__isnull=True).select_related('doc_type')
             doc_obj = doc_queryset.first()
             doc_queryset.update(verification_status=new_status)
-            user_obj = auth_models.User.objects.get(doc_obj.owner_id).prefetch_related('user_profile')
+            user_obj = auth_models.User.objects.prefetch_related('user_profile').filter(id=doc_obj.owner_id).first()
         except Exception as e:
             response['message'] = str(e)
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
