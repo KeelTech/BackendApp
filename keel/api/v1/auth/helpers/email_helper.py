@@ -3,6 +3,7 @@ from django.template.loader import get_template, render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from keel.Core.notifications import EmailNotification
+from keel.Core.email_notifications import EMAIL_DATA
 
 
 def send_email(user, site, current_time):
@@ -13,7 +14,7 @@ def send_email(user, site, current_time):
         "email": user,
         'domain': site.domain,
         'site_name': 'Getkeel',
-        'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': current_time,
         'protocol': 'http',
     }
@@ -67,4 +68,13 @@ def send_crs_score(context, to_email):
 def order_created_email(context, to_email):
     subject = 'Order Created'
     html_content = get_template('order_created.html').render(context)
+    base_send_email(subject, html_content, to_email)
+
+
+def email_manager(context, to_email, tag):
+    tag_obj = EMAIL_DATA.get(tag)
+    if tag_obj:
+        subject = tag_obj['subject']
+        template = tag_obj['template']
+    html_content = get_template(template).render(context)
     base_send_email(subject, html_content, to_email)

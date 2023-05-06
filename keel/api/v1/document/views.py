@@ -11,9 +11,8 @@ from keel.document.models import Documents, DocumentType
 from keel.authentication import models as auth_models
 from keel.authentication.backends import JWTAuthentication
 from keel.Core.err_log import log_error
-
-from .serializers import DocumentsSerializer
-
+from keel.api.v1.auth.helpers.email_helper import email_manager
+from keel.Core import constants as core_const
 import magic
 import base64 
 
@@ -98,10 +97,16 @@ class GetDocument(GenericViewSet):
         doc_id = req_data.get('doc_id')
         new_status = req_data.get('status')
         try:
-            Documents.objects.filter(doc_pk=doc_id, deleted_at__isnull=True).update(verification_status=new_status)
+            doc_queryset = Documents.objects.filter(doc_pk=doc_id, deleted_at__isnull=True).select_related('doc_type')
+            doc_obj = doc_queryset.first()
+            doc_queryset.update(verification_status=new_status)
+            user_obj = auth_models.User.objects.get(doc_obj.owner_id).prefetch_related('user_profile')
         except Exception as e:
             response['message'] = str(e)
             return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        email_tag = 'doc_approved' if new_status == core_const.APPROVED else 'doc_rejected'
+        email_manager({'name': user_obj.get_profile_name(), 'doc': doc_obj.doc_type.doc_type_name}, user_obj.email, email_tag)
         response['status'] = 1
         response['message'] = 'Status Updated Successfully'
         return Response(response)

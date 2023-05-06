@@ -1080,14 +1080,14 @@ class UploadDocument(GenericViewSet):
         user_id = user.id
         files = request.FILES
 
-        case_id = req_data.get("case","")
+        case_id = req_data.get("case", "")
 
         # Catching the case Id exception unless FE start passing it, TODO: Remove it once done
         try:
             from keel.api.v1.cases.serializers import CaseIDSerializer
 
             # validate Case ID against User/Agent
-            case_serializer = CaseIDSerializer(data = {"case_id": case_id, "user_id": user_id})
+            case_serializer = CaseIDSerializer(data={"case_id": case_id, "user_id": user_id})
             case_serializer.is_valid(raise_exception=True)
             case_obj = case_serializer.validated_data
             
@@ -1099,25 +1099,25 @@ class UploadDocument(GenericViewSet):
             pass
         
         doc_type = req_data.get("doc_type")
-        doc_serializer = DocumentCreateSerializer(data = request.FILES.dict())
+        doc_serializer = DocumentCreateSerializer(data=request.FILES.dict())
         doc_serializer.is_valid(raise_exception=True)
 
-        doc_type_serializer = DocumentTypeSerializer(data = {"doc_type": doc_type})
-        doc_type_serializer.is_valid(raise_exception = True)
+        doc_type_serializer = DocumentTypeSerializer(data={"doc_type": doc_type})
+        doc_type_serializer.is_valid(raise_exception=True)
 
         try:
             docs = Documents.objects.add_attachments(files, user_id, doc_type)
-        except (DocumentInvalid, DocumentTypeInvalid) as e:
-            log_error("ERROR", "UploadDocument:upload DocumentInvalid", str(user_id), err=str(e))
+        except (DocumentInvalid, DocumentTypeInvalid) as invalid_e:
+            log_error("ERROR", "UploadDocument:upload DocumentInvalid", str(user_id), err=str(invalid_e))
             response["status"] = 1
-            response["message"] = str(e)
+            response["message"] = str(invalid_e)
             resp_status = status.HTTP_400_BAD_REQUEST
-            return Response(response, status = resp_status)
+            return Response(response, status=resp_status)
         except Exception as e:
             log_error("ERROR", "UploadDocument:upload Exception", str(user_id), err=str(e))
             response["status"] = 1
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
-            return Response(response, status = resp_status)
+            return Response(response, status=resp_status)
 
         # Validate for Task Id, and replace the doc_user_id with task.user_id
         try:
@@ -1129,7 +1129,7 @@ class UploadDocument(GenericViewSet):
                 doc_user_id = task_obj.user_id
 
         except ValidationError as e:
-            log_error("ERROR","UploadDocument: upload taskValidation", str(user_id), err=str(e))
+            log_error("ERROR", "UploadDocument: upload taskValidation", str(user_id), err=str(e))
             response["status"] = 1
             resp_status = status.HTTP_500_INTERNAL_SERVER_ERROR
             return Response(response, status = resp_status)
@@ -1152,13 +1152,13 @@ class UploadDocument(GenericViewSet):
         # create a notification instance
         case_id_notification = request.user.users_cases.first()
         notification = InAppNotification.objects.create(
-            text = "New Document uploaded",
-            user_id = user, 
-            case_id = case_id_notification, 
-            category = DOCUMENT
+            text="New Document uploaded",
+            user_id=user,
+            case_id=case_id_notification,
+            category=DOCUMENT
         )
 
-        return Response(response, status = resp_status)
+        return Response(response, status=resp_status)
 
     # works for both User and agent based on case id
     def fetch(self, request, format = 'json'):

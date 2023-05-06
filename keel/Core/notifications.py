@@ -75,7 +75,7 @@ class EmailNotification:
         valid = all([self.validate_email(i) for i in self.to_list ])
         if not valid:
             err = "Invalid Email Id"
-            log_error("ERROR","EmailNotification:validation_email_obj","", err = err, to_list = self.to_list)
+            log_error("ERROR", "EmailNotification:validation_email_obj", "", err=err, to_list=self.to_list)
             return err
         return err
 
@@ -95,10 +95,9 @@ class EmailNotification:
             save_triggered_email(self.to_list, self.subject)
             get_connection(path).send_email(self.subject, self.content, settings.SENDER_EMAIL, self.to_list, self.content_type)
         except Exception as e:
-            log_error("CRITICAL", "EmailNotification:send_mail", "", err = str(e))
+            log_error("CRITICAL", "EmailNotification:send_mail", "", err=str(e))
             err = str("Failed to send email")
         return err
-
 
 
 class SendNotification:
