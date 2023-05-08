@@ -1451,7 +1451,7 @@ class FamilyInformationView(GenericViewSet):
                 "relationship": info["relationship"].get("value"),
                 "first_name": info["first_name"].get("value"),
                 "last_name": info["last_name"].get("value"),
-                "date_of_birth": info["date_of_birth"].get("value"),
+                # "date_of_birth": info["date_of_birth"].get("value"),
                 "date_of_death": info["date_of_death"].get("value"),
                 "city_of_birth": info.get("city_of_birth").get("value"),
                 "country_of_birth": info["country_of_birth"].get("value"),
@@ -1510,7 +1510,7 @@ class CustomerInformationView(GenericViewSet):
             "age": datas['age'].get("value"),
             "address": datas['address'].get("value"),
             "phone_number": datas['phone_number'].get("value"),
-            "date_of_birth": datas['date_of_birth'].get("value"),
+            # "date_of_birth": datas['date_of_birth'].get("value"),
             "current_country": datas['current_country'].get("value"),
             "desired_country": datas['desired_country'].get("value"),
 
