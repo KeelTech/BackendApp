@@ -35,13 +35,13 @@ class GetDocumentTypeChoices(GenericViewSet):
         response['data'] = ListDocumentTypeSerializer(doc_types, many=True).data
         return Response(response)
 
-    def user_uploaded_docs(self, request, **kwargs):
+    def user_uploaded_docs(self, request):
 
         response = {
                 "status": 0,
                 "message": "User Uploaded Document Type List fetched successfully",
         }
-        case_id = kwargs.get('case_id', '')
+        case_id = request.query_params.get('case_id', '')
         user_id = request.user.id
         doc_types = DocumentType.objects.all()
         if case_id != '':
