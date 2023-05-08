@@ -10,6 +10,7 @@ from .serializers import ListDocumentTypeSerializer
 from keel.document.models import Documents, DocumentType
 from keel.authentication import models as auth_models
 from keel.authentication.backends import JWTAuthentication
+from keel.cases.models import Case
 from keel.Core.err_log import log_error
 from keel.api.v1.auth.helpers.email_helper import email_manager
 from keel.Core import constants as core_const
@@ -34,16 +35,21 @@ class GetDocumentTypeChoices(GenericViewSet):
         response['data'] = ListDocumentTypeSerializer(doc_types, many=True).data
         return Response(response)
 
-    def user_uploaded_docs(self, request):
+    def user_uploaded_docs(self, request, **kwargs):
 
         response = {
                 "status": 0,
                 "message": "User Uploaded Document Type List fetched successfully",
         }
-        user = request.user
+        case_id = kwargs.get('case_id', '')
+        user_id = request.user.id
         doc_types = DocumentType.objects.all()
+        if case_id != '':
+            case_obj = Case.objects.filter(case_id=case_id).first()
+            if case_obj:
+                user_id = case_obj.user.id
         user_docs = auth_models.UserDocument.objects.select_related('doc', 'doc__doc_type'). \
-            filter(user_id=user.id, deleted_at__isnull=True).order_by("-updated_at")
+            filter(user_id=user_id, deleted_at__isnull=True).order_by("-updated_at")
         user_doc_map = {}
         for u_doc in user_docs:
             user_doc_map[u_doc.doc.doc_type.doc_type_name] = 1
