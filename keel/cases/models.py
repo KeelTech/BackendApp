@@ -187,7 +187,7 @@ class Program(TimeStampedModel, SoftDeleteModel):
         (PROVINCIAL_NOMINATION, "PROVINCIAL_NOMINATION"),
         (INVESTORS, "INVESTORS"),
         (FAMILY_SPONSORSHIP, "FAMILY_SPONSORSHIP"),
-        (STUDY_VISA, "Study Visa")
+        (STUDY_VISA, "STUDY_VISA")
     )
 
     choice = models.CharField(max_length=512, default=None, blank=True, null=True)
