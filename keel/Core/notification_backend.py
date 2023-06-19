@@ -25,6 +25,7 @@ class ConsoleSMSBackend(object):
     def send_sms(self, number, text):
         print ("SMS phone number and body : ",number, text)
 
+
 class SMSBackend(object):
     def send_sms(self, number, text):
         resp = self.send_fast2_sms(number, text)
