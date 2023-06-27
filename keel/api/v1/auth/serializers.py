@@ -1530,8 +1530,8 @@ class CustomerLanguageUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerLanguageScore
         fields = (
-            "id", 'test_type', 'test_date', 'result_date', 'test_version',  'report_form_number', 'listening_score', 'writing_score',
-            'speaking_score', 'reading_score', 'overall_score', 'owner', )
+            "id", 'test_type', 'test_date', 'result_date', 'test_version',  'report_form_number', 'listening_score','reading_score', 'writing_score',
+            'speaking_score', 'overall_score', 'owner', )
 
 
 class CustomerFamilyInfoUpdateSerializer(serializers.ModelSerializer):

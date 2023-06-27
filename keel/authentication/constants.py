@@ -99,9 +99,9 @@ LANGUAGESCORE = [{
     "test_date": {"value": "", "type": "calendar", "labels": "Test Date"},
     "report_form_number": {"value": "", "type": "char", "labels": "Test Report Form Number"},
     "listening_score": {"value": "", "type": "char", "labels": "Listening Score"},
+    "reading_score": {"value": "", "type": "char", "labels": "Reading Score"},
     "writing_score": {"value": "", "type": "char", "labels": "Writing Score"},
     "speaking_score": {"value": "", "type": "char", "labels": "Speaking Score"},
-    "reading_score": {"value": "", "type": "char", "labels": "Reading Score"},
     "overall_score": {"value": "", "type": "char", "labels": "Overall Score"},
     "owner": {"value": core_const.SELF, "type": "char", "labels": ""},
 }]
