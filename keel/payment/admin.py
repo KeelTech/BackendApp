@@ -56,9 +56,9 @@ class RazorPayTransactionsAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderItem)
-admin.site.register(Transaction, TransactionAdmin)
-admin.site.register(CasePaymentProfile, CasePaymentProfileAdmin)
+# admin.site.register(Order, OrderAdmin)
+# admin.site.register(OrderItem)
+# admin.site.register(Transaction, TransactionAdmin)
+# admin.site.register(CasePaymentProfile, CasePaymentProfileAdmin)
 admin.site.register(UserOrderDetails, UserOrderDetailsAdmin)
 admin.site.register(RazorPayTransactions, RazorPayTransactionsAdmin)
