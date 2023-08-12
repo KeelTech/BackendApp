@@ -421,12 +421,14 @@ class CustomerLanguageScore(TimeStampedModel, SoftDeleteModel, ProfileOwner):
     CELPIP = 2
     PTE = 3
     TOEFL = 4
+    DUOLINGO = 5
 
     TEST_TYPE = (
         (IELTS, 'IELTS'),
         (CELPIP, 'CELPIP'),
         (PTE, 'PTE'),
         (TOEFL, 'TOEFL'),
+        (DUOLINGO, 'DUOLINGO'),
     )
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_lang_score")
     test_type = models.PositiveSmallIntegerField(choices=TEST_TYPE)
