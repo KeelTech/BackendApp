@@ -151,6 +151,9 @@ SMS_BACKEND = 'keel.Core.notification_backend.SMSBackend'
 
 FAST_2_SMS_URL = os.getenv("FAST_2_SMS_URL")
 FAST_2_SMS_KEY = os.getenv("FAST_2_SMS_KEY")
+LEADSQUARED_ACCESS_KEY = os.getenv("LEADSQUARED_ACCESS_KEY")
+LEADSQUARED_SECRET_KEY = os.getenv("LEADSQUARED_SECRET_KEY")
+LEADSQUARED_URL = os.getenv("LEADSQUARED_URL")
 
 
 

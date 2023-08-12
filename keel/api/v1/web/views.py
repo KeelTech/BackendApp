@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 import requests, json
+from django.conf import settings
 
 from .serializers import (
     BlogListSerializer,
@@ -98,11 +99,11 @@ class LeadEngine(GenericViewSet):
         resp = {'status': 0,
                 'message': ''}
 
-        access_key = 'u$r1a2b8fa79ff8b2ad3348301c938576b4'
-        secret_key = '9a220c6b229cc9fa5e832668805747ae6fb4ad66'
+        access_key = settings.LEADSQUARED_ACCESS_KEY
+        secret_key = settings.LEADSQUARED_SECRET_KEY
         #url = 'https://asyncapi-in21.leadsquared.com/lead/capture?accessKey='+access_key+'&secretKey='+secret_key
 
-        url = "https://api-in21.leadsquared.com/v2/LeadManagement.svc/Lead.Capture?accessKey="+access_key+"&secretKey="+secret_key
+        url = settings.LEADSQUARED_URL + "?accessKey="+access_key+"&secretKey="+secret_key
         # headers_obj = {'x-api-key': 'ZMy4nAMclj8hnKpGQg7DD369ZRNj0Oqy3fZ5Wczl', "Content-Type": "application/json"}
         # headers_obj = {"Content-Type": "application/json"}
         req_body = request.data
